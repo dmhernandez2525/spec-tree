@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_datasets_items",
+  "info": {
+    "displayName": "items",
+    "icon": "file"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    },
+    "icon": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

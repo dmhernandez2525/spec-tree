@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contextual_questions",
+  "info": {
+    "singularName": "contextual-question",
+    "pluralName": "contextual-questions",
+    "displayName": "BBContextualQuestion",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "question": {
+      "type": "text"
+    },
+    "answer": {
+      "type": "text"
+    },
+    "app": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::app.app",
+      "inversedBy": "contextualQuestions"
+    },
+    "epic": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::epic.epic",
+      "inversedBy": "contextualQuestions"
+    },
+    "feature": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::feature.feature",
+      "inversedBy": "contextualQuestions"
+    },
+    "task": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::task.task",
+      "inversedBy": "contextualQuestions"
+    },
+    "userStories": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::user-story.user-story",
+      "inversedBy": "contextualQuestions"
+    }
+  }
+}

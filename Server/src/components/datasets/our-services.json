@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_datasets_our_services",
+  "info": {
+    "displayName": "OurServices",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Service": {
+      "type": "string"
+    },
+    "ServiceDescription": {
+      "type": "text"
+    },
+    "serviceList": {
+      "displayName": "Service list",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.service-list"
+    },
+    "ServiceTitle": {
+      "type": "string"
+    },
+    "ListTitle": {
+      "type": "string"
+    }
+  }
+}

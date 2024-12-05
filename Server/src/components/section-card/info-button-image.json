@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_section_card_info_button_images",
+  "info": {
+    "displayName": "Info-Button-Image",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "subText": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "button": {
+      "type": "component",
+      "repeatable": true,
+      "component": "micro-component.button"
+    }
+  }
+}

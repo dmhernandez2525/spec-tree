@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_datasets_our_mission_sections",
+  "info": {
+    "displayName": "OurMissionSection",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Header": {
+      "type": "string"
+    },
+    "SubHeader1": {
+      "type": "text"
+    },
+    "SubHeader2": {
+      "type": "text"
+    },
+    "SubHeader3": {
+      "type": "text"
+    },
+    "HeaderColor": {
+      "type": "string"
+    }
+  }
+}

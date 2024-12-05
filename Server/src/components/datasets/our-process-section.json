@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_datasets_our_process_sections",
+  "info": {
+    "displayName": "OurProcessSection"
+  },
+  "options": {},
+  "attributes": {
+    "Header": {
+      "type": "string"
+    },
+    "HeaderColor": {
+      "type": "string"
+    }
+  }
+}

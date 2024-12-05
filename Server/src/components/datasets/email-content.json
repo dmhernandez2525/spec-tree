@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_datasets_email_contents",
+  "info": {
+    "displayName": "Email Content",
+    "icon": "file"
+  },
+  "options": {},
+  "attributes": {
+    "subject": {
+      "type": "string",
+      "required": true
+    },
+    "emailBody": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

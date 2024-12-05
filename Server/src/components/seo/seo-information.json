@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_seo_seo_informations",
+  "info": {
+    "displayName": "seoInformation",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "keywords": {
+      "type": "string",
+      "regex": "^\\s*[^,\\s]+(\\s*,\\s*[^,\\s]+)*\\s*$"
+    }
+  }
+}

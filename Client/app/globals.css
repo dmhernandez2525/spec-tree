@@ -1,0 +1,376 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --radius: 0.5rem;
+
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Default Style */
+  .style-default {
+    @apply text-foreground;
+  }
+
+  .style-default button,
+  .style-default .button {
+    @apply shadow bg-primary text-primary-foreground hover:bg-primary/90
+           border border-primary rounded transition-colors duration-200;
+  }
+
+  .style-default .card {
+    @apply bg-card text-card-foreground shadow rounded border;
+  }
+
+  /* New York Style */
+  .style-new-york {
+    @apply text-foreground;
+  }
+
+  .style-new-york button,
+  .style-new-york .button {
+    @apply shadow-md bg-primary text-primary-foreground hover:bg-primary/90
+           border border-primary rounded transition-colors duration-200;
+  }
+
+  .style-new-york .card {
+    @apply bg-card text-card-foreground shadow-md rounded border;
+  }
+
+  /* Cyberpunk Style */
+  .style-cyberpunk {
+    @apply font-cyberpunk text-foreground;
+  }
+
+  .style-cyberpunk button,
+  .style-cyberpunk .button {
+    @apply relative bg-gradient-to-r from-primary to-secondary text-primary-foreground
+           border-2 border-dashed border-primary uppercase tracking-wider
+           shadow-[0_0_10px_rgba(255,0,255,0.3),0_0_20px_rgba(0,255,255,0.2)]
+           transition-all duration-200 hover:shadow-[0_0_20px_rgba(255,0,255,0.5),0_0_40px_rgba(0,255,255,0.4)]
+           transform hover:-translate-y-0.5;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 8px),
+      calc(100% - 8px) 100%,
+      0 100%
+    );
+  }
+
+  .style-cyberpunk .card {
+    @apply bg-card text-card-foreground
+           border-2 border-dashed border-primary
+           shadow-[0_0_10px_rgba(255,0,255,0.3),0_0_20px_rgba(0,255,255,0.2)];
+  }
+
+  /* Retro Style */
+  .style-retro {
+    @apply font-retro text-foreground;
+  }
+
+  .style-retro button,
+  .style-retro .button {
+    @apply bg-primary text-primary-foreground
+           border-[3px] border-solid border-primary
+           shadow-[4px_4px_0_rgba(0,0,0,0.85)]
+           transform -translate-x-0.5 -translate-y-0.5 transition-transform duration-100
+           hover:shadow-[4px_4px_0_rgba(0,0,0,0.85)];
+  }
+
+  .style-retro button:active,
+  .style-retro .button:active {
+    @apply translate-x-0 translate-y-0 shadow-none;
+  }
+
+  .style-retro .card {
+    @apply bg-card text-card-foreground
+    border-[3px] border-solid border-primary
+           shadow-[4px_4px_0_rgba(0,0,0,0.85)];
+    background-image: repeating-linear-gradient(
+      45deg,
+      hsl(var(--card)),
+      hsl(var(--card)) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+  }
+
+  /* Glassmorphic Style */
+  .style-glassmorphic {
+    @apply text-foreground;
+  }
+
+  .style-glassmorphic button,
+  .style-glassmorphic .button {
+    @apply backdrop-blur-xl bg-white/10 
+           border border-white/20 rounded-xl
+           shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]
+           transition-all duration-200
+           hover:bg-white/20;
+  }
+
+  .style-glassmorphic .card {
+    @apply backdrop-blur-xl bg-white/10
+           border border-white/20 rounded-xl
+           shadow-[0_8px_32px_0_rgba(31,38,135,0.37)];
+  }
+}
+
+.main {
+  @apply w-full p-4;
+}
+
+/* Base button and card styles */
+.button,
+button {
+  @apply px-4 py-2 font-medium;
+}
+
+.card {
+  @apply p-4;
+}
+
+@layer components {
+  /* Brutalist Style */
+  .style-brutalist {
+    @apply text-foreground;
+  }
+
+  .style-brutalist button,
+  .style-brutalist .button {
+    @apply bg-primary text-primary-foreground
+           border-4 border-primary hover:border-primary/90
+           transform hover:-translate-y-0.5
+           uppercase font-bold tracking-wider
+           transition-all duration-200;
+    clip-path: polygon(
+      0 0,
+      calc(100% - 8px) 0,
+      100% 8px,
+      100% 100%,
+      8px 100%,
+      0 calc(100% - 8px)
+    );
+  }
+
+  .style-brutalist .card {
+    @apply bg-card text-card-foreground relative
+           border-4 border-primary p-6;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      hsl(var(--primary) / 0.1) 10px,
+      hsl(var(--primary) / 0.1) 20px
+    );
+  }
+
+  /* Neumorphic Style */
+  .style-neumorphic {
+    @apply text-foreground;
+  }
+
+  .style-neumorphic button,
+  .style-neumorphic .button {
+    @apply bg-card text-card-foreground relative
+           border-none transition-all duration-200
+           hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.7)]
+           active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.7)];
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2),
+      -6px -6px 12px rgba(255, 255, 255, 0.7);
+  }
+
+  .style-neumorphic .card {
+    @apply bg-card text-card-foreground p-6;
+    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.2),
+      -8px -8px 16px rgba(255, 255, 255, 0.7);
+  }
+
+  /* Kawaii Style */
+  .style-kawaii {
+    @apply text-foreground;
+  }
+
+  .style-kawaii button,
+  .style-kawaii .button {
+    @apply bg-primary text-primary-foreground
+           rounded-full border-4 border-primary/80
+           shadow-[4px_4px_0_rgba(0,0,0,0.2)]
+           hover:shadow-[2px_2px_0_rgba(0,0,0,0.2)]
+           hover:-translate-y-0.5 hover:translate-x-0.5
+           transition-all duration-200
+           font-bold tracking-wide;
+  }
+
+  .style-kawaii .card {
+    @apply bg-card text-card-foreground
+           rounded-[2rem] border-4 border-primary/80
+           shadow-[8px_8px_0_rgba(0,0,0,0.1)]
+           p-6;
+    background-image: radial-gradient(
+      circle at 50% 0%,
+      hsl(var(--primary) / 0.1) 0%,
+      transparent 75%
+    );
+  }
+
+  /* Terminal Style */
+  .style-terminal {
+    @apply text-foreground;
+  }
+
+  .style-terminal button,
+  .style-terminal .button {
+    @apply bg-primary text-primary-foreground
+           border border-primary
+           hover:bg-primary/90
+           transition-colors duration-200
+           uppercase tracking-wider
+           font-mono;
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.3),
+      inset 0 0 5px hsl(var(--primary) / 0.3);
+  }
+
+  .style-terminal .card {
+    @apply bg-card text-card-foreground
+           border border-primary p-6
+           font-mono;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.2),
+      inset 0 0 10px hsl(var(--primary) / 0.2);
+  }
+
+  /* Handdrawn Style */
+  .style-handdrawn {
+    @apply text-foreground;
+  }
+
+  .style-handdrawn button,
+  .style-handdrawn .button {
+    @apply bg-primary text-primary-foreground
+           hover:bg-primary/90
+           transition-colors duration-200
+           border-2 border-primary;
+    filter: url('#handdrawn');
+  }
+
+  .style-handdrawn .card {
+    @apply bg-card text-card-foreground
+           border-2 border-primary p-6;
+    filter: url('#handdrawn');
+  }
+
+  /* Claymorphic Style */
+  .style-claymorphic {
+    @apply text-foreground;
+  }
+
+  .style-claymorphic button,
+  .style-claymorphic .button {
+    @apply bg-gradient-to-br from-primary to-primary/90
+           text-primary-foreground relative
+           border-none
+           transform hover:-translate-y-0.5
+           transition-all duration-200;
+    box-shadow: 0 4px 0 0 hsl(var(--primary) / 0.5),
+      0 8px 0 0 hsl(var(--primary) / 0.3), 0 12px 0 0 hsl(var(--primary) / 0.1);
+  }
+
+  .style-claymorphic .card {
+    @apply bg-gradient-to-br from-card to-card/90
+           text-card-foreground relative p-6;
+    box-shadow: 0 8px 0 0 hsl(var(--card) / 0.5),
+      0 16px 0 0 hsl(var(--card) / 0.3), 0 24px 0 0 hsl(var(--card) / 0.1);
+  }
+}
+
+/* Add SVG filter for handdrawn effect */
+@layer base {
+  .style-handdrawn-filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+}

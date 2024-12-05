@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_datasets_sms_partial_users",
+  "info": {
+    "displayName": "SMS Partial User",
+    "icon": "phone",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    }
+  }
+}
