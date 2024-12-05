@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_datasets_our_work_headers",
+  "info": {
+    "displayName": "ourWorkHeader"
+  },
+  "options": {},
+  "attributes": {
+    "Header": {
+      "type": "string"
+    },
+    "HeaderColor": {
+      "type": "string"
+    }
+  }
+}

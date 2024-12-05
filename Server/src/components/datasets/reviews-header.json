@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_datasets_reviews_headers",
+  "info": {
+    "displayName": "ReviewsHeader"
+  },
+  "options": {},
+  "attributes": {
+    "Header": {
+      "type": "string"
+    },
+    "HeaderColor": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_section_card_title_card_helper_texts",
+  "info": {
+    "displayName": "Title Card Helper Text",
+    "icon": "feather"
+  },
+  "options": {},
+  "attributes": {
+    "header": {
+      "type": "string"
+    },
+    "subHeader": {
+      "type": "string"
+    },
+    "helperText": {
+      "type": "string"
+    }
+  }
+}

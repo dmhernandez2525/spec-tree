@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_section_card_background_cards",
+  "info": {
+    "displayName": "Background Cards",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "cards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "section-card.title-card"
+    },
+    "backgroundImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

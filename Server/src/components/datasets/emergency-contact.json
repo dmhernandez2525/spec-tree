@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_datasets_emergency_contacts",
+  "info": {
+    "displayName": "emergencyContact",
+    "icon": "handHeart"
+  },
+  "options": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "relationship": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    }
+  }
+}

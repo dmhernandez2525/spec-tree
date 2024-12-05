@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "apps",
+  "info": {
+    "singularName": "app",
+    "pluralName": "apps",
+    "displayName": "BBApp",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "applactionInformation": {
+      "type": "text"
+    },
+    "epics": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::epic.epic",
+      "mappedBy": "app"
+    },
+    "globalInformation": {
+      "type": "text"
+    },
+    "selectedModel": {
+      "type": "string"
+    },
+    "contextualQuestions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contextual-question.contextual-question",
+      "mappedBy": "app"
+    }
+  }
+}

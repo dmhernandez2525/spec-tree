@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_datasets_service_lists",
+  "info": {
+    "displayName": "Service list"
+  },
+  "options": {},
+  "attributes": {
+    "listEntry": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_datasets_email_options",
+  "info": {
+    "displayName": "Email Options",
+    "icon": "book",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "subject": {
+      "type": "string",
+      "required": false
+    },
+    "from": {
+      "type": "string"
+    },
+    "to": {
+      "type": "string",
+      "required": false
+    },
+    "cc": {
+      "type": "string"
+    },
+    "bcc": {
+      "type": "string"
+    },
+    "replyTo": {
+      "type": "string"
+    }
+  }
+}

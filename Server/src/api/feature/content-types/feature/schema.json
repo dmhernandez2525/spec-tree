@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "features",
+  "info": {
+    "singularName": "feature",
+    "pluralName": "features",
+    "displayName": "BBFeature",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "details": {
+      "type": "text"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "epic": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::epic.epic",
+      "inversedBy": "features"
+    },
+    "userStories": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::user-story.user-story",
+      "inversedBy": "features"
+    },
+    "contextualQuestions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contextual-question.contextual-question",
+      "mappedBy": "feature"
+    },
+    "acceptanceCriteria": {
+      "displayName": "acceptanceCriteria",
+      "type": "component",
+      "repeatable": true,
+      "component": "micro-component.acceptance-criteria"
+    }
+  }
+}

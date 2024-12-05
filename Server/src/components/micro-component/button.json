@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_micro_component_buttons",
+  "info": {
+    "displayName": "button"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180
+    },
+    "url": {
+      "type": "string"
+    }
+  }
+}

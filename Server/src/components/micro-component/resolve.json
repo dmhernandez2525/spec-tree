@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_micro_component_resolves",
+  "info": {
+    "displayName": "resolve",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    }
+  }
+}

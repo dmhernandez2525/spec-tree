@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_micro_component_acceptance_criteria",
+  "info": {
+    "displayName": "acceptanceCriteria"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "text"
+    }
+  }
+}

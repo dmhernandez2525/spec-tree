@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "epics",
+  "info": {
+    "singularName": "epic",
+    "pluralName": "epics",
+    "displayName": "BBEpic",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "successCriteria": {
+      "type": "string"
+    },
+    "dependencies": {
+      "type": "string"
+    },
+    "timeline": {
+      "type": "string"
+    },
+    "resources": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "app": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::app.app",
+      "inversedBy": "epics"
+    },
+    "features": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::feature.feature",
+      "mappedBy": "epic"
+    },
+    "contextualQuestions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contextual-question.contextual-question",
+      "mappedBy": "epic"
+    },
+    "risksAndMitigation": {
+      "displayName": "risksAndMitigation",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.risks-and-mitigation"
+    }
+  }
+}

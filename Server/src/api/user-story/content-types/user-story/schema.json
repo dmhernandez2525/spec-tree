@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_stories",
+  "info": {
+    "singularName": "user-story",
+    "pluralName": "user-stories",
+    "displayName": "BBUserStory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "goal": {
+      "type": "text"
+    },
+    "developmentOrder": {
+      "type": "integer"
+    },
+    "role": {
+      "type": "string"
+    },
+    "actionStr": {
+      "type": "string"
+    },
+    "acceptanceCriteria": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "points": {
+      "type": "integer"
+    },
+    "tasks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::task.task",
+      "mappedBy": "userStory"
+    },
+    "features": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::feature.feature",
+      "mappedBy": "userStories"
+    },
+    "contextualQuestions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contextual-question.contextual-question",
+      "mappedBy": "userStories"
+    }
+  }
+}
