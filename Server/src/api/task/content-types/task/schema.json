@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tasks",
+  "info": {
+    "singularName": "task",
+    "pluralName": "tasks",
+    "displayName": "BBTask",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "details": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "integer"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "userStory": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::user-story.user-story",
+      "inversedBy": "tasks"
+    },
+    "contextualQuestions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contextual-question.contextual-question",
+      "mappedBy": "task"
+    }
+  }
+}

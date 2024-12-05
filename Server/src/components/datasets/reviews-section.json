@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_datasets_reviews_sections",
+  "info": {
+    "displayName": "ReviewsSection"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    }
+  }
+}

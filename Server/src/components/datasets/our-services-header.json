@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_datasets_our_services_headers",
+  "info": {
+    "displayName": "OurServicesHeader"
+  },
+  "options": {},
+  "attributes": {
+    "Header": {
+      "type": "string"
+    },
+    "HeaderColor": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_section_card_title_card_ctas",
+  "info": {
+    "displayName": "Title Card CTA",
+    "icon": "layer"
+  },
+  "options": {},
+  "attributes": {
+    "header": {
+      "type": "string"
+    },
+    "subHeader": {
+      "type": "string"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "micro-component.button"
+    }
+  }
+}

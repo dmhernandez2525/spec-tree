@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_datasets_risks_and_mitigations",
+  "info": {
+    "displayName": "risksAndMitigation",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "own": {
+      "displayName": "own",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.own"
+    },
+    "accept": {
+      "displayName": "accept",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.accept"
+    },
+    "mitigate": {
+      "displayName": "mitigate",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.mitigate"
+    },
+    "resolve": {
+      "displayName": "resolve",
+      "type": "component",
+      "repeatable": true,
+      "component": "micro-component.resolve"
+    }
+  }
+}

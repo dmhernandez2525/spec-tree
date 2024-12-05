@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_section_card_title_cards",
+  "info": {
+    "displayName": "Title Card",
+    "icon": "layer",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "header": {
+      "type": "string"
+    },
+    "subHeader": {
+      "type": "text"
+    },
+    "headerColor": {
+      "type": "string"
+    }
+  }
+}

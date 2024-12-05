@@ -1,0 +1,79 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_pages",
+  "info": {
+    "singularName": "home-page",
+    "pluralName": "home-pages",
+    "displayName": "HomePage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroData": {
+      "displayName": "HeroSection",
+      "type": "component",
+      "repeatable": false,
+      "component": "datasets.hero-section"
+    },
+    "ourMissionData": {
+      "displayName": "OurMissionSection",
+      "type": "component",
+      "repeatable": false,
+      "component": "datasets.our-mission-section"
+    },
+    "ourServicesData": {
+      "displayName": "OurServices",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.our-services"
+    },
+    "WheelSection": {
+      "displayName": "ProcessWheelSection",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.process-wheel-section"
+    },
+    "reviews": {
+      "displayName": "ReviewsSection",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.reviews-section"
+    },
+    "ourWorkData": {
+      "displayName": "OurWorkSection",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.our-work-section"
+    },
+    "ourServicesHeader": {
+      "displayName": "OurServicesHeader",
+      "type": "component",
+      "repeatable": false,
+      "component": "datasets.our-services-header"
+    },
+    "OurProcess": {
+      "displayName": "OurProcessSection",
+      "type": "component",
+      "repeatable": false,
+      "component": "datasets.our-process-section"
+    },
+    "ourWorkHeader": {
+      "displayName": "ourWorkHeader",
+      "type": "component",
+      "repeatable": false,
+      "component": "datasets.our-work-header"
+    },
+    "reviewsHeader": {
+      "displayName": "ReviewsHeader",
+      "type": "component",
+      "repeatable": false,
+      "component": "datasets.reviews-header"
+    },
+    "showReviews": {
+      "type": "boolean"
+    }
+  }
+}

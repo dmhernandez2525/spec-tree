@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_section_card_faqs",
+  "info": {
+    "displayName": "FAQ",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "section-card.title-card"
+    },
+    "header": {
+      "type": "string"
+    },
+    "subHeader": {
+      "type": "string"
+    }
+  }
+}

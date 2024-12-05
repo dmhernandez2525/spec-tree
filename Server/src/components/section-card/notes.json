@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_section_card_notes",
+  "info": {
+    "displayName": "notes",
+    "icon": "file",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "richtext"
+    }
+  }
+}

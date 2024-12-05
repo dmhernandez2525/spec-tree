@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_datasets_mitigates",
+  "info": {
+    "displayName": "mitigate",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    }
+  }
+}

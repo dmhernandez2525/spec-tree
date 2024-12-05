@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_copyright_copyright_footers",
+  "info": {
+    "displayName": "CopyrightFooter",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "ownerStatement": {
+      "type": "string"
+    }
+  }
+}

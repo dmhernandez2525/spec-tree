@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_section_card_social_options",
+  "info": {
+    "displayName": "Social Options",
+    "icon": "earth"
+  },
+  "options": {},
+  "attributes": {
+    "header": {
+      "type": "string"
+    },
+    "subHeader": {
+      "type": "string"
+    },
+    "links": {
+      "displayName": "Icon Link",
+      "type": "component",
+      "repeatable": true,
+      "component": "datasets.icon-link"
+    }
+  }
+}

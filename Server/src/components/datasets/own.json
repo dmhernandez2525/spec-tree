@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_datasets_owns",
+  "info": {
+    "displayName": "own",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_section_card_info_notes",
+  "info": {
+    "displayName": "infoNotes",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "goals": {
+      "type": "string"
+    },
+    "details": {
+      "type": "string"
+    }
+  }
+}
