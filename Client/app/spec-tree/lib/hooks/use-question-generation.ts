@@ -11,7 +11,7 @@ import {
 import { ExtendedWorkItemType, ContextualQuestion } from '../types/work-items';
 import generateId from '../utils/generate-id';
 import { useSelector } from 'react-redux';
-import { selectChatApi } from '../store/slices/sow-slice';
+import { selectChatApi } from '../../../../lib/store/sow-slice';
 
 const useQuestionGeneration = (
   workItemType: ExtendedWorkItemType,

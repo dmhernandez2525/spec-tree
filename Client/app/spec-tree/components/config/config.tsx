@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { updateSelectedModel } from '../../lib/store/slices/sow-slice';
+import { updateSelectedModel } from '../../../../lib/store/sow-slice';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

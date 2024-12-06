@@ -1,9 +1,13 @@
-// app/page.tsx
 'use client';
 
 import { Hero } from '@/components/marketing/Hero';
+import { Features } from '@/components/marketing/Features';
+import { Benefits } from '@/components/marketing/Benefits';
+import { SampleWorkflows } from '@/components/marketing/SampleWorkflows';
+import { ClientSuccess } from '@/components/marketing/ClientSuccess';
 import { OurServices } from '@/components/marketing/OurServices';
 import { NewsletterForm } from '@/components/marketing/NewsletterForm';
+import { CTASection } from '@/components/marketing/CTASection';
 import { ColorHeader } from '@/components/shared/ColorHeader';
 import { useHomePageData } from '@/lib/hooks/useHomePageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
@@ -27,13 +31,33 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
       <Hero
-        data={homeSections.heroData}
+        data={homeSections?.heroData}
         onScrollDown={() =>
           document
-            .getElementById('ourMission')
+            .getElementById('features')
             ?.scrollIntoView({ behavior: 'smooth' })
         }
       />
+
+      {/* Features Section */}
+      <section id="features" className="bg-background py-16 md:py-24">
+        <Features />
+      </section>
+
+      {/* Benefits Section */}
+      <section className="bg-muted py-16 md:py-24">
+        <Benefits />
+      </section>
+
+      {/* Sample Workflows */}
+      <section className="bg-background py-16 md:py-24">
+        <SampleWorkflows />
+      </section>
+
+      {/* Client Success Stories */}
+      <section className="bg-muted py-16 md:py-24">
+        <ClientSuccess />
+      </section>
 
       {/* Our Mission Section */}
       <section id="ourMission" className="bg-background py-16 md:py-24">
@@ -73,8 +97,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Newsletter Section */}
+      {/* CTA Section */}
       <section className="bg-muted py-16 md:py-24">
+        <CTASection />
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="bg-background py-16 md:py-24">
         <div className="container max-w-xl">
           <NewsletterForm />
         </div>

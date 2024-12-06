@@ -1,9 +1,9 @@
-import { RootState } from '../store';
+import { RootState } from '../../../../lib/store';
 import { EpicType, FeatureType, UserStoryType } from '../types/work-items';
 import {
   selectFeatureById,
   selectUserStoryById,
-} from '../store/slices/sow-slice';
+} from '../../../../lib/store/sow-slice';
 
 const calculateTotalPoints = (
   state: RootState,

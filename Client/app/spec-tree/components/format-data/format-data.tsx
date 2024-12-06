@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setSow } from '../../lib/store/slices/sow-slice';
+import { setSow } from '../../../../lib/store/sow-slice';
 import { strapiService } from '../../lib/api/strapi-service';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';

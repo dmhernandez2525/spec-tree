@@ -74,8 +74,8 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         username: values.email,
         email: values.email,
         password: values.password,
-        firstName: values.firstName,
-        lastName: values.lastName,
+        // firstName: values.firstName,
+        // lastName: values.lastName,
       });
 
       if (success) {

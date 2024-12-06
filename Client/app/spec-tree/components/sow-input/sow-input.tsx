@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setSow } from '../../lib/store/slices/sow-slice';
+import { setSow } from '../../../../lib/store/sow-slice';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {

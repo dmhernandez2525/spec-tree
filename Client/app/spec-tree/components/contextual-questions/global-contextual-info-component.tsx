@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../lib/store';
+import { RootState } from '../../../../lib/store';
 import { WizardStep } from '../wizard/types';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@ import {
   selectGlobalContextualQuestions,
   selectGlobalInformation,
   selectChatApi,
-} from '../../lib/store/slices/sow-slice';
+} from '../../../../lib/store/sow-slice';
 
 interface GlobalContextualInfoProps {
   onClose?: () => void;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../lib/store';
-import { selectChatApi } from '../../lib/store/slices/sow-slice';
+import { RootState } from '../../../../lib/store';
+import { selectChatApi } from '../../../../lib/store/sow-slice';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

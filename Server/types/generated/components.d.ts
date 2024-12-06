@@ -13,6 +13,124 @@ export interface SeoSeoInformation extends Struct.ComponentSchema {
   };
 }
 
+export interface SectionCardTitleCard extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_title_cards';
+  info: {
+    displayName: 'Title Card';
+    icon: 'layer';
+    description: '';
+  };
+  attributes: {
+    header: Schema.Attribute.String;
+    subHeader: Schema.Attribute.Text;
+    headerColor: Schema.Attribute.String;
+  };
+}
+
+export interface SectionCardTitleCardHelperText extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_title_card_helper_texts';
+  info: {
+    displayName: 'Title Card Helper Text';
+    icon: 'feather';
+  };
+  attributes: {
+    header: Schema.Attribute.String;
+    subHeader: Schema.Attribute.String;
+    helperText: Schema.Attribute.String;
+  };
+}
+
+export interface SectionCardTitleCardCta extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_title_card_ctas';
+  info: {
+    displayName: 'Title Card CTA';
+    icon: 'layer';
+  };
+  attributes: {
+    header: Schema.Attribute.String;
+    subHeader: Schema.Attribute.String;
+    cta: Schema.Attribute.Component<'micro-component.button', false>;
+  };
+}
+
+export interface SectionCardSocialOptions extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_social_options';
+  info: {
+    displayName: 'Social Options';
+    icon: 'earth';
+  };
+  attributes: {
+    header: Schema.Attribute.String;
+    subHeader: Schema.Attribute.String;
+    links: Schema.Attribute.Component<'datasets.icon-link', true>;
+  };
+}
+
+export interface SectionCardNotes extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_notes';
+  info: {
+    displayName: 'notes';
+    icon: 'file';
+    description: '';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+  };
+}
+
+export interface SectionCardInfoNotes extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_info_notes';
+  info: {
+    displayName: 'infoNotes';
+    icon: 'bulletList';
+    description: '';
+  };
+  attributes: {
+    goals: Schema.Attribute.String;
+    details: Schema.Attribute.String;
+  };
+}
+
+export interface SectionCardInfoButtonImage extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_info_button_images';
+  info: {
+    displayName: 'Info-Button-Image';
+    description: '';
+  };
+  attributes: {
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    description: Schema.Attribute.Text;
+    subText: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images'>;
+    button: Schema.Attribute.Component<'micro-component.button', true>;
+  };
+}
+
+export interface SectionCardFaq extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_faqs';
+  info: {
+    displayName: 'FAQ';
+    icon: 'bulletList';
+  };
+  attributes: {
+    items: Schema.Attribute.Component<'section-card.title-card', true>;
+    header: Schema.Attribute.String;
+    subHeader: Schema.Attribute.String;
+  };
+}
+
+export interface SectionCardBackgroundCards extends Struct.ComponentSchema {
+  collectionName: 'components_section_card_background_cards';
+  info: {
+    displayName: 'Background Cards';
+    icon: 'layout';
+  };
+  attributes: {
+    cards: Schema.Attribute.Component<'section-card.title-card', true>;
+    backgroundImage: Schema.Attribute.Media<'images'>;
+  };
+}
+
 export interface MicroComponentResolve extends Struct.ComponentSchema {
   collectionName: 'components_micro_component_resolves';
   info: {
@@ -375,128 +493,19 @@ export interface AddressAddress extends Struct.ComponentSchema {
   };
 }
 
-export interface SectionCardTitleCard extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_title_cards';
-  info: {
-    displayName: 'Title Card';
-    icon: 'layer';
-    description: '';
-  };
-  attributes: {
-    header: Schema.Attribute.String;
-    subHeader: Schema.Attribute.Text;
-    headerColor: Schema.Attribute.String;
-  };
-}
-
-export interface SectionCardTitleCardHelperText extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_title_card_helper_texts';
-  info: {
-    displayName: 'Title Card Helper Text';
-    icon: 'feather';
-  };
-  attributes: {
-    header: Schema.Attribute.String;
-    subHeader: Schema.Attribute.String;
-    helperText: Schema.Attribute.String;
-  };
-}
-
-export interface SectionCardTitleCardCta extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_title_card_ctas';
-  info: {
-    displayName: 'Title Card CTA';
-    icon: 'layer';
-  };
-  attributes: {
-    header: Schema.Attribute.String;
-    subHeader: Schema.Attribute.String;
-    cta: Schema.Attribute.Component<'micro-component.button', false>;
-  };
-}
-
-export interface SectionCardSocialOptions extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_social_options';
-  info: {
-    displayName: 'Social Options';
-    icon: 'earth';
-  };
-  attributes: {
-    header: Schema.Attribute.String;
-    subHeader: Schema.Attribute.String;
-    links: Schema.Attribute.Component<'datasets.icon-link', true>;
-  };
-}
-
-export interface SectionCardNotes extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_notes';
-  info: {
-    displayName: 'notes';
-    icon: 'file';
-    description: '';
-  };
-  attributes: {
-    content: Schema.Attribute.RichText;
-  };
-}
-
-export interface SectionCardInfoNotes extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_info_notes';
-  info: {
-    displayName: 'infoNotes';
-    icon: 'bulletList';
-    description: '';
-  };
-  attributes: {
-    goals: Schema.Attribute.String;
-    details: Schema.Attribute.String;
-  };
-}
-
-export interface SectionCardInfoButtonImage extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_info_button_images';
-  info: {
-    displayName: 'Info-Button-Image';
-    description: '';
-  };
-  attributes: {
-    title: Schema.Attribute.String & Schema.Attribute.Required;
-    description: Schema.Attribute.Text;
-    subText: Schema.Attribute.Text;
-    image: Schema.Attribute.Media<'images'>;
-    button: Schema.Attribute.Component<'micro-component.button', true>;
-  };
-}
-
-export interface SectionCardFaq extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_faqs';
-  info: {
-    displayName: 'FAQ';
-    icon: 'bulletList';
-  };
-  attributes: {
-    items: Schema.Attribute.Component<'section-card.title-card', true>;
-    header: Schema.Attribute.String;
-    subHeader: Schema.Attribute.String;
-  };
-}
-
-export interface SectionCardBackgroundCards extends Struct.ComponentSchema {
-  collectionName: 'components_section_card_background_cards';
-  info: {
-    displayName: 'Background Cards';
-    icon: 'layout';
-  };
-  attributes: {
-    cards: Schema.Attribute.Component<'section-card.title-card', true>;
-    backgroundImage: Schema.Attribute.Media<'images'>;
-  };
-}
-
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'seo.seo-information': SeoSeoInformation;
+      'section-card.title-card': SectionCardTitleCard;
+      'section-card.title-card-helper-text': SectionCardTitleCardHelperText;
+      'section-card.title-card-cta': SectionCardTitleCardCta;
+      'section-card.social-options': SectionCardSocialOptions;
+      'section-card.notes': SectionCardNotes;
+      'section-card.info-notes': SectionCardInfoNotes;
+      'section-card.info-button-image': SectionCardInfoButtonImage;
+      'section-card.faq': SectionCardFaq;
+      'section-card.background-cards': SectionCardBackgroundCards;
       'micro-component.resolve': MicroComponentResolve;
       'micro-component.button': MicroComponentButton;
       'micro-component.acceptance-criteria': MicroComponentAcceptanceCriteria;
@@ -526,15 +535,6 @@ declare module '@strapi/strapi' {
       'copyright.copyright-footer': CopyrightCopyrightFooter;
       'banner.logo': BannerLogo;
       'address.address': AddressAddress;
-      'section-card.title-card': SectionCardTitleCard;
-      'section-card.title-card-helper-text': SectionCardTitleCardHelperText;
-      'section-card.title-card-cta': SectionCardTitleCardCta;
-      'section-card.social-options': SectionCardSocialOptions;
-      'section-card.notes': SectionCardNotes;
-      'section-card.info-notes': SectionCardInfoNotes;
-      'section-card.info-button-image': SectionCardInfoButtonImage;
-      'section-card.faq': SectionCardFaq;
-      'section-card.background-cards': SectionCardBackgroundCards;
     }
   }
 }
