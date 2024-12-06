@@ -1,0 +1,72 @@
+<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Blueprint Grid -->
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#E6F3FF" stroke-width="0.5"/>
+    </pattern>
+    
+    <!-- Circle Gradients -->
+    <radialGradient id="circleGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </radialGradient>
+    
+    <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#93c5fd"/>
+      <stop offset="100%" style="stop-color:#60a5fa"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="300" height="180" fill="#ffffff"/>
+  <rect width="300" height="180" fill="url(#grid)"/>
+  
+  <!-- Main Icon -->
+  <g transform="translate(115, 20)">
+    <!-- Central Circle -->
+    <circle cx="35" cy="35" r="35" fill="url(#circleGradient)"/>
+    
+    <!-- Dot Grid Pattern -->
+    <g>
+      <circle cx="25" cy="25" r="2" fill="#ffffff"/>
+      <circle cx="35" cy="25" r="2" fill="#ffffff"/>
+      <circle cx="45" cy="25" r="2" fill="#ffffff"/>
+      <circle cx="25" cy="35" r="2" fill="#ffffff"/>
+      <circle cx="35" cy="35" r="3" fill="#ffffff"/>
+      <circle cx="45" cy="35" r="2" fill="#ffffff"/>
+      <circle cx="25" cy="45" r="2" fill="#ffffff"/>
+      <circle cx="35" cy="45" r="2" fill="#ffffff"/>
+      <circle cx="45" cy="45" r="2" fill="#ffffff"/>
+    </g>
+    
+    <!-- Orbital System -->
+    <g fill="none" stroke="#3b82f6" stroke-width="1.5">
+      <ellipse cx="35" cy="35" rx="45" ry="20" transform="rotate(45 35 35)"/>
+      <ellipse cx="35" cy="35" rx="45" ry="20" transform="rotate(-45 35 35)"/>
+    </g>
+    
+    <!-- Nodes -->
+    <g>
+      <circle cx="35" cy="0" r="6" fill="url(#nodeGradient)"/>
+      <circle cx="70" cy="35" r="6" fill="url(#nodeGradient)"/>
+      <circle cx="35" cy="70" r="6" fill="url(#nodeGradient)"/>
+      <circle cx="0" cy="35" r="6" fill="url(#nodeGradient)"/>
+      
+      <circle cx="35" cy="0" r="2" fill="#ffffff"/>
+      <circle cx="70" cy="35" r="2" fill="#ffffff"/>
+      <circle cx="35" cy="70" r="2" fill="#ffffff"/>
+      <circle cx="0" cy="35" r="2" fill="#ffffff"/>
+    </g>
+  </g>
+  
+  <!-- Typography -->
+  <g transform="translate(150, 135)">
+    <text text-anchor="middle" font-family="Arial, sans-serif">
+      <tspan x="0" y="0" font-size="28" font-weight="bold" fill="#1e40af">Spec Tree</tspan>
+      <tspan x="0" y="15" font-size="12" fill="#3b82f6">AI-Powered Project Management</tspan>
+    </text>
+  </g>
+  
+  <!-- Simple Border -->
+  <rect x="5" y="5" width="290" height="170" fill="none" stroke="#dbeafe" stroke-width="1"/>
+</svg>
