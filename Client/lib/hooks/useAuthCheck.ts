@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useAppSelector } from '../../api/fetchData';
+import { useAppSelector } from '../hooks/use-store';
 import protectedRoutes from '../../utils/protectedRoutes';
 import { useEffect } from 'react';
 

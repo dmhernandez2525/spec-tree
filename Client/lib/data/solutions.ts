@@ -1,0 +1,693 @@
+import { IndustrySolution, RoleSolution } from '@/types/solutions';
+
+export const industries: IndustrySolution[] = [
+  {
+    slug: 'enterprise',
+    title: 'Enterprise Organizations',
+    description:
+      'Scale your project management across teams while maintaining consistency and clarity.',
+    imageUrl: '/images/solutions/enterprise.jpg',
+    features: [
+      'Cross-team collaboration tools',
+      'Enterprise-wide templates',
+      'Advanced security features',
+      'Custom workflows',
+      'Team performance analytics',
+      'Resource management',
+    ],
+    benefits: [
+      'Improved cross-team alignment',
+      'Standardized project delivery',
+      'Enhanced security and compliance',
+      'Better resource utilization',
+      'Increased project success rate',
+      'Reduced operational costs',
+    ],
+    keyMetrics: [
+      { value: '40%', label: 'Faster Delivery' },
+      { value: '60%', label: 'Better Collaboration' },
+      { value: '30%', label: 'Cost Reduction' },
+    ],
+    caseStudies: [
+      {
+        id: '1',
+        title: 'How Global Corp Transformed Project Delivery',
+        href: '/resources/case-studies/global-corp',
+      },
+    ],
+  },
+  {
+    slug: 'software-development',
+    title: 'Software Development',
+    description:
+      'Streamline your development process with AI-powered planning and context management.',
+    imageUrl: '/images/solutions/software.jpg',
+    features: [
+      'AI-powered sprint planning',
+      'Automated task breakdown',
+      'Integration with dev tools',
+      'Technical requirement gathering',
+      'Code dependency tracking',
+      'Release planning',
+    ],
+    benefits: [
+      'Faster development cycles',
+      'Improved code quality',
+      'Better team collaboration',
+      'Reduced technical debt',
+      'Streamlined code reviews',
+      'Enhanced documentation',
+    ],
+    keyMetrics: [
+      { value: '45%', label: 'Development Speed' },
+      { value: '35%', label: 'Code Quality' },
+      { value: '50%', label: 'Documentation Time' },
+    ],
+    caseStudies: [
+      {
+        id: '2',
+        title: "TechCorp's Journey to Faster Development",
+        href: '/resources/case-studies/techcorp',
+      },
+    ],
+  },
+  {
+    slug: 'digital-marketing',
+    title: 'Digital Marketing Agencies',
+    description:
+      'Optimize campaign management and client reporting with data-driven insights.',
+    imageUrl: '/images/solutions/marketing.jpg',
+    features: [
+      'Campaign performance tracking',
+      'Automated reporting dashboards',
+      'Client portal access',
+      'Social media scheduling',
+      'ROI calculation tools',
+      'Content calendar management',
+    ],
+    benefits: [
+      'Streamlined campaign execution',
+      'Enhanced client communication',
+      'Data-driven decision making',
+      'Improved campaign ROI',
+      'Better resource allocation',
+      'Increased client retention',
+    ],
+    keyMetrics: [
+      { value: '55%', label: 'Reporting Efficiency' },
+      { value: '40%', label: 'Client Satisfaction' },
+      { value: '35%', label: 'Campaign Performance' },
+    ],
+    caseStudies: [
+      {
+        id: '3',
+        title: 'Digital Edge Agency Doubles Client Base',
+        href: '/resources/case-studies/digital-edge',
+      },
+    ],
+  },
+  {
+    slug: 'healthcare',
+    title: 'Healthcare Organizations',
+    description:
+      'Ensure compliance and patient care excellence through structured project management.',
+    imageUrl: '/images/solutions/healthcare.jpg',
+    features: [
+      'HIPAA-compliant workflows',
+      'Patient care coordination',
+      'Resource scheduling',
+      'Compliance tracking',
+      'Medical inventory management',
+      'Staff certification monitoring',
+    ],
+    benefits: [
+      'Enhanced patient care quality',
+      'Reduced administrative overhead',
+      'Improved compliance adherence',
+      'Better staff utilization',
+      'Streamlined operations',
+      'Increased patient satisfaction',
+    ],
+    keyMetrics: [
+      { value: '50%', label: 'Administrative Efficiency' },
+      { value: '45%', label: 'Compliance Rate' },
+      { value: '40%', label: 'Patient Satisfaction' },
+    ],
+    caseStudies: [
+      {
+        id: '4',
+        title: 'Metropolitan Hospital Revolutionizes Patient Care',
+        href: '/resources/case-studies/metro-hospital',
+      },
+    ],
+  },
+  {
+    slug: 'construction',
+    title: 'Construction & Engineering',
+    description:
+      'Coordinate complex projects and teams while maintaining safety and quality standards.',
+    imageUrl: '/images/solutions/construction.jpg',
+    features: [
+      'Project timeline tracking',
+      'Safety compliance tools',
+      'Equipment management',
+      'Contractor coordination',
+      'Budget monitoring',
+      'Quality assurance checklist',
+    ],
+    benefits: [
+      'Improved project delivery',
+      'Enhanced safety standards',
+      'Better cost control',
+      'Streamlined communication',
+      'Reduced delays',
+      'Higher quality output',
+    ],
+    keyMetrics: [
+      { value: '35%', label: 'Project Efficiency' },
+      { value: '50%', label: 'Safety Compliance' },
+      { value: '40%', label: 'Cost Savings' },
+    ],
+    caseStudies: [
+      {
+        id: '5',
+        title: 'BuildRight Constructions Achieves Perfect Safety Record',
+        href: '/resources/case-studies/buildright',
+      },
+    ],
+  },
+  {
+    slug: 'education',
+    title: 'Educational Institutions',
+    description:
+      'Transform educational program management with collaborative tools and progress tracking.',
+    imageUrl: '/images/solutions/education.jpg',
+    features: [
+      'Curriculum planning tools',
+      'Student progress tracking',
+      'Resource allocation',
+      'Parent communication portal',
+      'Assessment management',
+      'Educational content library',
+    ],
+    benefits: [
+      'Enhanced learning outcomes',
+      'Better parent engagement',
+      'Improved resource utilization',
+      'Streamlined administration',
+      'Data-driven decisions',
+      'Increased student success',
+    ],
+    keyMetrics: [
+      { value: '45%', label: 'Administrative Efficiency' },
+      { value: '55%', label: 'Parent Engagement' },
+      { value: '40%', label: 'Student Performance' },
+    ],
+    caseStudies: [
+      {
+        id: '6',
+        title: 'Summit Academy Transforms Learning Experience',
+        href: '/resources/case-studies/summit-academy',
+      },
+    ],
+  },
+  {
+    slug: 'startups',
+    title: 'Tech Startups',
+    description:
+      'Accelerate your growth with AI-powered project management built for fast-moving startups.',
+    imageUrl: '/images/solutions/startups.jpg',
+    features: [
+      'Agile workflow automation',
+      'Burn rate tracking',
+      'Sprint planning assistance',
+      'Investor reporting templates',
+      'Growth metrics dashboard',
+      'Team velocity monitoring',
+    ],
+    benefits: [
+      'Faster time to market',
+      'Improved investor communication',
+      'Better resource allocation',
+      'Enhanced team productivity',
+      'Data-driven decision making',
+      'Reduced operational friction',
+    ],
+    keyMetrics: [
+      { value: '60%', label: 'Development Speed' },
+      { value: '45%', label: 'Team Productivity' },
+      { value: '50%', label: 'Resource Efficiency' },
+    ],
+    caseStudies: [
+      {
+        id: '1',
+        title: 'How TechNext Scaled Their Operations',
+        href: '/resources/case-studies/technext',
+      },
+    ],
+  },
+  {
+    slug: 'digital-agencies',
+    title: 'Digital Agencies',
+    description:
+      'Streamline client management and project delivery with tools built for modern agencies.',
+    imageUrl: '/images/solutions/agencies.jpg',
+    features: [
+      'Client portal dashboard',
+      'Automated reporting system',
+      'Resource allocation tools',
+      'Project timeline tracking',
+      'Client feedback management',
+      'White-label capabilities',
+    ],
+    benefits: [
+      'Enhanced client satisfaction',
+      'Streamlined project delivery',
+      'Improved profitability',
+      'Better team utilization',
+      'Increased client retention',
+      'Scalable operations',
+    ],
+    keyMetrics: [
+      { value: '55%', label: 'Client Satisfaction' },
+      { value: '40%', label: 'Project Efficiency' },
+      { value: '35%', label: 'Revenue Growth' },
+    ],
+    caseStudies: [
+      {
+        id: '2',
+        title: 'Creative Solutions Agency Doubles Revenue',
+        href: '/resources/case-studies/creative-solutions',
+      },
+    ],
+  },
+  {
+    slug: 'creative-agencies',
+    title: 'Creative Agencies',
+    description:
+      'Manage creative workflows and client deliverables with intuitive tools built for creative teams.',
+    imageUrl: '/images/solutions/creative.jpg',
+    features: [
+      'Asset management system',
+      'Creative brief templates',
+      'Review and approval workflows',
+      'Time tracking integration',
+      'Portfolio showcase tools',
+      'Brand guidelines management',
+    ],
+    benefits: [
+      'Streamlined creative process',
+      'Better client collaboration',
+      'Improved project margins',
+      'Enhanced creative quality',
+      'Faster approval cycles',
+      'Consistent brand delivery',
+    ],
+    keyMetrics: [
+      { value: '50%', label: 'Approval Speed' },
+      { value: '45%', label: 'Project Profitability' },
+      { value: '40%', label: 'Client Retention' },
+    ],
+    caseStudies: [
+      {
+        id: '3',
+        title: 'Artisan Studio Transforms Project Delivery',
+        href: '/resources/case-studies/artisan-studio',
+      },
+    ],
+  },
+];
+export const roles: RoleSolution[] = [
+  {
+    slug: 'product-owners',
+    title: 'Product Owners',
+    description:
+      'Take control of your product roadmap with AI-assisted planning',
+    imageUrl: '/images/solutions/product-owner.jpg',
+    keyResponsibilities: [
+      'Feature prioritization',
+      'Backlog management',
+      'Stakeholder communication',
+      'Release planning',
+      'Resource allocation',
+      'ROI tracking',
+    ],
+    challenges: [
+      'Managing competing priorities',
+      'Maintaining clear requirements',
+      'Coordinating with multiple teams',
+      'Meeting stakeholder expectations',
+      'Balancing short and long-term goals',
+    ],
+    benefits: [
+      {
+        title: 'Clear Vision',
+        description: 'Maintain a clear product vision and roadmap',
+        icon: 'eye',
+      },
+      {
+        title: 'Better Planning',
+        description: 'Make data-driven prioritization decisions',
+        icon: 'brain',
+      },
+      {
+        title: 'Stakeholder Alignment',
+        description: 'Keep everyone aligned on product direction',
+        icon: 'users',
+      },
+    ],
+    features: [
+      'AI-assisted backlog refinement',
+      'Automated dependency tracking',
+      'Stakeholder collaboration tools',
+      'ROI prediction',
+      'Resource forecasting',
+      'Custom reporting',
+    ],
+  },
+  {
+    slug: 'project-managers',
+    title: 'Project Managers',
+    description:
+      'Deliver projects on time and within budget with intelligent planning tools',
+    imageUrl: '/images/solutions/project-manager.jpg',
+    keyResponsibilities: [
+      'Project planning',
+      'Team coordination',
+      'Risk management',
+      'Budget tracking',
+      'Timeline management',
+      'Status reporting',
+    ],
+    challenges: [
+      'Resource constraints',
+      'Scope creep',
+      'Timeline pressure',
+      'Team communication',
+      'Stakeholder management',
+    ],
+    benefits: [
+      {
+        title: 'Efficient Planning',
+        description: 'Streamline project planning with AI assistance',
+        icon: 'eye',
+      },
+      {
+        title: 'Risk Management',
+        description: 'Identify and mitigate risks early',
+        icon: 'eye',
+      },
+      {
+        title: 'Team Productivity',
+        description: 'Boost team efficiency with clear direction',
+        icon: 'barChart',
+      },
+    ],
+    features: [
+      'AI-powered project templates',
+      'Resource allocation tools',
+      'Risk assessment',
+      'Budget tracking',
+      'Automated reporting',
+      'Team collaboration features',
+    ],
+  },
+  {
+    slug: 'developers',
+    title: 'Software Developers',
+    description:
+      'Write better code faster with AI-powered development workflows',
+    imageUrl: '/images/solutions/developer.jpg',
+    keyResponsibilities: [
+      'Code implementation',
+      'Code review',
+      'Technical documentation',
+      'Bug fixing',
+      'Feature development',
+      'System architecture',
+    ],
+    challenges: [
+      'Technical debt management',
+      'Knowledge sharing',
+      'Code quality maintenance',
+      'Meeting deadlines',
+      'Complex debugging',
+    ],
+    benefits: [
+      {
+        title: 'Code Quality',
+        description: 'Improve code quality with AI assistance',
+        icon: 'eye',
+      },
+      {
+        title: 'Faster Development',
+        description: 'Accelerate development cycles',
+        icon: 'eye',
+      },
+      {
+        title: 'Better Documentation',
+        description: 'Maintain comprehensive documentation',
+        icon: 'eye',
+      },
+    ],
+    features: [
+      'AI code suggestions',
+      'Automated code review',
+      'Documentation generator',
+      'Integration testing tools',
+      'Version control integration',
+      'Development metrics',
+    ],
+  },
+  {
+    slug: 'designers',
+    title: 'UX/UI Designers',
+    description:
+      'Create exceptional user experiences with AI-enhanced design tools',
+    imageUrl: '/images/solutions/designer.jpg',
+    keyResponsibilities: [
+      'User interface design',
+      'Prototyping',
+      'User research',
+      'Design system management',
+      'Usability testing',
+      'Visual design',
+    ],
+    challenges: [
+      'Design consistency',
+      'User feedback integration',
+      'Cross-platform design',
+      'Design handoff',
+      'Iterative improvements',
+    ],
+    benefits: [
+      {
+        title: 'Design Efficiency',
+        description: 'Streamline design workflows with AI',
+        icon: 'eye',
+      },
+      {
+        title: 'User Insights',
+        description: 'Make data-driven design decisions',
+        icon: 'eye',
+      },
+      {
+        title: 'Collaboration',
+        description: 'Seamless design-development handoff',
+        icon: 'eye',
+      },
+    ],
+    features: [
+      'Design system tools',
+      'Prototyping platform',
+      'User testing integration',
+      'Design analytics',
+      'Asset management',
+      'Collaboration features',
+    ],
+  },
+  {
+    slug: 'marketing-managers',
+    title: 'Marketing Managers',
+    description: 'Optimize marketing campaigns with data-driven insights',
+    imageUrl: '/images/solutions/marketing-manager.jpg',
+    keyResponsibilities: [
+      'Campaign planning',
+      'Performance tracking',
+      'Budget management',
+      'Team coordination',
+      'Content strategy',
+      'ROI analysis',
+    ],
+    challenges: [
+      'Attribution tracking',
+      'Channel optimization',
+      'Budget allocation',
+      'Content coordination',
+      'Performance measurement',
+    ],
+    benefits: [
+      {
+        title: 'Campaign Insights',
+        description: 'Get real-time campaign performance data',
+        icon: 'eye',
+      },
+      {
+        title: 'Resource Optimization',
+        description: 'Optimize marketing resource allocation',
+        icon: 'eye',
+      },
+      {
+        title: 'Team Alignment',
+        description: 'Keep marketing efforts coordinated',
+        icon: 'eye',
+      },
+    ],
+    features: [
+      'Campaign tracking tools',
+      'Budget management',
+      'Performance analytics',
+      'Content calendar',
+      'Team collaboration',
+      'ROI reporting',
+    ],
+  },
+  {
+    slug: 'scrum-masters',
+    title: 'Scrum Masters',
+    description: 'Facilitate agile processes with intelligent team management',
+    imageUrl: '/images/solutions/scrum-master.jpg',
+    keyResponsibilities: [
+      'Sprint planning',
+      'Team facilitation',
+      'Process improvement',
+      'Impediment removal',
+      'Scrum ceremonies',
+      'Team coaching',
+    ],
+    challenges: [
+      'Team dynamics',
+      'Process adoption',
+      'Sprint management',
+      'Stakeholder expectations',
+      'Continuous improvement',
+    ],
+    benefits: [
+      {
+        title: 'Process Efficiency',
+        description: 'Optimize agile ceremonies and workflows',
+        icon: 'eye',
+      },
+      {
+        title: 'Team Growth',
+        description: 'Foster team development and learning',
+        icon: 'eye',
+      },
+      {
+        title: 'Better Outcomes',
+        description: 'Improve sprint success rates',
+        icon: 'eye',
+      },
+    ],
+    features: [
+      'Sprint planning tools',
+      'Retrospective templates',
+      'Team metrics dashboard',
+      'Impediment tracking',
+      'Ceremony management',
+      'Team health monitoring',
+    ],
+  },
+  {
+    slug: 'quality-analysts',
+    title: 'Quality Analysts',
+    description: 'Ensure product quality with comprehensive testing tools',
+    imageUrl: '/images/solutions/qa-analyst.jpg',
+    keyResponsibilities: [
+      'Test planning',
+      'Test execution',
+      'Bug tracking',
+      'Quality metrics',
+      'Process improvement',
+      'Documentation',
+    ],
+    challenges: [
+      'Test coverage',
+      'Regression testing',
+      'Bug prioritization',
+      'Test automation',
+      'Documentation maintenance',
+    ],
+    benefits: [
+      {
+        title: 'Testing Efficiency',
+        description: 'Streamline testing processes',
+        icon: 'eye',
+      },
+      {
+        title: 'Quality Metrics',
+        description: 'Track and improve quality metrics',
+        icon: 'eye',
+      },
+      {
+        title: 'Better Coverage',
+        description: 'Enhance test coverage and reliability',
+        icon: 'eye',
+      },
+    ],
+    features: [
+      'Test case management',
+      'Automated testing tools',
+      'Bug tracking system',
+      'Quality dashboards',
+      'Test reporting',
+      'Integration testing',
+    ],
+  },
+  {
+    slug: 'business-analysts',
+    title: 'Business Analysts',
+    description: 'Transform business requirements into actionable solutions',
+    imageUrl: '/images/solutions/business-analyst.jpg',
+    keyResponsibilities: [
+      'Requirements gathering',
+      'Process analysis',
+      'Solution design',
+      'Stakeholder management',
+      'Documentation',
+      'Impact analysis',
+    ],
+    challenges: [
+      'Requirement clarity',
+      'Stakeholder alignment',
+      'Process optimization',
+      'Change management',
+      'Technical communication',
+    ],
+    benefits: [
+      {
+        title: 'Better Requirements',
+        description: 'Create clear, actionable requirements',
+        icon: 'eye',
+      },
+      {
+        title: 'Process Clarity',
+        description: 'Improve process documentation',
+        icon: 'eye',
+      },
+      {
+        title: 'Stakeholder Success',
+        description: 'Enhance stakeholder satisfaction',
+        icon: 'users',
+      },
+    ],
+    features: [
+      'Requirements management',
+      'Process modeling tools',
+      'Impact analysis',
+      'Documentation templates',
+      'Collaboration features',
+      'Reporting tools',
+    ],
+  },
+];

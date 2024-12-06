@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../lib/store';
+import { RootState, AppDispatch } from '../../../../lib/store';
 import {
   deleteFeature,
   requestUserStories,
@@ -8,7 +8,7 @@ import {
   addUserStory,
   selectUserStoryById,
   addContextualQuestionToWorkItem,
-} from '../../lib/store/slices/sow-slice';
+} from '../../../../lib/store/sow-slice';
 import {
   EpicType,
   FeatureType,

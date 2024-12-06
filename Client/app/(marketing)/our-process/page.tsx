@@ -1,83 +1,105 @@
 'use client';
 
-import { useOurProcessPageData } from '@/lib/hooks/useOurProcessData';
-import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import { NewsletterForm } from '@/components/marketing/NewsletterForm';
 import { HeadingSection } from '@/components/shared/HeadingSection';
+import ProcessImplementationSteps from '@/components/our-process/ProcessImplementationSteps';
+import SupportTraining from '@/components/our-process/SupportTraining';
+import SuccessMetrics from '@/components/our-process/SuccessMetrics';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { Separator } from '@/components/ui/separator';
 
 export default function OurProcessPage() {
-  const { aboutSections, loading } = useOurProcessPageData();
-  const router = useRouter();
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (!aboutSections) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-muted-foreground">
-          The process page is not available at the moment. Please check back
-          later.
-        </p>
-      </div>
-    );
-  }
-
-  const {
-    aboutSection,
-    sectionTwo,
-    newsletterSection,
-    wysiwyg,
-    wysiwygSectionTwo,
-    button,
-  } = aboutSections;
-
   return (
     <div className="container py-8 md:py-12">
-      {/* First Section */}
-      <div className="space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <HeadingSection
-          heading={aboutSection?.header}
-          description={aboutSection?.subHeader}
+          heading="Our Implementation Process"
+          description="A proven methodology for successful adoption of Spec Tree in your organization"
+          className="mb-12"
         />
+      </motion.div>
 
-        {wysiwyg && (
-          <div
-            className="prose max-w-none dark:prose-invert"
-            dangerouslySetInnerHTML={{ __html: wysiwyg }}
-          />
-        )}
+      <div className="space-y-24">
+        <section>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl font-bold mb-8">Implementation Steps</h2>
+            <ProcessImplementationSteps />
+          </motion.div>
+        </section>
 
-        {button?.text && (
-          <div className="flex justify-center">
-            <Button onClick={() => router.push(button.url || '/booking')}>
-              {button.text}
-            </Button>
-          </div>
-        )}
-      </div>
+        <Separator />
 
-      {/* Second Section */}
-      <div className="mt-16 space-y-8">
-        <HeadingSection
-          heading={sectionTwo?.header}
-          description={sectionTwo?.subHeader}
-        />
+        <section>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl font-bold mb-8">Support & Training</h2>
+            <p className="text-muted-foreground mb-8 max-w-3xl">
+              We provide comprehensive support and training resources to ensure
+              your team gets the most out of Spec Tree. Our
+              multi-faceted approach includes documentation, video tutorials,
+              live training sessions, and dedicated support.
+            </p>
+            <SupportTraining />
+          </motion.div>
+        </section>
 
-        {wysiwygSectionTwo && (
-          <div
-            className="prose max-w-none dark:prose-invert"
-            dangerouslySetInnerHTML={{ __html: wysiwygSectionTwo }}
-          />
-        )}
-      </div>
+        <Separator />
 
-      {/* Newsletter Section */}
-      <div className="mt-16">
-        <NewsletterForm data={newsletterSection} />
+        <section>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl font-bold mb-8">Success Metrics</h2>
+            <p className="text-muted-foreground mb-8 max-w-3xl">
+              Our customers consistently see significant improvements in their
+              project management metrics after implementing Spec Tree.
+              Here are some key performance indicators from our successful
+              implementations.
+            </p>
+            <SuccessMetrics />
+          </motion.div>
+        </section>
+
+        <section className="bg-muted rounded-lg p-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="max-w-2xl mx-auto"
+          >
+            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+            <p className="text-muted-foreground mb-8">
+              Begin your journey with Spec Tree today. Our team is ready
+              to help you transform your project management process.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button asChild size="lg">
+                <Link href="/register">Start Free Trial</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/contact">Contact Sales</Link>
+              </Button>
+            </div>
+          </motion.div>
+        </section>
       </div>
     </div>
   );

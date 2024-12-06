@@ -26,7 +26,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { loginUser } from '@/api/fetchData';
+import { useDispatch } from 'react-redux';
+
+import { loginUser } from '../../lib/store/user-slice';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -43,6 +45,7 @@ interface LoginFormProps {
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -56,7 +59,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   async function onSubmit(values: FormData) {
     setIsLoading(true);
     try {
-      const success = await loginUser({
+      const success = await loginUser(dispatch, {
         identifier: values.email,
         password: values.password,
       });

@@ -14,9 +14,10 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Company Info */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-semibold">BrainyDeveloper</h3>
+            <h3 className="text-lg font-semibold">Spec Tree</h3>
             <p className="text-sm text-muted-foreground">
-              Bespoke solutions, scaleable strategies
+              Spec Tree is a platform for creating, sharing, and
+              managing project requirements.
             </p>
             <div className="flex gap-4">
               <Button variant="ghost" size="icon" asChild>
@@ -105,8 +106,8 @@ export function Footer() {
         <div className="flex flex-col gap-4 border-t pt-8">
           <div className="flex flex-col gap-2 text-center sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} BrainyDeveloper. All
-              rights reserved.
+              &copy; {new Date().getFullYear()} Spec Tree. All rights
+              reserved.
             </p>
             <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
               <Link href="/privacy" className="hover:text-foreground">

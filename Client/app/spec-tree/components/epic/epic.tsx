@@ -1,13 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../lib/store';
+import { RootState, AppDispatch } from '../../../../lib/store';
 import {
   deleteEpic,
   updateEpicField,
   addFeature,
   requestAdditionalFeatures,
   selectFeatureById,
-} from '../../lib/store/slices/sow-slice';
+} from '../../../../lib/store/sow-slice';
 import {
   EpicType,
   FeatureType,
@@ -276,8 +276,8 @@ const Epic: React.FC<EpicProps> = ({ epic, index }) => {
             <Button onClick={handleGenerateFeatures}>Generate Features</Button>
           </div>
 
-          {features.map((feature) => (
-            <Feature key={feature.id} feature={feature} epic={epic} />
+          {features.map((feature, i) => (
+            <Feature index={i} key={feature.id} feature={feature} epic={epic} />
           ))}
         </div>
       </CardContent>

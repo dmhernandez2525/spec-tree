@@ -9,8 +9,8 @@ import {
   generateAdditionalEpics,
   generateUserStories,
   generateTasks,
-} from '../../api/openai';
-import { strapiService } from '../../api/strapi-service';
+} from '../../app/spec-tree/lib/api/openai';
+import { strapiService } from '../../app/spec-tree/lib/api/strapi-service';
 import {
   UserStoryType,
   FeatureType,
@@ -37,9 +37,9 @@ import {
   TaskType,
   UserStoryFields,
   WorkItemType,
-} from '../../types/work-items';
-import { RootState } from '../index';
-import generateId from '../../utils/generate-id';
+} from '../../app/spec-tree/lib/types/work-items';
+import { RootState } from './store/index';
+import generateId from '../../app/spec-tree/lib/utils/generate-id';
 
 const initialState: SowState = {
   epics: {},

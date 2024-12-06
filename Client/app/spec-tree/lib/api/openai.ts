@@ -14,7 +14,7 @@ import {
   generateContextQuestionsForGlobalRefinement,
   generateExplanationForGlobalRefinement,
 } from '../constants/prompts';
-import { RootState } from '../store';
+import { RootState } from '../../../../lib/store';
 
 import {
   EpicType,

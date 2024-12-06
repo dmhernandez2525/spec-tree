@@ -1,4 +1,4 @@
-import { RootState } from '../store';
+import { RootState } from '../../../../lib/store';
 import {
   EpicType,
   FeatureType,
@@ -9,7 +9,7 @@ import {
   selectFeatureById,
   selectUserStoryById,
   selectTaskById,
-} from '../store/slices/sow-slice';
+} from '../../../../lib/store/sow-slice';
 
 const mapFeatures = (featureIds: string[], state: RootState): string =>
   JSON.stringify(featureIds.map((id) => selectFeatureById(state, id)));
