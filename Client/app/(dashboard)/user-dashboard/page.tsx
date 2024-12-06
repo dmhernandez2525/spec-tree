@@ -31,10 +31,9 @@ const itemVariants = {
 
 export default function DashboardPage() {
   const user = useAppSelector((state) => state.user.user);
-
-  if (!user) {
-    redirect('/login');
-  }
+  // if (!user) {
+  //   redirect('/login');
+  // }
 
   return (
     <motion.div
