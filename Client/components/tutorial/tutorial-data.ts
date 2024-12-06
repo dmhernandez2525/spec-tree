@@ -1,0 +1,151 @@
+import { TutorialSection } from '@/types/tutorial';
+
+export const tutorialData: TutorialSection[] = [
+  {
+    id: 'dashboard-overview',
+    title: 'Dashboard Overview',
+    description: 'Learn how to use the main dashboard features',
+    completed: false,
+    steps: [
+      {
+        id: 'welcome',
+        title: 'Welcome to Spec Tree',
+        description:
+          "Let's take a quick tour of your dashboard and its main features.",
+        target: '.dashboard-header',
+        placement: 'bottom',
+        order: 1,
+        section: 'dashboard-overview',
+      },
+      {
+        id: 'metrics-overview',
+        title: 'Key Metrics',
+        description:
+          'View your important metrics at a glance, including active projects, tasks, and team performance.',
+        target: '.metrics-cards',
+        placement: 'bottom',
+        order: 2,
+        section: 'dashboard-overview',
+      },
+      {
+        id: 'project-list',
+        title: 'Project Overview',
+        description: 'See all your active projects and their current status.',
+        target: '.project-overview',
+        placement: 'top',
+        order: 3,
+        section: 'dashboard-overview',
+      },
+      {
+        id: 'recent-activity',
+        title: 'Recent Activity',
+        description:
+          'Keep track of recent changes and updates across your projects.',
+        target: '.recent-activity',
+        placement: 'left',
+        order: 4,
+        section: 'dashboard-overview',
+      },
+      {
+        id: 'navigation',
+        title: 'Navigation',
+        description:
+          'Access different sections of the application using the sidebar navigation.',
+        target: '.sidebar-nav',
+        placement: 'right',
+        order: 5,
+        section: 'dashboard-overview',
+      },
+    ],
+  },
+  {
+    id: 'blueprint-creation',
+    title: 'Creating Blueprints',
+    description: 'Learn how to create and manage project blueprints',
+    completed: false,
+    steps: [
+      {
+        id: 'new-blueprint',
+        title: 'Create New Blueprint',
+        description: 'Start by creating a new blueprint for your project.',
+        target: '.new-blueprint-button',
+        placement: 'bottom',
+        order: 1,
+        section: 'blueprint-creation',
+      },
+      {
+        id: 'ai-context',
+        title: 'AI Context Gathering',
+        description:
+          'Use our AI to help gather and refine project requirements.',
+        target: '.ai-context-section',
+        placement: 'right',
+        order: 2,
+        section: 'blueprint-creation',
+      },
+      {
+        id: 'epic-creation',
+        title: 'Creating Epics',
+        description: 'Break down your project into major epics.',
+        target: '.epic-section',
+        placement: 'right',
+        order: 3,
+        section: 'blueprint-creation',
+      },
+      {
+        id: 'feature-breakdown',
+        title: 'Feature Breakdown',
+        description: 'Define features within your epics.',
+        target: '.features-section',
+        placement: 'left',
+        order: 4,
+        section: 'blueprint-creation',
+      },
+      {
+        id: 'story-creation',
+        title: 'User Stories',
+        description: 'Create detailed user stories for each feature.',
+        target: '.stories-section',
+        placement: 'right',
+        order: 5,
+        section: 'blueprint-creation',
+      },
+    ],
+  },
+  {
+    id: 'analytics-tutorial',
+    title: 'Analytics & Reporting',
+    description: 'Understanding your project analytics',
+    completed: false,
+    steps: [
+      {
+        id: 'analytics-overview',
+        title: 'Analytics Dashboard',
+        description:
+          'Get insights into your project performance and team productivity.',
+        target: '.analytics-overview',
+        placement: 'bottom',
+        order: 1,
+        section: 'analytics-tutorial',
+      },
+      {
+        id: 'performance-metrics',
+        title: 'Performance Metrics',
+        description: 'Track key performance indicators and project health.',
+        target: '.performance-metrics',
+        placement: 'top',
+        order: 2,
+        section: 'analytics-tutorial',
+      },
+      {
+        id: 'team-analytics',
+        title: 'Team Analytics',
+        description: 'Monitor team performance and workload distribution.',
+        target: '.team-analytics',
+        placement: 'right',
+        order: 3,
+        section: 'analytics-tutorial',
+      },
+    ],
+  },
+];
