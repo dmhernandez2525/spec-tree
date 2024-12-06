@@ -26,6 +26,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
+import { FeatureTutorialButton } from '@/components/tutorial/FeatureTutorialButton';
+import { useAchievements } from '@/components/achievements/AchievementsProvider';
+import { Badge } from '@/components/ui/badge';
 import type {
   TaskMetric,
   GenerationMetric,
@@ -72,15 +75,23 @@ const aiUsageData = [
   { month: 'Jun', contextGenerated: 65, questionsAsked: 170, accuracy: 96 },
 ];
 
+// Component Definitions
 interface MetricCardProps {
   title: string;
   value: string;
   description: string;
   trend?: number;
+  className?: string;
 }
 
-const MetricCard = ({ title, value, description, trend }: MetricCardProps) => (
-  <Card>
+const MetricCard = ({
+  title,
+  value,
+  description,
+  trend,
+  className,
+}: MetricCardProps) => (
+  <Card className={className}>
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <CardTitle className="text-sm font-medium">{title}</CardTitle>
       {trend && (
@@ -145,14 +156,26 @@ const userActivityMetrics: UserActivityMetric = {
 };
 
 export default function AnalyticsDashboard() {
-  const [timeRange, setTimeRange] = useState('month');
+  const [timeRange, setTimeRange] = useState<string>('month');
   const [date, setDate] = useState<Date | undefined>(new Date());
+  // const { hasUnlockedAchievement } = useAchievements();
+
+  // const hasAdvancedAnalytics = hasUnlockedAchievement('analytics-master');
+  // const hasCustomAnalytics = hasUnlockedAchievement('data-scientist');
 
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Analytics</h2>
+        {/* <div className="flex items-center gap-2">
+          <h2 className="text-3xl font-bold tracking-tight">Analytics</h2>
+          <FeatureTutorialButton featureId="analytics-deep-dive" />
+        </div> */}
         <div className="flex items-center gap-4">
+          {/* {hasAdvancedAnalytics && (
+            <Badge variant="secondary" className="h-7">
+              Advanced Analytics Enabled
+            </Badge>
+          )} */}
           <Tabs defaultValue={timeRange} onValueChange={setTimeRange}>
             <TabsList>
               <TabsTrigger value="week">Week</TabsTrigger>
@@ -184,31 +207,35 @@ export default function AnalyticsDashboard() {
           </Popover>
         </div>
       </div>
-      {/* Task Generation Metrics */}
+      {/* Metrics Section */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           title="Active Projects"
           value="12"
           description="+2 from last month"
           trend={8}
+          className="analytics-metrics"
         />
         <MetricCard
           title="Completion Rate"
           value="92%"
           description="Average across all projects"
           trend={5}
+          className="analytics-metrics"
         />
         <MetricCard
           title="AI Context Usage"
           value="450"
           description="Total contexts generated"
           trend={12}
+          className="analytics-metrics"
         />
         <MetricCard
           title="Team Efficiency"
           value="87%"
           description="Based on delivery times"
           trend={3}
+          className="analytics-metrics"
         />
 
         <Card>
@@ -275,7 +302,7 @@ export default function AnalyticsDashboard() {
         </Card>
       </div>
       {/* Project Timeline */}
-      <Card>
+      <Card className="performance-charts">
         <CardHeader>
           <CardTitle>Project Timeline Overview</CardTitle>
         </CardHeader>
@@ -657,6 +684,9 @@ export default function AnalyticsDashboard() {
         <Button variant="outline">Export as CSV</Button>
         <Button variant="outline">Generate Report</Button>
       </div>
+      {/* {hasAdvancedAnalytics && (
+        <></>
+      )} */}
     </div>
   );
 }
