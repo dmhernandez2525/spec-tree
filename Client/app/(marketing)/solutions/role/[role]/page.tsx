@@ -125,7 +125,7 @@ export default function RolePage() {
               <Card className="h-full">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2">
-                    <Icons.alertCircle className="h-5 w-5 text-primary" />
+                    <Icons.alert className="h-5 w-5 text-primary" />
                     <span>{challenge}</span>
                   </div>
                 </CardContent>
