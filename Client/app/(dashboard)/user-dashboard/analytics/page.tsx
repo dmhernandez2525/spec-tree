@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
 import {
   LineChart,
   BarChart,
@@ -29,6 +29,8 @@ import { CalendarIcon } from 'lucide-react';
 import { FeatureTutorialButton } from '@/components/tutorial/FeatureTutorialButton';
 import { useAchievements } from '@/components/achievements/AchievementsProvider';
 import { Badge } from '@/components/ui/badge';
+import { TutorialProgress } from '@/components/tutorial/TutorialProgress';
+import { AchievementsDisplay } from '@/components/achievements/AchievementsDisplay';
 import type {
   TaskMetric,
   GenerationMetric,
@@ -136,7 +138,18 @@ const timelineMetrics: TimelineMetric[] = [
     editedItems: 23,
     completedItems: 34,
   },
-  // Add more timeline data...
+  {
+    date: '2024-02-01',
+    generatedItems: 52,
+    editedItems: 28,
+    completedItems: 38,
+  },
+  {
+    date: '2024-03-01',
+    generatedItems: 48,
+    editedItems: 25,
+    completedItems: 36,
+  },
 ];
 
 const projectMetrics: ProjectMetric = {
@@ -158,24 +171,24 @@ const userActivityMetrics: UserActivityMetric = {
 export default function AnalyticsDashboard() {
   const [timeRange, setTimeRange] = useState<string>('month');
   const [date, setDate] = useState<Date | undefined>(new Date());
-  // const { hasUnlockedAchievement } = useAchievements();
+  const { hasUnlockedAchievement } = useAchievements();
 
-  // const hasAdvancedAnalytics = hasUnlockedAchievement('analytics-master');
-  // const hasCustomAnalytics = hasUnlockedAchievement('data-scientist');
+  const hasAdvancedAnalytics = hasUnlockedAchievement('analytics-master');
+  const hasCustomAnalytics = hasUnlockedAchievement('data-scientist');
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-8">
       <div className="flex items-center justify-between">
-        {/* <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <h2 className="text-3xl font-bold tracking-tight">Analytics</h2>
           <FeatureTutorialButton featureId="analytics-deep-dive" />
-        </div> */}
+        </div>
         <div className="flex items-center gap-4">
-          {/* {hasAdvancedAnalytics && (
+          {hasAdvancedAnalytics && (
             <Badge variant="secondary" className="h-7">
               Advanced Analytics Enabled
             </Badge>
-          )} */}
+          )}
           <Tabs defaultValue={timeRange} onValueChange={setTimeRange}>
             <TabsList>
               <TabsTrigger value="week">Week</TabsTrigger>
@@ -443,6 +456,11 @@ export default function AnalyticsDashboard() {
                   />
                 </BarChart>
               </ResponsiveContainer>
+
+              <TutorialProgress />
+              <div className="mt-6">
+                <AchievementsDisplay />
+              </div>
             </div>
           </CardContent>
         </Card>

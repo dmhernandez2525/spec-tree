@@ -1,15 +1,31 @@
 'use client';
 
-import React, { createContext, useContext, useCallback } from 'react';
+import React, { createContext, useContext, useCallback, useState } from 'react';
 import { useTutorial } from './TutorialContext';
 import { allFeatureTutorials } from './feature-tutorials';
 import { TutorialSection } from '@/types/tutorial';
+import { useToast } from '@/lib/hooks/use-toast';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Icons } from '@/components/shared/icons';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 interface TutorialManagerContextType {
   startFeatureTutorial: (featureId: string) => void;
   isTutorialAvailable: (featureId: string) => boolean;
   getFeatureTutorial: (featureId: string) => TutorialSection | undefined;
   getTutorialProgress: (featureId: string) => number;
+  suggestNextTutorial: () => TutorialSection | undefined;
+  resetTutorialProgress: () => void;
 }
 
 const TutorialManagerContext = createContext<
@@ -20,19 +36,93 @@ interface TutorialManagerProviderProps {
   children: React.ReactNode;
 }
 
+interface TutorialCardProps {
+  tutorial: TutorialSection;
+  progress: number;
+  onStart: () => void;
+  isActive?: boolean;
+}
+
+const TutorialCard = ({
+  tutorial,
+  progress,
+  onStart,
+  isActive,
+}: TutorialCardProps) => {
+  const Icon = Icons.alert;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className={cn('mb-4', isActive && 'ring-2 ring-primary')}
+    >
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <div className="flex items-center gap-2">
+            <div
+              className={cn(
+                'p-2 rounded-full',
+                progress === 100
+                  ? 'bg-primary/10 text-primary'
+                  : 'bg-muted text-muted-foreground'
+              )}
+            >
+              <Icon className="h-4 w-4" />
+            </div>
+            <CardTitle className="text-lg">{tutorial.title}</CardTitle>
+          </div>
+          <Badge variant={progress === 100 ? 'default' : 'secondary'}>
+            {progress}%
+          </Badge>
+        </CardHeader>
+        <CardContent>
+          <CardDescription className="mb-4">
+            {tutorial.description}
+          </CardDescription>
+          <div className="space-y-4">
+            <Progress value={progress} className="h-2" />
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">
+                {tutorial.steps.length} steps
+              </span>
+              <Button
+                variant={isActive ? 'default' : 'outline'}
+                size="sm"
+                onClick={onStart}
+              >
+                {progress > 0 ? 'Continue' : 'Start'}
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
+
 export function TutorialManagerProvider({
   children,
 }: TutorialManagerProviderProps) {
-  const { startTutorial, progress } = useTutorial();
+  const { toast } = useToast();
+  const { startTutorial, progress, endTutorial } = useTutorial();
+  const [activeTutorial, setActiveTutorial] = useState<string | null>(null);
 
   const startFeatureTutorial = useCallback(
     (featureId: string) => {
       const tutorial = allFeatureTutorials.find((t) => t.id === featureId);
       if (tutorial) {
-        startTutorial(tutorial.id);
+        setActiveTutorial(featureId);
+        startTutorial(featureId);
+
+        toast({
+          title: 'Tutorial Started',
+          description: `Starting ${tutorial.title} tutorial`,
+        });
       }
     },
-    [startTutorial]
+    [startTutorial, toast]
   );
 
   const isTutorialAvailable = useCallback((featureId: string) => {
@@ -52,21 +142,80 @@ export function TutorialManagerProvider({
         tutorial.steps.some((step) => step.id === stepId)
       ).length;
 
-      return (completedSteps / tutorial.steps.length) * 100;
+      return Math.round((completedSteps / tutorial.steps.length) * 100);
     },
     [progress.completedSteps]
   );
 
+  const suggestNextTutorial = useCallback(() => {
+    const incompleteTutorials = allFeatureTutorials.filter((tutorial) => {
+      const tutorialProgress = getTutorialProgress(tutorial.id);
+      return tutorialProgress < 100;
+    });
+
+    // Sort by progress (descending) to suggest the most progressed tutorial first
+    incompleteTutorials.sort((a, b) => {
+      const progressA = getTutorialProgress(a.id);
+      const progressB = getTutorialProgress(b.id);
+      return progressB - progressA;
+    });
+
+    return incompleteTutorials[0];
+  }, [getTutorialProgress]);
+
+  const resetTutorialProgress = useCallback(() => {
+    endTutorial();
+    setActiveTutorial(null);
+
+    toast({
+      title: 'Tutorial Progress Reset',
+      description: 'All tutorial progress has been reset.',
+    });
+  }, [endTutorial, toast]);
+
+  const value = {
+    startFeatureTutorial,
+    isTutorialAvailable,
+    getFeatureTutorial,
+    getTutorialProgress,
+    suggestNextTutorial,
+    resetTutorialProgress,
+  };
+
   return (
-    <TutorialManagerContext.Provider
-      value={{
-        startFeatureTutorial,
-        isTutorialAvailable,
-        getFeatureTutorial,
-        getTutorialProgress,
-      }}
-    >
+    <TutorialManagerContext.Provider value={value}>
       {children}
+      <AnimatePresence mode="wait">
+        {activeTutorial && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-4 right-4 z-50 w-80"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Active Tutorial</CardTitle>
+                <CardDescription>
+                  Currently viewing {getFeatureTutorial(activeTutorial)?.title}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    endTutorial();
+                    setActiveTutorial(null);
+                  }}
+                >
+                  End Tutorial
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </TutorialManagerContext.Provider>
   );
 }
