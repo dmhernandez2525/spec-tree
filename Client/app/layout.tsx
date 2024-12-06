@@ -7,6 +7,7 @@ import StoreProvider from './StoreProvider';
 import { MainNav } from '@/components/layout/MainNav';
 import { Footer } from '@/components/layout/Footer';
 import { Toaster } from '@/components/ui/toaster';
+import { Layout } from '@/components/auth/Layout';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -27,7 +28,9 @@ export default function RootLayout({
               <StyleWrapper>
                 <div className="relative flex min-h-screen flex-col">
                   <MainNav />
-                  <main className="flex-1">{children}</main>
+                  <Layout>
+                    <main className="flex-1">{children}</main>
+                  </Layout>
                   <Footer />
                 </div>
                 <Toaster />

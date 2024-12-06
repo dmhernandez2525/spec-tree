@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/lib/hooks/use-store';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { redirect } from 'next/navigation';
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -23,6 +25,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useDispatch } from 'react-redux';
+import { logOut } from '../../lib/store/auth-slice';
+import { clearUser } from '../../lib/store/user-slice';
 
 interface NavItem {
   title: string;
@@ -143,9 +148,12 @@ interface UserNavProps {
 }
 
 function UserNav({ user }: UserNavProps) {
+  const dispatch = useDispatch();
+
   const handleSignOut = (event: Event) => {
-    event.preventDefault();
-    // Add sign out logic here
+    dispatch(clearUser());
+    dispatch(logOut());
+    redirect('');
   };
 
   return (
