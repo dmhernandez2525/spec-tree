@@ -467,17 +467,6 @@ export interface CopyrightCopyrightFooter extends Struct.ComponentSchema {
   };
 }
 
-export interface BannerLogo extends Struct.ComponentSchema {
-  collectionName: 'components_banner_logos';
-  info: {
-    displayName: 'Logo';
-    description: '';
-  };
-  attributes: {
-    logo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
-  };
-}
-
 export interface AddressAddress extends Struct.ComponentSchema {
   collectionName: 'components_address_address_s';
   info: {
@@ -490,6 +479,17 @@ export interface AddressAddress extends Struct.ComponentSchema {
     country: Schema.Attribute.String;
     zipCode: Schema.Attribute.String;
     city: Schema.Attribute.String;
+  };
+}
+
+export interface BannerLogo extends Struct.ComponentSchema {
+  collectionName: 'components_banner_logos';
+  info: {
+    displayName: 'Logo';
+    description: '';
+  };
+  attributes: {
+    logo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
   };
 }
 
@@ -533,8 +533,8 @@ declare module '@strapi/strapi' {
       'datasets.email-content': DatasetsEmailContent;
       'datasets.accept': DatasetsAccept;
       'copyright.copyright-footer': CopyrightCopyrightFooter;
-      'banner.logo': BannerLogo;
       'address.address': AddressAddress;
+      'banner.logo': BannerLogo;
     }
   }
 }
