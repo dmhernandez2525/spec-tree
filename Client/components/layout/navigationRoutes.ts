@@ -182,15 +182,6 @@ export const routes: NavItem[] = [
     title: 'Contact',
     href: '/contact',
   },
-  {
-    title: 'Spec Tree',
-    href: '/spec-tree',
-    description: 'Access the main application',
-  },
-  {
-    title: 'Theme',
-    href: '/theam',
-  },
 ];
 
 // Auth routes - not shown in nav but needed for reference
