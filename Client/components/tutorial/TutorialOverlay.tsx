@@ -10,9 +10,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { Icons } from '@/components/shared/icons';
 import { cn } from '@/lib/utils';
+import { TutorialStep } from '@/types/tutorial';
 
 interface HighlightBoxProps {
   targetElement: DOMRect | null;
@@ -28,7 +31,7 @@ const HighlightBox = ({ targetElement, className }: HighlightBoxProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className={cn(
-        'absolute border-2 border-primary bg-primary/10 pointer-events-none',
+        'absolute border-2 border-primary bg-primary/10 pointer-events-none rounded-lg',
         className
       )}
       style={{
@@ -36,9 +39,34 @@ const HighlightBox = ({ targetElement, className }: HighlightBoxProps) => {
         left: targetElement.left - 4,
         width: targetElement.width + 8,
         height: targetElement.height + 8,
-        borderRadius: '4px',
       }}
     />
+  );
+};
+
+interface StepProgressProps {
+  currentStep: TutorialStep;
+  totalSteps: number;
+  currentStepIndex: number;
+}
+
+const StepProgress = ({
+  currentStep,
+  totalSteps,
+  currentStepIndex,
+}: StepProgressProps) => {
+  const progress = ((currentStepIndex + 1) / totalSteps) * 100;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm">
+        <span className="text-muted-foreground">
+          Step {currentStepIndex + 1} of {totalSteps}
+        </span>
+        <span className="font-medium">{progress.toFixed(0)}%</span>
+      </div>
+      <Progress value={progress} className="h-1" />
+    </div>
   );
 };
 
@@ -46,10 +74,12 @@ export function TutorialOverlay() {
   const {
     isActive,
     currentStep,
+    currentSection,
     nextStep,
     previousStep,
     skipTutorial,
     endTutorial,
+    markStepComplete,
   } = useTutorial();
 
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
@@ -61,11 +91,33 @@ export function TutorialOverlay() {
       if (targetElement) {
         const rect = targetElement.getBoundingClientRect();
         setTargetRect(rect);
+
+        // Scroll target into view if needed
+        const buffer = 100; // pixels from top/bottom
+        const isInView =
+          rect.top >= buffer && rect.bottom <= window.innerHeight - buffer;
+
+        if (!isInView) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+        }
       }
     }
   }, [isActive, currentStep]);
 
-  if (!isActive || !currentStep) return null;
+  useEffect(() => {
+    if (currentStep?.id) {
+      markStepComplete(currentStep.id);
+    }
+  }, [currentStep]);
+
+  if (!isActive || !currentStep || !currentSection) return null;
+
+  const currentStepIndex = currentSection.steps.findIndex(
+    (step) => step.id === currentStep.id
+  );
 
   return (
     <div
@@ -86,8 +138,8 @@ export function TutorialOverlay() {
           >
             <Card className="w-[400px]">
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  {currentStep.title}
+                <div className="flex items-center justify-between">
+                  <CardTitle>{currentStep.title}</CardTitle>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -96,20 +148,33 @@ export function TutorialOverlay() {
                   >
                     <Icons.x className="h-4 w-4" />
                   </Button>
-                </CardTitle>
+                </div>
+                <CardDescription>{currentSection.title}</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">
                   {currentStep.description}
                 </p>
+                <StepProgress
+                  currentStep={currentStep}
+                  totalSteps={currentSection.steps.length}
+                  currentStepIndex={currentStepIndex}
+                />
               </CardContent>
               <CardFooter className="flex justify-between">
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={previousStep}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={previousStep}
+                    disabled={currentStepIndex === 0}
+                  >
+                    <Icons.chevronDown className="h-4 w-4 rotate-90 mr-1" />
                     Previous
                   </Button>
                   <Button size="sm" onClick={nextStep}>
                     Next
+                    <Icons.chevronDown className="h-4 w-4 -rotate-90 ml-1" />
                   </Button>
                 </div>
                 <Button variant="ghost" size="sm" onClick={skipTutorial}>
