@@ -39,6 +39,16 @@ const sidebarNavItems = [
     href: '/user-dashboard/support',
     icon: 'helpCircle',
   },
+  {
+    title: 'Spec Tree',
+    href: '/user-dashboard/spec-tree',
+    icon: 'helpCircle',
+  },
+  {
+    title: 'Theme',
+    href: '/user-dashboard/theme',
+    icon: 'helpCircle',
+  },
 ];
 
 interface DashboardLayoutProps {

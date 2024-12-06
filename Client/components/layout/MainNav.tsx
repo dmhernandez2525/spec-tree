@@ -3,10 +3,11 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/lib/hooks/use-store';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { redirect } from 'next/navigation';
+import { Icons } from '@/components/shared/icons';
 
 import {
   NavigationMenu,
@@ -16,8 +17,15 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Icons } from '@/components/shared/icons';
+
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,118 +34,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useDispatch } from 'react-redux';
-import { logOut } from '../../lib/store/auth-slice';
-import { clearUser } from '../../lib/store/user-slice';
-
-interface NavItem {
-  title: string;
-  href: string;
-  description?: string;
-  children?: NavItem[];
-}
-
-const routes: NavItem[] = [
-  {
-    title: 'About',
-    href: '/about',
-    children: [
-      {
-        title: 'About Us',
-        href: '/about',
-        description: 'Learn more about our company and mission',
-      },
-      {
-        title: 'Our Process',
-        href: '/our-process',
-        description: 'Discover how we work with our clients',
-      },
-    ],
-  },
-  {
-    title: 'Features',
-    href: '/features',
-    children: [
-      {
-        title: 'AI-Powered Context',
-        href: '/features/ai-context',
-        description: 'Intelligent context gathering and analysis',
-      },
-      {
-        title: 'Work Item Generation',
-        href: '/features/work-items',
-        description: 'Automated generation of epics, features, and tasks',
-      },
-      {
-        title: 'Template System',
-        href: '/features/templates',
-        description: 'Reusable templates for faster project setup',
-      },
-      {
-        title: 'Integration Hub',
-        href: '/features/integrations',
-        description: 'Connect with your favorite project management tools',
-      },
-    ],
-  },
-  {
-    title: 'Solutions',
-    href: '/solutions',
-    children: [
-      {
-        title: 'For Enterprises',
-        href: '/solutions/industry/enterprise',
-        description: 'Scale your project management across teams',
-      },
-      {
-        title: 'For Startups',
-        href: '/solutions/industry/startups',
-        description: 'Move fast with efficient project planning',
-      },
-      {
-        title: 'For Agencies',
-        href: '/solutions/industry/digital-marketing',
-        description: 'Manage multiple client projects seamlessly',
-      },
-    ],
-  },
-  {
-    title: 'Resources',
-    href: '/resources',
-    children: [
-      {
-        title: 'Documentation',
-        href: '/resources/documentation',
-        description: 'Detailed guides and API references',
-      },
-      {
-        title: 'Case Studies',
-        href: '/resources/case-studies',
-        description: 'Real-world success stories',
-      },
-      {
-        title: 'Blog',
-        href: '/blog',
-        description: 'Latest updates and insights',
-      },
-    ],
-  },
-  {
-    title: 'Pricing',
-    href: '/pricing',
-  },
-  {
-    title: 'Contact',
-    href: '/contact',
-  },
-  {
-    title: 'Spec Tree',
-    href: '/spec-tree',
-  },
-  {
-    title: 'Theme',
-    href: '/theam',
-  },
-];
+import { logOut } from '@/lib/store/auth-slice';
+import { clearUser } from '@/lib/store/user-slice';
+import { routes, NavItem } from './navigationRoutes';
 
 interface UserNavProps {
   user: {
@@ -149,11 +48,12 @@ interface UserNavProps {
 
 function UserNav({ user }: UserNavProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const handleSignOut = (event: Event) => {
+  const handleSignOut = () => {
     dispatch(clearUser());
     dispatch(logOut());
-    redirect('');
+    router.push('/');
   };
 
   return (
@@ -190,52 +90,142 @@ function UserNav({ user }: UserNavProps) {
           <Link href="/user-dashboard/settings">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onSelect={handleSignOut as any}
-        >
-          Sign out
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-function MobileNav({ routes }: { routes: NavItem[] }) {
+function NavLink({ item }: { item: NavItem }) {
   const pathname = usePathname();
 
-  return (
-    <div className="flex flex-col gap-4 px-2 py-4">
-      {routes.map((route) =>
-        route.children ? (
-          <div key={route.href} className="flex flex-col gap-2">
-            <h4 className="font-medium">{route.title}</h4>
-            {route.children.map((child) => (
-              <Link
-                key={child.href}
-                href={child.href}
-                className={cn(
-                  'text-muted-foreground hover:text-foreground',
-                  pathname === child.href && 'text-foreground'
+  if (item.children) {
+    return (
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+            {item.children.map((child) => (
+              <li key={child.href}>
+                {child.children ? (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium leading-none mb-2">
+                      {child.title}
+                    </h4>
+                    <ul className="space-y-2">
+                      {child.children.map((subChild) => (
+                        <li key={subChild.href}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href={subChild.href}
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            >
+                              <div className="text-sm font-medium">
+                                {subChild.title}
+                              </div>
+                              {subChild.description && (
+                                <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                  {subChild.description}
+                                </p>
+                              )}
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href={child.href}
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                    >
+                      <div className="text-sm font-medium">{child.title}</div>
+                      {child.description && (
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          {child.description}
+                        </p>
+                      )}
+                    </Link>
+                  </NavigationMenuLink>
                 )}
-              >
-                {child.title}
-              </Link>
+              </li>
+            ))}
+          </ul>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+    );
+  }
+
+  return (
+    <NavigationMenuItem>
+      <Link href={item.href} legacyBehavior passHref>
+        <NavigationMenuLink
+          className={cn(
+            'group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50',
+            pathname === item.href && 'bg-accent/50'
+          )}
+        >
+          {item.title}
+        </NavigationMenuLink>
+      </Link>
+    </NavigationMenuItem>
+  );
+}
+
+function MobileNavItem({ item, depth = 0 }: { item: NavItem; depth?: number }) {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const pathname = usePathname();
+
+  if (item.children) {
+    return (
+      <div className="space-y-2">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={cn(
+            'flex w-full items-center justify-between rounded-md p-2 text-left text-sm hover:bg-accent',
+            depth > 0 && 'pl-6'
+          )}
+        >
+          <span className="font-medium">{item.title}</span>
+          <Icons.chevronDown
+            className={cn(
+              'h-4 w-4 transition-transform',
+              isOpen && 'rotate-180'
+            )}
+          />
+        </button>
+        {isOpen && (
+          <div className="pl-4 space-y-2">
+            {item.children.map((child) => (
+              <MobileNavItem key={child.href} item={child} depth={depth + 1} />
             ))}
           </div>
-        ) : (
-          <Link
-            key={route.href}
-            href={route.href}
-            className={cn(
-              'text-muted-foreground hover:text-foreground',
-              pathname === route.href && 'text-foreground'
-            )}
-          >
-            {route.title}
-          </Link>
-        )
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={item.href}
+      className={cn(
+        'block rounded-md p-2 text-sm hover:bg-accent',
+        pathname === item.href && 'bg-accent',
+        depth > 0 && 'pl-6'
       )}
+    >
+      {item.title}
+    </Link>
+  );
+}
+
+function MobileNav() {
+  return (
+    <div className="space-y-4 px-2 py-4">
+      {routes.map((route) => (
+        <MobileNavItem key={route.href} item={route} />
+      ))}
     </div>
   );
 }
@@ -247,94 +237,50 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+      <div className="container flex h-14 items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center space-x-2">
             <span className="font-bold">Spec Tree</span>
           </Link>
-          <NavigationMenu>
-            <NavigationMenuList>
-              {routes.map((route) => (
-                <NavigationMenuItem key={route.href}>
-                  {route.children ? (
-                    <>
-                      <NavigationMenuTrigger>
-                        {route.title}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                          {route.children.map((child) => (
-                            <li key={child.href}>
-                              <NavigationMenuLink asChild>
-                                <Link
-                                  href={child.href}
-                                  className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                >
-                                  <div className="text-sm font-medium leading-none">
-                                    {child.title}
-                                  </div>
-                                  {child.description && (
-                                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                      {child.description}
-                                    </p>
-                                  )}
-                                </Link>
-                              </NavigationMenuLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
-                    </>
-                  ) : (
-                    <Link href={route.href} legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={cn(
-                          'group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50',
-                          pathname === route.href && 'bg-accent/50'
-                        )}
-                      >
-                        {route.title}
-                      </NavigationMenuLink>
-                    </Link>
-                  )}
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+
+          <nav className="hidden md:flex">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {routes.map((route) => (
+                  <NavLink key={route.href} item={route} />
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </nav>
+
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Icons.menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+              <SheetHeader>
+                <SheetTitle>Navigation</SheetTitle>
+              </SheetHeader>
+              <MobileNav />
+            </SheetContent>
+          </Sheet>
         </div>
 
-        {/* Mobile Navigation */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              className="mr-2 px-0 text-base hover:bg-transparent focus:ring-0 md:hidden"
-            >
-              <Icons.menu className="h-6 w-6" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="pr-0">
-            <MobileNav routes={routes} />
-          </SheetContent>
-        </Sheet>
-
-        <Link href="/" className="mr-6 flex items-center space-x-2 md:hidden">
-          <span className="font-bold">Spec Tree</span>
-        </Link>
-
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex items-center gap-2">
           {user ? (
             <UserNav user={user} />
           ) : (
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" asChild>
+            <>
+              <Button variant="ghost" asChild className="hidden sm:flex">
                 <Link href="/login">Sign In</Link>
               </Button>
               <Button asChild>
                 <Link href="/register">Get Started</Link>
               </Button>
-            </div>
+            </>
           )}
         </div>
       </div>
