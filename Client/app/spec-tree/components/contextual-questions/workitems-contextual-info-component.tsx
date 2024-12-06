@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../lib/store';
+import { RootState } from '../../../../lib/store';
 import { WizardStep } from '../wizard/types';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';

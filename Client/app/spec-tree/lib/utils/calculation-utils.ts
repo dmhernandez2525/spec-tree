@@ -1,10 +1,10 @@
-import { RootState } from '../store';
+import { RootState } from '../../../../lib/store';
 import { EpicType, FeatureType, UserStoryType } from '../types/work-items';
 import {
   selectFeatureById,
   selectUserStoryById,
   selectTaskById,
-} from '../store/slices/sow-slice';
+} from '../../../../lib/store/sow-slice';
 
 const calculateTotalTasks = (
   state: RootState,

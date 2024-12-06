@@ -1,4 +1,3 @@
-// components/shared/icons.tsx
 import {
   Twitter,
   Facebook,
@@ -9,6 +8,18 @@ import {
   Phone,
   AlertCircle,
   ChevronDown,
+  Eye,
+  Users,
+  Brain,
+  BarChart,
+  Plug,
+  Sparkles,
+  Quote,
+  Menu,
+  Check,
+  X,
+  ArrowRight,
+  Search,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -24,4 +35,16 @@ export const Icons = {
   phone: Phone,
   alert: AlertCircle,
   chevronDown: ChevronDown,
+  eye: Eye,
+  users: Users,
+  brain: Brain,
+  barChart: BarChart,
+  plug: Plug,
+  sparkles: Sparkles,
+  quote: Quote,
+  menu: Menu,
+  check: Check,
+  x: X,
+  arrowRight: ArrowRight,
+  search: Search,
 } as const;

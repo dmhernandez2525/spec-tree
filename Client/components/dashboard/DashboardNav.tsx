@@ -19,7 +19,7 @@ export function DashboardNav({
   items = [
     {
       href: '/user-dashboard',
-      title: 'Home',
+      title: 'Homeds',
       icon: Home,
     },
     {

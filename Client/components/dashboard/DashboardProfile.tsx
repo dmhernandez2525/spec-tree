@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
 import { UserAttributes } from '@/types/main';
-import { updateUserInfo } from '@/lib/api';
+import { updateUserProfile } from '../../lib/store/user-slice';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -61,9 +61,9 @@ export function DashboardProfile({ initialData }: DashboardProfileProps) {
   async function onSubmit(data: ProfileFormValues) {
     setIsLoading(true);
     try {
-      await updateUserInfo({
+      await updateUserProfile({
         userId: initialData?.id?.toString() || '',
-        data: {
+        newUserData: {
           ...data,
         },
       });

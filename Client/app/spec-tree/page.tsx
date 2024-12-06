@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Provider } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { store } from './lib/store';
 import { Toaster } from '@/components/ui/toaster';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,14 +16,10 @@ import Builder from './components/builder';
 import { strapiService } from './lib/api/strapi-service';
 
 import { App } from './lib/types/work-items';
-import { setSow } from './lib/store/slices/sow-slice';
+import { setSow } from '../../lib/store/sow-slice';
 
 export default function SpecTree() {
-  return (
-    <Provider store={store}>
-      <SpecTreeContent />
-    </Provider>
-  );
+  return <SpecTreeContent />;
 }
 
 // Separate component to use Redux hooks

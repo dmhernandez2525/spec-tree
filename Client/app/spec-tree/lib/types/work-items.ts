@@ -1,5 +1,5 @@
-import { sowSlice } from '../store/slices/sow-slice';
-import { RootState } from '../store';
+import { sowSlice } from '../../../../lib/store/sow-slice';
+import { RootState } from '../../../../lib/store';
 
 export interface App {
   id: string;

@@ -452,12 +452,31 @@ export interface ApiAboutPageAboutPage extends Struct.SingleTypeSchema {
     singularName: 'about-page';
     pluralName: 'about-pages';
     displayName: 'About Page';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    temp: Schema.Attribute.String;
+    metricSection: Schema.Attribute.Component<
+      'section-card.background-cards',
+      false
+    >;
+    newsletterSection: Schema.Attribute.Component<
+      'section-card.title-card',
+      false
+    >;
+    socialSection: Schema.Attribute.Component<
+      'section-card.social-options',
+      false
+    >;
+    aboutSection: Schema.Attribute.Component<
+      'section-card.title-card-cta',
+      false
+    >;
+    mediaContent: Schema.Attribute.Media<'images' | 'videos'>;
+    wysiwyg: Schema.Attribute.RichText;
+    mediaContentHeader: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;

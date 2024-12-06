@@ -18,7 +18,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { setSow } from '../../lib/store/slices/sow-slice';
+import { setSow } from '../../../../lib/store/sow-slice';
 import { App } from '../../lib/types/work-items';
 import { strapiService } from '../../lib/api/strapi-service';
 

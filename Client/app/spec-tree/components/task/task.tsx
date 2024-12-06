@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteTask, updateTaskField } from '../../lib/store/slices/sow-slice';
+import { deleteTask, updateTaskField } from '../../../../lib/store/sow-slice';
 import { TaskType, TaskFields } from '../../lib/types/work-items';
 import { Button } from '@/components/ui/button';
 import {

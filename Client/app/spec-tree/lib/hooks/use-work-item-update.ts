@@ -11,10 +11,10 @@ import {
   FeatureType,
   UserStoryType,
 } from '../types/work-items';
-import { RootState } from '../store';
+import { RootState } from '../../../../lib/store';
 
 import { useSelector } from 'react-redux';
-import { selectChatApi } from '../store/slices/sow-slice';
+import { selectChatApi } from '../../../../lib/store/sow-slice';
 
 interface IGenerateUpdatedWorkItemProps {
   context: string;

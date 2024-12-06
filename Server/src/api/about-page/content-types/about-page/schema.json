@@ -4,14 +4,44 @@
   "info": {
     "singularName": "about-page",
     "pluralName": "about-pages",
-    "displayName": "About Page"
+    "displayName": "About Page",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "temp": {
+    "metricSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "section-card.background-cards"
+    },
+    "newsletterSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "section-card.title-card"
+    },
+    "socialSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "section-card.social-options"
+    },
+    "aboutSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "section-card.title-card-cta"
+    },
+    "mediaContent": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "wysiwyg": {
+      "type": "richtext"
+    },
+    "mediaContentHeader": {
       "type": "string"
     }
   }
