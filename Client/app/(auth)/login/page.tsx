@@ -2,9 +2,16 @@
 
 import { LoginForm } from '@/components/auth/LoginForm';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { useAppSelector } from '@/lib/hooks/use-store';
+import { redirect } from 'next/navigation';
 import Image from 'next/image';
 
 export default function LoginPage() {
+  const user = useAppSelector((state) => state.user.user);
+
+  if (user) {
+    redirect('/user-dashboard');
+  }
   return (
     <div className="container flex min-h-screen items-center justify-center py-8 md:py-12">
       <Card className="w-full max-w-md">
