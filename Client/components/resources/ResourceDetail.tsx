@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Clock, Calendar, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
+import Section from '@/components/layout/Section';
 
 interface ResourceDetailProps {
   title: string;
@@ -32,7 +33,7 @@ export function ResourceDetail({
   relatedResources,
 }: ResourceDetailProps) {
   return (
-    <div className="container max-w-4xl py-8 md:py-12">
+    <Section className=" max-w-4xl py-8 md:py-12">
       <Button variant="ghost" className="mb-8" asChild>
         <Link href="/resources">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -74,6 +75,6 @@ export function ResourceDetail({
           </div>
         </section>
       </article>
-    </div>
+    </Section>
   );
 }

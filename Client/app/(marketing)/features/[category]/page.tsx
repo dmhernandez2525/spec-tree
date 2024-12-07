@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Icons } from '@/components/shared/icons';
 import Link from 'next/link';
+import Section from '@/components/layout/Section';
 
 interface FeatureCategoryPageProps {
   params: {
@@ -45,10 +46,8 @@ export default function FeatureCategoryPage({
     notFound();
   }
 
-  const Icon = Icons[feature.icon];
-
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <div className="space-y-8">
         {/* Hero Section */}
         <motion.div
@@ -234,6 +233,6 @@ export default function FeatureCategoryPage({
           </Card>
         </motion.div>
       </div>
-    </div>
+    </Section>
   );
 }

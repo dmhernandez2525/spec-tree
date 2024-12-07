@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { ArrowRight, Quote } from 'lucide-react';
+import Section from '@/components/layout/Section';
 
 interface SuccessStory {
   company: string;
@@ -69,7 +70,7 @@ const successStories: SuccessStory[] = [
 
 export function ClientSuccess() {
   return (
-    <div className="container">
+    <Section>
       <HeadingSection
         heading="Client Success Stories"
         description="See how organizations are transforming their projects with Spec Tree"
@@ -135,6 +136,6 @@ export function ClientSuccess() {
           </Link>
         ))}
       </div>
-    </div>
+    </Section>
   );
 }

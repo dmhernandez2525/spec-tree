@@ -7,8 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import { ArrowRight, Search, Building2 } from 'lucide-react';
+import { ArrowRight, Search } from 'lucide-react';
 import Link from 'next/link';
+import Section from '@/components/layout/Section';
 
 interface CaseStudy {
   id: string;
@@ -99,7 +100,7 @@ export default function CaseStudiesPage() {
   });
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading="Case Studies"
         description="Learn how organizations are transforming their projects with Spec Tree"
@@ -190,6 +191,6 @@ export default function CaseStudiesPage() {
           </Link>
         ))}
       </div>
-    </div>
+    </Section>
   );
 }

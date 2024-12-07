@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Icons } from '@/components/shared/icons';
 import { cn } from '@/lib/utils';
+import Section from '@/components/layout/Section';
 
 interface WorkflowStep {
   title: string;
@@ -79,7 +80,7 @@ const workflows: Workflow[] = [
 
 export function SampleWorkflows() {
   return (
-    <div className="container space-y-16">
+    <Section className=" space-y-16">
       <HeadingSection
         heading="Sample Workflows"
         description="See how Spec Tree streamlines common development processes"
@@ -133,6 +134,6 @@ export function SampleWorkflows() {
           </div>
         </div>
       ))}
-    </div>
+    </Section>
   );
 }

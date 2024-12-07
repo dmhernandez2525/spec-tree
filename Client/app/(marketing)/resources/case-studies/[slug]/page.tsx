@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Quote } from 'lucide-react';
 import Link from 'next/link';
+import Section from '@/components/layout/Section';
 
 interface CaseStudyDetail {
   company: string;
@@ -97,7 +98,7 @@ const mockCaseStudy: CaseStudyDetail = {
 
 export default function CaseStudyPage() {
   return (
-    <div className="container max-w-4xl py-8 md:py-12">
+    <Section className=" max-w-4xl py-8 md:py-12">
       <Button variant="ghost" className="mb-8" asChild>
         <Link href="/resources/case-studies">
           <ArrowLeft className="mr-2 h-4 w-4" />
@@ -208,6 +209,6 @@ export default function CaseStudyPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Section>
   );
 }

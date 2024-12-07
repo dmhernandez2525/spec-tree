@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 interface ContainerProps {
   children: React.ReactNode;
   className?: string;
-  size?: 'default' | 'narrow' | 'wide';
+  size?: 'default' | 'narrow' | 'wide' | 'full';
   as?: keyof JSX.IntrinsicElements;
 }
 
@@ -20,6 +20,7 @@ export default function Container({
           container: size === 'default',
           'container-narrow': size === 'narrow',
           'container-wide': size === 'wide',
+          'container-full': size === 'full',
         },
         className
       )}

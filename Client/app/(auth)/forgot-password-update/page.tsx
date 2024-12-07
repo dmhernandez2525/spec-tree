@@ -24,6 +24,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import Section from '@/components/layout/Section';
 
 const formSchema = z
   .object({
@@ -83,7 +84,7 @@ export default function ForgotPasswordUpdatePage() {
   }
 
   return (
-    <div className="container flex h-screen items-center justify-center">
+    <Section className=" flex h-screen items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Reset Password</CardTitle>
@@ -125,6 +126,6 @@ export default function ForgotPasswordUpdatePage() {
           </Form>
         </CardContent>
       </Card>
-    </div>
+    </Section>
   );
 }

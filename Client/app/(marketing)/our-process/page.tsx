@@ -8,10 +8,11 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
+import Section from '@/components/layout/Section';
 
 export default function OurProcessPage() {
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -101,6 +102,6 @@ export default function OurProcessPage() {
           </motion.div>
         </section>
       </div>
-    </div>
+    </Section>
   );
 }
