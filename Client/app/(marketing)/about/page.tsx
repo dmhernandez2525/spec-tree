@@ -113,7 +113,8 @@ const aboutData: AboutPageData = {
       name: 'Sarah Chen',
       role: 'CEO & Founder',
       bio: 'Former tech lead with 15 years of project management experience',
-      imageUrl: '/team/sarah-chen.jpg',
+      imageUrl:
+        'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       socialLinks: {
         linkedin: 'https://linkedin.com/in/sarah-chen',
         twitter: 'https://twitter.com/sarahchen',
@@ -124,7 +125,8 @@ const aboutData: AboutPageData = {
       name: 'Michael Rodriguez',
       role: 'CTO',
       bio: 'AI researcher and full-stack developer with a focus on developer tools',
-      imageUrl: '/team/michael-rodriguez.jpg',
+      imageUrl:
+        'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       socialLinks: {
         linkedin: 'https://linkedin.com/in/michael-rodriguez',
         github: 'https://github.com/mrodriguez',
@@ -138,19 +140,22 @@ const aboutData: AboutPageData = {
         {
           name: 'Next.js',
           description: 'React framework for production',
-          iconUrl: '/tech/nextjs.svg',
+          iconUrl:
+            'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           link: 'https://nextjs.org',
         },
         {
           name: 'TypeScript',
           description: 'JavaScript with syntax for types',
-          iconUrl: '/tech/typescript.svg',
+          iconUrl:
+            'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           link: 'https://www.typescriptlang.org',
         },
         {
           name: 'Tailwind CSS',
           description: 'Utility-first CSS framework',
-          iconUrl: '/tech/tailwind.svg',
+          iconUrl:
+            'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           link: 'https://tailwindcss.com',
         },
       ],
@@ -161,13 +166,15 @@ const aboutData: AboutPageData = {
         {
           name: 'OpenAI',
           description: 'Advanced language models for context analysis',
-          iconUrl: '/tech/openai.svg',
+          iconUrl:
+            'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           link: 'https://openai.com',
         },
         {
           name: 'TensorFlow',
           description: 'Machine learning framework',
-          iconUrl: '/tech/tensorflow.svg',
+          iconUrl:
+            'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           link: 'https://tensorflow.org',
         },
       ],
@@ -178,14 +185,16 @@ const aboutData: AboutPageData = {
       id: '1',
       name: 'TechCorp Solutions',
       description: 'Enterprise software integration partner',
-      logoUrl: '/partners/techcorp.svg',
+      logoUrl:
+        'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       websiteUrl: 'https://techcorp.com',
     },
     {
       id: '2',
       name: 'AgileFlow',
       description: 'Agile project management tools',
-      logoUrl: '/partners/agileflow.svg',
+      logoUrl:
+        'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       websiteUrl: 'https://agileflow.com',
     },
   ],

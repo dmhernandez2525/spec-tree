@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     siteName: 'Spec Tree',
     images: [
       {
-        url: '/og/home.jpg',
+        url: 'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         width: 1200,
         height: 630,
         alt: 'Spec Tree',
@@ -32,7 +32,9 @@ export const metadata: Metadata = {
     title: 'Spec Tree - AI-Powered Project Planning',
     description:
       'Transform how you plan and execute projects with Spec Tree',
-    images: ['/og/home.jpg'],
+    images: [
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    ],
   },
 };
 
