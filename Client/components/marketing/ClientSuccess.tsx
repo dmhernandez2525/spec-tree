@@ -44,7 +44,8 @@ const successStories: SuccessStory[] = [
       { metric: 'Team Productivity', value: '+60%' },
       { metric: 'Cost Reduction', value: '25%' },
     ],
-    logoUrl: '/images/logos/techcorp.svg',
+    logoUrl:
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     href: '/resources/case-studies/techcorp-solutions',
   },
   {
@@ -63,7 +64,8 @@ const successStories: SuccessStory[] = [
       { metric: 'Campaign Success', value: '92%' },
       { metric: 'Time Saved', value: '50%' },
     ],
-    logoUrl: '/images/logos/global-marketing.svg',
+    logoUrl:
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     href: '/resources/case-studies/global-marketing',
   },
 ];

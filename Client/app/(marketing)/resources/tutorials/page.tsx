@@ -19,8 +19,10 @@ const tutorials: Tutorial[] = [
     category: 'beginner',
     duration: 15,
     lastUpdated: '2024-04-01',
-    thumbnailUrl: '/api/placeholder/800/400',
-    videoUrl: 'https://example.com/tutorial-1',
+    thumbnailUrl:
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    videoUrl:
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
     chapters: [
       { title: 'Introduction', timestamp: '0:00' },
       { title: 'Creating Your First Project', timestamp: '2:30' },
@@ -29,7 +31,8 @@ const tutorials: Tutorial[] = [
     author: {
       name: 'Sarah Chen',
       role: 'Product Manager',
-      avatarUrl: '/api/placeholder/100/100',
+      avatarUrl:
+        'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
   },
   {
@@ -41,8 +44,10 @@ const tutorials: Tutorial[] = [
     category: 'advanced',
     duration: 25,
     lastUpdated: '2024-04-01',
-    thumbnailUrl: '/api/placeholder/800/400',
-    videoUrl: 'https://example.com/tutorial-2',
+    thumbnailUrl:
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    videoUrl:
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
     chapters: [
       { title: 'Understanding Context', timestamp: '0:00' },
       { title: 'AI Configuration', timestamp: '4:15' },
@@ -51,7 +56,8 @@ const tutorials: Tutorial[] = [
     author: {
       name: 'Michael Rodriguez',
       role: 'Technical Lead',
-      avatarUrl: '/api/placeholder/100/100',
+      avatarUrl:
+        'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
   },
 ];
