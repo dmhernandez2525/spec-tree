@@ -2,11 +2,11 @@ import { Metadata } from 'next';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { SidebarNav } from '@/components/dashboard/SidebarNav';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { TutorialProvider } from '@/components/tutorial/TutorialContext';
-import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
-import { TutorialControls } from '@/components/tutorial/TutorialControls';
-import { AchievementsProvider } from '@/components/achievements/AchievementsProvider';
-import { TutorialManagerProvider } from '@/components/tutorial/TutorialManager';
+import { TutorialProvider } from '@/components/dashboard/tutorial/TutorialContext';
+import { TutorialOverlay } from '@/components/dashboard/tutorial/TutorialOverlay';
+import { TutorialControls } from '@/components/dashboard/tutorial/TutorialControls';
+import { AchievementsProvider } from '@/components/dashboard/achievements/AchievementsProvider';
+import { TutorialManagerProvider } from '@/components/dashboard/tutorial/TutorialManager';
 
 export const metadata: Metadata = {
   title: 'Dashboard | Spec Tree',
