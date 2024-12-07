@@ -26,11 +26,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
-import { FeatureTutorialButton } from '@/components/tutorial/FeatureTutorialButton';
-import { useAchievements } from '@/components/achievements/AchievementsProvider';
+import { FeatureTutorialButton } from '@/components/dashboard/tutorial/FeatureTutorialButton';
+import { useAchievements } from '@/components/dashboard/achievements/AchievementsProvider';
 import { Badge } from '@/components/ui/badge';
-import { TutorialProgress } from '@/components/tutorial/TutorialProgress';
-import { AchievementsDisplay } from '@/components/achievements/AchievementsDisplay';
+import { TutorialProgress } from '@/components/dashboard/tutorial/TutorialProgress';
+import { AchievementsDisplay } from '@/components/dashboard/achievements/AchievementsDisplay';
 import type {
   TaskMetric,
   GenerationMetric,
