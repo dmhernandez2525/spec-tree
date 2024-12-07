@@ -104,7 +104,7 @@ function SpecTreeContent() {
           </div>
         ) : selectedApp ? (
           <Builder
-            chatApi={chatApi}
+            chatApi={chatApi || ''}
             setSelectedApp={setSelectedApp}
             selectedApp={selectedApp}
           />
@@ -121,6 +121,13 @@ function SpecTreeContent() {
                 selectedApp={selectedApp}
                 setSelectedApp={setSelectedApp}
                 apps={apps}
+                onAppCreated={async () => {
+                  // Reload apps after a new app is created
+                  const fetchAppsResponse = await strapiService.fetchApps();
+                  if (fetchAppsResponse) {
+                    setApps(fetchAppsResponse);
+                  }
+                }}
               />
             </CardContent>
           </Card>

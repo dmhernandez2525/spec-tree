@@ -72,7 +72,7 @@ const GlobalContextualInfo: React.FC<GlobalContextualInfoProps> = ({
     }
   }, [mainGlobalContextualQuestions, mainGlobalInformation]);
 
-  const handleGenerateQuestions = async () => {
+  const handleGenerateQuestions = async (): Promise<void> => {
     if (!globalInformation) {
       setError('Please enter information about the entire application.');
       return;
@@ -81,12 +81,12 @@ const GlobalContextualInfo: React.FC<GlobalContextualInfoProps> = ({
     if (newQuestions) {
       dispatch(addGlobalContextualQuestions(newQuestions));
       setError(null);
-      return true;
+      return;
     }
-    return false;
+    return;
   };
 
-  const handleGenerateExplanation = async () => {
+  const handleGenerateExplanation = async (): Promise<void> => {
     setIsLoadingExplanation(true);
     setError(null);
     try {
@@ -102,10 +102,8 @@ const GlobalContextualInfo: React.FC<GlobalContextualInfoProps> = ({
       });
       setUpdatedExplanation(explanation);
       dispatch(updateGlobalInformation(explanation));
-      return true;
     } catch (err) {
       setError('Failed to generate explanation. Please try again.');
-      return false;
     } finally {
       setIsLoadingExplanation(false);
     }

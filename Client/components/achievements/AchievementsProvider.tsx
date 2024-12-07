@@ -45,7 +45,6 @@ export function AchievementsProvider({ children }: AchievementsProviderProps) {
       completedSteps: [],
       unlockedAchievements: [],
       lastAchievementDate: undefined,
-      completedTutorials: [],
     }
   );
 
@@ -159,7 +158,6 @@ export function AchievementsProvider({ children }: AchievementsProviderProps) {
       completedSteps: [],
       unlockedAchievements: [],
       lastAchievementDate: undefined,
-      completedTutorials: [],
     });
     toast({
       title: 'Progress Reset',

@@ -1,4 +1,3 @@
-// components/pricing/PricingToggle.tsx
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 

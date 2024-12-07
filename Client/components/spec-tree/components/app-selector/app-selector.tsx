@@ -63,7 +63,7 @@ const AppSelector: React.FC<AppSelectorProps> = ({
         globalInformation: applicationInformation,
       });
 
-      handleSelectApp(newApp.documentId);
+      handleSelectApp(newApp.documentId || null);
       setIsCreateDialogOpen(false);
       setApplicationInformation('');
       await onAppCreated();

@@ -66,12 +66,12 @@ const WorkitemsContextualInfo: React.FC<WorkitemsContextualInfoProps> = ({
     }
   }, [workItem]);
 
-  const handleGenerateInitialQuestions = async () => {
+  const handleGenerateInitialQuestions = async (): Promise<void> => {
     const newQuestions = await generateQuestions(workItem);
     if (newQuestions) {
-      return true;
+      return;
     }
-    return false;
+    return;
   };
 
   const handleUpdateAnswer = (index: number, value: string) => {
@@ -81,13 +81,12 @@ const WorkitemsContextualInfo: React.FC<WorkitemsContextualInfoProps> = ({
     updateQuestion(index, { ...questions[index], answer: value });
   };
 
-  const handleGenerateUpdatedWorkItem = async () => {
+  const handleGenerateUpdatedWorkItem = async (): Promise<void> => {
     const context = compileContext(
       questions.map((q) => q.question),
       answers
     );
     await generateUpdatedWorkItem({ context, state: localState });
-    return true;
   };
 
   const steps: WizardStep[] = [

@@ -27,6 +27,9 @@ interface UserAttributes extends Timestamps {
     state: string;
     zipCode: string;
   };
+  company?: string;
+  role?: string;
+  bio?: string;
 }
 interface NewsFeedData {
   id: number;
@@ -52,7 +55,7 @@ interface PostAttributes extends Timestamps {
   description: string;
   entireBlogPage: string;
   headerImage?: SingleApiResponse<ImageAttributes>;
-
+  category: { name: string };
   createdBy: {
     data: {
       attributes: { firstname: string; lastname: string; createdAt: string };

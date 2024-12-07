@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { BenefitCard } from '@/components/solutions/BenefitCard';
 import { Icons } from '@/components/shared/icons';

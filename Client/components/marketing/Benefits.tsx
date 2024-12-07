@@ -1,10 +1,7 @@
-// components/marketing/Benefits.tsx
 'use client';
 
-import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import { Icons } from '@/components/shared/icons';
 
 interface Benefit {
   title: string;

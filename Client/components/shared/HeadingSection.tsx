@@ -1,4 +1,3 @@
-// components/shared/HeadingSection.tsx
 interface HeadingSectionProps {
   heading?: string;
   description?: string;

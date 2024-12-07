@@ -96,7 +96,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature, epic }) => {
   };
 
   const { add, remove, update } = useAcceptanceCriteria(
-    userStory.acceptanceCriteria,
+    userStory.acceptanceCriteria.map((criteria) => criteria.text),
     handleUpdateUserStory
   );
 
