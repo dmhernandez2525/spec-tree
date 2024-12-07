@@ -38,7 +38,8 @@ import {
   UserStoryFields,
   WorkItemType,
 } from '../../components/spec-tree/lib/types/work-items';
-import { RootState } from './store/index';
+import { RootState } from './index';
+
 import generateId from '../../components/spec-tree/lib/utils/generate-id';
 
 const initialState: SowState = {
@@ -51,6 +52,7 @@ const initialState: SowState = {
   selectedModel: 'gpt-3.5-turbo-16k',
   chatApi: 'StartState',
   id: '',
+  apps: {},
 };
 
 // New Strapi data fetching thunk

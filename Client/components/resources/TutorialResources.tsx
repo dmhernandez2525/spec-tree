@@ -41,9 +41,9 @@ const mockResources: Resource[] = [
 ];
 
 const resourceIcons = {
-  pdf: Icons.fileText,
-  code: Icons.code,
-  zip: Icons.archive,
+  pdf: Icons.alert,
+  code: Icons.alert,
+  zip: Icons.alert,
 } as const;
 
 export function TutorialResources({ tutorialId }: TutorialResourcesProps) {

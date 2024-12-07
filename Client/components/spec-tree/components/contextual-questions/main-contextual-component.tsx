@@ -47,7 +47,7 @@ const MainContextualComponent: React.FC<MainContextualComponentProps> = ({
           ) : (
             <WorkitemsContextualInfo
               workItemType={workItemType}
-              workItem={workItem}
+              workItem={workItem!}
               onClose={handleClose}
             />
           )}

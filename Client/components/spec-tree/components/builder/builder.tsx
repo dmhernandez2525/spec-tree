@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../../../lib/store';
 import {
-  setSow,
   addEpics,
   requestAdditionalEpics,
   requestAdditionalFeatures,

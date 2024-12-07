@@ -10,7 +10,7 @@ interface ResourcePageProps {
   };
 }
 
-// This would typically come from your API/CMS
+// TODO: pull form API
 const getMockResourceData = (type: string, slug: string) => {
   // Mock data - replace with actual data fetching
   return {

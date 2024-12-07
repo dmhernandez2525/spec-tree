@@ -1,4 +1,3 @@
-// components/marketing/NewsletterForm.tsx
 'use client';
 
 import { useState } from 'react';

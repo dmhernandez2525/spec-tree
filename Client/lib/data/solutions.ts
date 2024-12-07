@@ -8,12 +8,36 @@ export const industries: IndustrySolution[] = [
       'Scale your project management across teams while maintaining consistency and clarity.',
     imageUrl: '/images/solutions/enterprise.jpg',
     features: [
-      'Cross-team collaboration tools',
-      'Enterprise-wide templates',
-      'Advanced security features',
-      'Custom workflows',
-      'Team performance analytics',
-      'Resource management',
+      {
+        title: 'Cross-team collaboration tools',
+        description: 'Cross-team collaboration tools',
+        icon: 'eye',
+      },
+      {
+        title: 'Enterprise-wide templates',
+        description: 'Enterprise-wide templates',
+        icon: 'eye',
+      },
+      {
+        title: 'Advanced security features',
+        description: 'Advanced security features',
+        icon: 'eye',
+      },
+      {
+        title: 'Custom workflows',
+        description: 'Custom workflows',
+        icon: 'eye',
+      },
+      {
+        title: 'Team performance analytics',
+        description: 'Team performance analytics',
+        icon: 'eye',
+      },
+      {
+        title: 'Resource management',
+        description: 'Resource management',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Improved cross-team alignment',
@@ -43,12 +67,36 @@ export const industries: IndustrySolution[] = [
       'Streamline your development process with AI-powered planning and context management.',
     imageUrl: '/images/solutions/software.jpg',
     features: [
-      'AI-powered sprint planning',
-      'Automated task breakdown',
-      'Integration with dev tools',
-      'Technical requirement gathering',
-      'Code dependency tracking',
-      'Release planning',
+      {
+        title: 'AI-powered sprint planning',
+        description: 'AI-powered sprint planning',
+        icon: 'eye',
+      },
+      {
+        title: 'Automated task breakdown',
+        description: 'Automated task breakdown',
+        icon: 'eye',
+      },
+      {
+        title: 'Integration with dev tools',
+        description: 'Integration with dev tools',
+        icon: 'eye',
+      },
+      {
+        title: 'Technical requirement gathering',
+        description: 'Technical requirement gathering',
+        icon: 'eye',
+      },
+      {
+        title: 'Code dependency tracking',
+        description: 'Code dependency tracking',
+        icon: 'eye',
+      },
+      {
+        title: 'Release planning',
+        description: 'Release planning',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Faster development cycles',
@@ -78,12 +126,36 @@ export const industries: IndustrySolution[] = [
       'Optimize campaign management and client reporting with data-driven insights.',
     imageUrl: '/images/solutions/marketing.jpg',
     features: [
-      'Campaign performance tracking',
-      'Automated reporting dashboards',
-      'Client portal access',
-      'Social media scheduling',
-      'ROI calculation tools',
-      'Content calendar management',
+      {
+        title: 'Campaign performance tracking',
+        description: 'Campaign performance tracking',
+        icon: 'eye',
+      },
+      {
+        title: 'Automated reporting dashboards',
+        description: 'Automated reporting dashboards',
+        icon: 'eye',
+      },
+      {
+        title: 'Client portal access',
+        description: 'Client portal access',
+        icon: 'eye',
+      },
+      {
+        title: 'Social media scheduling',
+        description: 'Social media scheduling',
+        icon: 'eye',
+      },
+      {
+        title: 'ROI calculation tools',
+        description: 'ROI calculation tools',
+        icon: 'eye',
+      },
+      {
+        title: 'Content calendar management',
+        description: 'Content calendar management',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Streamlined campaign execution',
@@ -113,12 +185,36 @@ export const industries: IndustrySolution[] = [
       'Ensure compliance and patient care excellence through structured project management.',
     imageUrl: '/images/solutions/healthcare.jpg',
     features: [
-      'HIPAA-compliant workflows',
-      'Patient care coordination',
-      'Resource scheduling',
-      'Compliance tracking',
-      'Medical inventory management',
-      'Staff certification monitoring',
+      {
+        title: 'HIPAA-compliant workflows',
+        description: 'HIPAA-compliant workflows',
+        icon: 'eye',
+      },
+      {
+        title: 'Patient care coordination',
+        description: 'Patient care coordination',
+        icon: 'eye',
+      },
+      {
+        title: 'Resource scheduling',
+        description: 'Resource scheduling',
+        icon: 'eye',
+      },
+      {
+        title: 'Compliance tracking',
+        description: 'Compliance tracking',
+        icon: 'eye',
+      },
+      {
+        title: 'Medical inventory management',
+        description: 'Medical inventory management',
+        icon: 'eye',
+      },
+      {
+        title: 'Staff certification monitoring',
+        description: 'Staff certification monitoring',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Enhanced patient care quality',
@@ -148,12 +244,36 @@ export const industries: IndustrySolution[] = [
       'Coordinate complex projects and teams while maintaining safety and quality standards.',
     imageUrl: '/images/solutions/construction.jpg',
     features: [
-      'Project timeline tracking',
-      'Safety compliance tools',
-      'Equipment management',
-      'Contractor coordination',
-      'Budget monitoring',
-      'Quality assurance checklist',
+      {
+        title: 'Project timeline tracking',
+        description: 'Project timeline tracking',
+        icon: 'eye',
+      },
+      {
+        title: 'Safety compliance tools',
+        description: 'Safety compliance tools',
+        icon: 'eye',
+      },
+      {
+        title: 'Equipment management',
+        description: 'Equipment management',
+        icon: 'eye',
+      },
+      {
+        title: 'Contractor coordination',
+        description: 'Contractor coordination',
+        icon: 'eye',
+      },
+      {
+        title: 'Budget monitoring',
+        description: 'Budget monitoring',
+        icon: 'eye',
+      },
+      {
+        title: 'Quality assurance checklist',
+        description: 'Quality assurance checklist',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Improved project delivery',
@@ -183,12 +303,36 @@ export const industries: IndustrySolution[] = [
       'Transform educational program management with collaborative tools and progress tracking.',
     imageUrl: '/images/solutions/education.jpg',
     features: [
-      'Curriculum planning tools',
-      'Student progress tracking',
-      'Resource allocation',
-      'Parent communication portal',
-      'Assessment management',
-      'Educational content library',
+      {
+        title: 'Curriculum planning tools',
+        description: 'Curriculum planning tools',
+        icon: 'eye',
+      },
+      {
+        title: 'Student progress tracking',
+        description: 'Student progress tracking',
+        icon: 'eye',
+      },
+      {
+        title: 'Resource allocation',
+        description: 'Resource allocation',
+        icon: 'eye',
+      },
+      {
+        title: 'Parent communication portal',
+        description: 'Parent communication portal',
+        icon: 'eye',
+      },
+      {
+        title: 'Assessment management',
+        description: 'Assessment management',
+        icon: 'eye',
+      },
+      {
+        title: 'Educational content library',
+        description: 'Educational content library',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Enhanced learning outcomes',
@@ -218,12 +362,36 @@ export const industries: IndustrySolution[] = [
       'Accelerate your growth with AI-powered project management built for fast-moving startups.',
     imageUrl: '/images/solutions/startups.jpg',
     features: [
-      'Agile workflow automation',
-      'Burn rate tracking',
-      'Sprint planning assistance',
-      'Investor reporting templates',
-      'Growth metrics dashboard',
-      'Team velocity monitoring',
+      {
+        title: 'Agile workflow automation',
+        description: 'Agile workflow automation',
+        icon: 'eye',
+      },
+      {
+        title: 'Burn rate tracking',
+        description: 'Burn rate tracking',
+        icon: 'eye',
+      },
+      {
+        title: 'Sprint planning assistance',
+        description: 'Sprint planning assistance',
+        icon: 'eye',
+      },
+      {
+        title: 'Investor reporting templates',
+        description: 'Investor reporting templates',
+        icon: 'eye',
+      },
+      {
+        title: 'Growth metrics dashboard',
+        description: 'Growth metrics dashboard',
+        icon: 'eye',
+      },
+      {
+        title: 'Team velocity monitoring',
+        description: 'Team velocity monitoring',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Faster time to market',
@@ -253,12 +421,36 @@ export const industries: IndustrySolution[] = [
       'Streamline client management and project delivery with tools built for modern agencies.',
     imageUrl: '/images/solutions/agencies.jpg',
     features: [
-      'Client portal dashboard',
-      'Automated reporting system',
-      'Resource allocation tools',
-      'Project timeline tracking',
-      'Client feedback management',
-      'White-label capabilities',
+      {
+        title: 'Client portal dashboard',
+        description: 'Client portal dashboard',
+        icon: 'eye',
+      },
+      {
+        title: 'Automated reporting system',
+        description: 'Automated reporting system',
+        icon: 'eye',
+      },
+      {
+        title: 'Resource allocation tools',
+        description: 'Resource allocation tools',
+        icon: 'eye',
+      },
+      {
+        title: 'Project timeline tracking',
+        description: 'Project timeline tracking',
+        icon: 'eye',
+      },
+      {
+        title: 'Client feedback management',
+        description: 'Client feedback management',
+        icon: 'eye',
+      },
+      {
+        title: 'White-label capabilities',
+        description: 'White-label capabilities',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Enhanced client satisfaction',
@@ -288,12 +480,36 @@ export const industries: IndustrySolution[] = [
       'Manage creative workflows and client deliverables with intuitive tools built for creative teams.',
     imageUrl: '/images/solutions/creative.jpg',
     features: [
-      'Asset management system',
-      'Creative brief templates',
-      'Review and approval workflows',
-      'Time tracking integration',
-      'Portfolio showcase tools',
-      'Brand guidelines management',
+      {
+        title: 'Asset management system',
+        description: 'Asset management system',
+        icon: 'eye',
+      },
+      {
+        title: 'Creative brief templates',
+        description: 'Creative brief templates',
+        icon: 'eye',
+      },
+      {
+        title: 'Review and approval workflows',
+        description: 'Review and approval workflows',
+        icon: 'eye',
+      },
+      {
+        title: 'Time tracking integration',
+        description: 'Time tracking integration',
+        icon: 'eye',
+      },
+      {
+        title: 'Portfolio showcase tools',
+        description: 'Portfolio showcase tools',
+        icon: 'eye',
+      },
+      {
+        title: 'Brand guidelines management',
+        description: 'Brand guidelines management',
+        icon: 'eye',
+      },
     ],
     benefits: [
       'Streamlined creative process',

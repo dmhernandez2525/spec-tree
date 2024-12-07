@@ -1,4 +1,3 @@
-// app/(marketing)/resources/case-studies/page.tsx
 'use client';
 
 import { useState } from 'react';

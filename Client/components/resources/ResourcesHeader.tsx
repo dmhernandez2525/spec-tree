@@ -1,4 +1,3 @@
-// components/resources/ResourcesHeader.tsx
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';

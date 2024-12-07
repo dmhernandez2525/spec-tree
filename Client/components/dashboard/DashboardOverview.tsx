@@ -1,4 +1,3 @@
-// components/dashboard/DashboardOverview.tsx
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

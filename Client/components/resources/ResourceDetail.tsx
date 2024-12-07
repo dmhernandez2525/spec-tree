@@ -1,5 +1,3 @@
-// components/resources/ResourceDetail.tsx
-import { MDXRemote } from 'next-mdx-remote';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -60,8 +58,6 @@ export function ResourceDetail({
 
         <h1 className="text-4xl font-bold mb-4">{title}</h1>
         <p className="text-xl text-muted-foreground mb-8">{description}</p>
-
-        <MDXRemote {...content} />
 
         <Separator className="my-12" />
 

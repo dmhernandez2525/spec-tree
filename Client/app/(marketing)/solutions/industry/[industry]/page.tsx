@@ -109,7 +109,7 @@ export default function IndustryPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center gap-2">
                     <Icons.check className="h-5 w-5 text-primary" />
-                    <span>{feature}</span>
+                    <span>{feature.toString()}</span>
                   </div>
                 </CardContent>
               </Card>

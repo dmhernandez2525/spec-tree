@@ -1,4 +1,3 @@
-// components/features/FeatureComparison.tsx
 import {
   Table,
   TableBody,

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -72,7 +73,7 @@ export default function TutorialDetailPage({
   if (isLoading) {
     return (
       <div className="container flex items-center justify-center py-16">
-        <Icons.spinner className="h-8 w-8 animate-spin" />
+        <Icons.alert className="h-8 w-8 animate-spin" />
       </div>
     );
   }
@@ -107,7 +108,7 @@ export default function TutorialDetailPage({
             <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black">
               {/* Video player would go here */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <Icons.play className="h-16 w-16 text-white opacity-50" />
+                <Icons.alert className="h-16 w-16 text-white opacity-50" />
               </div>
             </div>
 
@@ -117,12 +118,12 @@ export default function TutorialDetailPage({
                   {tutorial.category}
                 </Badge>
                 <div className="flex items-center text-sm text-muted-foreground">
-                  <Icons.clock className="mr-1 h-4 w-4" />
+                  <Icons.alert className="mr-1 h-4 w-4" />
                   {tutorial.duration} min
                 </div>
               </div>
               <Button variant="outline" size="sm">
-                <Icons.download className="mr-2 h-4 w-4" />
+                <Icons.alert className="mr-2 h-4 w-4" />
                 Download Resources
               </Button>
             </div>

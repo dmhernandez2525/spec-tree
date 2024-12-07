@@ -1,4 +1,3 @@
-// types/resources.ts
 export type ResourceType =
   | 'all'
   | 'documentation'
