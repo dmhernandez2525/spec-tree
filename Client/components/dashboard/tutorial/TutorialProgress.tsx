@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useTutorial } from './TutorialContext';
 import { tutorialData } from './tutorial-data';
-import { Icons } from '../shared/icons';
+import { Icons } from '../../shared/icons';
 import { TutorialSection } from '@/types/tutorial';
 
 interface TutorialSectionCardProps {
