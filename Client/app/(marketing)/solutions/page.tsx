@@ -105,7 +105,8 @@ const testimonials = [
     author: 'Sarah Chen',
     role: 'Director of PMO',
     company: 'Global Tech Solutions',
-    image: '/testimonials/sarah-chen.jpg',
+    image:
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     quote:
@@ -113,7 +114,8 @@ const testimonials = [
     author: 'Michael Rodriguez',
     role: 'Engineering Manager',
     company: 'InnovateX',
-    image: '/testimonials/michael-rodriguez.jpg',
+    image:
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     quote:
@@ -121,7 +123,8 @@ const testimonials = [
     author: 'Emma Thompson',
     role: 'Agency Director',
     company: 'Creative Solutions Agency',
-    image: '/testimonials/emma-thompson.jpg',
+    image:
+      'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
 ];
 
@@ -193,7 +196,7 @@ export default function SolutionsPage() {
               description: "Adapt the system to your organization's needs",
             },
           ]}
-          image="/images/solutions/enterprise-dashboard.svg"
+          image="https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         />
 
         <SolutionShowcase
@@ -213,7 +216,7 @@ export default function SolutionsPage() {
               description: 'Connect with your development tools',
             },
           ]}
-          image="/images/solutions/dev-workflow.svg"
+          image="https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           imageLeft={false}
         />
       </div>

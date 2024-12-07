@@ -22,7 +22,7 @@ export function BlogList({ blogPosts }: BlogListProps) {
     return (
       <div className="flex flex-col items-center justify-center h-[400px] text-center bg-muted rounded-lg p-8">
         <Image
-          src="/images/blog-empty.svg"
+          src="https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="No blog posts"
           width={200}
           height={200}
