@@ -1,4 +1,3 @@
-// app/(marketing)/resources/layout.tsx
 'use client';
 
 import { useState } from 'react';

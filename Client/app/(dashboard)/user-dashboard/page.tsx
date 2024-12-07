@@ -7,7 +7,6 @@ import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { TaskSummary } from '@/components/dashboard/TaskSummary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAppSelector } from '@/lib/hooks/use-store';
-import { redirect } from 'next/navigation';
 import { Icons } from '@/components/shared/icons';
 
 const containerVariants = {

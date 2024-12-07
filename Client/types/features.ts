@@ -94,7 +94,6 @@ export const features: Record<FeatureCategory, Feature> = {
       },
     ],
   },
-  // Add similar detailed objects for other categories
   'work-items': {
     id: 'work-items',
     title: 'Smart Work Item Generation',

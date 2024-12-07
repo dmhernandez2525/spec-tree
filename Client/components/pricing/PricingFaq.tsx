@@ -1,4 +1,3 @@
-// components/pricing/PricingFaq.tsx
 import {
   Accordion,
   AccordionContent,

@@ -1,4 +1,3 @@
-// components/pricing/PricingTable.tsx
 import {
   Table,
   TableBody,

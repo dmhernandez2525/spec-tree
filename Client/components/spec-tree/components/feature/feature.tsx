@@ -108,7 +108,7 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index }) => {
   };
 
   const { add, remove, update } = useAcceptanceCriteria(
-    feature.acceptanceCriteria,
+    feature.acceptanceCriteria.map((criteria) => criteria.text),
     handleUpdateFeature
   );
 

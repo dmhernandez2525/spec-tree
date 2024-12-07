@@ -1,4 +1,3 @@
-// components/blog/CommentSection.tsx
 'use client';
 
 import { useState } from 'react';

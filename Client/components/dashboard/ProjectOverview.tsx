@@ -1,5 +1,3 @@
-// components/dashboard/ProjectOverview.tsx
-
 'use client';
 
 import { motion } from 'framer-motion';
@@ -15,7 +13,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Progress } from '@/components/ui/progress';
-import { Icons } from '@/components/shared/icons';
 
 interface Project {
   id: string;

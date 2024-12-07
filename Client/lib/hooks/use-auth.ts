@@ -1,4 +1,3 @@
-// lib/hooks/use-auth.ts
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppSelector } from './use-store';

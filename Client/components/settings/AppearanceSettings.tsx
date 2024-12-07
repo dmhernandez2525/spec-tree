@@ -26,6 +26,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useFonts, styleFonts } from '@/components/FontManager';
+import { toast } from 'sonner';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']),

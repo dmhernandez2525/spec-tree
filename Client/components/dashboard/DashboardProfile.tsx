@@ -65,7 +65,14 @@ export function DashboardProfile({ initialData }: DashboardProfileProps) {
         userId: initialData?.id?.toString() || '',
         newUserData: {
           ...data,
+          address: {
+            street: data.address.street || '',
+            city: data.address.city || '',
+            state: data.address.state || '',
+            zipCode: data.address.zipCode || '',
+          },
         },
+        posUserId: initialData?.id?.toString() || null,
       });
       toast.success('Profile updated successfully');
     } catch (error) {
