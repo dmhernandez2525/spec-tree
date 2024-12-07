@@ -100,7 +100,7 @@ export default function TutorialDetailPage({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="container py-8 md:py-12"
+      className="py-8 md:py-12"
     >
       <div className="grid gap-8 lg:grid-cols-[1fr,300px]">
         <div className="space-y-8">
