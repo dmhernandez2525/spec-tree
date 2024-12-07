@@ -7,7 +7,6 @@ import { TutorialOverlay } from '@/components/tutorial/TutorialOverlay';
 import { TutorialControls } from '@/components/tutorial/TutorialControls';
 import { AchievementsProvider } from '@/components/achievements/AchievementsProvider';
 import { TutorialManagerProvider } from '@/components/tutorial/TutorialManager';
-import Section from '@/components/layout/Section';
 
 export const metadata: Metadata = {
   title: 'Dashboard | Spec Tree',
@@ -19,6 +18,11 @@ const sidebarNavItems = [
     title: 'Overview',
     href: '/user-dashboard',
     icon: 'home',
+  },
+  {
+    title: 'Builder',
+    href: '/user-dashboard/spec-tree',
+    icon: 'helpCircle',
   },
   {
     title: 'Projects',
@@ -45,11 +49,7 @@ const sidebarNavItems = [
     href: '/user-dashboard/support',
     icon: 'helpCircle',
   },
-  {
-    title: 'Spec Tree',
-    href: '/user-dashboard/spec-tree',
-    icon: 'helpCircle',
-  },
+
   {
     title: 'Theme',
     href: '/user-dashboard/theme',
@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <AchievementsProvider>
           <div className="flex min-h-screen flex-col">
             <DashboardHeader />
-            <Section className=" flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
+            <div className="mr-20	ml-20 flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
               <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
                 <ScrollArea className="py-6 pr-6 lg:py-8">
                   <SidebarNav items={sidebarNavItems} />
@@ -78,7 +78,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 <TutorialControls />
                 {children}
               </main>
-            </Section>
+            </div>
             <TutorialOverlay />
           </div>
         </AchievementsProvider>

@@ -3,11 +3,10 @@
 import { ForgotPasswordForm } from '@/components/auth/ForgotPasswordForm';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Image from 'next/image';
-import Section from '@/components/layout/Section';
 
 export default function ForgotPasswordPage() {
   return (
-    <Section className=" flex min-h-screen items-center justify-center py-8 md:py-12">
+    <div className=" flex min-h-screen items-center justify-center py-8 md:py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Image
@@ -23,6 +22,6 @@ export default function ForgotPasswordPage() {
           <ForgotPasswordForm />
         </CardContent>
       </Card>
-    </Section>
+    </div>
   );
 }
