@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import { CustomizationPanel } from '@/components/CustomizationPanel/CustomizationPanel';
 import { Button } from '@/components/ui/button';
 import { useFonts } from '@/components/FontManager';
+import Section from '@/components/layout/Section';
 
 // TODO: create a separate Layout component to keep the page component clean
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -21,7 +22,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-8">{children}</div>
+      <Section className=" mx-auto px-4 py-8">{children}</Section>
     </div>
   );
 };

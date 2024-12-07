@@ -21,6 +21,7 @@ import { Icons } from '@/components/shared/icons';
 import { TutorialTranscript } from '@/components/resources/TutorialTranscript';
 import { TutorialResources } from '@/components/resources/TutorialResources';
 import { Tutorial } from '@/types/tutorials';
+import Section from '@/components/layout/Section';
 
 const tutorials: Tutorial[] = [
   {
@@ -72,15 +73,15 @@ export default function TutorialDetailPage({
 
   if (isLoading) {
     return (
-      <div className="container flex items-center justify-center py-16">
+      <Section className=" flex items-center justify-center py-16">
         <Icons.alert className="h-8 w-8 animate-spin" />
-      </div>
+      </Section>
     );
   }
 
   if (!tutorial) {
     return (
-      <div className="container py-16">
+      <Section className=" py-16">
         <div className="text-center">
           <h2 className="text-2xl font-bold">Tutorial not found</h2>
           <Button
@@ -90,7 +91,7 @@ export default function TutorialDetailPage({
             Back to Tutorials
           </Button>
         </div>
-      </div>
+      </Section>
     );
   }
 

@@ -6,6 +6,7 @@ import { ResourceSearch } from '@/components/resources/ResourceSearch';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Resource } from '@/types/resources';
+import Section from '@/components/layout/Section';
 
 type GuideCategory =
   | 'all'
@@ -64,7 +65,7 @@ export default function GuidesPage() {
   });
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading="Guides & Tutorials"
         description="Step-by-step guides to help you get the most out of Spec Tree"
@@ -90,6 +91,6 @@ export default function GuidesPage() {
       </Tabs>
 
       <ResourceGrid resources={filteredGuides} />
-    </div>
+    </Section>
   );
 }

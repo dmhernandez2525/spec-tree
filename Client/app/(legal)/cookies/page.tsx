@@ -3,6 +3,7 @@
 import { useCookiesPageData } from '@/lib/hooks/useCookiesPageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { HeadingSection } from '@/components/shared/HeadingSection';
+import Section from '@/components/layout/Section';
 
 export default function CookiesPage() {
   const { cookiesSections, loading } = useCookiesPageData();
@@ -25,7 +26,7 @@ export default function CookiesPage() {
   const { aboutSection, contentSection } = cookiesSections;
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading={aboutSection?.header}
         description={aboutSection?.subHeader}
@@ -37,6 +38,6 @@ export default function CookiesPage() {
           dangerouslySetInnerHTML={{ __html: contentSection }}
         />
       </div>
-    </div>
+    </Section>
   );
 }

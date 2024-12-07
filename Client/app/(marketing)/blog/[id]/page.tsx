@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { fetchPostsById } from '@/api/fetchData';
 import { PostAttributes } from '@/types/main';
+import Section from '@/components/layout/Section';
 
 export default function BlogPostPage({ params }: { params: { id: string } }) {
   const [post, setPost] = useState<PostAttributes | null>(null);
@@ -40,8 +41,8 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <BlogPost post={post} />
-    </div>
+    </Section>
   );
 }

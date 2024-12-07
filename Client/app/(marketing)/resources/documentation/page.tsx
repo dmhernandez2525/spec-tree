@@ -9,6 +9,7 @@ import { HeadingSection } from '@/components/shared/HeadingSection';
 import { ResourceSearch } from '@/components/resources/ResourceSearch';
 import { Book, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import Section from '@/components/layout/Section';
 
 interface DocumentationCategory {
   id: string;
@@ -83,7 +84,7 @@ export default function DocumentationPage() {
   });
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading="Documentation"
         description="Comprehensive guides and references for Spec Tree"
@@ -146,6 +147,6 @@ export default function DocumentationPage() {
           ))}
         </main>
       </div>
-    </div>
+    </Section>
   );
 }

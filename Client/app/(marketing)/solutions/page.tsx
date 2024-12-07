@@ -7,6 +7,7 @@ import { HeadingSection } from '@/components/shared/HeadingSection';
 import Link from 'next/link';
 import { SolutionShowcase } from '@/components/solutions/SolutionShowcase';
 import { TestimonialCard } from '@/components/solutions/TestimonialCard';
+import Section from '@/components/layout/Section';
 
 interface IndustryCardProps {
   title: string;
@@ -126,7 +127,7 @@ const testimonials = [
 
 export default function SolutionsPage() {
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       {/* Hero Section */}
       <HeadingSection
         heading="Solutions for Every Team"
@@ -249,6 +250,6 @@ export default function SolutionsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Section>
   );
 }

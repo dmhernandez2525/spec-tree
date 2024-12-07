@@ -379,6 +379,10 @@ button {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 
+  .container-full {
+    @apply mx-auto w-full max-w-max px-4 sm:px-6 lg:px-8;
+  }
+
   .section-padding {
     @apply py-8 md:py-12 lg:py-16;
   }

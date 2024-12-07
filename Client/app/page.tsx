@@ -11,6 +11,7 @@ import { CTASection } from '@/components/marketing/CTASection';
 import { ColorHeader } from '@/components/shared/ColorHeader';
 import { useHomePageData } from '@/lib/hooks/useHomePageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
+import Section from '@/components/layout/Section';
 
 export default function HomePage() {
   const { homeSections, loading } = useHomePageData();
@@ -61,7 +62,7 @@ export default function HomePage() {
 
       {/* Our Mission Section */}
       <section id="ourMission" className="bg-background py-16 md:py-24">
-        <div className="container">
+        <Section>
           <ColorHeader
             header={homeSections.ourMissionData?.Header}
             headerColor={homeSections.ourMissionData?.HeaderColor}
@@ -72,29 +73,29 @@ export default function HomePage() {
             <p>{homeSections.ourMissionData?.SubHeader2}</p>
             <p>{homeSections.ourMissionData?.SubHeader3}</p>
           </div>
-        </div>
+        </Section>
       </section>
 
       {/* Our Services Section */}
       <section className="bg-muted py-16 md:py-24">
-        <div className="container">
+        <Section>
           <OurServices
             serviceData={homeSections.ourServicesData}
             serviceHeader={homeSections.ourServicesHeader}
           />
-        </div>
+        </Section>
       </section>
 
       {/* Process Section */}
       <section className="bg-background py-16 md:py-24">
-        <div className="container">
+        <Section>
           <ColorHeader
             header={homeSections.OurProcess?.Header}
             headerColor={homeSections.OurProcess?.HeaderColor}
             textColor="#E2E7F0"
             dark
           />
-        </div>
+        </Section>
       </section>
 
       {/* CTA Section */}
@@ -104,9 +105,9 @@ export default function HomePage() {
 
       {/* Newsletter Section */}
       <section className="bg-background py-16 md:py-24">
-        <div className="container max-w-xl">
+        <Section>
           <NewsletterForm />
-        </div>
+        </Section>
       </section>
     </main>
   );

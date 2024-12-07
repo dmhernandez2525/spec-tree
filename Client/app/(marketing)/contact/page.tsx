@@ -17,6 +17,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { sendContactUsEmail } from '@/api/fetchData';
+import Section from '@/components/layout/Section';
 
 export default function ContactPage() {
   const { contactSections, loading } = useContactPageData();
@@ -81,7 +82,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       {/* Header Section */}
       <HeadingSection
         heading={aboutSection?.header}
@@ -209,6 +210,6 @@ export default function ContactPage() {
           </div>
         </div>
       )}
-    </div>
+    </Section>
   );
 }

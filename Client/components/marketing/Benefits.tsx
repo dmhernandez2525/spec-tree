@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { HeadingSection } from '@/components/shared/HeadingSection';
+import Section from '@/components/layout/Section';
 
 interface Benefit {
   title: string;
@@ -47,7 +48,7 @@ const benefits: Benefit[] = [
 
 export function Benefits() {
   return (
-    <div className="container">
+    <Section>
       <HeadingSection
         heading="Real Results"
         description="See how Spec Tree transforms project management"
@@ -79,6 +80,6 @@ export function Benefits() {
           </Card>
         ))}
       </div>
-    </div>
+    </Section>
   );
 }

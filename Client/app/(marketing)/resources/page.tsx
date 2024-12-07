@@ -6,6 +6,7 @@ import { ResourceSearch } from '@/components/resources/ResourceSearch';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResourceType, Resource } from '@/types/resources';
+import Section from '@/components/layout/Section';
 
 const resourcesData: Resource[] = [
   {
@@ -78,7 +79,7 @@ export default function ResourcesPage() {
   });
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading="Resources"
         description="Everything you need to succeed with Spec Tree"
@@ -109,6 +110,6 @@ export default function ResourcesPage() {
       </Tabs>
 
       <ResourceGrid resources={filteredResources} />
-    </div>
+    </Section>
   );
 }

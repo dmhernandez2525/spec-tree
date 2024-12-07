@@ -4,11 +4,12 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/icons';
+import Section from '@/components/layout/Section';
 
 export function Footer() {
   return (
     <footer className="border-t bg-background">
-      <div className="container flex flex-col gap-8 py-12 lg:py-16">
+      <Section className=" flex flex-col gap-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Company Info */}
           <div className="flex flex-col gap-4">
@@ -117,7 +118,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-      </div>
+      </Section>
     </footer>
   );
 }

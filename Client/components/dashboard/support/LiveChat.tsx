@@ -1,11 +1,12 @@
 'use client';
 import Chat from '@/components/chat/Chat';
+import Section from '@/components/layout/Section';
 
 const LiveChat: React.FC = () => {
   return (
-    <div className="container mx-auto p-6">
+    <Section className=" mx-auto p-6">
       <Chat />
-    </div>
+    </Section>
   );
 };
 

@@ -5,6 +5,7 @@ import { AppearanceSettings } from '@/components/settings/AppearanceSettings';
 import { NotificationSettings } from '@/components/settings/NotificationSettings';
 import { PrivacySettings } from '@/components/settings/PrivacySettings';
 import { SettingsLayout } from '@/components/settings/SettingsLayout';
+import Section from '@/components/layout/Section';
 
 export default function SettingsPage() {
   const settingsTabs = [
@@ -31,7 +32,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="container mx-auto py-6">
+    <Section className=" mx-auto py-6">
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground">
@@ -39,6 +40,6 @@ export default function SettingsPage() {
         </p>
       </div>
       <SettingsLayout tabs={settingsTabs} defaultTab="account" />
-    </div>
+    </Section>
   );
 }

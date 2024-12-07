@@ -15,6 +15,7 @@ import { PricingToggle } from '@/components/pricing/PricingToggle';
 import { PricingTable } from '@/components/pricing/PricingTable';
 import { PricingFaq } from '@/components/pricing/PricingFaq';
 import { useState } from 'react';
+import Section from '@/components/layout/Section';
 
 interface PricingTier {
   name: string;
@@ -108,7 +109,7 @@ export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       {/* Hero Section */}
       <HeadingSection
         heading="Simple, Transparent Pricing"
@@ -214,6 +215,6 @@ export default function PricingPage() {
           <Link href="/contact">Contact Sales</Link>
         </Button>
       </div>
-    </div>
+    </Section>
   );
 }

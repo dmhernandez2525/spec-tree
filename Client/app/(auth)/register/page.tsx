@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useAppSelector } from '@/lib/hooks/use-store';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
+import Section from '@/components/layout/Section';
 
 export default function RegisterPage() {
   const user = useAppSelector((state) => state.user.user);
@@ -17,7 +18,7 @@ export default function RegisterPage() {
   }, [user]);
 
   return (
-    <div className="container flex min-h-screen items-center justify-center py-8 md:py-12">
+    <Section className=" flex min-h-screen items-center justify-center py-8 md:py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Image
@@ -33,6 +34,6 @@ export default function RegisterPage() {
           <RegisterForm />
         </CardContent>
       </Card>
-    </div>
+    </Section>
   );
 }

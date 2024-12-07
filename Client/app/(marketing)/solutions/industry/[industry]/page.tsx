@@ -12,6 +12,7 @@ import { HeadingSection } from '@/components/shared/HeadingSection';
 import { MetricDisplay } from '@/components/solutions/MetricDisplay';
 import { industries } from '@/lib/data/solutions';
 import { IndustrySolution } from '@/types/solutions';
+import Section from '@/components/layout/Section';
 
 export default function IndustryPage() {
   const params = useParams();
@@ -23,17 +24,17 @@ export default function IndustryPage() {
 
   if (!industry) {
     return (
-      <div className="container py-8 md:py-12 text-center">
+      <Section className=" py-8 md:py-12 text-center">
         <h1 className="text-2xl font-bold">Industry not found</h1>
         <Button asChild className="mt-4">
           <Link href="/solutions">Back to Solutions</Link>
         </Button>
-      </div>
+      </Section>
     );
   }
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -166,6 +167,6 @@ export default function IndustryPage() {
           </Button>
         </div>
       </motion.div>
-    </div>
+    </Section>
   );
 }
