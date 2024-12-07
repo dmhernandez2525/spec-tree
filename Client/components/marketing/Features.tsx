@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Icons } from '@/components/shared/icons';
+import Section from '@/components/layout/Section';
 
 interface Feature {
   title: string;
@@ -51,7 +52,7 @@ const features: Feature[] = [
 
 export function Features() {
   return (
-    <div className="container">
+    <Section>
       <HeadingSection
         heading="Powerful Features"
         description="Transform how you plan and execute projects with our AI-powered tools"
@@ -79,6 +80,6 @@ export function Features() {
           );
         })}
       </div>
-    </div>
+    </Section>
   );
 }

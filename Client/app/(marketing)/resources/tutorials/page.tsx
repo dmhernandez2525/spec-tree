@@ -7,6 +7,7 @@ import { ResourceSearch } from '@/components/resources/ResourceSearch';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tutorial, TutorialCategory } from '@/types/tutorials';
+import Section from '@/components/layout/Section';
 
 const tutorials: Tutorial[] = [
   {
@@ -88,7 +89,7 @@ export default function TutorialsPage() {
   });
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <motion.div
         initial="hidden"
         animate="visible"
@@ -126,6 +127,6 @@ export default function TutorialsPage() {
 
         <TutorialGrid tutorials={filteredTutorials} />
       </motion.div>
-    </div>
+    </Section>
   );
 }

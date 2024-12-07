@@ -12,6 +12,7 @@ import { BenefitCard } from '@/components/solutions/BenefitCard';
 import { Icons } from '@/components/shared/icons';
 import { roles } from '@/lib/data/solutions';
 import { RoleSolution } from '@/types/solutions';
+import Section from '@/components/layout/Section';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -42,17 +43,17 @@ export default function RolePage() {
 
   if (!role) {
     return (
-      <div className="container py-8 md:py-12 text-center">
+      <Section className=" py-8 md:py-12 text-center">
         <h1 className="text-2xl font-bold">Role not found</h1>
         <Button asChild className="mt-4">
           <Link href="/solutions">Back to Solutions</Link>
         </Button>
-      </div>
+      </Section>
     );
   }
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -196,6 +197,6 @@ export default function RolePage() {
           </Button>
         </div>
       </motion.div>
-    </div>
+    </Section>
   );
 }

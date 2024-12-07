@@ -14,6 +14,7 @@ import {
 import AppSelector from './components/app-selector';
 import Builder from './components/builder';
 import { strapiService } from './lib/api/strapi-service';
+import Section from '@/components/layout/Section';
 
 import { App } from './lib/types/work-items';
 import { setSow } from '../../lib/store/sow-slice';
@@ -80,7 +81,7 @@ function SpecTreeContent() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
+        <Section className=" mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Spec Tree</h1>
             {selectedApp && (
@@ -89,7 +90,7 @@ function SpecTreeContent() {
               </Button>
             )}
           </div>
-        </div>
+        </Section>
       </header>
 
       <main className="container mx-auto px-4 py-6">

@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Icons } from '@/components/shared/icons';
 import Link from 'next/link';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
+import Section from '@/components/layout/Section';
 import { InteractiveDemo } from '@/components/features/InteractiveDemo';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 
@@ -80,7 +80,7 @@ const useCases = [
 
 export default function AIContextPage() {
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       {/* Hero Section */}
       <HeadingSection
         heading="AI-Powered Context Gathering"
@@ -213,6 +213,6 @@ export default function AIContextPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Section>
   );
 }

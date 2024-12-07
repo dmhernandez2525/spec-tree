@@ -8,6 +8,7 @@ import { useAppSelector } from '@/lib/hooks/use-store';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/shared/icons';
+import Section from '@/components/layout/Section';
 
 import {
   NavigationMenu,
@@ -237,7 +238,11 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center justify-between">
+      <Section
+        containerSize="full"
+        className="flex h-14 items-center justify-between"
+        containerClassName="flex h-14 items-center justify-between"
+      >
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center space-x-2">
             <span className="font-bold">Spec Tree</span>
@@ -283,7 +288,7 @@ export function MainNav() {
             </>
           )}
         </div>
-      </div>
+      </Section>
     </header>
   );
 }

@@ -4,7 +4,7 @@ import Container from './Container';
 interface SectionProps {
   children: React.ReactNode;
   className?: string;
-  containerSize?: 'default' | 'narrow' | 'wide';
+  containerSize?: 'default' | 'narrow' | 'wide' | 'full';
   background?: 'default' | 'muted' | 'primary';
   containerClassName?: string;
 }
@@ -12,7 +12,7 @@ interface SectionProps {
 export default function Section({
   children,
   className,
-  containerSize = 'default',
+  containerSize = 'narrow',
   background = 'default',
   containerClassName,
 }: SectionProps) {

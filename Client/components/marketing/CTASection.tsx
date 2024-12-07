@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Icons } from '@/components/shared/icons';
+import Section from '@/components/layout/Section';
 
 export function CTASection() {
   return (
-    <div className="container">
+    <Section>
       <Card className="bg-primary text-primary-foreground">
         <CardContent className="p-12">
           <div className="grid gap-8 md:grid-cols-2 items-center">
@@ -48,6 +49,6 @@ export function CTASection() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </Section>
   );
 }

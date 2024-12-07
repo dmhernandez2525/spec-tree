@@ -8,6 +8,7 @@ import { RoiCalculator } from '@/components/demo/RoiCalculator';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Section from '@/components/layout/Section';
 
 export default function DemoPage() {
   const [activeTab, setActiveTab] = useState('interactive');
@@ -34,7 +35,7 @@ export default function DemoPage() {
   };
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -96,6 +97,6 @@ export default function DemoPage() {
           </CardContent>
         </Card>
       </motion.div>
-    </div>
+    </Section>
   );
 }

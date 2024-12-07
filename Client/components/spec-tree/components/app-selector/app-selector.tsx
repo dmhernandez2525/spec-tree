@@ -21,6 +21,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { setSow } from '../../../../lib/store/sow-slice';
 import { App } from '../../lib/types/work-items';
 import { strapiService } from '../../lib/api/strapi-service';
+import Section from '@/components/layout/Section';
 
 interface AppSelectorProps {
   apps: App[];
@@ -75,7 +76,7 @@ const AppSelector: React.FC<AppSelectorProps> = ({
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <Section className=" mx-auto p-6 max-w-4xl">
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Select an App to Work With</h1>
@@ -151,7 +152,7 @@ const AppSelector: React.FC<AppSelectorProps> = ({
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+    </Section>
   );
 };
 

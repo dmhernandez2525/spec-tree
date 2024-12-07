@@ -3,6 +3,7 @@
 import { usePrivacyPageData } from '@/lib/hooks/usePrivacyPageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { HeadingSection } from '@/components/shared/HeadingSection';
+import Section from '@/components/layout/Section';
 
 export default function PrivacyPage() {
   const { privacySections, loading } = usePrivacyPageData();
@@ -25,7 +26,7 @@ export default function PrivacyPage() {
   const { aboutSection, contentSection } = privacySections;
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading={aboutSection?.header}
         description={aboutSection?.subHeader}
@@ -37,6 +38,6 @@ export default function PrivacyPage() {
           dangerouslySetInnerHTML={{ __html: contentSection }}
         />
       </div>
-    </div>
+    </Section>
   );
 }

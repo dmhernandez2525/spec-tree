@@ -3,6 +3,7 @@
 import { useTermsPageData } from '@/lib/hooks/useTermsPageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { HeadingSection } from '@/components/shared/HeadingSection';
+import Section from '@/components/layout/Section';
 
 export default function TermsPage() {
   const { termsSections, loading } = useTermsPageData();
@@ -25,7 +26,7 @@ export default function TermsPage() {
   const { aboutSection, contentSection } = termsSections;
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading={aboutSection?.header}
         description={aboutSection?.subHeader}
@@ -37,6 +38,6 @@ export default function TermsPage() {
           dangerouslySetInnerHTML={{ __html: contentSection }}
         />
       </div>
-    </div>
+    </Section>
   );
 }

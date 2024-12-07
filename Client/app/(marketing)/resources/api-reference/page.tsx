@@ -9,6 +9,7 @@ import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Badge } from '@/components/ui/badge';
 import { Check, Copy, Search } from 'lucide-react';
 import { toast } from 'sonner';
+import Section from '@/components/layout/Section';
 
 interface Endpoint {
   id: string;
@@ -131,7 +132,7 @@ export default function APIReferencePage() {
   };
 
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       <HeadingSection
         heading="API Reference"
         description="Complete reference documentation for the Spec Tree API"
@@ -271,6 +272,6 @@ export default function APIReferencePage() {
             ))}
         </main>
       </div>
-    </div>
+    </Section>
   );
 }

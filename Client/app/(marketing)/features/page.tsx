@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { FeatureHighlight } from '@/components/features/FeatureHighlight';
 import { FeatureComparison } from '@/components/features/FeatureComparison';
 import { HeadingSection } from '@/components/shared/HeadingSection';
+import Section from '@/components/layout/Section';
 
 interface FeatureCard {
   title: string;
@@ -62,7 +63,7 @@ const features: FeatureCard[] = [
 
 export default function FeaturesPage() {
   return (
-    <div className="container py-8 md:py-12">
+    <Section className=" py-8 md:py-12">
       {/* Hero Section */}
       <HeadingSection
         heading="Powerful Features for Modern Project Management"
@@ -165,6 +166,6 @@ export default function FeaturesPage() {
           </Button>
         </div>
       </div>
-    </div>
+    </Section>
   );
 }

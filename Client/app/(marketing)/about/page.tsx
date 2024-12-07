@@ -16,17 +16,12 @@ import {
 import { Icons } from '@/components/shared/icons';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
-import {
   AboutPageData,
   TeamMember,
   Partner,
   TechnologyStack,
 } from '@/types/about';
+import Section from '@/components/layout/Section';
 
 // Animation variants
 const containerVariants = {
@@ -224,7 +219,7 @@ function AnimatedSection({ children }: { children: React.ReactNode }) {
 function TeamSection({ team }: { team: TeamMember[] }) {
   return (
     <section className="py-16 bg-muted/50">
-      <div className="container">
+      <Section>
         <AnimatedSection>
           <HeadingSection
             heading="Our Team"
@@ -290,7 +285,7 @@ function TeamSection({ team }: { team: TeamMember[] }) {
             ))}
           </div>
         </AnimatedSection>
-      </div>
+      </Section>
     </section>
   );
 }
@@ -299,7 +294,7 @@ function TeamSection({ team }: { team: TeamMember[] }) {
 function TechStackSection({ techStack }: { techStack: TechnologyStack[] }) {
   return (
     <section className="py-16">
-      <div className="container">
+      <Section>
         <AnimatedSection>
           <HeadingSection
             heading="Our Technology Stack"
@@ -355,7 +350,7 @@ function TechStackSection({ techStack }: { techStack: TechnologyStack[] }) {
             ))}
           </div>
         </AnimatedSection>
-      </div>
+      </Section>
     </section>
   );
 }
@@ -363,7 +358,7 @@ function TechStackSection({ techStack }: { techStack: TechnologyStack[] }) {
 function PartnersSection({ partners }: { partners: Partner[] }) {
   return (
     <section className="py-16 bg-muted/50">
-      <div className="container">
+      <Section>
         <AnimatedSection>
           <HeadingSection
             heading="Our Partners"
@@ -403,7 +398,7 @@ function PartnersSection({ partners }: { partners: Partner[] }) {
             ))}
           </div>
         </AnimatedSection>
-      </div>
+      </Section>
     </section>
   );
 }
@@ -413,7 +408,7 @@ export default function AboutPage() {
     <div className="flex-1">
       {/* Vision & Mission */}
       <section className="py-16 bg-muted/50">
-        <div className="container">
+        <Section>
           <div className="max-w-3xl mx-auto text-center">
             <AnimatedSection>
               <motion.div variants={itemVariants}>
@@ -432,12 +427,12 @@ export default function AboutPage() {
               </motion.div>
             </AnimatedSection>
           </div>
-        </div>
+        </Section>
       </section>
 
       {/* Values */}
       <section className="py-16">
-        <div className="container">
+        <Section>
           <AnimatedSection>
             <HeadingSection
               heading="Our Values"
@@ -473,12 +468,12 @@ export default function AboutPage() {
               })}
             </div>
           </AnimatedSection>
-        </div>
+        </Section>
       </section>
 
       {/* Why Spec Tree */}
       <section className="py-16 bg-muted/50">
-        <div className="container">
+        <Section>
           <AnimatedSection>
             <HeadingSection
               heading={aboutData.whySpecTree.title}
@@ -514,7 +509,7 @@ export default function AboutPage() {
               })}
             </div>
           </AnimatedSection>
-        </div>
+        </Section>
       </section>
 
       {/* Team Section */}
@@ -528,7 +523,7 @@ export default function AboutPage() {
 
       {/* CTA Section */}
       <section className="py-16">
-        <div className="container">
+        <Section>
           <AnimatedSection>
             <motion.div
               className="rounded-lg bg-primary p-8 text-primary-foreground text-center"
@@ -557,7 +552,7 @@ export default function AboutPage() {
               </div>
             </motion.div>
           </AnimatedSection>
-        </div>
+        </Section>
       </section>
     </div>
   );
