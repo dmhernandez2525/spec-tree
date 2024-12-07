@@ -79,7 +79,6 @@ const AppSelector: React.FC<AppSelectorProps> = ({
     <Section className=" mx-auto p-6 max-w-4xl">
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Select an App to Work With</h1>
           <Button onClick={() => setIsCreateDialogOpen(true)}>
             Create New App
           </Button>

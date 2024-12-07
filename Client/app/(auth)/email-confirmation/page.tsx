@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function EmailConfirmationPage() {
   return (
-    <Section className="flex min-h-screen items-center justify-center py-8 md:py-12">
+    <div className="flex min-h-screen items-center justify-center py-8 md:py-12">
       <Card className="w-full max-w-md text-center">
         <CardHeader>
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
@@ -24,6 +24,6 @@ export default function EmailConfirmationPage() {
           </Button>
         </CardContent>
       </Card>
-    </Section>
+    </div>
   );
 }

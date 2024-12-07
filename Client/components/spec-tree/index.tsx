@@ -14,7 +14,6 @@ import {
 import AppSelector from './components/app-selector';
 import Builder from './components/builder';
 import { strapiService } from './lib/api/strapi-service';
-import Section from '@/components/layout/Section';
 
 import { App } from './lib/types/work-items';
 import { setSow } from '../../lib/store/sow-slice';
@@ -31,7 +30,6 @@ function SpecTreeContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [expressUrl, setExpressUrl] = useState<string | null>(null);
   const [apiSettings, setApiSettings] = useState<any>(null);
-  const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
   // Now useDispatch can be used safely
   const dispatch = useDispatch();
@@ -81,19 +79,18 @@ function SpecTreeContent() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b">
-        <Section className=" mx-auto px-4 py-4">
+        <div>
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">Spec Tree</h1>
             {selectedApp && (
               <Button variant="outline" onClick={() => setSelectedApp(null)}>
                 Back to App Selector
               </Button>
             )}
           </div>
-        </Section>
+        </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6">
+      <main className="mx-auto px-4 py-6">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <div className="text-lg space-y-2">
@@ -110,7 +107,7 @@ function SpecTreeContent() {
             selectedApp={selectedApp}
           />
         ) : (
-          <Card className="max-w-4xl mx-auto">
+          <Card className=" mx-auto">
             <CardHeader>
               <CardTitle>Select an App</CardTitle>
               <CardDescription>

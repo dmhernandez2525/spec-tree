@@ -18,7 +18,7 @@ export default function RegisterPage() {
   }, [user]);
 
   return (
-    <Section className=" flex min-h-screen items-center justify-center py-8 md:py-12">
+    <div className=" flex min-h-screen items-center justify-center py-8 md:py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Image
@@ -34,6 +34,6 @@ export default function RegisterPage() {
           <RegisterForm />
         </CardContent>
       </Card>
-    </Section>
+    </div>
   );
 }
