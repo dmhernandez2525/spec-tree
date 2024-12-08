@@ -6,7 +6,7 @@ import { Icons } from '@/components/shared/icons';
 import Link from 'next/link';
 import Image from 'next/image';
 import Section from '@/components/layout/Section';
-import { InteractiveDemo } from '@/components/features/InteractiveDemo';
+import { InteractiveDemo } from '@/components/marketing/features/InteractiveDemo';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 
 interface BenefitProps {
