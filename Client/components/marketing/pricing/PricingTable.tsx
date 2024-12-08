@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -6,83 +9,33 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Icons } from '@/components/shared/icons';
+import { ComparisonFeature } from '@/types/pricing';
+import { featureComparison } from '@/lib/data/pricing';
 
-interface Feature {
-  name: string;
-  description: string;
-  starter: boolean | string;
-  professional: boolean | string;
-  enterprise: boolean | string;
+interface FeatureComparisonTableProps {
+  features?: ComparisonFeature[];
 }
 
-const features: Feature[] = [
-  {
-    name: 'Team Members',
-    description: 'Number of users who can access the system',
-    starter: 'Up to 5',
-    professional: 'Up to 20',
-    enterprise: 'Unlimited',
-  },
-  {
-    name: 'Active Projects',
-    description: 'Number of concurrent projects',
-    starter: '10',
-    professional: 'Unlimited',
-    enterprise: 'Unlimited',
-  },
-  {
-    name: 'AI Context Gathering',
-    description: 'AI-powered requirements and context collection',
-    starter: 'Basic',
-    professional: 'Advanced',
-    enterprise: 'Premium',
-  },
-  {
-    name: 'Templates',
-    description: 'Pre-built and custom project templates',
-    starter: 'Pre-built only',
-    professional: 'Custom + Pre-built',
-    enterprise: 'Enterprise Library',
-  },
-  {
-    name: 'Support',
-    description: 'Access to customer support',
-    starter: 'Email',
-    professional: 'Priority',
-    enterprise: 'Dedicated',
-  },
-  {
-    name: 'Integrations',
-    description: 'Connect with other tools',
-    starter: 'Basic',
-    professional: 'Advanced',
-    enterprise: 'Custom',
-  },
-  {
-    name: 'Analytics',
-    description: 'Project and team analytics',
-    starter: false,
-    professional: true,
-    enterprise: 'Advanced',
-  },
-  {
-    name: 'SSO',
-    description: 'Single Sign-On',
-    starter: false,
-    professional: false,
-    enterprise: true,
-  },
-  {
-    name: 'SLA',
-    description: 'Service Level Agreement',
-    starter: false,
-    professional: false,
-    enterprise: true,
-  },
-];
+export function FeatureComparisonTable({
+  features = featureComparison,
+}: FeatureComparisonTableProps) {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-export function PricingTable() {
+  const categories = ['all', ...new Set(features.map((f) => f.category))];
+
+  const filteredFeatures =
+    selectedCategory === 'all'
+      ? features
+      : features.filter((f) => f.category === selectedCategory);
+
   const renderValue = (value: boolean | string) => {
     if (typeof value === 'boolean') {
       return value ? (
@@ -95,38 +48,55 @@ export function PricingTable() {
   };
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[300px]">Feature</TableHead>
-          <TableHead className="text-center">Starter</TableHead>
-          <TableHead className="text-center">Professional</TableHead>
-          <TableHead className="text-center">Enterprise</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {features.map((feature) => (
-          <TableRow key={feature.name}>
-            <TableCell className="font-medium">
-              <div>
-                {feature.name}
-                <p className="text-sm text-muted-foreground">
-                  {feature.description}
-                </p>
-              </div>
-            </TableCell>
-            <TableCell className="text-center">
-              {renderValue(feature.starter)}
-            </TableCell>
-            <TableCell className="text-center">
-              {renderValue(feature.professional)}
-            </TableCell>
-            <TableCell className="text-center">
-              {renderValue(feature.enterprise)}
-            </TableCell>
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map((category) => (
+              <SelectItem key={category} value={category}>
+                {category === 'all' ? 'All Features' : category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[300px]">Feature</TableHead>
+            <TableHead className="text-center">Starter</TableHead>
+            <TableHead className="text-center">Professional</TableHead>
+            <TableHead className="text-center">Enterprise</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {filteredFeatures.map((feature) => (
+            <TableRow key={feature.name}>
+              <TableCell className="font-medium">
+                <div>
+                  {feature.name}
+                  <p className="text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </div>
+              </TableCell>
+              <TableCell className="text-center">
+                {renderValue(feature.plans.starter)}
+              </TableCell>
+              <TableCell className="text-center">
+                {renderValue(feature.plans.professional)}
+              </TableCell>
+              <TableCell className="text-center">
+                {renderValue(feature.plans.enterprise)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
