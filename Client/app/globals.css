@@ -380,7 +380,7 @@ button {
   }
 
   .container-full {
-    @apply mx-auto w-full max-w-max px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[100%] px-4 sm:px-6 lg:px-8;
   }
 
   .section-padding {

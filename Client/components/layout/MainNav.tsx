@@ -284,6 +284,7 @@ export function MainNav() {
       <Section
         className="flex h-14 items-center relative"
         containerClassName="flex h-14 items-center relative"
+        containerSize="full"
       >
         <div className="flex-none">
           <Link href="/" className="flex items-center space-x-2 h-14">
