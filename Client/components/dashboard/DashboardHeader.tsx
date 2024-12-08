@@ -1,7 +1,6 @@
 'use client';
 
 import { UserNav } from './header/UserNav';
-import { MainNav } from './header/MainNav';
 import { Search } from './header/Search';
 import { Notifications } from './header/Notifications';
 import { useAppSelector } from '@/lib/hooks/use-store';
@@ -12,10 +11,14 @@ export function DashboardHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-background">
       <div className="mr-20	ml-20	flex h-16 items-center justify-between py-4">
-        <MainNav />
+        <div>
+          <>Hello user </>
+          <Notifications />
+        </div>
+
         <div className="flex items-center gap-4">
           <Search />
-          <Notifications />
+
           <UserNav
             user={{
               name: `${user?.firstName} ${user?.lastName}`,

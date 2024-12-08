@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import {
   Table,
   TableBody,
@@ -62,7 +63,7 @@ export function ProjectOverview() {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Project Overview</CardTitle>
         <Button variant="outline" size="sm">
-          Add Project
+          <Link href="/user-dashboard/spec-tree"> Add Project</Link>
         </Button>
       </CardHeader>
       <CardContent>
