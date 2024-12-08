@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/card';
 import { useFonts, styleFonts } from '@/components/FontManager';
 import { toast } from 'sonner';
+import Theme from '@/components/theme';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']),
@@ -66,84 +67,7 @@ export function AppearanceSettings() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="theme"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Theme</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a theme" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Select your preferred color theme
-                  </FormDescription>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="style"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Style</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a style" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {Object.keys(styleFonts).map((style) => (
-                        <SelectItem key={style} value={style}>
-                          {style.charAt(0).toUpperCase() + style.slice(1)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Choose your preferred UI style
-                  </FormDescription>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="animationsEnabled"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
-                      Interface Animations
-                    </FormLabel>
-                    <FormDescription>
-                      Enable animations and transitions
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <Theme />
             <Button type="submit">Save Preferences</Button>
           </form>
         </Form>

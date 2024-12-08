@@ -25,11 +25,6 @@ const sidebarNavItems = [
     icon: 'helpCircle',
   },
   {
-    title: 'Projects',
-    href: '/user-dashboard/projects',
-    icon: 'folder',
-  },
-  {
     title: 'Analytics',
     href: '/user-dashboard/analytics',
     icon: 'barChart',
@@ -47,12 +42,6 @@ const sidebarNavItems = [
   {
     title: 'Support',
     href: '/user-dashboard/support',
-    icon: 'helpCircle',
-  },
-
-  {
-    title: 'Theme',
-    href: '/user-dashboard/theme',
     icon: 'helpCircle',
   },
 ];
