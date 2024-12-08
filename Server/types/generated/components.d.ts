@@ -168,6 +168,17 @@ export interface MicroComponentAcceptanceCriteria
   };
 }
 
+export interface CopyrightCopyrightFooter extends Struct.ComponentSchema {
+  collectionName: 'components_copyright_copyright_footers';
+  info: {
+    displayName: 'CopyrightFooter';
+    description: '';
+  };
+  attributes: {
+    ownerStatement: Schema.Attribute.String;
+  };
+}
+
 export interface DatasetsSmsPartialUser extends Struct.ComponentSchema {
   collectionName: 'components_datasets_sms_partial_users';
   info: {
@@ -456,14 +467,14 @@ export interface DatasetsAccept extends Struct.ComponentSchema {
   };
 }
 
-export interface CopyrightCopyrightFooter extends Struct.ComponentSchema {
-  collectionName: 'components_copyright_copyright_footers';
+export interface BannerLogo extends Struct.ComponentSchema {
+  collectionName: 'components_banner_logos';
   info: {
-    displayName: 'CopyrightFooter';
+    displayName: 'Logo';
     description: '';
   };
   attributes: {
-    ownerStatement: Schema.Attribute.String;
+    logo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
   };
 }
 
@@ -479,17 +490,6 @@ export interface AddressAddress extends Struct.ComponentSchema {
     country: Schema.Attribute.String;
     zipCode: Schema.Attribute.String;
     city: Schema.Attribute.String;
-  };
-}
-
-export interface BannerLogo extends Struct.ComponentSchema {
-  collectionName: 'components_banner_logos';
-  info: {
-    displayName: 'Logo';
-    description: '';
-  };
-  attributes: {
-    logo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
   };
 }
 
@@ -509,6 +509,7 @@ declare module '@strapi/strapi' {
       'micro-component.resolve': MicroComponentResolve;
       'micro-component.button': MicroComponentButton;
       'micro-component.acceptance-criteria': MicroComponentAcceptanceCriteria;
+      'copyright.copyright-footer': CopyrightCopyrightFooter;
       'datasets.sms-partial-user': DatasetsSmsPartialUser;
       'datasets.service-list': DatasetsServiceList;
       'datasets.risks-and-mitigation': DatasetsRisksAndMitigation;
@@ -532,9 +533,8 @@ declare module '@strapi/strapi' {
       'datasets.email-options': DatasetsEmailOptions;
       'datasets.email-content': DatasetsEmailContent;
       'datasets.accept': DatasetsAccept;
-      'copyright.copyright-footer': CopyrightCopyrightFooter;
-      'address.address': AddressAddress;
       'banner.logo': BannerLogo;
+      'address.address': AddressAddress;
     }
   }
 }

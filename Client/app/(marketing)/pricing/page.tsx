@@ -94,7 +94,7 @@ export default function PricingPage() {
         )}
 
         {activeTab === 'calculator' && (
-          <motion.div variants={itemVariants} className="mx-auto max-w-2xl">
+          <motion.div variants={itemVariants} className="mx-auto ">
             <PricingCalculator />
           </motion.div>
         )}
@@ -105,18 +105,15 @@ export default function PricingPage() {
           </motion.div>
         )}
 
-        <motion.div variants={itemVariants} className="mx-auto max-w-4xl">
+        <motion.div variants={itemVariants} className="mx-auto">
           <PricingFAQ />
         </motion.div>
 
-        <motion.div variants={itemVariants} className="mx-auto max-w-5xl">
+        <motion.div variants={itemVariants} className="mx-auto ">
           <EnterpriseCTA />
         </motion.div>
 
-        <motion.div
-          variants={itemVariants}
-          className="mx-auto max-w-2xl text-center"
-        >
+        <motion.div variants={itemVariants} className="mx-auto  text-center">
           <h3 className="text-xl font-semibold">Need something different?</h3>
           <p className="mt-2 text-muted-foreground">
             We offer custom solutions for large organizations with specific

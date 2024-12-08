@@ -144,27 +144,6 @@ interface metricCards extends Section1 {
   backgroundImage: SingleApiResponse<ImageAttributes>;
 }
 
-interface ServiceListItem {
-  id: number;
-  listEntry: string;
-}
-
-interface ServiceData {
-  Service: string;
-  ServiceDescription: string;
-  serviceList: ServiceListItem[];
-  ServiceTitle: string;
-  ListTitle: string;
-}
-interface Step {
-  id: number;
-  title: string;
-  subHeader: string;
-  description: string;
-  color: string;
-  icon?: { url: string; caption: string };
-}
-
 interface Review {
   text: string;
   id: number;
@@ -194,12 +173,8 @@ interface HomePageData {
     heroImage: { url: string; caption: string };
   };
   ourMissionData: ourMission;
-  ourServicesData: ServiceData[];
-  WheelSection: Step[];
   reviews: Review[];
   ourWorkData: ourWork[];
-  ourServicesHeader: { Header: string; HeaderColor: string };
-  OurProcess: { Header: string; HeaderColor: string };
   ourWorkHeader: { Header: string; HeaderColor: string };
   reviewsHeader: { Header: string; HeaderColor: string };
   showReviews: Boolean;
