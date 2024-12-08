@@ -38,6 +38,7 @@ import { useDispatch } from 'react-redux';
 import { logOut } from '@/lib/store/auth-slice';
 import { clearUser } from '@/lib/store/user-slice';
 import { routes, NavItem } from './navigationRoutes';
+import img from '@/public/spec-tree-icon.svg';
 
 interface UserNavProps {
   user: {
@@ -279,26 +280,47 @@ export function MainNav() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <Section
-        containerSize="full"
-        className="flex h-14 items-center justify-between"
-        containerClassName="flex h-14 items-center justify-between"
+        className="flex h-14 items-center relative"
+        containerClassName="flex h-14 items-center relative"
       >
-        <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="font-bold">Spec Tree</span>
+        <div className="flex-none">
+          <Link href="/" className="flex items-center space-x-2 h-14">
+            <img
+              src={img.src}
+              alt="Spec Tree Logo"
+              className="h-20 w-auto"
+            />
+            <span className="font-bold text-lg">Spec Tree</span>
           </Link>
+        </div>
 
-          <nav className="hidden md:flex">
-            <NavigationMenu>
-              <NavigationMenuList>
-                {routes.map((route) => (
-                  <NavLink key={route.href} item={route} />
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </nav>
+        {/* Center: Navigation links */}
+        <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex">
+          <NavigationMenu>
+            <NavigationMenuList className="space-x-1">
+              {routes.map((route) => (
+                <NavLink key={route.href} item={route} />
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+        </nav>
+
+        {/* Right: Auth actions and Mobile Menu */}
+        <div className="flex-none ml-auto flex items-center gap-2">
+          {user ? (
+            <UserNav user={user} />
+          ) : (
+            <>
+              <Button variant="ghost" asChild className="hidden sm:flex">
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/register">Get Started</Link>
+              </Button>
+            </>
+          )}
 
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="md:hidden">
@@ -314,21 +336,6 @@ export function MainNav() {
               <MobileNav />
             </SheetContent>
           </Sheet>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {user ? (
-            <UserNav user={user} />
-          ) : (
-            <>
-              <Button variant="ghost" asChild className="hidden sm:flex">
-                <Link href="/login">Sign In</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/register">Get Started</Link>
-              </Button>
-            </>
-          )}
         </div>
       </Section>
     </header>
