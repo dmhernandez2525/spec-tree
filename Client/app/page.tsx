@@ -5,7 +5,6 @@ import { Features } from '@/components/marketing/Features';
 import { Benefits } from '@/components/marketing/Benefits';
 import { SampleWorkflows } from '@/components/marketing/SampleWorkflows';
 import { ClientSuccess } from '@/components/marketing/ClientSuccess';
-import { OurServices } from '@/components/marketing/OurServices';
 import { NewsletterForm } from '@/components/marketing/NewsletterForm';
 import { CTASection } from '@/components/marketing/CTASection';
 import { ColorHeader } from '@/components/shared/ColorHeader';
@@ -70,37 +69,24 @@ export default function HomePage() {
       <section id="ourMission" className="bg-background py-16 md:py-24">
         <Section>
           <ColorHeader
-            header={homeSections.ourMissionData?.Header}
-            headerColor={homeSections.ourMissionData?.HeaderColor}
+            header={homeSections.ourMissionData?.Header || 'Our Mission'}
+            headerColor={homeSections.ourMissionData?.HeaderColor || '#000'}
             textColor="#717D96"
           />
           <div className="mt-6 space-y-4 text-muted-foreground">
-            <p>{homeSections.ourMissionData?.SubHeader1}</p>
-            <p>{homeSections.ourMissionData?.SubHeader2}</p>
-            <p>{homeSections.ourMissionData?.SubHeader3}</p>
+            <p>
+              {homeSections.ourMissionData?.SubHeader1 ||
+                'At our company, our mission is to spark innovation and transform everyday experiences into extraordinary opportunities.'}
+            </p>
+            <p>
+              {homeSections.ourMissionData?.SubHeader2 ||
+                'We believe in leveraging cutting-edge technology, user-focused design, and a relentless commitment to quality to empower individuals and organizations across the globe.'}
+            </p>
+            <p>
+              {homeSections.ourMissionData?.SubHeader3 ||
+                'By fostering a culture rooted in collaboration, integrity, and continuous growth, we strive to make a lasting, positive impact on the world—one breakthrough at a time.'}
+            </p>
           </div>
-        </Section>
-      </section>
-
-      {/* Our Services Section */}
-      <section className="bg-muted py-16 md:py-24">
-        <Section>
-          <OurServices
-            serviceData={homeSections.ourServicesData}
-            serviceHeader={homeSections.ourServicesHeader}
-          />
-        </Section>
-      </section>
-
-      {/* Process Section */}
-      <section className="bg-background py-16 md:py-24">
-        <Section>
-          <ColorHeader
-            header={homeSections.OurProcess?.Header}
-            headerColor={homeSections.OurProcess?.HeaderColor}
-            textColor="#E2E7F0"
-            dark
-          />
         </Section>
       </section>
 

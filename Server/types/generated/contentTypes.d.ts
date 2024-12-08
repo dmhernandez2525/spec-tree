@@ -793,21 +793,8 @@ export interface ApiHomePageHomePage extends Struct.SingleTypeSchema {
       'datasets.our-mission-section',
       false
     >;
-    ourServicesData: Schema.Attribute.Component<'datasets.our-services', true>;
-    WheelSection: Schema.Attribute.Component<
-      'datasets.process-wheel-section',
-      true
-    >;
     reviews: Schema.Attribute.Component<'datasets.reviews-section', true>;
     ourWorkData: Schema.Attribute.Component<'datasets.our-work-section', true>;
-    ourServicesHeader: Schema.Attribute.Component<
-      'datasets.our-services-header',
-      false
-    >;
-    OurProcess: Schema.Attribute.Component<
-      'datasets.our-process-section',
-      false
-    >;
     ourWorkHeader: Schema.Attribute.Component<
       'datasets.our-work-header',
       false
