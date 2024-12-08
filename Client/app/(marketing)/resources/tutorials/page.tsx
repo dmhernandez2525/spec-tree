@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { TutorialGrid } from '@/components/resources/TutorialGrid';
-import { ResourceSearch } from '@/components/resources/ResourceSearch';
+import { TutorialGrid } from '@/components/marketing/resources/TutorialGrid';
+import { ResourceSearch } from '@/components/marketing/resources/ResourceSearch';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tutorial, TutorialCategory } from '@/types/tutorials';

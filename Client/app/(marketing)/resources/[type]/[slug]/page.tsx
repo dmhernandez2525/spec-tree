@@ -1,6 +1,6 @@
 'use client';
 
-import { ResourceDetail } from '@/components/resources/ResourceDetail';
+import { ResourceDetail } from '@/components/marketing/resources/ResourceDetail';
 import { notFound } from 'next/navigation';
 
 interface ResourcePageProps {

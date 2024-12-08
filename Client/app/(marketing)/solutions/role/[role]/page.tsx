@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import { BenefitCard } from '@/components/solutions/BenefitCard';
+import { BenefitCard } from '@/components/marketing/solutions/BenefitCard';
 import { Icons } from '@/components/shared/icons';
 import { roles } from '@/lib/data/solutions';
 import { RoleSolution } from '@/types/solutions';

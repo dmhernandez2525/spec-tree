@@ -5,8 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Icons } from '@/components/shared/icons';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import Link from 'next/link';
-import { SolutionShowcase } from '@/components/solutions/SolutionShowcase';
-import { TestimonialCard } from '@/components/solutions/TestimonialCard';
+import { SolutionShowcase } from '@/components/marketing/solutions/SolutionShowcase';
+import { TestimonialCard } from '@/components/marketing/solutions/TestimonialCard';
 import Section from '@/components/layout/Section';
 
 interface IndustryCardProps {

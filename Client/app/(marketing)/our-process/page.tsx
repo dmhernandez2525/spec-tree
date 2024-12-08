@@ -1,9 +1,9 @@
 'use client';
 
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import ProcessImplementationSteps from '@/components/our-process/ProcessImplementationSteps';
-import SupportTraining from '@/components/our-process/SupportTraining';
-import SuccessMetrics from '@/components/our-process/SuccessMetrics';
+import ProcessImplementationSteps from '@/components/marketing/our-process/ProcessImplementationSteps';
+import SupportTraining from '@/components/marketing/our-process/SupportTraining';
+import SuccessMetrics from '@/components/marketing/our-process/SuccessMetrics';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import Link from 'next/link';

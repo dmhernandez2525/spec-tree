@@ -11,9 +11,9 @@ import {
 import { Icons } from '@/components/shared/icons';
 import Link from 'next/link';
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import { PricingToggle } from '@/components/pricing/PricingToggle';
-import { PricingTable } from '@/components/pricing/PricingTable';
-import { PricingFaq } from '@/components/pricing/PricingFaq';
+import { PricingToggle } from '@/components/marketing/pricing/PricingToggle';
+import { PricingTable } from '@/components/marketing/pricing/PricingTable';
+import { PricingFaq } from '@/components/marketing/pricing/PricingFaq';
 import { useState } from 'react';
 import Section from '@/components/layout/Section';
 

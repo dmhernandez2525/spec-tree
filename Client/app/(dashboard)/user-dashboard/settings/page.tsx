@@ -1,10 +1,10 @@
 'use client';
 
-import { AccountSettings } from '@/components/settings/AccountSettings';
-import { AppearanceSettings } from '@/components/settings/AppearanceSettings';
-import { NotificationSettings } from '@/components/settings/NotificationSettings';
-import { PrivacySettings } from '@/components/settings/PrivacySettings';
-import { SettingsLayout } from '@/components/settings/SettingsLayout';
+import { AccountSettings } from '@/components/dashboard/settings/AccountSettings';
+import { AppearanceSettings } from '@/components/dashboard/settings/AppearanceSettings';
+import { NotificationSettings } from '@/components/dashboard/settings/NotificationSettings';
+import { PrivacySettings } from '@/components/dashboard/settings/PrivacySettings';
+import { SettingsLayout } from '@/components/dashboard/settings/SettingsLayout';
 import Section from '@/components/layout/Section';
 
 export default function SettingsPage() {
