@@ -493,7 +493,7 @@ export interface ApiAppApp extends Struct.CollectionTypeSchema {
   info: {
     singularName: 'app';
     pluralName: 'apps';
-    displayName: 'BBApp';
+    displayName: 'App';
     description: '';
   };
   options: {
@@ -507,6 +507,10 @@ export interface ApiAppApp extends Struct.CollectionTypeSchema {
     contextualQuestions: Schema.Attribute.Relation<
       'oneToMany',
       'api::contextual-question.contextual-question'
+    >;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
     >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -616,7 +620,7 @@ export interface ApiContextualQuestionContextualQuestion
   info: {
     singularName: 'contextual-question';
     pluralName: 'contextual-questions';
-    displayName: 'BBContextualQuestion';
+    displayName: 'ContextualQuestion';
     description: '';
   };
   options: {
@@ -674,7 +678,7 @@ export interface ApiEpicEpic extends Struct.CollectionTypeSchema {
   info: {
     singularName: 'epic';
     pluralName: 'epics';
-    displayName: 'BBEpic';
+    displayName: 'Epic';
     description: '';
   };
   options: {
@@ -715,7 +719,7 @@ export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
   info: {
     singularName: 'feature';
     pluralName: 'features';
-    displayName: 'BBFeature';
+    displayName: 'Feature';
     description: '';
   };
   options: {
@@ -836,6 +840,30 @@ export interface ApiNavbarNavbar extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiOrganizationOrganization
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'organizations';
+  info: {
+    singularName: 'organization';
+    pluralName: 'organizations';
+    displayName: 'organization';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    apps: Schema.Attribute.Relation<'oneToMany', 'api::app.app'>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+  };
+}
+
 export interface ApiPrivacyPagePrivacyPage extends Struct.SingleTypeSchema {
   collectionName: 'privacy_pages';
   info: {
@@ -866,7 +894,7 @@ export interface ApiTaskTask extends Struct.CollectionTypeSchema {
   info: {
     singularName: 'task';
     pluralName: 'tasks';
-    displayName: 'BBTask';
+    displayName: 'Task';
     description: '';
   };
   options: {
@@ -926,7 +954,7 @@ export interface ApiUserStoryUserStory extends Struct.CollectionTypeSchema {
   info: {
     singularName: 'user-story';
     pluralName: 'user-stories';
-    displayName: 'BBUserStory';
+    displayName: 'UserStory';
     description: '';
   };
   options: {
@@ -1329,6 +1357,7 @@ declare module '@strapi/strapi' {
       'api::footer.footer': ApiFooterFooter;
       'api::home-page.home-page': ApiHomePageHomePage;
       'api::navbar.navbar': ApiNavbarNavbar;
+      'api::organization.organization': ApiOrganizationOrganization;
       'api::privacy-page.privacy-page': ApiPrivacyPagePrivacyPage;
       'api::task.task': ApiTaskTask;
       'api::terms-page.terms-page': ApiTermsPageTermsPage;
