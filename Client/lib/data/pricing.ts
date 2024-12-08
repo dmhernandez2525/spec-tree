@@ -40,10 +40,41 @@ export const pricingTiers: PricingTier[] = [
         description: 'Project and team analytics',
         included: false,
       },
+      {
+        title: 'API Access',
+        description: 'Access to Spec Tree API',
+        included: 'Limited',
+      },
+      {
+        title: 'Custom Integrations',
+        description: 'Ability to create custom integrations',
+        included: false,
+      },
+      {
+        title: 'Training',
+        description: 'Product training and onboarding',
+        included: 'Documentation',
+      },
+      {
+        title: 'Custom AI Training',
+        description: 'Train AI on your organization’s data',
+        included: false,
+      },
+      {
+        title: 'SLA Guarantee',
+        description: 'Service level agreement',
+        included: false,
+      },
+      {
+        title: 'Custom Deployment',
+        description: 'Custom deployment options',
+        included: false,
+      },
     ],
     maxProjects: 10,
     maxTeamSize: 5,
     supportLevel: 'Email',
+    hasTrial: true, // This tier includes a free trial
     button: {
       text: 'Start Free Trial',
       href: '/register',
@@ -89,14 +120,125 @@ export const pricingTiers: PricingTier[] = [
         description: 'Project and team analytics',
         included: true,
       },
+      {
+        title: 'API Access',
+        description: 'Access to Spec Tree API',
+        included: true,
+      },
+      {
+        title: 'Custom Integrations',
+        description: 'Ability to create custom integrations',
+        included: 'Basic',
+      },
+      {
+        title: 'Training',
+        description: 'Product training and onboarding',
+        included: 'Group Sessions',
+      },
+      {
+        title: 'Custom AI Training',
+        description: 'Train AI on your organization’s data',
+        included: false,
+      },
+      {
+        title: 'SLA Guarantee',
+        description: 'Service level agreement',
+        included: false,
+      },
+      {
+        title: 'Custom Deployment',
+        description: 'Custom deployment options',
+        included: false,
+      },
     ],
     maxProjects: -1,
     maxTeamSize: 20,
     supportLevel: 'Priority',
     highlight: true,
+    hasTrial: true, // This tier includes a free trial
     button: {
       text: 'Get Started',
       href: '/register',
+    },
+  },
+  {
+    id: 'business',
+    name: 'Business',
+    description: 'Advanced features for established organizations',
+    price: {
+      monthly: 129,
+      annual: 109,
+    },
+    features: [
+      {
+        title: 'Team Members',
+        description: 'Number of team members who can access the system',
+        included: 'Up to 50',
+      },
+      {
+        title: 'Active Projects',
+        description: 'Number of concurrent projects',
+        included: 'Unlimited',
+      },
+      {
+        title: 'AI Context Gathering',
+        description: 'AI-powered requirements and context collection',
+        included: 'Advanced',
+      },
+      {
+        title: 'Templates',
+        description: 'Expanded template library + custom templates',
+        included: 'Expanded + Custom',
+      },
+      {
+        title: 'Support',
+        description: 'Access to customer support',
+        included: 'Priority with Faster SLAs',
+      },
+      {
+        title: 'Analytics',
+        description: 'Project and team analytics with advanced filters',
+        included: 'Enhanced',
+      },
+      {
+        title: 'API Access',
+        description: 'Access to Spec Tree API',
+        included: 'Enhanced API Access',
+      },
+      {
+        title: 'Custom Integrations',
+        description: 'Ability to create advanced custom integrations',
+        included: 'Advanced',
+      },
+      {
+        title: 'Training',
+        description: 'Product training and onboarding',
+        included: 'Dedicated Sessions + Tailored Modules',
+      },
+      {
+        title: 'Custom AI Training',
+        description: 'Train AI on your organization’s data',
+        included: 'Partial (Up to X Models)',
+      },
+      {
+        title: 'SLA Guarantee',
+        description: 'Service level agreement',
+        included: false,
+      },
+      {
+        title: 'Custom Deployment',
+        description: 'Custom deployment options',
+        included: false,
+      },
+    ],
+    maxProjects: -1,
+    maxTeamSize: 50,
+    supportLevel: 'Priority',
+    hasTrial: false, // This tier does NOT include a free trial
+    button: {
+      text: 'Upgrade',
+      href: '/register',
+      variant: 'secondary',
     },
   },
   {
@@ -138,6 +280,36 @@ export const pricingTiers: PricingTier[] = [
         description: 'Advanced analytics and custom reporting',
         included: 'Advanced',
       },
+      {
+        title: 'API Access',
+        description: 'Access to Spec Tree API',
+        included: 'Custom & Enhanced',
+      },
+      {
+        title: 'Custom Integrations',
+        description: 'Build custom integrations with full flexibility',
+        included: 'Advanced + Custom',
+      },
+      {
+        title: 'Training',
+        description: 'Product training and onboarding',
+        included: 'Custom Training (On-site/Virtual)',
+      },
+      {
+        title: 'Custom AI Training',
+        description: 'Train AI on your organization’s data',
+        included: 'Full Customization',
+      },
+      {
+        title: 'SLA Guarantee',
+        description: 'Service level agreement',
+        included: true,
+      },
+      {
+        title: 'Custom Deployment',
+        description: 'Custom deployment options',
+        included: true,
+      },
     ],
     maxProjects: -1,
     maxTeamSize: -1,
@@ -148,6 +320,7 @@ export const pricingTiers: PricingTier[] = [
       'Custom integrations',
       'SLA guarantees',
     ],
+    hasTrial: false, // No trial for enterprise
     button: {
       text: 'Contact Sales',
       href: '/contact',
@@ -163,6 +336,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: 'Up to 5',
       professional: 'Up to 20',
+      business: 'Up to 50',
       enterprise: 'Unlimited',
     },
     category: 'Basics',
@@ -173,6 +347,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: '10',
       professional: 'Unlimited',
+      business: 'Unlimited',
       enterprise: 'Unlimited',
     },
     category: 'Basics',
@@ -183,6 +358,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: 'Basic',
       professional: 'Advanced',
+      business: 'Advanced',
       enterprise: 'Premium',
     },
     category: 'AI Features',
@@ -193,6 +369,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: false,
       professional: false,
+      business: 'Partial',
       enterprise: true,
     },
     category: 'AI Features',
@@ -203,6 +380,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: 'Pre-built only',
       professional: 'Custom + Pre-built',
+      business: 'Expanded + Custom',
       enterprise: 'Enterprise Library',
     },
     category: 'Features',
@@ -213,6 +391,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: false,
       professional: true,
+      business: 'Enhanced',
       enterprise: 'Advanced',
     },
     category: 'Features',
@@ -223,7 +402,8 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: 'Limited',
       professional: true,
-      enterprise: 'Custom',
+      business: 'Enhanced',
+      enterprise: 'Custom & Enhanced',
     },
     category: 'Integrations',
   },
@@ -233,7 +413,8 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: false,
       professional: 'Basic',
-      enterprise: 'Advanced',
+      business: 'Advanced',
+      enterprise: 'Advanced + Custom',
     },
     category: 'Integrations',
   },
@@ -243,6 +424,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: 'Email',
       professional: 'Priority',
+      business: 'Priority (Faster SLAs)',
       enterprise: 'Dedicated',
     },
     category: 'Support',
@@ -253,6 +435,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: 'Documentation',
       professional: 'Group Sessions',
+      business: 'Dedicated + Tailored Modules',
       enterprise: 'Custom Training',
     },
     category: 'Support',
@@ -263,6 +446,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: false,
       professional: false,
+      business: false,
       enterprise: true,
     },
     category: 'Enterprise',
@@ -273,6 +457,7 @@ export const featureComparison: ComparisonFeature[] = [
     plans: {
       starter: false,
       professional: false,
+      business: false,
       enterprise: true,
     },
     category: 'Enterprise',

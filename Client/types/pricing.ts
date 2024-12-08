@@ -16,6 +16,7 @@ export interface PricingTier {
   };
   features: PricingFeature[];
   highlight?: boolean;
+  hasTrial?: boolean;
   button: {
     text: string;
     href: string;
