@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -64,18 +63,15 @@ export default function ResourcesLayout({
           key={link.href}
           href={link.href}
           className={cn(
-            buttonVariants({ variant: 'ghost' }),
-            pathname === link.href
-              ? 'bg-muted hover:bg-muted'
-              : 'hover:bg-transparent hover:underline',
-            'justify-start w-full'
+            'block w-full px-3 py-2 hover:bg-accent rounded-md transition-colors',
+            pathname === link.href ? 'bg-accent' : 'text-muted-foreground'
           )}
         >
-          <div>
-            <div>{link.title}</div>
-            <div className="text-sm text-muted-foreground hidden md:block">
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">{link.title}</span>
+            <span className="text-xs text-muted-foreground mt-0.5">
               {link.description}
-            </div>
+            </span>
           </div>
         </Link>
       ))}
@@ -83,7 +79,7 @@ export default function ResourcesLayout({
   );
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen relative">
       {/* Mobile Navigation */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger
@@ -103,15 +99,19 @@ export default function ResourcesLayout({
       </Sheet>
 
       {/* Desktop Navigation */}
-      <div className="hidden lg:flex w-[300px] flex-col fixed inset-y-0">
-        <ScrollArea className="flex-1 p-8">
-          <ResourceNav />
-        </ScrollArea>
+      <div className="hidden lg:flex w-[300px] flex-shrink-0">
+        <div className="fixed h-screen w-[300px] border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <ScrollArea className="h-full">
+            <nav className="space-y-4 p-4">
+              <ResourceNav />
+            </nav>
+          </ScrollArea>
+        </div>
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 lg:pl-[300px]">
-        <div className="min-h-screen">{children}</div>
+      <main className="flex-1 pt-16 lg:pt-0">
+        <div className="h-full min-h-screen">{children}</div>
       </main>
     </div>
   );

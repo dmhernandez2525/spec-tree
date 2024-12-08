@@ -136,7 +136,7 @@ export function InteractiveDemo() {
                 disabled={!projectType || isLoading}
               >
                 {isLoading && (
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  <Icons.alert className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Continue
               </Button>

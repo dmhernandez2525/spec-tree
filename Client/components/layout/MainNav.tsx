@@ -105,6 +105,48 @@ function NavLink({ item }: { item: NavItem }) {
       <NavigationMenuItem>
         <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
         <NavigationMenuContent>
+          {item.title === 'Solutions' && (
+            <div className="p-4 pt-0">
+              <Link
+                href="/solutions"
+                className="block w-full rounded-md p-3 hover:bg-accent"
+              >
+                <div className="text-sm font-medium">Overview</div>
+                <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                  Explore all our solutions and capabilities
+                </p>
+              </Link>
+              <div className="mt-4 h-px bg-muted" />
+            </div>
+          )}
+          {item.title === 'Resources' && (
+            <div className="p-4 pt-0">
+              <Link
+                href="/resources"
+                className="block w-full rounded-md p-3 hover:bg-accent"
+              >
+                <div className="text-sm font-medium">Overview</div>
+                <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                  Explore all our Resources
+                </p>
+              </Link>
+              <div className="mt-4 h-px bg-muted" />
+            </div>
+          )}
+          {item.title === 'Features' && (
+            <div className="p-4 pt-0">
+              <Link
+                href="/features"
+                className="block w-full rounded-md p-3 hover:bg-accent"
+              >
+                <div className="text-sm font-medium">Overview</div>
+                <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                  Explore all our Features
+                </p>
+              </Link>
+              <div className="mt-4 h-px bg-muted" />
+            </div>
+          )}
           <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
             {item.children.map((child) => (
               <li key={child.href}>

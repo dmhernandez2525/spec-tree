@@ -83,7 +83,7 @@ export default function ResourcesPage() {
   });
 
   return (
-    <Section className=" py-8 md:py-12">
+    <div className=" py-8 md:py-12">
       <HeadingSection
         heading="Resources"
         description="Everything you need to succeed with Spec Tree"
@@ -114,6 +114,6 @@ export default function ResourcesPage() {
       </Tabs>
 
       <ResourceGrid resources={filteredResources} />
-    </Section>
+    </div>
   );
 }
