@@ -229,18 +229,9 @@ const Builder: React.FC<BuilderProps> = ({
     <div className="flex h-screen">
       {/* Left Sidebar */}
       <div className="w-80 border-r bg-background p-6 space-y-4">
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => setSelectedApp(null)}
-        >
-          Back to App Selector
-        </Button>
-
-        <Separator />
+        <ContextualQuestions content="Global" workItemType="Global" />
 
         <FormatData chatApi={chatApi} selectedApp={selectedApp} />
-        <SowInput selectedApp={selectedApp} />
 
         <div className="space-y-2">
           <Button className="w-full" onClick={handleAddEpics}>
@@ -265,9 +256,9 @@ const Builder: React.FC<BuilderProps> = ({
 
         <Separator />
 
-        <ContextualQuestions content="Global" workItemType="Global" />
         <Chat />
         <Config />
+        <SowInput selectedApp={selectedApp} />
 
         {error && (
           <Alert variant="destructive">
