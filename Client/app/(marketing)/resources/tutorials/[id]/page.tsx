@@ -18,8 +18,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Icons } from '@/components/shared/icons';
-import { TutorialTranscript } from '@/components/resources/TutorialTranscript';
-import { TutorialResources } from '@/components/resources/TutorialResources';
+import { TutorialTranscript } from '@/components/marketing/resources/TutorialTranscript';
+import { TutorialResources } from '@/components/marketing/resources/TutorialResources';
 import { Tutorial } from '@/types/tutorials';
 import Section from '@/components/layout/Section';
 
