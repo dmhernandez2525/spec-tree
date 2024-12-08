@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { ResourceGrid } from '@/components/resources/ResourceGrid';
-import { ResourceSearch } from '@/components/resources/ResourceSearch';
+import { ResourceGrid } from '@/components/marketing/resources/ResourceGrid';
+import { ResourceSearch } from '@/components/marketing/resources/ResourceSearch';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Resource } from '@/types/resources';

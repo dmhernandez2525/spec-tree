@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import { ResourceSearch } from '@/components/resources/ResourceSearch';
+import { ResourceSearch } from '@/components/marketing/resources/ResourceSearch';
 import { Book, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Section from '@/components/layout/Section';

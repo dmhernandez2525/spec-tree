@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { DemoForm } from '@/components/demo/DemoForm';
-import { InteractiveDemo } from '@/components/demo/InteractiveDemo';
-import { RoiCalculator } from '@/components/demo/RoiCalculator';
+import { DemoForm } from '@/components/marketing/demo/DemoForm';
+import { InteractiveDemo } from '@/components/marketing/demo/InteractiveDemo';
+import { RoiCalculator } from '@/components/marketing/demo/RoiCalculator';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

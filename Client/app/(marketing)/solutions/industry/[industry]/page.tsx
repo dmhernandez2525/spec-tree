@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Icons } from '@/components/shared/icons';
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import { MetricDisplay } from '@/components/solutions/MetricDisplay';
+import { MetricDisplay } from '@/components/marketing/solutions/MetricDisplay';
 import { industries } from '@/lib/data/solutions';
 import { IndustrySolution } from '@/types/solutions';
 import Section from '@/components/layout/Section';
