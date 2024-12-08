@@ -51,7 +51,7 @@ export default function RootLayout({
             <SidebarProvider>
               <BaseLayout>
                 <MainNav />
-                <main className="mt-36 min-h-screen w-full bg-background">
+                <main className="mt-44 min-h-screen w-full bg-background">
                   {children}
                 </main>
                 <Footer />
