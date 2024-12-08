@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Icons } from '@/components/shared/icons';
 import Link from 'next/link';
-import { FeatureHighlight } from '@/components/features/FeatureHighlight';
-import { FeatureComparison } from '@/components/features/FeatureComparison';
+import { FeatureHighlight } from '@/components/marketing/features/FeatureHighlight';
+import { FeatureComparison } from '@/components/marketing/features/FeatureComparison';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import Section from '@/components/layout/Section';
 
