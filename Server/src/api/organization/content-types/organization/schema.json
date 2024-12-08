@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organizations",
+  "info": {
+    "singularName": "organization",
+    "pluralName": "organizations",
+    "displayName": "organization"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "apps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::app.app",
+      "mappedBy": "organization"
+    }
+  }
+}
