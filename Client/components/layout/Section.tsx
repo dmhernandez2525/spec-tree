@@ -12,7 +12,7 @@ interface SectionProps {
 export default function Section({
   children,
   className,
-  containerSize = 'narrow',
+  containerSize = 'wide',
   background = 'default',
   containerClassName,
 }: SectionProps) {
