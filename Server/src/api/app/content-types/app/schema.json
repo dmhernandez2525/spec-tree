@@ -4,7 +4,7 @@
   "info": {
     "singularName": "app",
     "pluralName": "apps",
-    "displayName": "BBApp",
+    "displayName": "App",
     "description": ""
   },
   "options": {
@@ -32,6 +32,12 @@
       "relation": "oneToMany",
       "target": "api::contextual-question.contextual-question",
       "mappedBy": "app"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "apps"
     }
   }
 }
