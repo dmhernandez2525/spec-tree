@@ -280,7 +280,10 @@ export function MainNav() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
+    <header
+      // className="fixed"
+      className="top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm"
+    >
       <Section
         className="flex h-14 items-center relative"
         containerClassName="flex h-14 items-center relative"
