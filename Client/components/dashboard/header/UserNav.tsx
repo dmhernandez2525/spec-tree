@@ -1,7 +1,11 @@
 'use client';
-
+import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { logOut } from '@/lib/store/auth-slice';
+import { clearUser } from '@/lib/store/user-slice';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +26,15 @@ interface UserNavProps {
 }
 
 export function UserNav({ user }: UserNavProps) {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    dispatch(clearUser());
+    dispatch(logOut());
+    router.push('/');
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -43,19 +56,24 @@ export function UserNav({ user }: UserNavProps) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+          <DropdownMenuItem asChild>
+            <Link href="/user-dashboard/profile">
+              <User className="mr-2 h-4 w-4" />
+              Profile
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuItem asChild>
+            <Link href="/user-dashboard/settings">
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
