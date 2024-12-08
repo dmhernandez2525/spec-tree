@@ -12,6 +12,7 @@ import { ColorHeader } from '@/components/shared/ColorHeader';
 import { useHomePageData } from '@/lib/hooks/useHomePageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import Section from '@/components/layout/Section';
+import { ResultsGraph } from '@/components/marketing/ResultsGraph';
 
 export default function HomePage() {
   const { homeSections, loading } = useHomePageData();
@@ -39,6 +40,11 @@ export default function HomePage() {
             ?.scrollIntoView({ behavior: 'smooth' })
         }
       />
+
+      {/* Results Section */}
+      <Section className="bg-muted py-16 md:py-24">
+        <ResultsGraph />
+      </Section>
 
       {/* Features Section */}
       <section id="features" className="bg-background py-16 md:py-24">

@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Icons } from '@/components/shared/icons';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 import Section from '@/components/layout/Section';
 
 interface WorkflowStep {
@@ -109,19 +110,27 @@ export function SampleWorkflows() {
               {workflow.steps.map((step) => {
                 const Icon = Icons[step.icon];
                 return (
-                  <Card key={step.title}>
-                    <CardContent className="flex items-start gap-4 p-4">
-                      <div className="rounded-lg bg-primary/10 p-2">
-                        <Icon className="h-4 w-4 text-primary" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">{step.title}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          {step.description}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <motion.div
+                    key={step.title}
+                    whileHover={{
+                      scale: 1.02,
+                      transition: { duration: 0.2 },
+                    }}
+                  >
+                    <Card className="transition-shadow hover:shadow-md">
+                      <CardContent className="flex items-start gap-4 p-4">
+                        <div className="rounded-lg bg-primary/10 p-2 transition-colors group-hover:bg-primary/20">
+                          <Icon className="h-4 w-4 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold mb-1">{step.title}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {step.description}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 );
               })}
             </div>

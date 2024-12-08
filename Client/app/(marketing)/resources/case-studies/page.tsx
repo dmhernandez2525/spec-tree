@@ -35,18 +35,9 @@ const caseStudies: CaseStudy[] = [
       'How TechCorp improved project delivery time by 40% using Spec Tree',
     industry: 'Software Development',
     results: [
-      {
-        metric: 'Faster Project Delivery',
-        value: '40%',
-      },
-      {
-        metric: 'Cost Reduction',
-        value: '25%',
-      },
-      {
-        metric: 'Team Productivity',
-        value: '+60%',
-      },
+      { metric: 'Faster Project Delivery', value: '40%' },
+      { metric: 'Cost Reduction', value: '25%' },
+      { metric: 'Team Productivity', value: '+60%' },
     ],
     logoUrl:
       'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -62,18 +53,9 @@ const caseStudies: CaseStudy[] = [
       'How a leading marketing agency transformed their campaign planning process',
     industry: 'Marketing',
     results: [
-      {
-        metric: 'Planning Time Reduced',
-        value: '50%',
-      },
-      {
-        metric: 'Client Satisfaction',
-        value: '+45%',
-      },
-      {
-        metric: 'Campaign Success Rate',
-        value: '92%',
-      },
+      { metric: 'Planning Time Reduced', value: '50%' },
+      { metric: 'Client Satisfaction', value: '+45%' },
+      { metric: 'Campaign Success Rate', value: '92%' },
     ],
     logoUrl:
       'https://plus.unsplash.com/premium_photo-1723507319323-a429e23b04d2?q=80&w=3326&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -104,7 +86,7 @@ export default function CaseStudiesPage() {
   });
 
   return (
-    <Section className=" py-8 md:py-12">
+    <Section className="py-8 md:py-12">
       <HeadingSection
         heading="Case Studies"
         description="Learn how organizations are transforming their projects with Spec Tree"
@@ -138,7 +120,7 @@ export default function CaseStudiesPage() {
       <div className="grid gap-8 md:grid-cols-2">
         {filteredCaseStudies.map((study) => (
           <Link key={study.id} href={study.href}>
-            <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow">
+            <Card className="h-full hover:shadow-lg transition-shadow">
               <CardHeader className="p-0">
                 <div className="relative aspect-video">
                   <Image
@@ -178,7 +160,6 @@ export default function CaseStudiesPage() {
                       <div className="text-2xl font-bold text-primary">
                         {result.value}
                       </div>
-
                       <div className="text-sm text-muted-foreground">
                         {result.metric}
                       </div>
