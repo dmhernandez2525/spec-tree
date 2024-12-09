@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { CommentSection } from '@/components/marketing/blog/CommentSection';
 import { PostAttributes } from '@/types/main';
+import { marked } from 'marked';
 
 interface BlogPostProps {
   post: PostAttributes;
@@ -21,6 +22,9 @@ export function BlogPost({ post }: BlogPostProps) {
   if (!post) {
     return <div>Blog post not found.</div>;
   }
+
+  // Convert markdown to HTML
+  const htmlContent = marked(post.entireBlogPage || '');
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-8">
@@ -51,9 +55,10 @@ export function BlogPost({ post }: BlogPostProps) {
             <p className="text-xl text-muted-foreground">{post.description}</p>
           </div>
 
+          {/* Render converted HTML */}
           <div
             className="prose prose-blue dark:prose-invert max-w-none mb-16"
-            dangerouslySetInnerHTML={{ __html: post.entireBlogPage }}
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
 
           <CommentSection postId={post.id} />
