@@ -52,7 +52,7 @@ export function TrialModal({ isOpen, onClose, onStartTrial }: TrialModalProps) {
           <DialogTitle>Select Your Plan</DialogTitle>
           <DialogDescription>
             Choose the plan that best fits your needs. Trial plans offer a
-            14-day free trial, no credit card required.
+            14-day free trial
           </DialogDescription>
         </DialogHeader>
 

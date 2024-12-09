@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
@@ -17,6 +18,7 @@ interface TrialBannerProps {
 
 export function TrialBanner({ trialStatus, onStartTrial }: TrialBannerProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const pathname = usePathname();
 
   if (!isVisible) return null;
 
@@ -25,6 +27,7 @@ export function TrialBanner({ trialStatus, onStartTrial }: TrialBannerProps) {
     : null;
 
   const progress = daysRemaining ? ((14 - daysRemaining) / 14) * 100 : 0;
+  const isPricingPage = pathname === '/pricing';
 
   return (
     <AnimatePresence>
@@ -33,12 +36,13 @@ export function TrialBanner({ trialStatus, onStartTrial }: TrialBannerProps) {
         animate={{ height: 'auto', opacity: 1 }}
         exit={{ height: 0, opacity: 0 }}
         transition={{ duration: 0.3 }}
+        className="overflow-hidden"
       >
         <Alert className="relative border-primary/50 bg-primary/5">
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-2 top-2"
+            className="absolute right-2 top-2 hover:bg-primary/10"
             onClick={() => setIsVisible(false)}
           >
             <Icons.x className="h-4 w-4" />
@@ -46,7 +50,7 @@ export function TrialBanner({ trialStatus, onStartTrial }: TrialBannerProps) {
 
           {trialStatus?.isActive ? (
             <>
-              <AlertTitle className="flex items-center gap-2">
+              <AlertTitle className="flex items-center gap-2 text-primary">
                 <Icons.alert className="h-4 w-4" />
                 Trial Status
               </AlertTitle>
@@ -78,7 +82,7 @@ export function TrialBanner({ trialStatus, onStartTrial }: TrialBannerProps) {
             </>
           ) : (
             <>
-              <AlertTitle className="flex items-center gap-2">
+              <AlertTitle className="flex items-center gap-2 text-primary">
                 <Icons.sparkles className="h-4 w-4" />
                 Start Your Free Trial
               </AlertTitle>
@@ -93,9 +97,11 @@ export function TrialBanner({ trialStatus, onStartTrial }: TrialBannerProps) {
                       Start Free Trial
                     </Button>
                   )}
-                  <Button variant="outline" size="sm" asChild>
-                    <Link href="/pricing">View Pricing</Link>
-                  </Button>
+                  {!isPricingPage && (
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href="/pricing">View Pricing</Link>
+                    </Button>
+                  )}
                 </div>
               </AlertDescription>
             </>
@@ -105,3 +111,5 @@ export function TrialBanner({ trialStatus, onStartTrial }: TrialBannerProps) {
     </AnimatePresence>
   );
 }
+
+export default TrialBanner;
