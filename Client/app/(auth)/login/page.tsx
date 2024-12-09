@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useAppSelector } from '@/lib/hooks/use-store';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
+import img from '@/public/spec-tree-icon.svg';
 
 export default function LoginPage() {
   const user = useAppSelector((state) => state.user.user);
@@ -26,13 +27,14 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Image
-            src="/logo.png"
-            alt="Logo"
+            src={img.src}
+            alt="Spec Tree Logo"
             width={150}
             height={150}
-            className="mx-auto"
+            className="h-20 w-auto"
             priority
           />
+          <span className="font-bold text-lg">Spec Tree</span>
         </CardHeader>
         <CardContent>
           <LoginForm />
