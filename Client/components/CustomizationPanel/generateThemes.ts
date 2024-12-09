@@ -48,7 +48,8 @@ export type StyleVariant =
   | 'kawaii'
   | 'terminal'
   | 'handdrawn'
-  | 'claymorphic';
+  | 'claymorphic'
+  | 'schematic';
 
 export type ThemeOptions = {
   style: StyleVariant;
@@ -417,8 +418,21 @@ export const styleVariants = {
     '--font-heading': 'var(--font-work-sans)',
     '--font-body': 'var(--font-inter)',
   },
-} as const;
 
+  schematic: {
+    '--card': '220 15% 12%',
+    '--popover': '220 15% 12%',
+    '--border': '220 10% 30%',
+    '--ring': '210 90% 50%',
+    '--shadow': '0 4px 12px hsla(210,15%,8%,0.2)',
+    '--border-width': '1px',
+    '--border-style': 'solid',
+    '--button-radius': 'calc(var(--radius) * 1.25)',
+    '--card-radius': 'calc(var(--radius) * 1.25)',
+    '--font-heading': 'var(--font-work-sans)',
+    '--font-body': 'var(--font-inter)',
+  },
+} as const;
 // Generate complete theme with all necessary CSS variables
 export function generateTheme({
   style,
@@ -465,6 +479,40 @@ export function generateTheme({
 
     // Apply radius
     root.style.setProperty('--radius', `${radius}rem`);
+
+    // For the schematic theme, let's add a subtle schematic pattern as a background overlay.
+    if (style === 'schematic') {
+      // The schematic theme: Adding a subtle schematic grid pattern using CSS masks or background images.
+      // We'll define a pattern that looks like grid lines, subtle and modern.
+      // We'll apply this pattern to the :root and .dark selectors.
+      // Since we cannot use placeholders, we directly define the pattern here.
+
+      const patternDataLight = `
+        background-image:
+          linear-gradient(to right, hsla(0,0%,100%,0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, hsla(0,0%,100%,0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+      `;
+      const patternDataDark = `
+        background-image:
+          linear-gradient(to right, hsla(0,0%,100%,0.02) 1px, transparent 1px),
+          linear-gradient(to bottom, hsla(0,0%,100%,0.02) 1px, transparent 1px);
+        background-size: 20px 20px;
+      `;
+
+      // If we are applying for light mode:
+      if (!isDark) {
+        root.style.setProperty('--schematic-pattern', patternDataLight);
+      } else {
+        root.style.setProperty('--schematic-pattern', patternDataDark);
+      }
+
+      // The pattern will be applied globally using these variables
+    } else {
+      // Clear pattern if switching themes
+      const root = document.documentElement;
+      root.style.removeProperty('--schematic-pattern');
+    }
   };
 
   return {

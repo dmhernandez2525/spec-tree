@@ -182,6 +182,10 @@ export const routes: NavItem[] = [
     title: 'Contact',
     href: '/contact',
   },
+  {
+    title: 'Demo',
+    href: '/demo',
+  },
 ];
 
 // Auth routes - not shown in nav but needed for reference

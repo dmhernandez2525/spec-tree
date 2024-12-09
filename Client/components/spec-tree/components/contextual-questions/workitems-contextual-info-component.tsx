@@ -151,9 +151,6 @@ const WorkitemsContextualInfo: React.FC<WorkitemsContextualInfoProps> = ({
               <h3 className="text-lg font-semibold mb-2">Updated</h3>
               <pre className="p-4 bg-muted rounded-lg whitespace-pre-wrap">
                 {JSON.stringify(updatedWorkItem, null, 2)}
-                //
-                app/spec-tree/components/contextual-questions/workitems-contextual-info.tsx
-                (continued)
               </pre>
             </div>
           </div>
