@@ -22,7 +22,7 @@ const faqs: FAQ[] = [
   {
     question: 'How does the 14-day free trial work?',
     answer:
-      'Start your free trial with full access to your chosen plans features. No credit card required. At the end of the trial, choose to subscribe or your account will be automatically downgraded to a limited free version.',
+      'Start your free trial with full access to your chosen plans features. At the end of the trial, choose to subscribe or your account will be automatically downgraded to a limited free version.',
     category: 'Trial & Pricing',
   },
   {
