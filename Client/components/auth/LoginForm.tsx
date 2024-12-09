@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Link from 'next/link';
-import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useDispatch } from 'react-redux';
 
 import { loginUser } from '../../lib/store/user-slice';
@@ -44,6 +44,7 @@ interface LoginFormProps {
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -58,6 +59,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   async function onSubmit(values: FormData) {
     setIsLoading(true);
+    setFormError(null);
+
     try {
       const success = await loginUser(dispatch, {
         identifier: values.email,
@@ -65,14 +68,13 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       });
 
       if (success) {
-        toast.success('Successfully logged in!');
         onSuccess?.();
         router.push('/user-dashboard');
       } else {
-        toast.error('Invalid email or password');
+        setFormError('Invalid email or password. Please try again.');
       }
     } catch (error) {
-      toast.error('An error occurred during login');
+      setFormError('An unexpected error occurred. Please try again later.');
       console.error('Login error:', error);
     } finally {
       setIsLoading(false);
@@ -90,6 +92,12 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {formError && (
+              <Alert variant="destructive">
+                <AlertDescription>{formError}</AlertDescription>
+              </Alert>
+            )}
+
             <FormField
               control={form.control}
               name="email"
