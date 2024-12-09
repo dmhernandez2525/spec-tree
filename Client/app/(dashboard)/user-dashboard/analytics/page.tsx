@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   LineChart,
   BarChart,
@@ -57,15 +57,6 @@ const projectData = [
   { month: 'Apr', completed: 6, active: 3, planned: 2 },
   { month: 'May', completed: 4, active: 5, planned: 3 },
   { month: 'Jun', completed: 7, active: 2, planned: 4 },
-];
-
-const workItemData = [
-  { month: 'Jan', epics: 2, features: 8, stories: 24, tasks: 64 },
-  { month: 'Feb', epics: 3, features: 12, stories: 36, tasks: 96 },
-  { month: 'Mar', epics: 2, features: 10, stories: 30, tasks: 80 },
-  { month: 'Apr', epics: 4, features: 16, stories: 48, tasks: 128 },
-  { month: 'May', epics: 3, features: 12, stories: 36, tasks: 96 },
-  { month: 'Jun', epics: 5, features: 20, stories: 60, tasks: 160 },
 ];
 
 const aiUsageData = [
@@ -174,7 +165,6 @@ export default function AnalyticsDashboard() {
   const { hasUnlockedAchievement } = useAchievements();
 
   const hasAdvancedAnalytics = hasUnlockedAchievement('analytics-master');
-  const hasCustomAnalytics = hasUnlockedAchievement('data-scientist');
 
   return (
     <div className="space-y-8 p-8">
@@ -507,7 +497,6 @@ export default function AnalyticsDashboard() {
           </CardContent>
         </Card>
       </div>
-      // ... previous code remains the same until the User Activity card ...
       {/* User Activity */}
       <Card>
         <CardHeader>

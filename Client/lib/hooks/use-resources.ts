@@ -1,9 +1,11 @@
 // lib/hooks/use-resources.ts
 import { useState, useCallback } from 'react';
-import { ResourceType } from '@/types/resources';
+import { Resource } from '@/types/resources';
 
-export function useResources(initialResources: ResourceType[]) {
+export function useResources(initialResources: Resource[]) {
   const [resources, setResources] = useState(initialResources);
+  // TODO: use setResources then remove console.log
+  console.log(setResources);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 

@@ -54,6 +54,7 @@ const SowInput: React.FC<SowInputProps> = ({ selectedApp }) => {
       dispatch(setSow(parsedSow));
       setSowInput('');
     } catch (err) {
+      console.error(`Failed to parse JSON: ${err}`);
       setError('Invalid JSON format. Please check your input.');
     } finally {
       setIsLoading(false);

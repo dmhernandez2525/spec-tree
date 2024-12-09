@@ -41,6 +41,8 @@ export function DashboardNotifications() {
   });
 
   async function onSubmit(data: NotificationsFormValues) {
+    // TODO: use data then remove console.log
+    console.log(data);
     setIsLoading(true);
     try {
       // Replace with your API call

@@ -90,9 +90,12 @@ const useWorkItemUpdate = (workItemType: ExtendedWorkItemType) => {
         default:
           throw new Error('Invalid work item type.');
       }
-      response && setUpdatedWorkItem(response.data);
+      if (response) {
+        setUpdatedWorkItem(response.data);
+      }
       setLoading(false);
     } catch (err) {
+      console.error('Failed to generate updated work item:', err);
       setError('Failed to generate updated work item.');
       setLoading(false);
     }

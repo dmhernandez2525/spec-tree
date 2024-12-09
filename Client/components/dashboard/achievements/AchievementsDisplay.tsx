@@ -17,7 +17,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Icons } from '@/components/shared/icons';
 import { Achievement } from '@/types/achievements';
 import {
   Select,
@@ -39,8 +38,6 @@ function AchievementCard({
   isUnlocked,
   progress,
 }: AchievementCardProps) {
-  const Icon = Icons[achievement.icon as keyof typeof Icons];
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

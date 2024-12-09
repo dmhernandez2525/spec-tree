@@ -275,7 +275,6 @@ function MobileNav() {
 }
 
 export function MainNav() {
-  const pathname = usePathname();
   const user = useAppSelector((state) => state.user.user);
   const [isOpen, setIsOpen] = React.useState(false);
   return (

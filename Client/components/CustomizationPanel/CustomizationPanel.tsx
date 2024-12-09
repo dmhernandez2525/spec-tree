@@ -214,7 +214,7 @@ export function CustomizationPanel({ onThemeChange }: Props): JSX.Element {
               <Info className="h-3 w-3 inline-block ml-1 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent>
-              <p>Enter HSL values (e.g., "210 100% 50%")</p>
+              <p>Enter HSL values (e.g., 210 100% 50%)</p>
             </TooltipContent>
           </Tooltip>
         </Label>

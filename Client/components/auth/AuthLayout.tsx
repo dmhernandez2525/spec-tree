@@ -37,7 +37,9 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     const fetchNavData = async () => {
       try {
         await refreshUser(dispatch);
-      } catch (error) {}
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
     };
     fetchNavData();
     setLoading(false);

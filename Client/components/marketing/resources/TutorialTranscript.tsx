@@ -8,6 +8,8 @@ interface TutorialTranscriptProps {
 }
 
 export function TutorialTranscript({ tutorialId }: TutorialTranscriptProps) {
+  // TODO: use tutorialId and remove console.log
+  console.log(tutorialId);
   return (
     <Card>
       <CardContent className="p-6">
@@ -22,7 +24,7 @@ export function TutorialTranscript({ tutorialId }: TutorialTranscriptProps) {
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">0:15</span>
                 <p>
-                  Today, we'll be covering the basics of getting started with
+                  Today, we will be covering the basics of getting started with
                   the platform.
                 </p>
               </div>

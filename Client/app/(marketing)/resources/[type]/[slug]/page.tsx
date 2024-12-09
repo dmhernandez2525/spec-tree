@@ -13,6 +13,7 @@ interface ResourcePageProps {
 // TODO: pull form API
 const getMockResourceData = (type: string, slug: string) => {
   // Mock data - replace with actual data fetching
+  console.log(type, slug);
   return {
     title: 'Getting Started with Spec Tree',
     description:

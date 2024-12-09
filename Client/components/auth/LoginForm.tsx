@@ -153,7 +153,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
+            Dont have an account?{' '}
             <Button variant="link" asChild className="p-0">
               <Link href="/register">Create one</Link>
             </Button>
