@@ -70,8 +70,7 @@ export default function HomePage() {
         <Section>
           <ColorHeader
             header={homeSections.ourMissionData?.Header || 'Our Mission'}
-            headerColor={homeSections.ourMissionData?.HeaderColor || '#000'}
-            textColor="#717D96"
+            textColor="#000"
           />
           <div className="mt-6 space-y-4 text-muted-foreground">
             <p>
