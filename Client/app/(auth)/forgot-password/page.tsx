@@ -3,6 +3,7 @@
 import { ForgotPasswordForm } from '@/components/auth/ForgotPasswordForm';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Image from 'next/image';
+import img from '@/public/spec-tree-icon.svg';
 
 export default function ForgotPasswordPage() {
   return (
@@ -10,13 +11,14 @@ export default function ForgotPasswordPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Image
-            src="/logo.png"
-            alt="Logo"
+            src={img.src}
+            alt="Spec Tree Logo"
             width={150}
             height={150}
-            className="mx-auto"
+            className="h-20 w-auto"
             priority
           />
+          <span className="font-bold text-lg">Spec Tree</span>
         </CardHeader>
         <CardContent>
           <ForgotPasswordForm />
