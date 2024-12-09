@@ -25,6 +25,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  PasswordStrengthIndicator,
+  evaluatePasswordStrength,
+} from '@/components/auth/PasswordStrengthIndicator';
 import { registerNewUser } from '@/api/fetchData';
 
 const formSchema = z
@@ -32,13 +36,7 @@ const formSchema = z
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
     email: z.string().email('Invalid email address'),
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-        'Password must include uppercase, lowercase, number and special character'
-      ),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -53,7 +51,7 @@ interface RegisterFormProps {
 }
 
 export function RegisterForm({ onSuccess }: RegisterFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const form = useForm<FormData>({
@@ -67,7 +65,14 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     },
   });
 
-  async function onSubmit(values: FormData) {
+  async function onSubmit(values: FormData): Promise<void> {
+    const passwordStrength = evaluatePasswordStrength(values.password);
+
+    if (passwordStrength === 'very-weak') {
+      toast.error('Password is too weak. Please choose a stronger password.');
+      return;
+    }
+
     setIsLoading(true);
     try {
       const success = await registerNewUser({
@@ -105,7 +110,11 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+            noValidate
+          >
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -145,6 +154,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                     <Input
                       type="email"
                       placeholder="you@example.com"
+                      autoComplete="email"
                       {...field}
                     />
                   </FormControl>
@@ -160,7 +170,15 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                    <div className="space-y-2">
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        autoComplete="new-password"
+                        {...field}
+                      />
+                      <PasswordStrengthIndicator password={field.value} />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -174,27 +192,36 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading || !form.formState.isValid}
+            >
               {isLoading ? 'Creating account...' : 'Create account'}
             </Button>
+
+            <div className="text-center text-sm">
+              <p className="text-muted-foreground">
+                Already have an account?{' '}
+                <Link href="/login" className="text-primary hover:underline">
+                  Sign in
+                </Link>
+              </p>
+            </div>
           </form>
         </Form>
-
-        <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <Button variant="link" asChild className="p-0">
-              <Link href="/login">Sign in</Link>
-            </Button>
-          </p>
-        </div>
       </CardContent>
     </Card>
   );
