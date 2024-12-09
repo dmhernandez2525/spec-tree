@@ -83,7 +83,6 @@ export function NotificationSettings() {
                   control={form.control}
                   name="emailNotifications.updates"
                   render={({ field }) => (
-                    // /components/settings/NotificationSettings.tsx (continued)
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                       <div className="space-y-0.5">
                         <FormLabel className="text-base">

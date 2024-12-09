@@ -1,10 +1,12 @@
 interface ApiSettings {}
 interface UserData {
   id: number;
+  documentId: string;
   attributes: UserAttributes;
 }
 interface UserAttributes extends Timestamps {
   id: number;
+  documentId: string;
   password?: string;
   username: string;
   email: string;
@@ -33,6 +35,7 @@ interface UserAttributes extends Timestamps {
 }
 interface NewsFeedData {
   id: number;
+  documentId: string;
   attributes: NewsFeedAttributes;
 }
 interface NewsFeedAttributes extends Timestamps {
@@ -44,17 +47,19 @@ interface NewsFeedAttributes extends Timestamps {
 }
 interface ButtonAttributes {
   id: number;
+  documentId: string;
   text: string;
   url: string;
 }
 
 interface PostAttributes extends Timestamps {
   id: number;
+  documentId: string;
   color?: string;
   title: string;
   description: string;
   entireBlogPage: string;
-  headerImage?: SingleApiResponse<ImageAttributes>;
+  headerImage?: ImageAttributes;
   category: { name: string };
   createdBy: {
     data: {
@@ -91,6 +96,7 @@ interface SingleApiResponse<T> {
 
 interface ImageAttributes extends Timestamps {
   id: number;
+  documentId: string;
   name: string;
   alternativeText: string | null;
   caption: string | null;
@@ -147,12 +153,14 @@ interface metricCards extends Section1 {
 interface Review {
   text: string;
   id: number;
+  documentId: string;
 }
 
 interface ourWork {
   heading: string;
   description: string;
   id: number;
+  documentId: string;
   image: { url: string; caption: string };
   icon: { url: string; caption: string };
   backgroundColor: string;
@@ -203,6 +211,7 @@ interface NewsPopupAttributes extends Timestamps {
 }
 interface NewsPopupData {
   id: number;
+  documentId: string;
   attributes: NewsPopupAttributes;
 }
 export type {
@@ -227,7 +236,6 @@ export type {
   Section2,
   Section5,
   Section3,
-  ServiceData,
   metricCards,
   HomePageData,
   IAdditionalUsersToNotify,

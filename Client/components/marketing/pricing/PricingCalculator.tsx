@@ -1,5 +1,3 @@
-// /components/marketing/pricing/PricingCalculator.tsx
-
 'use client';
 
 import { useState } from 'react';

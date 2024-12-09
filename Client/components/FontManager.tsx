@@ -82,6 +82,10 @@ export const styleFonts = {
     heading: 'font-work-sans',
     body: 'font-inter',
   },
+  schematic: {
+    heading: 'font-work-sans',
+    body: 'font-inter',
+  },
 } as const;
 
 export const fontClasses = {

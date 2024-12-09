@@ -1,22 +1,42 @@
-// components/blog/BlogList.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { fetchPosts } from '@/api/fetchData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { PostAttributes } from '@/types/main';
 
-interface BlogListProps {
-  blogPosts?: PostAttributes[];
-}
-
-export function BlogList({ blogPosts }: BlogListProps) {
+export function BlogList() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [blogPosts, setBlogPosts] = useState<PostAttributes[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const data = await fetchPosts();
+        if (data && data.data) {
+          setBlogPosts(data.data);
+        }
+        setIsLoading(false);
+      } catch (err: any) {
+        setError(err.message || 'An error occurred');
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
 
   if (!blogPosts?.length) {
     return (
@@ -41,7 +61,7 @@ export function BlogList({ blogPosts }: BlogListProps) {
       className="cursor-pointer group relative h-[400px] overflow-hidden"
       onClick={() => {
         setIsLoading(true);
-        router.push(`/blog/${post.id}`);
+        router.push(`/blog/${post.documentId}`);
       }}
     >
       {post.headerImage?.url && (
@@ -71,7 +91,7 @@ export function BlogList({ blogPosts }: BlogListProps) {
       className="cursor-pointer group h-full"
       onClick={() => {
         setIsLoading(true);
-        router.push(`/blog/${post.id}`);
+        router.push(`/blog/${post.documentId}`);
       }}
     >
       <CardHeader>
@@ -94,7 +114,6 @@ export function BlogList({ blogPosts }: BlogListProps) {
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
   return (
     <div className="space-y-8 p-4 sm:p-8">
       <div className="grid lg:grid-cols-3 gap-8">
@@ -103,13 +122,13 @@ export function BlogList({ blogPosts }: BlogListProps) {
         </div>
         <div className="space-y-8">
           {blogPosts.slice(1, 3).map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post.documentId} post={post} />
           ))}
         </div>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogPosts.slice(3).map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.documentId} post={post} />
         ))}
       </div>
     </div>
