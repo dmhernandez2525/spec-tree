@@ -3,7 +3,7 @@
 import { useBlogPageData } from '@/lib/hooks/useBlogPageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { HeadingSection } from '@/components/shared/HeadingSection';
-import { BlogList } from '@/components/blog/BlogList';
+import { BlogList } from '@/components/marketing/blog/BlogList';
 import Section from '@/components/layout/Section';
 
 export default function BlogPage() {

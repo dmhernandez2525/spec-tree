@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useAppSelector } from '@/lib/hooks/use-store';
@@ -8,12 +8,18 @@ import Image from 'next/image';
 
 export default function LoginPage() {
   const user = useAppSelector((state) => state.user.user);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
+      setLoading(true);
       redirect('/user-dashboard');
     }
   }, [user]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center py-8 md:py-12">

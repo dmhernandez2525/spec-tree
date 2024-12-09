@@ -278,7 +278,6 @@ export function MainNav() {
   const pathname = usePathname();
   const user = useAppSelector((state) => state.user.user);
   const [isOpen, setIsOpen] = React.useState(false);
-
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <Section

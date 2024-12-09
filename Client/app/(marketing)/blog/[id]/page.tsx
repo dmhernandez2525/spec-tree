@@ -1,7 +1,7 @@
 'use client';
 
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import { BlogPost } from '@/components/blog/BlogPost';
+import { BlogPost } from '@/components/marketing/blog/BlogPost';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { fetchPostsById } from '@/api/fetchData';

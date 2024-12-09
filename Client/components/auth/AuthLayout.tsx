@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../lib/hooks/use-store';
 import { refreshUser } from '../../lib/store/user-slice';
 
-export const Layout = ({ children }: { children: React.ReactNode }) => {
+export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   // ================
   // Hooks
   // ================

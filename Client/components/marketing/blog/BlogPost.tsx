@@ -7,7 +7,7 @@ import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import { CommentSection } from '@/components/blog/CommentSection';
+import { CommentSection } from '@/components/marketing/blog/CommentSection';
 import { PostAttributes } from '@/types/main';
 
 interface BlogPostProps {

@@ -35,7 +35,7 @@ import {
   ThemeOptions,
   ThemeColors,
 } from './generateThemes';
-import ScrollableCode from './ScrollableCode';
+import ScrollableCode from '../shared/ScrollableCode';
 import { useFonts } from '@/components/FontManager';
 
 interface Props {
@@ -463,7 +463,7 @@ export function CustomizationPanel({ onThemeChange }: Props): JSX.Element {
               type="single"
               value={config.style}
               onValueChange={handleStyleChange}
-              className="grid grid-cols-3 gap-2"
+              className="grid grid-cols-4 gap-2"
             >
               <ToggleGroupItem value="default">Default</ToggleGroupItem>
               <ToggleGroupItem value="new-york">New York</ToggleGroupItem>
@@ -476,6 +476,7 @@ export function CustomizationPanel({ onThemeChange }: Props): JSX.Element {
               <ToggleGroupItem value="terminal">Terminal</ToggleGroupItem>
               <ToggleGroupItem value="handdrawn">Handdrawn</ToggleGroupItem>
               <ToggleGroupItem value="claymorphic">Claymorphic</ToggleGroupItem>
+              <ToggleGroupItem value="blueprint">Blueprint</ToggleGroupItem>
             </ToggleGroup>
           </div>
         </div>

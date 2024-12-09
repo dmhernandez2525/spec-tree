@@ -6,6 +6,7 @@ import { MainNav } from '@/components/layout/MainNav';
 import { Footer } from '@/components/layout/Footer';
 import StoreProvider from './StoreProvider';
 import BaseLayout from '@/components/layout/BaseLayout';
+import { AuthLayout } from '@/components/auth/AuthLayout';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Spec Tree - AI-Powered Project Planning',
     description:
       'Transform how you plan and execute projects with Spec Tree',
-    url: 'https://blueprintbuilder.com',
+    url: 'https://myblueprintbuilder.com',
     siteName: 'Spec Tree',
     images: [
       {
@@ -50,11 +51,13 @@ export default function RootLayout({
           <StoreProvider>
             <SidebarProvider>
               <BaseLayout>
-                <MainNav />
-                <main className="mt-44 min-h-screen w-full bg-background">
-                  {children}
-                </main>
-                <Footer />
+                <AuthLayout>
+                  <MainNav />
+                  <main className="mt-44 min-h-screen w-full bg-background">
+                    {children}
+                  </main>
+                  <Footer />
+                </AuthLayout>
               </BaseLayout>
               <Toaster />
             </SidebarProvider>

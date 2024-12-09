@@ -39,6 +39,9 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Blueprint pattern variable, defaults to none if not blueprint */
+    --blueprint-pattern: none;
   }
 
   .dark {
@@ -99,8 +102,7 @@
 
   .style-default button,
   .style-default .button {
-    @apply shadow bg-primary text-primary-foreground hover:bg-primary/90
-           border border-primary rounded transition-colors duration-200;
+    @apply shadow bg-primary text-primary-foreground hover:bg-primary/90 border border-primary rounded transition-colors duration-200;
   }
 
   .style-default .card {
@@ -114,8 +116,7 @@
 
   .style-new-york button,
   .style-new-york .button {
-    @apply shadow-md bg-primary text-primary-foreground hover:bg-primary/90
-           border border-primary rounded transition-colors duration-200;
+    @apply shadow-md bg-primary text-primary-foreground hover:bg-primary/90 border border-primary rounded transition-colors duration-200;
   }
 
   .style-new-york .card {
@@ -129,11 +130,9 @@
 
   .style-cyberpunk button,
   .style-cyberpunk .button {
-    @apply relative bg-gradient-to-r from-primary to-secondary text-primary-foreground
-           border-2 border-dashed border-primary uppercase tracking-wider
-           shadow-[0_0_10px_rgba(255,0,255,0.3),0_0_20px_rgba(0,255,255,0.2)]
-           transition-all duration-200 hover:shadow-[0_0_20px_rgba(255,0,255,0.5),0_0_40px_rgba(0,255,255,0.4)]
-           transform hover:-translate-y-0.5;
+    @apply relative bg-gradient-to-r from-primary to-secondary text-primary-foreground border-2 border-dashed border-primary uppercase tracking-wider transition-all duration-200;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.2);
+    @apply hover:shadow-[0_0_20px_rgba(255,0,255,0.5),0_0_40px_rgba(0,255,255,0.4)] transform hover:-translate-y-0.5;
     clip-path: polygon(
       0 0,
       100% 0,
@@ -144,9 +143,8 @@
   }
 
   .style-cyberpunk .card {
-    @apply bg-card text-card-foreground
-           border-2 border-dashed border-primary
-           shadow-[0_0_10px_rgba(255,0,255,0.3),0_0_20px_rgba(0,255,255,0.2)];
+    @apply bg-card text-card-foreground border-2 border-dashed border-primary;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.2);
   }
 
   /* Retro Style */
@@ -156,11 +154,8 @@
 
   .style-retro button,
   .style-retro .button {
-    @apply bg-primary text-primary-foreground
-           border-[3px] border-solid border-primary
-           shadow-[4px_4px_0_rgba(0,0,0,0.85)]
-           transform -translate-x-0.5 -translate-y-0.5 transition-transform duration-100
-           hover:shadow-[4px_4px_0_rgba(0,0,0,0.85)];
+    @apply bg-primary text-primary-foreground border-[3px] border-solid border-primary shadow-[4px_4px_0_rgba(0,0,0,0.85)] transform -translate-x-0.5 -translate-y-0.5 transition-transform duration-100;
+    @apply hover:shadow-[4px_4px_0_rgba(0,0,0,0.85)];
   }
 
   .style-retro button:active,
@@ -169,9 +164,7 @@
   }
 
   .style-retro .card {
-    @apply bg-card text-card-foreground
-    border-[3px] border-solid border-primary
-           shadow-[4px_4px_0_rgba(0,0,0,0.85)];
+    @apply bg-card text-card-foreground border-[3px] border-solid border-primary shadow-[4px_4px_0_rgba(0,0,0,0.85)] p-4;
     background-image: repeating-linear-gradient(
       45deg,
       hsl(var(--card)),
@@ -188,17 +181,11 @@
 
   .style-glassmorphic button,
   .style-glassmorphic .button {
-    @apply backdrop-blur-xl bg-white/10 
-           border border-white/20 rounded-xl
-           shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]
-           transition-all duration-200
-           hover:bg-white/20;
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] transition-all duration-200 hover:bg-white/20;
   }
 
   .style-glassmorphic .card {
-    @apply backdrop-blur-xl bg-white/10
-           border border-white/20 rounded-xl
-           shadow-[0_8px_32px_0_rgba(31,38,135,0.37)];
+    @apply backdrop-blur-xl bg-white/10 border border-white/20 rounded-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)];
   }
 }
 
@@ -224,11 +211,7 @@ button {
 
   .style-brutalist button,
   .style-brutalist .button {
-    @apply bg-primary text-primary-foreground
-           border-4 border-primary hover:border-primary/90
-           transform hover:-translate-y-0.5
-           uppercase font-bold tracking-wider
-           transition-all duration-200;
+    @apply bg-primary text-primary-foreground border-4 border-primary hover:border-primary/90 transform hover:-translate-y-0.5 uppercase font-bold tracking-wider transition-all duration-200;
     clip-path: polygon(
       0 0,
       calc(100% - 8px) 0,
@@ -240,8 +223,7 @@ button {
   }
 
   .style-brutalist .card {
-    @apply bg-card text-card-foreground relative
-           border-4 border-primary p-6;
+    @apply bg-card text-card-foreground relative border-4 border-primary p-6;
     background-image: repeating-linear-gradient(
       45deg,
       transparent,
@@ -258,12 +240,11 @@ button {
 
   .style-neumorphic button,
   .style-neumorphic .button {
-    @apply bg-card text-card-foreground relative
-           border-none transition-all duration-200
-           hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.7)]
-           active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.7)];
+    @apply bg-card text-card-foreground relative border-none transition-all duration-200;
     box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2),
       -6px -6px 12px rgba(255, 255, 255, 0.7);
+    @apply hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.7)];
+    @apply active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-3px_-3px_6px_rgba(255,255,255,0.7)];
   }
 
   .style-neumorphic .card {
@@ -279,20 +260,11 @@ button {
 
   .style-kawaii button,
   .style-kawaii .button {
-    @apply bg-primary text-primary-foreground
-           rounded-full border-4 border-primary/80
-           shadow-[4px_4px_0_rgba(0,0,0,0.2)]
-           hover:shadow-[2px_2px_0_rgba(0,0,0,0.2)]
-           hover:-translate-y-0.5 hover:translate-x-0.5
-           transition-all duration-200
-           font-bold tracking-wide;
+    @apply bg-primary text-primary-foreground rounded-full border-4 border-primary/80 shadow-[4px_4px_0_rgba(0,0,0,0.2)] hover:shadow-[2px_2px_0_rgba(0,0,0,0.2)] hover:-translate-y-0.5 hover:translate-x-0.5 transition-all duration-200 font-bold tracking-wide;
   }
 
   .style-kawaii .card {
-    @apply bg-card text-card-foreground
-           rounded-[2rem] border-4 border-primary/80
-           shadow-[8px_8px_0_rgba(0,0,0,0.1)]
-           p-6;
+    @apply bg-card text-card-foreground rounded-[2rem] border-4 border-primary/80 shadow-[8px_8px_0_rgba(0,0,0,0.1)] p-6;
     background-image: radial-gradient(
       circle at 50% 0%,
       hsl(var(--primary) / 0.1) 0%,
@@ -307,20 +279,13 @@ button {
 
   .style-terminal button,
   .style-terminal .button {
-    @apply bg-primary text-primary-foreground
-           border border-primary
-           hover:bg-primary/90
-           transition-colors duration-200
-           uppercase tracking-wider
-           font-mono;
+    @apply bg-primary text-primary-foreground border border-primary hover:bg-primary/90 transition-colors duration-200 uppercase tracking-wider font-mono;
     box-shadow: 0 0 10px hsl(var(--primary) / 0.3),
       inset 0 0 5px hsl(var(--primary) / 0.3);
   }
 
   .style-terminal .card {
-    @apply bg-card text-card-foreground
-           border border-primary p-6
-           font-mono;
+    @apply bg-card text-card-foreground border border-primary p-6 font-mono;
     box-shadow: 0 0 20px hsl(var(--primary) / 0.2),
       inset 0 0 10px hsl(var(--primary) / 0.2);
   }
@@ -332,16 +297,12 @@ button {
 
   .style-handdrawn button,
   .style-handdrawn .button {
-    @apply bg-primary text-primary-foreground
-           hover:bg-primary/90
-           transition-colors duration-200
-           border-2 border-primary;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200 border-2 border-primary;
     filter: url('#handdrawn');
   }
 
   .style-handdrawn .card {
-    @apply bg-card text-card-foreground
-           border-2 border-primary p-6;
+    @apply bg-card text-card-foreground border-2 border-primary p-6;
     filter: url('#handdrawn');
   }
 
@@ -352,21 +313,60 @@ button {
 
   .style-claymorphic button,
   .style-claymorphic .button {
-    @apply bg-gradient-to-br from-primary to-primary/90
-           text-primary-foreground relative
-           border-none
-           transform hover:-translate-y-0.5
-           transition-all duration-200;
+    @apply bg-gradient-to-br from-primary to-primary/90 text-primary-foreground relative border-none transform hover:-translate-y-0.5 transition-all duration-200;
     box-shadow: 0 4px 0 0 hsl(var(--primary) / 0.5),
       0 8px 0 0 hsl(var(--primary) / 0.3), 0 12px 0 0 hsl(var(--primary) / 0.1);
   }
 
   .style-claymorphic .card {
-    @apply bg-gradient-to-br from-card to-card/90
-           text-card-foreground relative p-6;
+    @apply bg-gradient-to-br from-card to-card/90 text-card-foreground relative p-6;
     box-shadow: 0 8px 0 0 hsl(var(--card) / 0.5),
       0 16px 0 0 hsl(var(--card) / 0.3), 0 24px 0 0 hsl(var(--card) / 0.1);
   }
+
+  /* Blueprint Style */
+  .style-blueprint {
+    @apply text-foreground relative;
+  }
+
+  .style-blueprint button,
+  .style-blueprint .button {
+    @apply bg-primary text-primary-foreground border border-border transition-colors duration-200 hover:bg-primary/90;
+    box-shadow: var(--shadow);
+    border-radius: var(--button-radius);
+  }
+
+  .style-blueprint .card {
+    @apply bg-card text-card-foreground border border-border p-6 relative;
+    box-shadow: var(--shadow);
+    border-radius: var(--card-radius);
+  }
+
+  /* The blueprint pattern applied to the entire page */
+  /* We use the --blueprint-pattern variable defined in JS. */
+  html.style-blueprint body {
+    background-color: hsl(var(--background));
+    background: hsl(var(--background));
+    /* Apply the pattern if defined */
+    background-attachment: fixed;
+    background-position: 0 0;
+    background-repeat: repeat;
+    /* Insert the blueprint pattern from the variable */
+  }
+
+  /* We'll use a pseudo-element to overlay the blueprint pattern so it can adapt to light/dark modes */
+  html.style-blueprint body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    background: var(--blueprint-pattern);
+  }
+
   .container {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
   }
