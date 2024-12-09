@@ -81,6 +81,7 @@ const useQuestionGeneration = (
       setLoading(false);
       return parsedQuestions;
     } catch (err) {
+      console.error('Failed to generate questions:', err);
       setError('Failed to generate questions.');
       setLoading(false);
       return null;

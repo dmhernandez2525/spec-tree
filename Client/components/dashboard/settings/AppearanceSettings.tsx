@@ -2,22 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
+import { Form } from '@/components/ui/form';
+
 import {
   Card,
   CardContent,
@@ -25,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useFonts, styleFonts } from '@/components/FontManager';
+import { useFonts } from '@/components/FontManager';
 import { toast } from 'sonner';
 import Theme from '@/components/dashboard/theme';
 

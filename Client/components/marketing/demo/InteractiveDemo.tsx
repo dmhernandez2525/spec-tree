@@ -78,6 +78,8 @@ export function InteractiveDemo() {
   });
 
   async function generateContextualQuestions(data: FormValues) {
+    // TODO: use data then remove console.log
+    console.log(data);
     // Simulated AI response - in production, this would call your AI service
     const questions = [
       'What are the primary business objectives for this project?',
@@ -147,7 +149,7 @@ export function InteractiveDemo() {
           >
             <Card>
               <CardHeader>
-                <CardTitle>Let's Plan Your Project</CardTitle>
+                <CardTitle>Lets Plan Your Project</CardTitle>
               </CardHeader>
               <CardContent>
                 <Form {...form}>

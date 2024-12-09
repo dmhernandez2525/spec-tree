@@ -12,12 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Icons } from '@/components/shared/icons';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
 
 interface TutorialManagerContextType {
   startFeatureTutorial: (featureId: string) => void;
@@ -35,72 +31,6 @@ const TutorialManagerContext = createContext<
 interface TutorialManagerProviderProps {
   children: React.ReactNode;
 }
-
-interface TutorialCardProps {
-  tutorial: TutorialSection;
-  progress: number;
-  onStart: () => void;
-  isActive?: boolean;
-}
-
-const TutorialCard = ({
-  tutorial,
-  progress,
-  onStart,
-  isActive,
-}: TutorialCardProps) => {
-  const Icon = Icons.alert;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className={cn('mb-4', isActive && 'ring-2 ring-primary')}
-    >
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <div className="flex items-center gap-2">
-            <div
-              className={cn(
-                'p-2 rounded-full',
-                progress === 100
-                  ? 'bg-primary/10 text-primary'
-                  : 'bg-muted text-muted-foreground'
-              )}
-            >
-              <Icon className="h-4 w-4" />
-            </div>
-            <CardTitle className="text-lg">{tutorial.title}</CardTitle>
-          </div>
-          <Badge variant={progress === 100 ? 'default' : 'secondary'}>
-            {progress}%
-          </Badge>
-        </CardHeader>
-        <CardContent>
-          <CardDescription className="mb-4">
-            {tutorial.description}
-          </CardDescription>
-          <div className="space-y-4">
-            <Progress value={progress} className="h-2" />
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">
-                {tutorial.steps.length} steps
-              </span>
-              <Button
-                variant={isActive ? 'default' : 'outline'}
-                size="sm"
-                onClick={onStart}
-              >
-                {progress > 0 ? 'Continue' : 'Start'}
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
 
 export function TutorialManagerProvider({
   children,

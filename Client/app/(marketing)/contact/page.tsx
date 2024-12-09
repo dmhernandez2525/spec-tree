@@ -47,7 +47,6 @@ export default function ContactPage() {
   const {
     aboutSection,
     emailSection,
-    locationSection,
     phoneSection,
     contactSection,
     faqSection,
@@ -75,6 +74,7 @@ export default function ContactPage() {
         message: '',
       });
     } catch (error) {
+      console.error('Failed to send message:', error);
       toast.error('Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);

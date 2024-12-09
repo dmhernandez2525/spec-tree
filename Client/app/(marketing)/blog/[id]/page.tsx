@@ -2,7 +2,6 @@
 
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { BlogPost } from '@/components/marketing/blog/BlogPost';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { fetchPostsById } from '@/api/fetchData';
 import { PostAttributes } from '@/types/main';
@@ -11,7 +10,6 @@ import Section from '@/components/layout/Section';
 export default function BlogPostPage({ params }: { params: { id: string } }) {
   const [post, setPost] = useState<PostAttributes | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchPost = async () => {

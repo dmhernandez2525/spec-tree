@@ -41,6 +41,9 @@ function SpecTreeContent() {
   const [expressUrl, setExpressUrl] = useState<string | null>(null);
   const [apiSettings, setApiSettings] = useState<any>(null);
 
+  // TODO: use apiSettings and expressUrl then remove console.log
+  console.log({ apiSettings, expressUrl });
+
   // State for create app dialog and logic
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [applicationInformation, setApplicationInformation] = useState('');

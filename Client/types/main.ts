@@ -176,8 +176,8 @@ interface ourMission {
 
 interface HomePageData {
   heroData: {
-    Header: Text;
-    SubHeader: Text;
+    Header: string;
+    SubHeader: string;
     heroImage: { url: string; caption: string };
   };
   ourMissionData: ourMission;

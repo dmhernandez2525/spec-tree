@@ -4,7 +4,7 @@ const useLoadingMessage = (isLoading: boolean, componentName: string) => {
   const [message, setMessage] = useState('Loading...');
 
   useEffect(() => {
-    let timeouts: any = [];
+    const timeouts: any = [];
     if (isLoading) {
       timeouts.push(
         setTimeout(

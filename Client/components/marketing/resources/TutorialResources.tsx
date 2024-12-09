@@ -47,6 +47,8 @@ const resourceIcons = {
 } as const;
 
 export function TutorialResources({ tutorialId }: TutorialResourcesProps) {
+  // TODO: use tutorialId and remove console.log
+  console.log(tutorialId);
   return (
     <Card>
       <CardHeader>

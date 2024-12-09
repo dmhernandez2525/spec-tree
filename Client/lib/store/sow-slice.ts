@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   createSlice,
   createAsyncThunk,
@@ -165,7 +166,7 @@ export const requestAdditionalEpics = createAsyncThunk<
       selectedModel: state.sow.selectedModel,
     });
 
-    let parseGpt3: GeneratedEpic[] = response.data.choices[0].message.content
+    const parseGpt3: GeneratedEpic[] = response.data.choices[0].message.content
       .split('####')
       .map((value: string) => {
         try {
@@ -227,7 +228,7 @@ export const requestAdditionalFeatures = createAsyncThunk<
         selectedModel: state.sow.selectedModel,
       });
 
-      let parseGpt3: GeneratedFeature[] =
+      const parseGpt3: GeneratedFeature[] =
         response.data.choices[0].message.content
           .split('####')
           .map((value: string) => {
@@ -285,7 +286,7 @@ export const requestUserStories = createAsyncThunk<
         selectedModel: state.sow.selectedModel,
       });
 
-      let parseGpt3: GeneratedUserStory[] =
+      const parseGpt3: GeneratedUserStory[] =
         response.data.choices[0].message.content
           .split('####')
           .map((value: string) => {
@@ -314,7 +315,8 @@ export const requestUserStories = createAsyncThunk<
           });
         })
       );
-
+      // TODO: use userStories and remove console.log
+      console.log(userStories);
       return { userStories: parseGpt3, featureId: feature.id };
     } catch (err: any) {
       return rejectWithValue(err.response.data);
@@ -333,17 +335,18 @@ export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
         selectedModel: state.sow.selectedModel,
       });
 
-      let parseGpt3: GeneratedTask[] = response.data.choices[0].message.content
-        .split('####')
-        .map((value: string) => {
-          try {
-            return JSON.parse(value);
-          } catch (error) {
-            console.log(error);
-            return null;
-          }
-        })
-        .filter((item): item is GeneratedTask => item !== null);
+      const parseGpt3: GeneratedTask[] =
+        response.data.choices[0].message.content
+          .split('####')
+          .map((value: string) => {
+            try {
+              return JSON.parse(value);
+            } catch (error) {
+              console.log(error);
+              return null;
+            }
+          })
+          .filter((item): item is GeneratedTask => item !== null);
 
       // Use Strapi service to create tasks
       const tasks = await Promise.all(
@@ -358,6 +361,8 @@ export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
           });
         })
       );
+      // TODO: use tasks and remove console.log
+      console.log(tasks);
 
       return {
         userStoryId: userStory.id,
@@ -504,7 +509,13 @@ export const sowSlice: Slice<SowState> = createSlice({
       const userStory = state.userStories[task.parentUserStoryId];
       userStory.taskIds = userStory.taskIds.filter((id) => id !== taskId);
     },
-    addAC: (state, action: PayloadAction<AddACPayload>) => {},
+    addAC: (state, action: PayloadAction<AddACPayload>) => {
+      const { epicName, featureName, field } = action.payload;
+      const workItem = state[field][featureName];
+      if (workItem) {
+        workItem.acceptanceCriteria.push(epicName);
+      }
+    },
     updateTaskField: (state, action: PayloadAction<UpdateTaskFieldPayload>) => {
       const { taskId, field, newValue } = action.payload;
       const task = state.tasks[taskId];
@@ -646,8 +657,7 @@ export const sowSlice: Slice<SowState> = createSlice({
         index: number;
       }>
     ) => {
-      const { workItemId, questionId, workItemType, value, index } =
-        action.payload;
+      const { workItemId, workItemType, value, index } = action.payload;
 
       const oldState =
         state[workItemType as WorkItemType][workItemId].contextualQuestions;

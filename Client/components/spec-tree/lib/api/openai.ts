@@ -31,6 +31,8 @@ interface OpenAIRequest {
 }
 
 const openaiCall = ({ chatApi }: { chatApi: string }): AxiosInstance => {
+  // TODO: use chatApi then remove console.log
+  console.log(chatApi);
   return axios.create({
     baseURL: 'https://api.openai.com/v1',
     headers: {
@@ -54,6 +56,8 @@ export const generateAdditionalFeatures = ({
   selectedModel: string;
   context?: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const messages: OpenAIRequest['messages'] = [
     {
       role: 'system',
@@ -89,6 +93,8 @@ export const generateAdditionalEpics = ({
   state: RootState;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const messages: OpenAIRequest['messages'] = [
     {
       role: 'system',
@@ -126,6 +132,8 @@ export const generateUserStories = ({
   selectedModel: string;
   context?: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const messages: OpenAIRequest['messages'] = [
     {
       role: 'system',
@@ -194,6 +202,8 @@ export const generateTasks = ({
   selectedModel: string;
   context?: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const messages: OpenAIRequest['messages'] = [
     {
       role: 'system',
@@ -227,6 +237,8 @@ export const generateQuestionsForEpic = ({
   epic: EpicType;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -256,6 +268,8 @@ export const generateQuestionsForFeature = ({
   feature: FeatureType;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -285,6 +299,8 @@ export const generateQuestionsForUserStory = ({
   userStory: UserStoryType;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -314,6 +330,8 @@ export const generateQuestionsForTask = ({
   task: TaskType;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -343,6 +361,8 @@ export const generateFollowUpQuestions = ({
   context: string;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -376,6 +396,8 @@ export const generateUpdatedEpic = ({
   selectedModel: string;
   context?: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -412,6 +434,8 @@ export const generateUpdatedFeature = ({
   selectedModel: string;
   context?: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -450,6 +474,8 @@ export const generateUpdatedUserStory = ({
   selectedModel: string;
   context?: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -486,6 +512,8 @@ export const generateUpdatedTask = ({
   context: string;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -518,6 +546,8 @@ export const generateQuestionsForGlobalRefinement = ({
   globalInformation: string;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   return openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',
@@ -549,6 +579,8 @@ export const generateUpdatedExplanationForGlobalRefinement = async ({
   context: string;
   selectedModel: string;
 }) => {
+  // TODO: use selectedModel then remove console.log
+  console.log(selectedModel);
   const openai = openaiCall({ chatApi });
   const response = await openai.post('/chat/completions', {
     model: 'gpt-3.5-turbo-16k',

@@ -67,6 +67,7 @@ export default function ApplyPage() {
   };
 
   const onSubmit = async (data: FormValues) => {
+    console.log(data);
     setIsSubmitting(true);
     setSubmitError(null);
     setSuccessMessage(null);
@@ -88,6 +89,7 @@ export default function ApplyPage() {
       reset();
       setResumeFile(null);
     } catch (err) {
+      console.error('Failed to submit application:', err);
       setSubmitError('Failed to submit application. Please try again later.');
     } finally {
       setIsSubmitting(false);

@@ -84,6 +84,8 @@ const Builder: React.FC<BuilderProps> = ({
   selectedApp,
   chatApi,
 }) => {
+  // TODO: use setSelectedApp and remove console.log
+  console.log(setSelectedApp);
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -115,6 +117,8 @@ const Builder: React.FC<BuilderProps> = ({
     try {
       await dispatch(requestAdditionalEpics({ state: localState }));
     } catch (err) {
+      console.error(`Failed to generate epics: ${err}`);
+
       setError('Failed to generate epics. Please try again.');
     } finally {
       setIsLoading(false);
@@ -129,6 +133,8 @@ const Builder: React.FC<BuilderProps> = ({
         await dispatch(requestAdditionalFeatures({ epic, state: localState }));
       }
     } catch (err) {
+      console.error(`Failed to generate features: ${err}`);
+
       setError('Failed to generate features. Please try again.');
     } finally {
       setIsLoading(false);
@@ -148,6 +154,8 @@ const Builder: React.FC<BuilderProps> = ({
         }
       }
     } catch (err) {
+      console.error(`Failed to generate user stories: ${err}`);
+
       setError('Failed to generate user stories. Please try again.');
     } finally {
       setIsLoading(false);
@@ -172,6 +180,7 @@ const Builder: React.FC<BuilderProps> = ({
         }
       }
     } catch (err) {
+      console.error(`Failed to generate tasks: ${err}`);
       setError('Failed to generate tasks. Please try again.');
     } finally {
       setIsLoading(false);

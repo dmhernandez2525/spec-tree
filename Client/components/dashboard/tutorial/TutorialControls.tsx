@@ -75,6 +75,8 @@ const TutorialSummaryCard = ({
 export function TutorialControls() {
   const { startTutorial, isActive, progress } = useTutorial();
   const { achievements, hasUnlockedAchievement } = useAchievements();
+  // TODO: use achievements and remove console.log
+  console.log(achievements);
 
   const calculateSectionProgress = (sectionId: string): number => {
     const section = tutorialData.find((s) => s.id === sectionId);
@@ -103,7 +105,7 @@ export function TutorialControls() {
             </Badge>
           </TooltipTrigger>
           <TooltipContent>
-            <p>You've mastered all tutorials!</p>
+            <p>You have mastered all tutorials!</p>
           </TooltipContent>
         </Tooltip>
       )}

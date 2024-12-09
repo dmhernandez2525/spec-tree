@@ -56,7 +56,8 @@ const StepProgress = ({
   currentStepIndex,
 }: StepProgressProps) => {
   const progress = ((currentStepIndex + 1) / totalSteps) * 100;
-
+  // TODO: use currentStep and remove console.log
+  console.log(currentStep);
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">

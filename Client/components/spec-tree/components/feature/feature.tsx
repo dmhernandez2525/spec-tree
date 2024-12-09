@@ -7,7 +7,7 @@ import {
   updateFeatureField,
   addUserStory,
   selectUserStoryById,
-  addContextualQuestionToWorkItem,
+  // addContextualQuestionToWorkItem,
 } from '../../../../lib/store/sow-slice';
 import {
   EpicType,
@@ -82,6 +82,8 @@ const initialFormState: FormState = {
 };
 
 const Feature: React.FC<FeatureProps> = ({ feature, epic, index }) => {
+  // TODO: use index and remove console.log
+  console.log({ index });
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -109,7 +111,7 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index }) => {
 
   const { add, remove, update } = useAcceptanceCriteria(
     feature.acceptanceCriteria.map((criteria) => criteria.text),
-    handleUpdateFeature
+    handleUpdateFeature as any
   );
 
   const handleGenerateUserStories = async () => {

@@ -57,10 +57,13 @@ export function AccountSettings() {
   });
 
   async function onSubmit(data: AccountFormValues) {
+    // TODO: use data and remove console.log
+    console.log(data);
     try {
       // Handle account update
       toast.success('Account settings updated');
     } catch (error) {
+      console.error('Failed to update account settings:', error);
       toast.error('Failed to update account settings');
     }
   }

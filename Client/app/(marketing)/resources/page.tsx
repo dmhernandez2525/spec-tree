@@ -6,7 +6,6 @@ import { ResourceSearch } from '@/components/marketing/resources/ResourceSearch'
 import { HeadingSection } from '@/components/shared/HeadingSection';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResourceType, Resource } from '@/types/resources';
-import Section from '@/components/layout/Section';
 
 const resourcesData: Resource[] = [
   {

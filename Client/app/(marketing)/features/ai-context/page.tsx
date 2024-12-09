@@ -124,7 +124,7 @@ export default function AIContextPage() {
       <div className="mt-24">
         <h2 className="text-center text-3xl font-bold">Use Cases</h2>
         <div className="mt-12 grid gap-8 md:grid-cols-3">
-          {useCases.map((useCase, index) => (
+          {useCases.map((useCase) => (
             <Card key={useCase.title} className="relative overflow-hidden">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold">{useCase.title}</h3>
@@ -201,7 +201,7 @@ export default function AIContextPage() {
             Ready to Transform Your Project Planning?
           </h2>
           <p className="mt-4 text-xl opacity-90">
-            Start using Spec Tree's AI-powered context gathering today.
+            Start using Spec Trees AI-powered context gathering today.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Button size="lg" variant="secondary" asChild>

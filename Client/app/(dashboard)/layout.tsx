@@ -7,22 +7,27 @@ import { TutorialOverlay } from '@/components/dashboard/tutorial/TutorialOverlay
 import { TutorialControls } from '@/components/dashboard/tutorial/TutorialControls';
 import { AchievementsProvider } from '@/components/dashboard/achievements/AchievementsProvider';
 import { TutorialManagerProvider } from '@/components/dashboard/tutorial/TutorialManager';
+import { Icons } from '@/components/shared/icons';
 
 export const metadata: Metadata = {
   title: 'Dashboard | Spec Tree',
   description: 'Manage your projects and account settings',
 };
 
-const sidebarNavItems = [
+const sidebarNavItems: Array<{
+  title: string;
+  href: string;
+  icon: keyof typeof Icons;
+}> = [
   {
     title: 'Overview',
     href: '/user-dashboard',
-    icon: 'home',
+    icon: 'brain',
   },
   {
     title: 'Builder',
     href: '/user-dashboard/spec-tree',
-    icon: 'helpCircle',
+    icon: 'brain',
   },
   {
     title: 'Analytics',
@@ -32,17 +37,17 @@ const sidebarNavItems = [
   {
     title: 'Billing',
     href: '/user-dashboard/billing',
-    icon: 'creditCard',
+    icon: 'arrowRight',
   },
   {
     title: 'Settings',
     href: '/user-dashboard/settings',
-    icon: 'settings',
+    icon: 'menu',
   },
   {
     title: 'Support',
     href: '/user-dashboard/support',
-    icon: 'helpCircle',
+    icon: 'alert',
   },
 ];
 

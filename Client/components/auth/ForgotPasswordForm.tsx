@@ -73,7 +73,7 @@ export function ForgotPasswordForm() {
         <CardHeader>
           <CardTitle>Check your email</CardTitle>
           <CardDescription>
-            We've sent recovery instructions to your email address.
+            We sent recovery instructions to your email address.
           </CardDescription>
         </CardHeader>
         <CardFooter className="flex justify-center">
@@ -90,8 +90,8 @@ export function ForgotPasswordForm() {
       <CardHeader>
         <CardTitle>Forgot your password?</CardTitle>
         <CardDescription>
-          Enter your email address and we'll send you instructions to reset your
-          password.
+          Enter your email address and we will send you instructions to reset
+          your password.
         </CardDescription>
       </CardHeader>
       <CardContent>

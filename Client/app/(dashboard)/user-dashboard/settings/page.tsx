@@ -5,7 +5,6 @@ import { AppearanceSettings } from '@/components/dashboard/settings/AppearanceSe
 import { NotificationSettings } from '@/components/dashboard/settings/NotificationSettings';
 import { PrivacySettings } from '@/components/dashboard/settings/PrivacySettings';
 import { SettingsLayout } from '@/components/dashboard/settings/SettingsLayout';
-import Section from '@/components/layout/Section';
 
 export default function SettingsPage() {
   const settingsTabs = [

@@ -78,7 +78,7 @@ export const loginUser = async (
 
     if (data && data.jwt) {
       localStorage.setItem('token', data.jwt);
-      const userRoleResponse = await getUserRole(data.jwt);
+      // const userRoleResponse = await getUserRole(data.jwt);
 
       dispatch(setToken(data.jwt));
       dispatch(setUser(data.user));
@@ -111,9 +111,13 @@ const userSlice = createSlice({
     builder
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         // Handle successful profile update
+
+        // TODO: use state, action and remove console.log
+        console.log({ state, action });
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
-        // Handle failed profile update
+        // TODO: use state, action and remove console.log
+        console.log({ state, action });
       });
   },
 });

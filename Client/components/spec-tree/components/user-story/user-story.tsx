@@ -7,7 +7,7 @@ import {
   addTask,
   requestTasks,
   selectTaskById,
-  addContextualQuestionToWorkItem,
+  // addContextualQuestionToWorkItem,
 } from '../../../../lib/store/sow-slice';
 import {
   EpicType,
@@ -71,6 +71,8 @@ const initialFormState: FormState = {
 };
 
 const UserStory: React.FC<UserStoryProps> = ({ userStory, feature, epic }) => {
+  // TODO: use feature and epic then remove console.log
+  console.log({ feature, epic });
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -97,7 +99,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature, epic }) => {
 
   const { add, remove, update } = useAcceptanceCriteria(
     userStory.acceptanceCriteria.map((criteria) => criteria.text),
-    handleUpdateUserStory
+    handleUpdateUserStory as any
   );
 
   const handleGenerateTasks = async () => {
