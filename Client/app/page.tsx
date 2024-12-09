@@ -32,7 +32,11 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col">
       {/* Hero Section */}
       <Hero
-        data={homeSections?.heroData}
+        data={{
+          header: homeSections?.heroData?.Header,
+          subHeader: homeSections?.heroData?.SubHeader,
+          heroImage: homeSections?.heroData?.heroImage,
+        }}
         onScrollDown={() =>
           document
             .getElementById('features')

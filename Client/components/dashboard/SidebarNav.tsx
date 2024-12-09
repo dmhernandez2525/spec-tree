@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -22,7 +23,6 @@ export function SidebarNav({ items, className, ...props }: SidebarNavProps) {
   return (
     <nav className={cn('flex flex-col space-y-1', className)} {...props}>
       {items.map((item, index) => {
-        const Icon = Icons[item.icon];
         return (
           <motion.div
             key={item.href}
@@ -41,7 +41,11 @@ export function SidebarNav({ items, className, ...props }: SidebarNavProps) {
                 'group flex items-center rounded-md px-3 py-2 text-sm font-medium'
               )}
             >
-              {/* <Icon className="mr-2 h-4 w-4" /> */}
+              {item.icon && Icons[item.icon] && (
+                <div className="mr-2 h-4 w-4">
+                  {React.createElement(Icons[item.icon])}
+                </div>
+              )}
               <span>{item.title}</span>
             </Link>
           </motion.div>

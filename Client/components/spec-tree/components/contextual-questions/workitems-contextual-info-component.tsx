@@ -46,7 +46,11 @@ const WorkitemsContextualInfo: React.FC<WorkitemsContextualInfoProps> = ({
   const [workItemStatus, setWorkItemStatus] = useState<
     'original' | 'edited' | 'accepted'
   >('original');
-  const [editableWorkItem, setEditableWorkItem] = useState<any>(null);
+  const [editableWorkItem, setEditableWorkItem] =
+    useState<WorkItemTypeTypes | null>(null);
+
+  // TODO: use workItemStatus and editableWorkItem then remove console.log
+  console.log({ workItemStatus, editableWorkItem });
 
   const {
     loading: updateLoading,

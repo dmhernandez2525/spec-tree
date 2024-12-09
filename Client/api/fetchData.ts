@@ -446,7 +446,7 @@ const fetchHomePageData = async (): Promise<
   SingleApiResponse<HomePageData> | null | undefined
 > => {
   // TODO: use fetchCmsData instead of fetchData once it is working
-  // populate[locationSection]=*&populate[testimonialSection]=*&populate[section]=*&populate[section][populate][image]=*&populate[section][populate][button]=*&populate[aboutSection]=*&populate[metricSection]=*&populate[newsletterSection]=*&populate[socialSection][populate][links][populate][icon]=*&
+  // populate[testimonialSection]=*&populate[section]=*&populate[section][populate][image]=*&populate[section][populate][button]=*&populate[aboutSection]=*&populate[metricSection]=*&populate[newsletterSection]=*&populate[socialSection][populate][links][populate][icon]=*&
   return await fetchSingletonTypeData<HomePageData>(
     'home-page',
     'populate[heroData][populate][heroImage]=*&populate[ourMissionData]=*&populate[ourServicesData][populate][serviceList]=*&populate[WheelSection][populate][icon]=*&populate[reviews]=*&populate[ourWorkData][populate][image]=*&populate[ourWorkData][populate][icon]=*&populate[ourServicesHeader]=*&populate[OurProcess]=*&populate[ourWorkHeader]=*&populate[reviewsHeader]=*'
@@ -535,7 +535,6 @@ export interface ContactPageAttributes {
   id: number;
   aboutSection: Section1;
   emailSection: Section4;
-  locationSection: Section4;
   phoneSection: Section4;
   contactSection: Section1;
   faqSection: FaqSection;
@@ -547,7 +546,7 @@ const fetchContactPageData = async (): Promise<
 
   return await fetchSingletonTypeData<ContactPageAttributes>(
     'contact-page',
-    'populate[aboutSection]=*&populate[emailSection]=*&populate[locationSection]=*&populate[phoneSection]=*&populate[contactSection]=*&populate[faqSection][populate][items]=*'
+    'populate[aboutSection]=*&populate[emailSection]=*&populate[phoneSection]=*&populate[contactSection]=*&populate[faqSection][populate][items]=*'
   );
 };
 

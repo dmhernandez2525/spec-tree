@@ -62,6 +62,8 @@ export function NotificationSettings() {
   });
 
   function onSubmit(data: NotificationFormValues) {
+    // TODO: use data and remove console.log
+    console.log(data);
     toast.success('Notification preferences updated');
   }
 

@@ -36,7 +36,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CalendarIcon, Check } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
@@ -108,6 +108,8 @@ export function DemoForm() {
   });
 
   async function onSubmit(data: FormValues) {
+    // TODO: use data and remove console.log
+    console.log(data);
     setIsSubmitting(true);
     try {
       // This would be replaced with your actual API call
@@ -116,6 +118,7 @@ export function DemoForm() {
       toast.success('Demo request submitted successfully!');
       form.reset();
     } catch (error) {
+      console.error('Demo request error:', error);
       toast.error('Failed to submit demo request. Please try again.');
     } finally {
       setIsSubmitting(false);

@@ -12,10 +12,10 @@ import Wizard from '../wizard/wizard';
 import { generateUpdatedExplanationForGlobalRefinement } from '../../lib/api/openai';
 import useQuestionGeneration from '../../lib/hooks/use-question-generation';
 import compileContext from '../../lib/utils/compile-context';
-import { ContextualQuestion } from '../../lib/types/work-items';
+// import { ContextualQuestion } from '../../lib/types/work-items';
 
 import {
-  addGlobalContextualQuestion,
+  // addGlobalContextualQuestion,
   addGlobalContextualQuestions,
   removeGlobalContextualQuestion,
   replaceGlobalContextualQuestions,
@@ -103,6 +103,7 @@ const GlobalContextualInfo: React.FC<GlobalContextualInfoProps> = ({
       setUpdatedExplanation(explanation);
       dispatch(updateGlobalInformation(explanation));
     } catch (err) {
+      console.error(`Failed to generate explanation: ${err}`);
       setError('Failed to generate explanation. Please try again.');
     } finally {
       setIsLoadingExplanation(false);

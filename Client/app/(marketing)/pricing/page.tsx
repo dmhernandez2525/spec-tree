@@ -15,7 +15,7 @@ import { TrialModal } from '@/components/marketing/pricing/TrialModal';
 import { TrialFeatures } from '@/components/marketing/pricing/TrialFeatures';
 import { TrialStats } from '@/components/marketing/pricing/TrialStats';
 import { pricingTiers } from '@/lib/data/pricing';
-import { startTrial, getTrialStatus } from '@/api/trialApi';
+import { startTrial } from '@/api/trialApi';
 import { useToast } from '@/lib/hooks/use-toast';
 import { TrialStatus } from '@/types/trial';
 import Section from '@/components/layout/Section';
@@ -51,6 +51,7 @@ export default function PricingPage() {
           'Welcome to Spec Tree! Your 14-day trial has begun.',
       });
     } catch (error) {
+      console.error('Failed to start trial:', error);
       toast({
         title: 'Failed to Start Trial',
         description:
@@ -59,15 +60,6 @@ export default function PricingPage() {
       });
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const refreshTrialStatus = async () => {
-    try {
-      const status = await getTrialStatus();
-      setTrialStatus(status);
-    } catch (error) {
-      console.error('Failed to fetch trial status:', error);
     }
   };
 
@@ -88,6 +80,10 @@ export default function PricingPage() {
       y: 0,
     },
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

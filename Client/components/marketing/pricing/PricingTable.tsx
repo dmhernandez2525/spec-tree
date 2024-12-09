@@ -29,7 +29,10 @@ export function FeatureComparisonTable({
 }: FeatureComparisonTableProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  const categories = ['all', ...new Set(features.map((f) => f.category))];
+  const categories = [
+    'all',
+    ...Array.from(new Set(features.map((f) => f.category))),
+  ];
 
   const filteredFeatures =
     selectedCategory === 'all'

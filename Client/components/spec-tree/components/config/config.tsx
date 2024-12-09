@@ -66,6 +66,7 @@ const Config: React.FC = () => {
       dispatch(updateSelectedModel(module));
       setIsOpen(false);
     } catch (err) {
+      console.error(`Failed to update model selection: ${err}`);
       setError('Failed to update model selection');
     } finally {
       setIsLoading(false);

@@ -76,6 +76,7 @@ export default function ForgotPasswordUpdatePage() {
       toast.success('Password successfully reset, you can now login');
       form.reset();
     } catch (error) {
+      console.error('Failed to reset password:', error);
       toast.error('Failed to reset password. Please try again.');
     } finally {
       setIsSubmitting(false);

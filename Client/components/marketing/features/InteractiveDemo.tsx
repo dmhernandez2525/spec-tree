@@ -14,12 +14,6 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-interface Message {
-  id: string;
-  type: 'user' | 'ai';
-  content: string;
-}
-
 interface DemoQuestion {
   id: string;
   question: string;
@@ -177,8 +171,8 @@ export function InteractiveDemo() {
           <CardHeader>
             <CardTitle>Context Analysis Complete</CardTitle>
             <CardDescription>
-              Based on your responses, here's what our AI has learned about your
-              project.
+              Based on your responses, here is what our AI has learned about
+              your project.
             </CardDescription>
           </CardHeader>
           <CardContent>
