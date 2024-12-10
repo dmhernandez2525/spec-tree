@@ -156,6 +156,8 @@ const Epic: React.FC<EpicProps> = ({ epic, index }) => {
       userStoryIds: [],
       notes: formState.notes,
       contextualQuestions: [],
+      priority: 'Low',
+      effort: 'Low',
     };
 
     dispatch(addFeature(feature));

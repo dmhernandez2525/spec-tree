@@ -59,14 +59,14 @@ interface UserStoryProps {
 interface FormState {
   Title: string;
   Details: string;
-  Priority: string;
+  Priority: number;
   Notes: string;
 }
 
 const initialFormState: FormState = {
   Title: '',
   Details: '',
-  Priority: '',
+  Priority: 0,
   Notes: '',
 };
 
@@ -131,7 +131,6 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature, epic }) => {
       priority: formState.Priority,
       notes: formState.Notes,
       parentUserStoryId: userStory.id,
-      developmentOrder: 1,
       dependentTaskIds: [],
       contextualQuestions: [],
     };

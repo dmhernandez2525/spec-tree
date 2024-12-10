@@ -25,16 +25,20 @@ export type ContextualQuestion = {
 type BaseWorkItem = {
   id: string;
   contextualQuestions?: ContextualQuestion[];
+  documentId?: string;
 };
 
 export interface TaskType extends BaseWorkItem {
   title: string;
   details: string;
-  priority: string;
+  priority: number;
   notes: string;
   parentUserStoryId: string;
-  developmentOrder: number;
   dependentTaskIds: string[];
+}
+
+export interface ResTaskType extends TaskType {
+  userStory: UserStoryType;
 }
 
 export interface UserStoryType extends BaseWorkItem {
@@ -49,6 +53,11 @@ export interface UserStoryType extends BaseWorkItem {
   taskIds: string[];
   developmentOrder: number;
   dependentUserStoryIds?: string[];
+  contextualQuestions?: ContextualQuestion[];
+}
+
+export interface ResUserStoryType extends UserStoryType {
+  feature: FeatureType;
 }
 
 export interface FeatureType extends BaseWorkItem {
@@ -60,6 +69,11 @@ export interface FeatureType extends BaseWorkItem {
   parentEpicId: string;
   userStoryIds: string[];
   notes: string;
+  priority: string;
+  effort: string;
+}
+export interface ResFeatureType extends FeatureType {
+  epic: EpicType;
 }
 
 export interface RiskMitigationType {
@@ -94,21 +108,30 @@ export interface EpicType extends BaseWorkItem {
   resources: string;
   risksAndMitigation: RiskMitigationType[];
   featureIds: string[];
+  parentAppId: string;
   notes: string;
 }
 
-export type SowState = {
-  apps: Record<string, App>;
+export interface ResEpicType extends EpicType {
+  app: App;
+}
+
+export interface Sow {
   epics: Record<string, EpicType>;
   features: Record<string, FeatureType>;
   userStories: Record<string, UserStoryType>;
   tasks: Record<string, TaskType>;
   contextualQuestions?: ContextualQuestion[];
   globalInformation: string;
-  selectedModel: string;
-  chatApi: string;
   id: string;
-};
+  chatApi: string;
+  apps: Record<string, App>;
+  selectedModel: string;
+}
+export interface SowState extends Sow {
+  isLoading?: boolean;
+  error?: string | null;
+}
 
 export type SowExampleState = {
   epics: EpicType[];
@@ -148,6 +171,7 @@ export interface UserStoryResponse {
 }
 
 export interface GeneratedEpic {
+  id: string;
   title: string;
   description: string;
   goal: string;
@@ -157,18 +181,24 @@ export interface GeneratedEpic {
   resources: string;
   risksAndMitigation: RiskMitigationType[];
   notes: string;
+  appId: string;
 }
 
 export interface GeneratedFeature {
+  id: string;
   acceptanceCriteria: [{ text: string }];
   dependencies: string;
   description: string;
   details: string;
   notes: string;
   title: string;
+  priority: string;
+  effort: string;
+  parentEpicId: string;
 }
 
 export interface GeneratedUserStory {
+  id: string;
   title: string;
   role: string;
   action: string;
@@ -176,13 +206,17 @@ export interface GeneratedUserStory {
   points: string;
   acceptanceCriteria: [{ text: string }];
   notes: string;
+  developmentOrder: number;
+  parentFeatureId: string;
 }
 
 export interface GeneratedTask {
+  id: string;
   title: string;
   details: string;
-  priority: string;
+  priority: number;
   notes: string;
+  parentUserStoryId: string;
 }
 
 export interface TaskRequest {

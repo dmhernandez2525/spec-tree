@@ -40,6 +40,7 @@ import {
   WorkItemType,
 } from '../../components/spec-tree/lib/types/work-items';
 import { RootState } from './index';
+// import {epicMockNewData} from "../data/mockData"
 
 import generateId from '../../components/spec-tree/lib/utils/generate-id';
 
@@ -54,6 +55,8 @@ const initialState: SowState = {
   chatApi: 'StartState',
   id: '',
   apps: {},
+  isLoading: false,
+  error: null,
 };
 
 // New Strapi data fetching thunk
@@ -132,7 +135,6 @@ export const fetchStrapiData = createAsyncThunk(
                     priority: task.priority,
                     notes: task.notes,
                     parentUserStoryId: story.documentId,
-                    developmentOrder: task.developmentOrder || 0,
                     contextualQuestions: task.contextualQuestions || [],
                   };
                 });
@@ -193,7 +195,7 @@ export const requestAdditionalEpics = createAsyncThunk<
           risksAndMitigation: epic.risksAndMitigation,
         });
         return {
-          app: res.app,
+          appId: res.app.documentId,
           id: res.documentId,
           title: res.title,
           description: res.description,
@@ -207,6 +209,8 @@ export const requestAdditionalEpics = createAsyncThunk<
         };
       })
     );
+
+    // return { epics: epicMockNewData };
     return { epics: newData };
   } catch (err: any) {
     return rejectWithValue(err.response.data);
@@ -241,7 +245,7 @@ export const requestAdditionalFeatures = createAsyncThunk<
           })
           .filter((item): item is GeneratedFeature => item !== null);
 
-      const newFeatures: GeneratedFeature[] = await Promise.all(
+      const newFeatures = await Promise.all(
         parseGpt3.map(async (feature: GeneratedFeature) => {
           // Use Strapi service for creation
           const res = await strapiService.createFeature({
@@ -250,20 +254,24 @@ export const requestAdditionalFeatures = createAsyncThunk<
             details: feature.details,
             notes: feature.notes,
             acceptanceCriteria: feature.acceptanceCriteria,
-            epic: epic.id,
+            epic: epic.documentId,
           });
           return {
-            id: res.documentId,
-            title: res.title,
-            description: res.description,
-            acceptanceCriteria: res.acceptanceCriteria,
-            priority: res.priority,
-            effort: res.effort,
-            dependencies: res.dependencies,
-            epic: res.epic,
+            id: res.documentId || '',
+            title: res.title || '',
+            description: res.description || '',
+            acceptanceCriteria: res.acceptanceCriteria || [],
+            priority: res.priority || 0,
+            effort: res.effort || 0,
+            dependencies: res.dependencies || '',
+            parentEpicId: res.epic.documentId,
+            details: res.details || '',
+            notes: res.notes || '',
+            userStoryIds: [],
           };
         })
       );
+
       return { features: newFeatures, epicId: epic.id };
     } catch (err: any) {
       return rejectWithValue(err.response.data);
@@ -302,22 +310,40 @@ export const requestUserStories = createAsyncThunk<
       // Use Strapi service to create user stories
       const userStories = await Promise.all(
         parseGpt3.map(async (story) => {
-          return await strapiService.createUserStory({
-            title: story.title,
-            role: story.role,
-            action: story.action,
-            goal: story.goal,
-            points: story.points,
-            acceptanceCriteria: story.acceptanceCriteria,
-            feature: feature.id,
-            notes: story.notes,
-            developmentOrder: 0,
-          });
+          try {
+            const res = await strapiService.createUserStory({
+              title: story.title,
+              role: story.role,
+              actionStr: story.action,
+              goal: story.goal,
+              points: story.points,
+              acceptanceCriteria: story.acceptanceCriteria,
+              feature: feature.documentId,
+              notes: story.notes,
+              developmentOrder: 0,
+            });
+
+            return {
+              id: res.documentId,
+              title: res.title || '',
+              role: res.role || '',
+              action: res.action || '',
+              goal: res.goal || '',
+              points: res.points || 0,
+              acceptanceCriteria: res.acceptanceCriteria || [],
+              notes: res.notes || '',
+              parentFeatureId: res.feature.documentId,
+              developmentOrder: res.developmentOrder || 0,
+              contextualQuestions: res.contextualQuestions || [],
+            };
+          } catch (error) {
+            console.error('Failed to create user story:', error);
+            return null;
+          }
         })
       );
-      // TODO: use userStories and remove console.log
-      console.log(userStories);
-      return { userStories: parseGpt3, featureId: feature.id };
+
+      return { userStories: userStories, featureId: feature.id };
     } catch (err: any) {
       return rejectWithValue(err.response.data);
     }
@@ -325,13 +351,12 @@ export const requestUserStories = createAsyncThunk<
 );
 export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
   'sow/requestTasks',
-  async ({ userStory, state, context }, { rejectWithValue }) => {
+  async ({ userStory, state }, { rejectWithValue }) => {
     try {
       const response = await generateTasks({
         chatApi: state?.sow?.chatApi,
         userStory,
         state,
-        context,
         selectedModel: state.sow.selectedModel,
       });
 
@@ -347,26 +372,37 @@ export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
             }
           })
           .filter((item): item is GeneratedTask => item !== null);
-
       // Use Strapi service to create tasks
       const tasks = await Promise.all(
         parseGpt3.map(async (task) => {
-          return await strapiService.createTask({
-            title: task.title,
-            details: task.details,
-            priority: task.priority,
-            notes: task.notes,
-            userStory: userStory.id,
-            developmentOrder: 0,
-          });
+          try {
+            const res = await strapiService.createTask({
+              title: task.title,
+              details: task.details,
+              priority: task.priority,
+              notes: task.notes,
+              userStory: userStory.documentId,
+            });
+
+            return {
+              id: res.documentId,
+              title: res.title || '',
+              details: res.details || '',
+              priority: res.priority || 0,
+              notes: res.notes || '',
+              parentUserStoryId: res.userStory.documentId,
+              contextualQuestions: res.contextualQuestions || [],
+            };
+          } catch (error) {
+            console.error('Failed to create task:', error);
+            return null;
+          }
         })
       );
-      // TODO: use tasks and remove console.log
-      console.log(tasks);
 
       return {
         userStoryId: userStory.id,
-        tasks: parseGpt3,
+        tasks: tasks,
       };
     } catch (err: any) {
       return rejectWithValue({ errorMessage: err.response.data.message });
@@ -422,9 +458,26 @@ export const sowSlice: Slice<SowState> = createSlice({
     },
     addEpics: (state, action: PayloadAction<EpicType>) => {
       const epic = action.payload;
-      const draft = { ...state.epics };
-      draft[epic.id] = epic;
-      state.epics = draft;
+      if (!epic || !epic.id) {
+        console.warn('Attempted to add invalid epic:', epic);
+        return;
+      }
+
+      // Create a new epics object
+      const newEpics = {
+        ...state.epics,
+        [epic.id]: { ...epic },
+      };
+
+      // Replace the entire epics state
+      state.epics = newEpics;
+
+      console.log(
+        'Added epic:',
+        epic.id,
+        'Current epics:',
+        Object.keys(newEpics)
+      );
     },
     addFeature: (state, action: PayloadAction<FeatureType>) => {
       const feature = action.payload;
@@ -520,7 +573,7 @@ export const sowSlice: Slice<SowState> = createSlice({
       const { taskId, field, newValue } = action.payload;
       const task = state.tasks[taskId];
       if (task) {
-        task[field] = newValue;
+        (task as any)[field] = newValue;
       }
     },
     updateUserStoryField: (
@@ -533,9 +586,11 @@ export const sowSlice: Slice<SowState> = createSlice({
       if (userStory) {
         if (field === UserStoryFields.AcceptanceCriteria) {
           if (typeof arrayIndex === 'number') {
-            userStory.acceptanceCriteria[arrayIndex] = newValue as string;
+            userStory.acceptanceCriteria[arrayIndex] = {
+              text: newValue as string,
+            };
           } else if (isArrayItem) {
-            userStory.acceptanceCriteria.push(newValue as string);
+            userStory.acceptanceCriteria.push({ text: newValue as string });
           } else {
             userStory.acceptanceCriteria = newValue as string[];
           }
@@ -557,10 +612,12 @@ export const sowSlice: Slice<SowState> = createSlice({
         if (field === 'acceptanceCriteria') {
           if (typeof arrayIndex === 'number') {
             // Update an existing item in the acceptanceCriteria array
-            feature.acceptanceCriteria[arrayIndex] = newValue as string;
+            feature.acceptanceCriteria[arrayIndex] = {
+              text: newValue as string,
+            };
           } else if (isArrayItem) {
             // Add a new item to the end of the acceptanceCriteria array
-            feature.acceptanceCriteria.push(newValue as string);
+            feature.acceptanceCriteria.push({ text: newValue as string });
           } else {
             // used for deletion
             feature.acceptanceCriteria = newValue as string[];
@@ -716,105 +773,254 @@ export const sowSlice: Slice<SowState> = createSlice({
           Object.assign(state, action.payload.sow);
         }
       })
+      .addCase(fetchStrapiData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchStrapiData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
       .addCase(requestAdditionalFeatures.fulfilled, (state, action) => {
+        state.isLoading = false;
         const { features, epicId } = action.payload;
 
         const epic = state.epics[epicId];
-        if (epic) {
-          features.forEach((newFeature: GeneratedFeature) => {
-            const newFeatureId = generateId();
-            const reformattedFeature: FeatureType = {
-              id: newFeatureId,
-              title: newFeature.title,
-              description: newFeature.description,
-              details: newFeature.details,
-              dependencies: newFeature.dependencies,
-              acceptanceCriteria: newFeature.acceptanceCriteria,
-              parentEpicId: epic.id,
-              userStoryIds: [],
-              notes: newFeature.notes,
-            };
-
-            state.epics[epicId].featureIds.push(newFeatureId);
-            state.features[newFeatureId] = reformattedFeature;
-          });
+        if (!epic) {
+          console.warn('Cannot add features: Epic not found:', epicId);
+          return;
         }
-      })
-      .addCase(requestAdditionalEpics.fulfilled, (state, action) => {
-        const { epics } = action.payload;
 
-        epics?.forEach((newEpic: GeneratedEpic) => {
-          const epicId = generateId();
-          const epic: EpicType = {
-            id: epicId,
-            title: newEpic.title,
-            description: newEpic.description,
-            goal: newEpic.goal,
-            successCriteria: newEpic.successCriteria,
-            dependencies: newEpic.dependencies,
-            timeline: newEpic.timeline,
-            resources: newEpic.resources,
-            risksAndMitigation: newEpic?.risksAndMitigation || [],
-            featureIds: [],
-            notes: newEpic.notes,
+        // Create new features object
+        const newFeatures = { ...state.features };
+        // Create new epic to modify
+        const newEpic = { ...epic, featureIds: [...epic.featureIds] };
+
+        features.forEach((newFeature: GeneratedFeature) => {
+          const newFeatureId = newFeature.id;
+          if (!newFeatureId) {
+            console.warn('Received feature without ID:', newFeature);
+            return;
+          }
+
+          const reformattedFeature: FeatureType = {
+            id: newFeatureId,
+            title: newFeature.title,
+            description: newFeature.description,
+            details: newFeature.details,
+            dependencies: newFeature.dependencies || '',
+            acceptanceCriteria: newFeature.acceptanceCriteria,
+            parentEpicId: newFeature.parentEpicId,
+            userStoryIds: [],
+            notes: newFeature.notes,
+            contextualQuestions: [],
+            priority: newFeature.priority,
+            effort: newFeature.effort,
           };
-          state.epics[epicId] = epic;
+
+          newEpic.featureIds.push(newFeatureId);
+          newFeatures[newFeatureId] = reformattedFeature;
         });
+
+        // Update state with new objects
+        state.features = newFeatures;
+        state.epics = {
+          ...state.epics,
+          [epicId]: newEpic,
+        };
+
+        console.log(
+          'Added features:',
+          Object.keys(newFeatures).length,
+          'to epic:',
+          epicId
+        );
+      })
+      .addCase(requestAdditionalFeatures.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(requestAdditionalFeatures.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(requestAdditionalEpics.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(requestAdditionalEpics.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(
+        requestAdditionalEpics.fulfilled,
+        (state, action: PayloadAction<{ epics: GeneratedEpic[] }>) => {
+          state.isLoading = false;
+          const { epics } = action.payload;
+          if (!epics?.length) {
+            return;
+          }
+          const newEpics = { ...state.epics };
+
+          epics.forEach((newEpic: GeneratedEpic) => {
+            try {
+              const epicId = newEpic?.id;
+
+              if (!epicId) {
+                console.warn('Received epic without ID:', newEpic);
+                return;
+              }
+
+              const epic: EpicType = {
+                parentAppId: newEpic.appId,
+                id: newEpic.id,
+                title: newEpic.title || '',
+                description: newEpic.description || '',
+                goal: newEpic.goal || '',
+                successCriteria: newEpic.successCriteria || '',
+                dependencies: newEpic.dependencies,
+                timeline: newEpic.timeline || '',
+                resources: newEpic.resources,
+                risksAndMitigation: newEpic?.risksAndMitigation || [],
+                featureIds: [],
+                notes: newEpic.notes || '',
+                contextualQuestions: [],
+              };
+              newEpics[epicId] = epic;
+            } catch (error) {
+              console.error('Failed to add epic:', error);
+            }
+          });
+          state.epics = newEpics;
+          console.log('Current epics state:', Object.keys(state.epics));
+        }
+      )
+      .addCase(requestUserStories.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(requestUserStories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
       })
 
       .addCase(requestUserStories.fulfilled, (state, action) => {
+        state.isLoading = false;
         const { featureId, userStories } = action.payload;
 
         const feature = state.features[featureId];
-
-        if (feature) {
-          userStories.forEach((newUserStory) => {
-            const userStoryId = generateId();
-
-            const userStory: UserStoryType = {
-              id: userStoryId,
-              title: newUserStory.title,
-              role: newUserStory.role,
-              action: newUserStory.action,
-              goal: newUserStory.goal,
-              points: newUserStory.points,
-              acceptanceCriteria: newUserStory.acceptanceCriteria,
-              notes: newUserStory.notes,
-              parentFeatureId: feature.id,
-              taskIds: [],
-              developmentOrder: 0,
-              dependentUserStoryIds: [],
-            };
-
-            state.userStories[userStoryId] = userStory;
-            feature.userStoryIds.push(userStoryId);
-          });
+        if (!feature) {
+          console.warn(
+            'Cannot add user stories: Feature not found:',
+            featureId
+          );
+          return;
         }
+
+        // Create new user stories object
+        const newUserStories = { ...state.userStories };
+        // Create new feature to modify
+        const newFeature = {
+          ...feature,
+          userStoryIds: [...feature.userStoryIds],
+        };
+
+        userStories.forEach((newUserStory) => {
+          const userStoryId = newUserStory.id;
+          if (!userStoryId) {
+            console.warn('Received user story without ID:', newUserStory);
+            return;
+          }
+
+          const userStory: UserStoryType = {
+            id: userStoryId,
+            title: newUserStory.title,
+            role: newUserStory.role,
+            action: newUserStory.action,
+            goal: newUserStory.goal,
+            points: newUserStory.points,
+            acceptanceCriteria: newUserStory.acceptanceCriteria,
+            notes: newUserStory.notes,
+            parentFeatureId: featureId,
+            taskIds: [],
+            developmentOrder: newUserStory.developmentOrder || 0,
+            dependentUserStoryIds: [],
+            contextualQuestions: [],
+          };
+
+          newUserStories[userStoryId] = userStory;
+          newFeature.userStoryIds.push(userStoryId);
+        });
+
+        // Update state with new objects
+        state.userStories = newUserStories;
+        state.features = {
+          ...state.features,
+          [featureId]: newFeature,
+        };
+
+        console.log(
+          'Added user stories:',
+          Object.keys(newUserStories).length,
+          'to feature:',
+          featureId
+        );
       })
+
+      .addCase(requestTasks.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(requestTasks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      // Request Tasks
       .addCase(requestTasks.fulfilled, (state, action) => {
+        state.isLoading = false;
         const { userStoryId, tasks } = action.payload;
 
-        // Find the user story by its title within the feature
         const userStory = state.userStories[userStoryId];
-        if (userStory) {
-          tasks.forEach((newTask) => {
-            const taskId = generateId();
-            const task: TaskType = {
-              id: taskId,
-              title: newTask.title,
-              details: newTask.details,
-              priority: newTask.priority,
-              notes: newTask.notes,
-              parentUserStoryId: userStory.id,
-              developmentOrder: 0,
-              dependentTaskIds: [],
-            };
-
-            // Add the task to the user story
-            state.tasks[taskId] = task;
-            userStory.taskIds.push(taskId);
-          });
+        if (!userStory) {
+          console.warn('Cannot add tasks: User story not found:', userStoryId);
+          return;
         }
+
+        // Create new tasks object
+        const newTasks = { ...state.tasks };
+        // Create new user story to modify
+        const newUserStory = { ...userStory, taskIds: [...userStory.taskIds] };
+
+        tasks.forEach((newTask) => {
+          const taskId = generateId();
+          if (!taskId) {
+            console.warn('Failed to generate task ID for:', newTask);
+            return;
+          }
+
+          const task: TaskType = {
+            id: taskId,
+            title: newTask.title,
+            details: newTask.details,
+            priority: newTask.priority || 0,
+            notes: newTask.notes,
+            parentUserStoryId: userStoryId,
+            dependentTaskIds: [],
+            contextualQuestions: [],
+          };
+
+          newTasks[taskId] = task;
+          newUserStory.taskIds.push(taskId);
+        });
+
+        // Update state with new objects
+        state.tasks = newTasks;
+        state.userStories = {
+          ...state.userStories,
+          [userStoryId]: newUserStory,
+        };
+
+        console.log(
+          'Added tasks:',
+          Object.keys(newTasks).length,
+          'to user story:',
+          userStoryId
+        );
       });
   },
 });
