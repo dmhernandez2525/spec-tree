@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../../../lib/store';
 import {
@@ -50,6 +50,7 @@ import {
   calculateTotalUserStories,
 } from '../../lib/utils/calculation-utils';
 import calculateTotalPoints from '../../lib/utils/calculate-total-points';
+import useAsyncState from '@/lib/hooks/useAsyncState';
 
 interface BuilderProps {
   setSelectedApp: (id: string | null) => void;
@@ -87,159 +88,205 @@ const Builder: React.FC<BuilderProps> = ({
   // TODO: use setSelectedApp and remove console.log
   console.log(setSelectedApp);
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
   const [isAddEpicDialogOpen, setIsAddEpicDialogOpen] = React.useState(false);
   const [formState, setFormState] = React.useState<FormState>(initialFormState);
+  const {
+    state,
+    errorMessage,
+    startLoading,
+    stopLoading,
+    handleError,
+    clearError,
+  } = useAsyncState();
 
+  // Memoize selectors
   const localState = useSelector((state: RootState) => state);
   const epics = useSelector(selectAllEpics);
   const features = useSelector(selectAllFeatures);
   const userStories = useSelector(selectAllUserStories);
 
-  const featuresById = epics?.reduce((acc, epic) => {
-    epic.featureIds.forEach((featureId) => {
-      acc[featureId] = selectFeatureById(localState, featureId);
-    });
-    return acc;
-  }, {} as Record<string, FeatureType>);
-
-  const userStoriesById = features
-    .flatMap((feature) => feature.userStoryIds || [])
-    .reduce((acc, userStoryId) => {
-      acc[userStoryId] = selectUserStoryById(localState, userStoryId);
+  // Memoize computed values
+  const featuresById = useMemo(() => {
+    return epics?.reduce((acc, epic) => {
+      epic.featureIds.forEach((featureId) => {
+        acc[featureId] = selectFeatureById(localState, featureId);
+      });
       return acc;
-    }, {} as Record<string, UserStoryType>);
+    }, {} as Record<string, FeatureType>);
+  }, [epics, localState]);
 
-  const handleAddEpics = async () => {
-    setIsLoading(true);
-    setError(null);
+  const userStoriesById = useMemo(() => {
+    return features
+      .flatMap((feature) => feature.userStoryIds || [])
+      .reduce((acc, userStoryId) => {
+        acc[userStoryId] = selectUserStoryById(localState, userStoryId);
+        return acc;
+      }, {} as Record<string, UserStoryType>);
+  }, [features, localState]);
+
+  const handleAddEpics = useCallback(async () => {
     try {
-      await dispatch(requestAdditionalEpics({ state: localState }));
+      startLoading();
+      await dispatch(requestAdditionalEpics({ state: localState })).unwrap();
+      stopLoading();
     } catch (err) {
-      console.error(`Failed to generate epics: ${err}`);
-
-      setError('Failed to generate epics. Please try again.');
-    } finally {
-      setIsLoading(false);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Failed to generate epics. Please try again.';
+      console.error('Failed to generate epics:', err);
+      handleError(errorMessage);
     }
-  };
+  }, [dispatch, localState, startLoading, stopLoading, handleError]);
 
-  const handleAddFeatures = async () => {
-    setIsLoading(true);
-    setError(null);
+  const handleAddFeatures = useCallback(async () => {
     try {
-      for (const epic of epics) {
-        await dispatch(requestAdditionalFeatures({ epic, state: localState }));
-      }
+      startLoading();
+      await Promise.all(
+        epics.map((epic) =>
+          dispatch(
+            requestAdditionalFeatures({ epic, state: localState })
+          ).unwrap()
+        )
+      );
+      stopLoading();
     } catch (err) {
-      console.error(`Failed to generate features: ${err}`);
-
-      setError('Failed to generate features. Please try again.');
-    } finally {
-      setIsLoading(false);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Failed to generate features. Please try again.';
+      console.error('Failed to generate features:', err);
+      handleError(errorMessage);
     }
-  };
+  }, [dispatch, epics, localState, startLoading, stopLoading, handleError]);
 
-  const handleAddUserStories = async () => {
-    setIsLoading(true);
-    setError(null);
+  const handleAddUserStories = useCallback(async () => {
     try {
-      for (const epic of epics) {
-        for (const featureId of epic.featureIds) {
-          const feature = featuresById[featureId];
-          if (feature) {
-            await dispatch(requestUserStories({ feature, state: localState }));
-          }
-        }
-      }
+      startLoading();
+      await Promise.all(
+        epics.flatMap((epic) =>
+          epic.featureIds
+            .map((featureId) => featuresById[featureId])
+            .filter((feature): feature is FeatureType => !!feature)
+            .map((feature) =>
+              dispatch(
+                requestUserStories({ feature, state: localState })
+              ).unwrap()
+            )
+        )
+      );
+      stopLoading();
     } catch (err) {
-      console.error(`Failed to generate user stories: ${err}`);
-
-      setError('Failed to generate user stories. Please try again.');
-    } finally {
-      setIsLoading(false);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Failed to generate user stories. Please try again.';
+      console.error('Failed to generate user stories:', err);
+      handleError(errorMessage);
     }
-  };
+  }, [
+    dispatch,
+    epics,
+    featuresById,
+    localState,
+    startLoading,
+    stopLoading,
+    handleError,
+  ]);
 
-  const handleAddTasksToAllUserStories = async () => {
-    setIsLoading(true);
-    setError(null);
+  const handleAddTasksToAllUserStories = useCallback(async () => {
     try {
-      for (const epic of epics) {
-        for (const featureId of epic.featureIds) {
-          const feature = featuresById[featureId];
-          if (feature) {
-            for (const userStoryId of feature.userStoryIds) {
-              const userStory = userStoriesById[userStoryId];
-              if (userStory) {
-                await dispatch(requestTasks({ userStory, state: localState }));
-              }
-            }
-          }
-        }
-      }
+      startLoading();
+      await Promise.all(
+        Object.values(userStoriesById)
+          .filter((story): story is UserStoryType => !!story)
+          .map((userStory) =>
+            dispatch(requestTasks({ userStory, state: localState })).unwrap()
+          )
+      );
+      stopLoading();
     } catch (err) {
-      console.error(`Failed to generate tasks: ${err}`);
-      setError('Failed to generate tasks. Please try again.');
-    } finally {
-      setIsLoading(false);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Failed to generate tasks. Please try again.';
+      console.error('Failed to generate tasks:', err);
+      handleError(errorMessage);
     }
-  };
+  }, [
+    dispatch,
+    userStoriesById,
+    localState,
+    startLoading,
+    stopLoading,
+    handleError,
+  ]);
 
-  const handleAddEpic = () => {
-    const epic: EpicType = {
-      id: generateId(),
-      title: formState.Title,
-      description: formState.Description,
-      goal: formState.Goal,
-      successCriteria: formState.SuccessCriteria,
-      dependencies: formState.Dependencies,
-      timeline: formState.Timeline,
-      resources: formState.Resources,
-      risksAndMitigation: [],
-      featureIds: [],
-      notes: formState.Notes,
-    };
+  const handleAddEpic = useCallback(() => {
+    try {
+      const epic: EpicType = {
+        parentAppId: selectedApp,
+        id: generateId(),
+        title: formState.Title,
+        description: formState.Description,
+        goal: formState.Goal,
+        successCriteria: formState.SuccessCriteria,
+        dependencies: formState.Dependencies,
+        timeline: formState.Timeline,
+        resources: formState.Resources,
+        risksAndMitigation: [],
+        featureIds: [],
+        notes: formState.Notes,
+      };
+      dispatch(addEpics(epic));
+      setFormState(initialFormState);
+      setIsAddEpicDialogOpen(false);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : 'Failed to add epic. Please try again.';
+      console.error('Failed to add epic:', err);
+      handleError(errorMessage);
+    }
+  }, [dispatch, formState, selectedApp, handleError]);
 
-    dispatch(addEpics(epic));
-    setFormState(initialFormState);
-    setIsAddEpicDialogOpen(false);
-  };
+  // Memoize metrics
+  const metrics = useMemo(
+    () => [
+      {
+        label: 'Total Project Points',
+        value: calculateTotalPoints(localState, userStories),
+      },
+      {
+        label: 'Total Epics',
+        value: epics?.length ?? 0,
+      },
+      {
+        label: 'Total Features',
+        value: calculateTotalFeatures(epics),
+      },
+      {
+        label: 'Total User Stories',
+        value: calculateTotalUserStories(localState, epics),
+      },
+      {
+        label: 'Total Tasks',
+        value: calculateTotalTasks(localState, epics),
+      },
+    ],
+    [localState, userStories, epics]
+  );
 
-  const metrics = [
-    {
-      label: 'Total Project Points',
-      value: calculateTotalPoints(localState, userStories),
-    },
-    {
-      label: 'Total Epics',
-      value: epics?.length,
-    },
-    {
-      label: 'Total Features',
-      value: calculateTotalFeatures(epics),
-    },
-    {
-      label: 'Total User Stories',
-      value: calculateTotalUserStories(localState, epics),
-    },
-    {
-      label: 'Total Tasks',
-      value: calculateTotalTasks(localState, epics),
-    },
-  ];
-
-  if (isLoading) {
+  if (state === 'loading') {
     return <LoadingSpinner />;
   }
 
   return (
     <div className="flex h-screen">
-      {/* Left Sidebar */}
       <div className="w-80 border-r bg-background p-6 space-y-4">
         <ContextualQuestions content="Global" workItemType="Global" />
-
+        {/* TODO-p1: this is here essentially to call and fetch the data/update the state whenever we initially load and it seems like we're also doing it whenever we create new items we could probably not do it whenever we create new items/update the items but just initial load. We should probably turn this into a provider or a hook. */}
         <FormatData chatApi={chatApi} selectedApp={selectedApp} />
 
         <div className="space-y-2">
@@ -269,9 +316,19 @@ const Builder: React.FC<BuilderProps> = ({
         <Config />
         <SowInput selectedApp={selectedApp} />
 
-        {error && (
+        {state === 'error' && errorMessage && (
           <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription className="flex items-center justify-between">
+              <span>{errorMessage}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearError}
+                className="ml-2 h-auto py-1"
+              >
+                Dismiss
+              </Button>
+            </AlertDescription>
           </Alert>
         )}
       </div>

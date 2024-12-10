@@ -13,6 +13,7 @@ import {
   taskPrompt,
   generateContextQuestionsForGlobalRefinement,
   generateExplanationForGlobalRefinement,
+  generateAdditionalTasksPrompt,
 } from '../constants/prompts';
 import { RootState } from '../../../../lib/store';
 
@@ -194,13 +195,11 @@ export const generateTasks = ({
   userStory,
   state,
   selectedModel,
-  context,
 }: {
   chatApi: string;
   userStory: UserStoryType;
   state: RootState;
   selectedModel: string;
-  context?: string;
 }) => {
   // TODO: use selectedModel then remove console.log
   console.log(selectedModel);
@@ -212,7 +211,7 @@ export const generateTasks = ({
     },
     {
       role: 'user',
-      content: taskPrompt(userStory, state, context),
+      content: generateAdditionalTasksPrompt(userStory, state),
     },
   ];
   const openai = openaiCall({ chatApi });

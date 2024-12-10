@@ -179,6 +179,17 @@ export interface CopyrightCopyrightFooter extends Struct.ComponentSchema {
   };
 }
 
+export interface BannerLogo extends Struct.ComponentSchema {
+  collectionName: 'components_banner_logos';
+  info: {
+    displayName: 'Logo';
+    description: '';
+  };
+  attributes: {
+    logo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+  };
+}
+
 export interface DatasetsSmsPartialUser extends Struct.ComponentSchema {
   collectionName: 'components_datasets_sms_partial_users';
   info: {
@@ -467,17 +478,6 @@ export interface DatasetsAccept extends Struct.ComponentSchema {
   };
 }
 
-export interface BannerLogo extends Struct.ComponentSchema {
-  collectionName: 'components_banner_logos';
-  info: {
-    displayName: 'Logo';
-    description: '';
-  };
-  attributes: {
-    logo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
-  };
-}
-
 export interface AddressAddress extends Struct.ComponentSchema {
   collectionName: 'components_address_address_s';
   info: {
@@ -510,6 +510,7 @@ declare module '@strapi/strapi' {
       'micro-component.button': MicroComponentButton;
       'micro-component.acceptance-criteria': MicroComponentAcceptanceCriteria;
       'copyright.copyright-footer': CopyrightCopyrightFooter;
+      'banner.logo': BannerLogo;
       'datasets.sms-partial-user': DatasetsSmsPartialUser;
       'datasets.service-list': DatasetsServiceList;
       'datasets.risks-and-mitigation': DatasetsRisksAndMitigation;
@@ -533,7 +534,6 @@ declare module '@strapi/strapi' {
       'datasets.email-options': DatasetsEmailOptions;
       'datasets.email-content': DatasetsEmailContent;
       'datasets.accept': DatasetsAccept;
-      'banner.logo': BannerLogo;
       'address.address': AddressAddress;
     }
   }

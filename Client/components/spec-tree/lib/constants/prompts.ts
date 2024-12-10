@@ -130,7 +130,6 @@ export const taskPrompt = (
     "priority": "task priority", 
     "notes": "notes", 
     "parent": "parent task", 
-    "developmentOrder": "development order", 
     "dependentTasks": ["task one", "task two"]
   }.
   Do not start a new JSON object if you cannot complete it within the character limit. Separate each JSON object with "=+=".
@@ -245,17 +244,15 @@ export const generateAdditionalTasksPrompt = (
   Acceptance Criteria: ${JSON.stringify(userStory.acceptanceCriteria)}
   Notes: ${userStory.notes}
   Parent: ${userStory.parentFeatureId}
-  Development Order: ${userStory.developmentOrder}
   Dependent User Stories: ${JSON.stringify(userStory.dependentUserStoryIds)}
   Existing Tasks: ${mapTasks(userStory.taskIds, state)}
   Generate as many additional tasks as possible from a development perspective. Each task should be detailed, leveraging the provided information, and granular enough that it would take a developer approximately one day to implement. Please avoid repeating tasks that have already been mentioned.
   Return each task in the following JSON format: {
     "title": "task title", 
     "details": "task details", 
-    "priority": "task priority", 
+    "priority": "number", 
     "notes": "notes", 
     "parent": "parent task", 
-    "developmentOrder": "development order", 
     "dependentTasks": ["task one", "task two"]
   }.
   Please ensure to adhere strictly to the JSON format. Do not start a new JSON object if you cannot complete it within the character limit. Separate each JSON object with "####".
@@ -317,7 +314,6 @@ Title: ${task.title}
 Details: ${task.details}
 Priority: ${task.priority}
 Notes: ${task.notes}
-Development Order: ${task.developmentOrder}
 Dependent Tasks: ${JSON.stringify(task.dependentTaskIds)}
 Generate a set of questions that would help in understanding the detailed requirements, priority, dependencies, and other aspects of this task. The answers to these questions will be used to create a detailed context for generating work items related to this task.
 Return each question in a separate line and use "=+=" as a separator between questions.

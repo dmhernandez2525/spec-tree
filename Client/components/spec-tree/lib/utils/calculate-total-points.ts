@@ -20,8 +20,8 @@ const calculateTotalPoints = (
     const features = epicInput.featureIds.map((id) =>
       selectFeatureById(state, id)
     );
-    const userStories = features.flatMap((feature) =>
-      feature.userStoryIds?.map((id) => selectUserStoryById(state, id))
+    const userStories = features?.flatMap((feature) =>
+      feature?.userStoryIds?.map((id) => selectUserStoryById(state, id))
     );
     userStories.forEach((userStory) => {
       totalPoints += parseInt(userStory?.points || '0', 10);

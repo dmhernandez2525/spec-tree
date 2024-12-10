@@ -731,10 +731,6 @@ export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
     details: Schema.Attribute.Text;
     notes: Schema.Attribute.String;
     epic: Schema.Attribute.Relation<'manyToOne', 'api::epic.epic'>;
-    userStories: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::user-story.user-story'
-    >;
     contextualQuestions: Schema.Attribute.Relation<
       'oneToMany',
       'api::contextual-question.contextual-question'
@@ -742,6 +738,10 @@ export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
     acceptanceCriteria: Schema.Attribute.Component<
       'micro-component.acceptance-criteria',
       true
+    >;
+    userStories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::user-story.user-story'
     >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -966,14 +966,17 @@ export interface ApiUserStoryUserStory extends Struct.CollectionTypeSchema {
     developmentOrder: Schema.Attribute.Integer;
     role: Schema.Attribute.String;
     actionStr: Schema.Attribute.String;
-    acceptanceCriteria: Schema.Attribute.String;
     notes: Schema.Attribute.String;
     points: Schema.Attribute.Integer;
     tasks: Schema.Attribute.Relation<'oneToMany', 'api::task.task'>;
-    features: Schema.Attribute.Relation<'oneToMany', 'api::feature.feature'>;
+    feature: Schema.Attribute.Relation<'manyToOne', 'api::feature.feature'>;
     contextualQuestions: Schema.Attribute.Relation<
       'oneToMany',
       'api::contextual-question.contextual-question'
+    >;
+    acceptanceCriteria: Schema.Attribute.Component<
+      'micro-component.acceptance-criteria',
+      true
     >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;

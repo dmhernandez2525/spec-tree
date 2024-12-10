@@ -2,6 +2,13 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setSow } from '../../../../lib/store/sow-slice';
 import { strapiService } from '../../lib/api/strapi-service';
+import {
+  EpicType,
+  FeatureType,
+  UserStoryType,
+  TaskType,
+  Sow,
+} from '../../lib/types/work-items';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
@@ -12,19 +19,10 @@ interface FormatDataProps {
 }
 
 interface FormattedData {
-  sow: {
-    chatApi: string | null;
-    id: string;
-    epics: any[];
-    features: any[];
-    userStories: any[];
-    tasks: any[];
-    contextualQuestions: any[];
-    globalInformation: string;
-  };
+  sow: Sow;
 }
 
-const formatDBData = ({
+export const formatDBData = ({
   data,
   chatApi,
   id,
@@ -34,14 +32,16 @@ const formatDBData = ({
   id: string;
 }): FormattedData => {
   const sow: FormattedData['sow'] = {
-    chatApi,
+    chatApi: chatApi || '',
     id,
-    epics: [],
-    features: [],
-    userStories: [],
-    tasks: [],
+    apps: {},
+    epics: {},
+    features: {},
+    userStories: {},
+    tasks: {},
     contextualQuestions: [],
     globalInformation: '',
+    selectedModel: 'gpt-3.5-turbo-16k',
   };
 
   // Format contextual questions
@@ -55,48 +55,138 @@ const formatDBData = ({
   // Format global information
   sow.globalInformation = data?.globalInformation || '';
 
-  // Format epics and their nested data
-  sow.epics =
-    data?.epics?.map((epic: any) => ({
-      id: epic.documentId,
-      title: epic.title,
-      description: epic.description,
-      goal: epic.goal,
-      successCriteria: epic.successCriteria,
-      dependencies: epic.dependencies,
-      timeline: epic.timeline,
-      resources: epic.resources,
-      risksAndMitigation: epic.risksAndMitigation || [],
-      featureIds: epic.features?.map((f: any) => f.documentId) || [],
-      notes: epic.notes,
-      contextualQuestions: epic.contextualQuestions?.map((q: any) => ({
-        id: q.documentId,
-        question: q.question,
-        answer: q.answer,
-      })),
-    })) || [];
+  // Format epics
+  if (data?.epics) {
+    sow.epics = data.epics.reduce(
+      (acc: Record<string, EpicType>, epic: any) => {
+        acc[epic.documentId] = {
+          id: epic.documentId,
+          documentId: epic.documentId,
+          title: epic.title,
+          description: epic.description,
+          goal: epic.goal,
+          successCriteria: epic.successCriteria,
+          dependencies: epic.dependencies,
+          timeline: epic.timeline,
+          resources: epic.resources,
+          risksAndMitigation: epic.risksAndMitigation || [],
+          featureIds: epic.features?.map((f: any) => f.documentId) || [],
+          parentAppId: id,
+          notes: epic.notes,
+          contextualQuestions:
+            epic.contextualQuestions?.map((q: any) => ({
+              id: q.documentId,
+              question: q.question,
+              answer: q.answer,
+            })) || [],
+        };
+        return acc;
+      },
+      {}
+    );
+  }
 
   // Format features
-  sow.features =
-    data?.epics?.flatMap((epic: any) =>
-      epic.features?.map((feature: any) => ({
-        id: feature.documentId,
-        title: feature.title,
-        description: feature.description,
-        details: feature.details,
-        dependencies: feature.dependencies || '',
-        acceptanceCriteria: feature.acceptanceCriteria || [{ text: '' }],
-        parentEpicId: epic.documentId,
-        userStoryIds:
-          feature.userStories?.map((us: any) => us.documentId) || [],
-        notes: feature.notes,
-        contextualQuestions: feature.contextualQuestions?.map((q: any) => ({
-          id: q.documentId,
-          question: q.question,
-          answer: q.answer,
-        })),
-      }))
-    ) || [];
+  if (data?.epics) {
+    sow.features = data.epics.reduce(
+      (acc: Record<string, FeatureType>, epic: any) => {
+        if (epic.features) {
+          epic.features.forEach((feature: any) => {
+            acc[feature.documentId] = {
+              id: feature.documentId,
+              documentId: feature.documentId,
+              title: feature.title,
+              description: feature.description,
+              details: feature.details,
+              dependencies: feature.dependencies || '',
+              acceptanceCriteria: feature.acceptanceCriteria || [{ text: '' }],
+              parentEpicId: epic.documentId,
+              userStoryIds:
+                feature.userStories?.map((us: any) => us.documentId) || [],
+              priority: feature.priority,
+              effort: feature.effort,
+              notes: feature.notes,
+              contextualQuestions:
+                feature.contextualQuestions?.map((q: any) => ({
+                  id: q.documentId,
+                  question: q.question,
+                  answer: q.answer,
+                })) || [],
+            };
+          });
+        }
+        return acc;
+      },
+      {}
+    );
+  }
+
+  // Format user stories
+  if (data?.epics) {
+    sow.userStories = data.epics.reduce(
+      (acc: Record<string, UserStoryType>, epic: any) => {
+        epic.features?.forEach((feature: any) => {
+          feature.userStories?.forEach((story: any) => {
+            acc[story.documentId] = {
+              id: story.documentId,
+              documentId: story.documentId,
+              title: story.title,
+              role: story.role,
+              action: story.action,
+              goal: story.goal,
+              points: story.points,
+              acceptanceCriteria: story.acceptanceCriteria || [{ text: '' }],
+              notes: story.notes,
+              parentFeatureId: feature.documentId,
+              taskIds: story.tasks?.map((t: any) => t.documentId) || [],
+              developmentOrder: story.developmentOrder || 0,
+              dependentUserStoryIds: [],
+              contextualQuestions:
+                story.contextualQuestions?.map((q: any) => ({
+                  id: q.documentId,
+                  question: q.question,
+                  answer: q.answer,
+                })) || [],
+            };
+          });
+        });
+        return acc;
+      },
+      {}
+    );
+  }
+
+  // Format tasks
+  if (data?.epics) {
+    sow.tasks = data.epics.reduce(
+      (acc: Record<string, TaskType>, epic: any) => {
+        epic.features?.forEach((feature: any) => {
+          feature.userStories?.forEach((story: any) => {
+            story.tasks?.forEach((task: any) => {
+              acc[task.documentId] = {
+                id: task.documentId,
+                documentId: task.documentId,
+                title: task.title,
+                details: task.details,
+                priority: task.priority,
+                notes: task.notes,
+                parentUserStoryId: story.documentId,
+                dependentTaskIds: [],
+                contextualQuestions:
+                  task.contextualQuestions?.map((q: any) => ({
+                    id: q.documentId,
+                    question: q.question,
+                    answer: q.answer,
+                  })) || [],
+              };
+            });
+          });
+        });
+        return acc;
+      },
+      {}
+    );
+  }
 
   return { sow };
 };
@@ -130,7 +220,7 @@ const FormatData: React.FC<FormatDataProps> = ({ selectedApp, chatApi }) => {
     };
 
     fetchAndFormatData();
-  }, [selectedApp, chatApi, dispatch]);
+  }, [selectedApp, chatApi]);
 
   if (isLoading) {
     return (
