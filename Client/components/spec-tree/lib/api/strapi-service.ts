@@ -2,9 +2,13 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import {
   App,
   EpicType,
+  ResEpicType,
   FeatureType,
+  ResFeatureType,
   UserStoryType,
+  ResUserStoryType,
   TaskType,
+  ResTaskType,
   RiskMitigationType,
 } from '../types/work-items';
 
@@ -57,7 +61,7 @@ interface CreateFeatureRequest {
 interface CreateUserStoryRequest {
   title: string;
   role: string;
-  action: string;
+  actionStr: string;
   goal: string;
   points: string;
   acceptanceCriteria: Array<{ text: string }>;
@@ -69,10 +73,9 @@ interface CreateUserStoryRequest {
 interface CreateTaskRequest {
   title: string;
   details: string;
-  priority: string;
+  priority: number;
   notes?: string;
   userStory: string;
-  developmentOrder: number;
 }
 
 class StrapiService {
@@ -120,7 +123,41 @@ class StrapiService {
   }
 
   async fetchAppById(documentId: string): Promise<App> {
-    return this.fetch<App>(`/apps/${documentId}`);
+    return this.fetch<App>(`/apps/${documentId}`, {
+      populate: {
+        contextualQuestions: true,
+        epics: {
+          populate: {
+            contextualQuestions: true,
+            risksAndMitigation: {
+              populate: {
+                own: true,
+                accept: true,
+                mitigate: true,
+                resolve: true,
+              },
+            },
+            features: {
+              populate: {
+                acceptanceCriteria: true,
+                contextualQuestions: true,
+                userStories: {
+                  populate: {
+                    acceptanceCriteria: true,
+                    contextualQuestions: true,
+                    tasks: {
+                      populate: {
+                        contextualQuestions: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async createApp(data: Partial<App>): Promise<App> {
@@ -133,20 +170,46 @@ class StrapiService {
   }
 
   // Epics
-  async fetchEpics(appId: string): Promise<EpicType[]> {
-    return this.fetch<EpicType[]>('/epics', {
+  async fetchEpics(appId: string): Promise<ResEpicType[]> {
+    return this.fetch<ResEpicType[]>('/epics', {
       filters: {
         app: {
           documentId: appId,
         },
       },
-      populate: '*',
+      populate: {
+        app: {
+          fields: ['documentId'],
+        },
+      },
     });
   }
 
-  async createEpic(data: CreateEpicRequest): Promise<EpicType> {
+  async createEpic(data: CreateEpicRequest): Promise<ResEpicType> {
     try {
-      const response = await this.instance.post('/epics', { data });
+      const { app: appId, ...epicData } = data;
+
+      const response = await this.instance.post(
+        '/epics',
+        {
+          data: {
+            ...epicData,
+            app: {
+              connect: [appId],
+            },
+          },
+        },
+        {
+          params: {
+            populate: {
+              app: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -156,11 +219,23 @@ class StrapiService {
   async updateEpic(
     documentId: string,
     data: Partial<EpicType>
-  ): Promise<EpicType> {
+  ): Promise<ResEpicType> {
     try {
-      const response = await this.instance.put(`/epics/${documentId}`, {
-        data,
-      });
+      const response = await this.instance.put(
+        `/epics/${documentId}`,
+        {
+          data,
+        },
+        {
+          params: {
+            populate: {
+              app: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -176,20 +251,46 @@ class StrapiService {
   }
 
   // Features
-  async fetchFeatures(epicId: string): Promise<FeatureType[]> {
-    return this.fetch<FeatureType[]>('/features', {
+  async fetchFeatures(epicId: string): Promise<ResFeatureType[]> {
+    return this.fetch<ResFeatureType[]>('/features', {
       filters: {
         epic: {
           documentId: epicId,
         },
       },
-      populate: '*',
+      populate: {
+        epic: {
+          fields: ['documentId'],
+        },
+      },
     });
   }
 
-  async createFeature(data: CreateFeatureRequest): Promise<FeatureType> {
+  async createFeature(data: CreateFeatureRequest): Promise<ResFeatureType> {
     try {
-      const response = await this.instance.post('/features', { data });
+      const { epic: epicId, ...featureData } = data;
+
+      const response = await this.instance.post(
+        '/features',
+        {
+          data: {
+            ...featureData,
+            epic: {
+              connect: [epicId],
+            },
+          },
+        },
+        {
+          params: {
+            populate: {
+              epic: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -199,11 +300,23 @@ class StrapiService {
   async updateFeature(
     documentId: string,
     data: Partial<FeatureType>
-  ): Promise<FeatureType> {
+  ): Promise<ResFeatureType> {
     try {
-      const response = await this.instance.put(`/features/${documentId}`, {
-        data,
-      });
+      const response = await this.instance.put(
+        `/features/${documentId}`,
+        {
+          data,
+        },
+        {
+          params: {
+            populate: {
+              epic: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -219,20 +332,48 @@ class StrapiService {
   }
 
   // User Stories
-  async fetchUserStories(featureId: string): Promise<UserStoryType[]> {
-    return this.fetch<UserStoryType[]>('/user-stories', {
+  async fetchUserStories(featureId: string): Promise<ResUserStoryType[]> {
+    return this.fetch<ResUserStoryType[]>('/user-stories', {
       filters: {
         feature: {
           documentId: featureId,
         },
       },
-      populate: '*',
+      populate: {
+        feature: {
+          fields: ['documentId'],
+        },
+      },
     });
   }
 
-  async createUserStory(data: CreateUserStoryRequest): Promise<UserStoryType> {
+  async createUserStory(
+    data: CreateUserStoryRequest
+  ): Promise<ResUserStoryType> {
     try {
-      const response = await this.instance.post('/user-stories', { data });
+      const { feature: featureId, ...storyData } = data;
+
+      const response = await this.instance.post(
+        '/user-stories',
+        {
+          data: {
+            ...storyData,
+            feature: {
+              connect: [featureId],
+            },
+          },
+        },
+        {
+          params: {
+            populate: {
+              feature: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -242,11 +383,23 @@ class StrapiService {
   async updateUserStory(
     documentId: string,
     data: Partial<UserStoryType>
-  ): Promise<UserStoryType> {
+  ): Promise<ResUserStoryType> {
     try {
-      const response = await this.instance.put(`/user-stories/${documentId}`, {
-        data,
-      });
+      const response = await this.instance.put(
+        `/user-stories/${documentId}`,
+        {
+          data,
+        },
+        {
+          params: {
+            populate: {
+              feature: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -262,20 +415,46 @@ class StrapiService {
   }
 
   // Tasks
-  async fetchTasks(userStoryId: string): Promise<TaskType[]> {
-    return this.fetch<TaskType[]>('/tasks', {
+  async fetchTasks(userStoryId: string): Promise<ResTaskType[]> {
+    return this.fetch<ResTaskType[]>('/tasks', {
       filters: {
         userStory: {
           documentId: userStoryId,
         },
       },
-      populate: '*',
+      populate: {
+        userStory: {
+          fields: ['documentId'],
+        },
+      },
     });
   }
 
-  async createTask(data: CreateTaskRequest): Promise<TaskType> {
+  async createTask(data: CreateTaskRequest): Promise<ResTaskType> {
     try {
-      const response = await this.instance.post('/tasks', { data });
+      const { userStory: userStoryId, ...taskData } = data;
+
+      const response = await this.instance.post(
+        '/tasks',
+        {
+          data: {
+            ...taskData,
+            userStory: {
+              connect: [userStoryId],
+            },
+          },
+        },
+        {
+          params: {
+            populate: {
+              userStory: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -285,11 +464,23 @@ class StrapiService {
   async updateTask(
     documentId: string,
     data: Partial<TaskType>
-  ): Promise<TaskType> {
+  ): Promise<ResTaskType> {
     try {
-      const response = await this.instance.put(`/tasks/${documentId}`, {
-        data,
-      });
+      const response = await this.instance.put(
+        `/tasks/${documentId}`,
+        {
+          data,
+        },
+        {
+          params: {
+            populate: {
+              userStory: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
       return response.data.data;
     } catch (error) {
       this.handleError(error);
@@ -315,25 +506,7 @@ class StrapiService {
 
   // Fetch all data for an app
   async fetchAllAppData(documentId: string): Promise<any> {
-    return this.fetch<any>(`/apps/${documentId}`, {
-      populate: {
-        epics: {
-          populate: {
-            features: {
-              populate: {
-                userStories: {
-                  populate: {
-                    tasks: {
-                      populate: '*',
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    return this.fetchAppById(documentId);
   }
 }
 

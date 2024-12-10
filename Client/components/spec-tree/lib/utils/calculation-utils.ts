@@ -20,7 +20,7 @@ const calculateTotalTasks = (
         selectFeatureById(state, id)
       );
       const userStories = features?.flatMap((feature) =>
-        feature.userStoryIds?.map((id) => selectUserStoryById(state, id))
+        feature?.userStoryIds?.map((id) => selectUserStoryById(state, id))
       );
       const tasks = userStories?.flatMap((userStory) =>
         userStory?.taskIds?.map((id) => selectTaskById(state, id))
