@@ -35,10 +35,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  AccordionTrigger,
-  AccordionContent,
   Accordion,
+  AccordionContent,
   AccordionItem,
+  AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
@@ -189,106 +189,138 @@ const Epic: React.FC<EpicProps> = ({ epic, index }) => {
   }
 
   return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <span>Epic: {epic.title}</span>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => setIsAddFeatureDialogOpen(true)}
-            >
-              Add Feature
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => setIsDeleteDialogOpen(true)}
-            >
-              Delete
-            </Button>
-          </div>
-        </CardTitle>
-        <CardDescription>
-          <MetricsDisplay metrics={metrics} />
-        </CardDescription>
-      </CardHeader>
+    <Card className="mb-8 border-l-4 border-l-blue-600">
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value={epic.id} className="border-none">
+          <CardHeader className="bg-slate-50">
+            <AccordionTrigger>
+              <CardTitle className="flex justify-between items-center w-full text-lg">
+                <div className="flex items-center gap-3">
+                  <span className="text-blue-600 font-semibold">Epic</span>
+                  <span className="text-slate-600">{epic.title}</span>
+                </div>
+                <MetricsDisplay metrics={metrics} className="ml-4" />
+              </CardTitle>
+            </AccordionTrigger>
+          </CardHeader>
 
-      <CardContent>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="details">
-            <AccordionTrigger>Epic Details</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-4">
-                {Object.values(EpicFields).map((field) => (
-                  <div key={field} className="space-y-2">
-                    <Label>{field}</Label>
-                    {field === 'description' || field === 'notes' ? (
-                      <Textarea
-                        value={epic[field] || ''}
-                        onChange={(e) => handleUpdate(field, e.target.value)}
-                      />
-                    ) : (
-                      <Input
-                        value={epic[field] || ''}
-                        onChange={(e) => handleUpdate(field, e.target.value)}
-                      />
-                    )}
+          <AccordionContent>
+            <CardContent className="pt-6">
+              <div className="space-y-6">
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsAddFeatureDialogOpen(true)}
+                  >
+                    Add Feature
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => setIsDeleteDialogOpen(true)}
+                  >
+                    Delete Epic
+                  </Button>
+                </div>
+
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="details">
+                    <AccordionTrigger>Epic Details</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-4">
+                        {Object.values(EpicFields).map((field) => (
+                          <div key={field} className="space-y-2">
+                            <Label>{field}</Label>
+                            {field === 'description' || field === 'notes' ? (
+                              <Textarea
+                                value={epic[field] || ''}
+                                onChange={(e) =>
+                                  handleUpdate(field, e.target.value)
+                                }
+                              />
+                            ) : (
+                              <Input
+                                value={epic[field] || ''}
+                                onChange={(e) =>
+                                  handleUpdate(field, e.target.value)
+                                }
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="risks">
+                    <AccordionTrigger>Risks and Mitigation</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-4">
+                        {['resolve', 'own', 'accept', 'mitigate'].map(
+                          (category) => (
+                            <div key={category} className="space-y-2">
+                              <Label>
+                                {category.charAt(0).toUpperCase() +
+                                  category.slice(1)}
+                              </Label>
+                              <Textarea
+                                value={
+                                  epic.risksAndMitigation[0]?.[
+                                    category as keyof RiskMitigationType
+                                  ]?.[0]?.text || ''
+                                }
+                                onChange={(e) =>
+                                  handleUpdateRiskMitigation(
+                                    category as keyof RiskMitigationType,
+                                    0,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+
+                {error && (
+                  <Alert variant="destructive" className="mt-4">
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                <Separator className="my-6" />
+
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold">Features</h3>
+                    <Button onClick={handleGenerateFeatures}>
+                      Generate Features
+                    </Button>
                   </div>
-                ))}
+
+                  <Accordion type="single" collapsible className="w-full">
+                    {features.map((feature, i) => (
+                      <AccordionItem key={feature.id} value={feature.id}>
+                        <Feature epic={epic} feature={feature} index={i} />
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </div>
               </div>
-            </AccordionContent>
-          </AccordionItem>
+            </CardContent>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
-          <AccordionItem value="risks">
-            <AccordionTrigger>Risks and Mitigation</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-4">
-                {['resolve', 'own', 'accept', 'mitigate'].map((category) => (
-                  <div key={category} className="space-y-2">
-                    <Label>
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </Label>
-                    <Textarea
-                      value={
-                        epic.risksAndMitigation[0]?.[
-                          category as keyof RiskMitigationType
-                        ]?.[0]?.text || ''
-                      }
-                      onChange={(e) =>
-                        handleUpdateRiskMitigation(
-                          category as keyof RiskMitigationType,
-                          0,
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        {error && (
-          <Alert variant="destructive" className="mt-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        <Separator className="my-6" />
-
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Features</h3>
-            <Button onClick={handleGenerateFeatures}>Generate Features</Button>
-          </div>
-
-          {features.map((feature, i) => (
-            <Feature index={i} key={feature.id} feature={feature} epic={epic} />
-          ))}
-        </div>
-      </CardContent>
-
+      {/* Dialogs */}
       <Dialog
         open={isAddFeatureDialogOpen}
         onOpenChange={setIsAddFeatureDialogOpen}

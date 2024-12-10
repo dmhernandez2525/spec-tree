@@ -9,10 +9,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { AccordionContent, AccordionTrigger } from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
 
 interface TaskProps {
   task: TaskType;
@@ -44,11 +46,22 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   ];
 
   return (
-    <Card className="mb-4">
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <span>Task: {task.title}</span>
-          <div className="space-x-2">
+    <>
+      <AccordionTrigger className="hover:bg-slate-50 rounded-lg px-4">
+        <CardTitle className="flex justify-between items-center w-full text-sm">
+          <div className="flex items-center gap-3">
+            <span className="text-amber-600 font-semibold">Task</span>
+            <span className="text-slate-600">{task.title}</span>
+          </div>
+          <Badge variant="outline" className="ml-4">
+            Priority: {task.priority}
+          </Badge>
+        </CardTitle>
+      </AccordionTrigger>
+
+      <AccordionContent>
+        <div className="border-l-2 border-l-amber-200 ml-4 mt-2 pl-6 space-y-6 p-4">
+          <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
               Edit
             </Button>
@@ -56,57 +69,58 @@ const Task: React.FC<TaskProps> = ({ task }) => {
               Delete
             </Button>
           </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          <div>
-            <Label>Details</Label>
-            <p className="text-sm text-gray-600">{task.details}</p>
-          </div>
-          <div>
-            <Label>Priority</Label>
-            <p className="text-sm text-gray-600">{task.priority}</p>
-          </div>
-          {task.notes && (
-            <div>
-              <Label>Notes</Label>
-              <p className="text-sm text-gray-600">{task.notes}</p>
-            </div>
-          )}
-        </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Edit Task</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-4">
-              {fields.map(({ label, type }) => (
-                <div key={label} className="space-y-2">
-                  <Label htmlFor={label}>{label}</Label>
-                  {type === 'textarea' ? (
-                    <Textarea
-                      id={label}
-                      value={task[label] || ''}
-                      onChange={(e) => handleUpdate(label, e.target.value)}
-                      className="min-h-[100px]"
-                    />
-                  ) : (
-                    <Input
-                      id={label}
-                      type="text"
-                      value={task[label] || ''}
-                      onChange={(e) => handleUpdate(label, e.target.value)}
-                    />
-                  )}
-                </div>
-              ))}
+          <div className="space-y-4">
+            <div>
+              <Label>Details</Label>
+              <p className="text-sm text-gray-600 mt-1">{task.details}</p>
             </div>
-          </DialogContent>
-        </Dialog>
-      </CardContent>
-    </Card>
+            <div>
+              <Label>Priority</Label>
+              <p className="text-sm text-gray-600 mt-1">{task.priority}</p>
+            </div>
+            {task.notes && (
+              <div>
+                <Label>Notes</Label>
+                <p className="text-sm text-gray-600 mt-1">{task.notes}</p>
+              </div>
+            )}
+          </div>
+
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Edit Task</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 pt-4">
+                {fields.map(({ label, type }) => (
+                  <div key={label} className="space-y-2">
+                    <Label htmlFor={label}>
+                      {label.charAt(0).toUpperCase() + label.slice(1)}
+                    </Label>
+                    {type === 'textarea' ? (
+                      <Textarea
+                        id={label}
+                        value={task[label] || ''}
+                        onChange={(e) => handleUpdate(label, e.target.value)}
+                        className="min-h-[100px]"
+                      />
+                    ) : (
+                      <Input
+                        id={label}
+                        type="text"
+                        value={task[label] || ''}
+                        onChange={(e) => handleUpdate(label, e.target.value)}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </AccordionContent>
+    </>
   );
 };
 

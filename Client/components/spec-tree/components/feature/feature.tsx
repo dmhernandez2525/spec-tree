@@ -17,13 +17,7 @@ import {
 } from '../../lib/types/work-items';
 import UserStory from '../user-story';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
+import { CardContent, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -35,10 +29,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  AccordionTrigger,
-  AccordionContent,
   Accordion,
+  AccordionContent,
   AccordionItem,
+  AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import LoadingSpinner from '../loading-spinner';
@@ -177,122 +171,132 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index }) => {
   }
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <span>Feature: {feature.title}</span>
-          <div className="space-x-2">
-            <Button variant="outline" onClick={() => setShowModal(true)}>
-              Add User Story
-            </Button>
-            <Button variant="destructive" onClick={handleDelete}>
-              Delete
-            </Button>
+    <>
+      <AccordionTrigger className="hover:bg-slate-50 rounded-lg px-4">
+        <CardTitle className="flex justify-between items-center w-full text-md">
+          <div className="flex items-center gap-3">
+            <span className="text-purple-600 font-semibold">Feature</span>
+            <span className="text-slate-600">{feature.title}</span>
           </div>
+          <MetricsDisplay metrics={metrics} className="ml-4" />
         </CardTitle>
-        <CardDescription>
-          <MetricsDisplay metrics={metrics} />
-        </CardDescription>
-      </CardHeader>
+      </AccordionTrigger>
 
-      <CardContent>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="details">
-            <AccordionTrigger>Feature Details</AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-4">
-                <div>
-                  <Label>Title</Label>
-                  <Input
-                    value={feature.title}
-                    onChange={(e) =>
-                      handleUpdateFeature({
-                        field: FeatureFields.Title,
-                        newValue: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label>Description</Label>
-                  <Textarea
-                    value={feature.description}
-                    onChange={(e) =>
-                      handleUpdateFeature({
-                        field: FeatureFields.Description,
-                        newValue: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label>Details</Label>
-                  <Textarea
-                    value={feature.details}
-                    onChange={(e) =>
-                      handleUpdateFeature({
-                        field: FeatureFields.Details,
-                        newValue: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+      <AccordionContent>
+        <CardContent className="border-l-2 border-l-purple-200 ml-4 mt-2 pl-6">
+          <div className="space-y-6">
+            <div className="flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setShowModal(true)}>
+                Add User Story
+              </Button>
+              <Button variant="destructive" onClick={handleDelete}>
+                Delete Feature
+              </Button>
+            </div>
 
-                <AcceptanceCriteriaList
-                  acceptanceCriteria={feature.acceptanceCriteria}
-                  add={add}
-                  remove={remove}
-                  update={update}
-                />
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="details">
+                <AccordionTrigger>Feature Details</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-4">
+                    <div>
+                      <Label>Title</Label>
+                      <Input
+                        value={feature.title}
+                        onChange={(e) =>
+                          handleUpdateFeature({
+                            field: FeatureFields.Title,
+                            newValue: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label>Description</Label>
+                      <Textarea
+                        value={feature.description}
+                        onChange={(e) =>
+                          handleUpdateFeature({
+                            field: FeatureFields.Description,
+                            newValue: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label>Details</Label>
+                      <Textarea
+                        value={feature.details}
+                        onChange={(e) =>
+                          handleUpdateFeature({
+                            field: FeatureFields.Details,
+                            newValue: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
 
-                <div>
-                  <Label>Notes</Label>
-                  <Textarea
-                    value={feature.notes}
-                    onChange={(e) =>
-                      handleUpdateFeature({
-                        field: FeatureFields.Notes,
-                        newValue: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                    <AcceptanceCriteriaList
+                      acceptanceCriteria={feature.acceptanceCriteria}
+                      add={add}
+                      remove={remove}
+                      update={update}
+                    />
+
+                    <div>
+                      <Label>Notes</Label>
+                      <Textarea
+                        value={feature.notes}
+                        onChange={(e) =>
+                          handleUpdateFeature({
+                            field: FeatureFields.Notes,
+                            newValue: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold">User Stories</h3>
+                <Button onClick={handleGenerateUserStories}>
+                  Generate User Stories
+                </Button>
               </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
 
-        {error && (
-          <Alert variant="destructive" className="mt-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+              <ContextualQuestions
+                content="Work Item"
+                workItemType="features"
+                workItem={feature}
+              />
 
-        <div className="mt-6 space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">User Stories</h3>
-            <Button onClick={handleGenerateUserStories}>
-              Generate User Stories
-            </Button>
+              <Accordion type="single" collapsible className="w-full">
+                {userStories?.map((userStory) => (
+                  <AccordionItem key={userStory.id} value={userStory.id}>
+                    <UserStory
+                      userStory={userStory}
+                      feature={feature}
+                      epic={epic}
+                    />
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
+        </CardContent>
+      </AccordionContent>
 
-          <ContextualQuestions
-            content="Work Item"
-            workItemType="features"
-            workItem={feature}
-          />
-
-          {userStories?.map((userStory) => (
-            <UserStory
-              key={userStory.id}
-              userStory={userStory}
-              feature={feature}
-              epic={epic}
-            />
-          ))}
-        </div>
-      </CardContent>
-
+      {/* Add User Story Dialog */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent>
           <DialogHeader>
@@ -340,7 +344,7 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
+    </>
   );
 };
 
