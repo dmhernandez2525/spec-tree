@@ -23,6 +23,18 @@ import {
 } from '../types/work-items';
 import { makeProxyCall } from './openai-proxy-helper';
 
+const withErrorHandling = async <T>(
+  operation: () => Promise<T>,
+  errorContext: string
+): Promise<T> => {
+  try {
+    return await operation();
+  } catch (error) {
+    console.error(`Error in ${errorContext}:`, error);
+    throw error;
+  }
+};
+
 export const generateAdditionalFeatures = async ({
   epic,
   state,
@@ -35,15 +47,19 @@ export const generateAdditionalFeatures = async ({
   selectedModel: string;
   context?: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI model trained to generate additional features and user stories for software development projects.',
-    userPrompt: context
-      ? context
-      : generateAdditionalFeaturesPrompt(epic, state),
-    selectedModel,
-    errorContext: 'generate additional features',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI model trained to generate additional features and user stories for software development projects.',
+        userPrompt: context
+          ? context
+          : generateAdditionalFeaturesPrompt(epic, state),
+        selectedModel,
+        errorContext: 'generate additional features',
+      }),
+    'generateAdditionalFeatures'
+  );
 };
 
 export const generateAdditionalEpics = async ({
@@ -54,13 +70,17 @@ export const generateAdditionalEpics = async ({
   state: RootState;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI model trained to generate additional epics for software development projects.',
-    userPrompt: generateAdditionalEpicsPrompt({ state }),
-    selectedModel,
-    errorContext: 'generate additional epics',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI model trained to generate additional epics for software development projects.',
+        userPrompt: generateAdditionalEpicsPrompt({ state }),
+        selectedModel,
+        errorContext: 'generate additional epics',
+      }),
+    'generateAdditionalEpics'
+  );
 };
 
 export const generateUserStories = async ({
@@ -75,15 +95,19 @@ export const generateUserStories = async ({
   selectedModel: string;
   context?: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI model trained to generate additional features and user stories for software development projects.',
-    userPrompt: context
-      ? context
-      : generateAdditionalUserStoriesPrompt(feature, state),
-    selectedModel,
-    errorContext: 'generate user stories',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI model trained to generate additional features and user stories for software development projects.',
+        userPrompt: context
+          ? context
+          : generateAdditionalUserStoriesPrompt(feature, state),
+        selectedModel,
+        errorContext: 'generate user stories',
+      }),
+    'generateUserStories'
+  );
 };
 
 export const askQuestion = async ({
@@ -94,12 +118,16 @@ export const askQuestion = async ({
   question: string;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt: 'You are an AI model trained to generate information.',
-    userPrompt: question,
-    selectedModel,
-    errorContext: 'answer question',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt: 'You are an AI model trained to generate information.',
+        userPrompt: question,
+        selectedModel,
+        errorContext: 'answer question',
+      }),
+    'askQuestion'
+  );
 };
 
 export const generateTasks = async ({
@@ -112,13 +140,17 @@ export const generateTasks = async ({
   state: RootState;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI model trained to generate tasks for software development projects.',
-    userPrompt: generateAdditionalTasksPrompt(userStory, state),
-    selectedModel,
-    errorContext: 'generate tasks',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI model trained to generate tasks for software development projects.',
+        userPrompt: generateAdditionalTasksPrompt(userStory, state),
+        selectedModel,
+        errorContext: 'generate tasks',
+      }),
+    'generateTasks'
+  );
 };
 
 export const generateQuestionsForEpic = async ({
@@ -129,13 +161,17 @@ export const generateQuestionsForEpic = async ({
   epic: EpicType;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate contextual questions for software development projects.',
-    userPrompt: generateContextQuestionsForEpic(epic),
-    selectedModel,
-    errorContext: 'generate epic questions',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate contextual questions for software development projects.',
+        userPrompt: generateContextQuestionsForEpic(epic),
+        selectedModel,
+        errorContext: 'generate epic questions',
+      }),
+    'generateQuestionsForEpic'
+  );
 };
 
 export const generateQuestionsForFeature = async ({
@@ -146,13 +182,17 @@ export const generateQuestionsForFeature = async ({
   feature: FeatureType;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate contextual questions for software development projects.',
-    userPrompt: generateContextQuestionsForFeature(feature),
-    selectedModel,
-    errorContext: 'generate feature questions',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate contextual questions for software development projects.',
+        userPrompt: generateContextQuestionsForFeature(feature),
+        selectedModel,
+        errorContext: 'generate feature questions',
+      }),
+    'generateQuestionsForFeature'
+  );
 };
 
 export const generateQuestionsForUserStory = async ({
@@ -163,13 +203,17 @@ export const generateQuestionsForUserStory = async ({
   userStory: UserStoryType;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate contextual questions for software development projects.',
-    userPrompt: generateContextQuestionsForUserStory(userStory),
-    selectedModel,
-    errorContext: 'generate user story questions',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate contextual questions for software development projects.',
+        userPrompt: generateContextQuestionsForUserStory(userStory),
+        selectedModel,
+        errorContext: 'generate user story questions',
+      }),
+    'generateQuestionsForUserStory'
+  );
 };
 
 export const generateQuestionsForTask = async ({
@@ -180,13 +224,17 @@ export const generateQuestionsForTask = async ({
   task: TaskType;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate contextual questions for software development projects.',
-    userPrompt: generateContextQuestionsForTask(task),
-    selectedModel,
-    errorContext: 'generate task questions',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate contextual questions for software development projects.',
+        userPrompt: generateContextQuestionsForTask(task),
+        selectedModel,
+        errorContext: 'generate task questions',
+      }),
+    'generateQuestionsForTask'
+  );
 };
 
 export const generateFollowUpQuestions = async ({
@@ -197,14 +245,20 @@ export const generateFollowUpQuestions = async ({
   context: string;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate follow-up questions based on given context and answers.',
-    userPrompt: context,
-    selectedModel,
-    errorContext: 'generate follow-up questions',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate follow-up questions based on given context and answers.',
+        userPrompt: context,
+        selectedModel,
+        errorContext: 'generate follow-up questions',
+      }),
+    'generateFollowUpQuestions'
+  );
 };
+
+// Client/lib/api/openai.ts (continued)
 
 export const generateUpdatedEpic = async ({
   requirements,
@@ -216,13 +270,17 @@ export const generateUpdatedEpic = async ({
   selectedModel: string;
   context?: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate updated epics based on given context and answers.',
-    userPrompt: epicPrompt(requirements, context),
-    selectedModel,
-    errorContext: 'generate updated epic',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate updated epics based on given context and answers.',
+        userPrompt: epicPrompt(requirements, context),
+        selectedModel,
+        errorContext: 'generate updated epic',
+      }),
+    'generateUpdatedEpic'
+  );
 };
 
 export const generateUpdatedFeature = async ({
@@ -237,13 +295,17 @@ export const generateUpdatedFeature = async ({
   selectedModel: string;
   context?: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate updated features based on given context and answers.',
-    userPrompt: featurePrompt(epic, state, context),
-    selectedModel,
-    errorContext: 'generate updated feature',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate updated features based on given context and answers.',
+        userPrompt: featurePrompt(epic, state, context),
+        selectedModel,
+        errorContext: 'generate updated feature',
+      }),
+    'generateUpdatedFeature'
+  );
 };
 
 export const generateUpdatedUserStory = async ({
@@ -258,13 +320,17 @@ export const generateUpdatedUserStory = async ({
   selectedModel: string;
   context?: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate updated user stories based on given context and answers.',
-    userPrompt: userStoryPrompt(feature, state, context),
-    selectedModel,
-    errorContext: 'generate updated user story',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate updated user stories based on given context and answers.',
+        userPrompt: userStoryPrompt(feature, state, context),
+        selectedModel,
+        errorContext: 'generate updated user story',
+      }),
+    'generateUpdatedUserStory'
+  );
 };
 
 export const generateUpdatedTask = async ({
@@ -279,13 +345,17 @@ export const generateUpdatedTask = async ({
   context: string;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate updated tasks based on given context and answers.',
-    userPrompt: taskPrompt(userStory, state, context),
-    selectedModel,
-    errorContext: 'generate updated task',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate updated tasks based on given context and answers.',
+        userPrompt: taskPrompt(userStory, state, context),
+        selectedModel,
+        errorContext: 'generate updated task',
+      }),
+    'generateUpdatedTask'
+  );
 };
 
 export const generateQuestionsForGlobalRefinement = async ({
@@ -296,13 +366,18 @@ export const generateQuestionsForGlobalRefinement = async ({
   globalInformation: string;
   selectedModel: string;
 }) => {
-  return makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate contextual questions for software development projects.',
-    userPrompt: generateContextQuestionsForGlobalRefinement(globalInformation),
-    selectedModel,
-    errorContext: 'generate global refinement questions',
-  });
+  return withErrorHandling(
+    () =>
+      makeProxyCall({
+        systemPrompt:
+          'You are an AI trained to generate contextual questions for software development projects.',
+        userPrompt:
+          generateContextQuestionsForGlobalRefinement(globalInformation),
+        selectedModel,
+        errorContext: 'generate global refinement questions',
+      }),
+    'generateQuestionsForGlobalRefinement'
+  );
 };
 
 export const generateUpdatedExplanationForGlobalRefinement = async ({
@@ -314,20 +389,33 @@ export const generateUpdatedExplanationForGlobalRefinement = async ({
   globalInformation: string;
   context: string;
   selectedModel: string;
-}) => {
-  const response = await makeProxyCall({
-    systemPrompt:
-      'You are an AI trained to generate contextual questions for software development projects.',
-    userPrompt: generateExplanationForGlobalRefinement(
-      globalInformation,
-      context
-    ),
-    selectedModel,
-    errorContext: 'generate updated global refinement explanation',
-  });
+}): Promise<string> => {
+  const response = await withErrorHandling(async () => {
+    const proxyResponse = await makeProxyCall({
+      systemPrompt:
+        'You are an AI trained to generate contextual questions for software development projects.',
+      userPrompt: generateExplanationForGlobalRefinement(
+        globalInformation,
+        context
+      ),
+      selectedModel,
+      errorContext: 'generate updated global refinement explanation',
+    });
 
-  const responseText = response.data.choices[0].message.content;
-  const startIndex = responseText.indexOf('=+=') + 3;
-  const endIndex = responseText.lastIndexOf('=+=');
-  return responseText.substring(startIndex, endIndex).trim();
+    const responseText = proxyResponse.data.choices[0].message.content;
+    if (!responseText) {
+      throw new Error('Invalid response format: missing content');
+    }
+
+    const startIndex = responseText.indexOf('=+=') + 3;
+    const endIndex = responseText.lastIndexOf('=+=');
+
+    if (startIndex === -1 || endIndex === -1) {
+      throw new Error('Invalid response format: missing separators');
+    }
+
+    return responseText.substring(startIndex, endIndex).trim();
+  }, 'generateUpdatedExplanationForGlobalRefinement');
+
+  return response;
 };
