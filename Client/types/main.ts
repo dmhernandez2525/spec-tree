@@ -32,6 +32,23 @@ interface UserAttributes extends Timestamps {
   company?: string;
   role?: string;
   bio?: string;
+  organization: {
+    name: string;
+    address: string;
+    phoneNumber: string;
+    email: string;
+    website: string;
+    size: string;
+    industry:
+      | 'technology'
+      | 'finance'
+      | 'healthcare'
+      | 'education'
+      | 'manufacturing'
+      | 'retail'
+      | 'other';
+  };
+  userRole: 'admin' | 'user' | 'owner';
 }
 interface NewsFeedData {
   id: number;

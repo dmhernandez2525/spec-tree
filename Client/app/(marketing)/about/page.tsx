@@ -298,7 +298,6 @@ function TeamSection({ team }: { team: TeamMember[] }) {
     </section>
   );
 }
-// ... previous imports and types remain the same ...
 
 function TechStackSection({ techStack }: { techStack: TechnologyStack[] }) {
   return (
@@ -461,7 +460,7 @@ export default function AboutPage() {
                       <CardContent className="pt-6">
                         <div className="flex flex-col items-center text-center">
                           <div className="rounded-lg bg-primary/10 p-3 mb-4">
-                            <Icon className="h-6 w-6 text-primary" />
+                            <Icon className="h-5 w-5 text-primary" />
                           </div>
                           <h3 className="text-xl font-semibold mb-2">
                             {value.title}
@@ -502,7 +501,7 @@ export default function AboutPage() {
                       <CardContent className="pt-6">
                         <div className="flex flex-col items-center text-center">
                           <div className="rounded-lg bg-primary/10 p-3 mb-4">
-                            <Icon className="h-6 w-6 text-primary" />
+                            <Icon className="h-5 w-5 text-primary" />
                           </div>
                           <h3 className="text-xl font-semibold mb-2">
                             {point.title}
