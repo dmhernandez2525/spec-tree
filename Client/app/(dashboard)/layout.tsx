@@ -35,11 +35,6 @@ const sidebarNavItems: Array<{
     icon: 'barChart',
   },
   {
-    title: 'Billing',
-    href: '/user-dashboard/billing',
-    icon: 'arrowRight',
-  },
-  {
     title: 'Settings',
     href: '/user-dashboard/settings',
     icon: 'menu',
