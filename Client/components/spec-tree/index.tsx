@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Toaster } from '@/components/ui/toaster';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,7 +26,6 @@ import Builder from './components/builder';
 import { strapiService } from './lib/api/strapi-service';
 
 import { App } from './lib/types/work-items';
-import { setSow } from '../../lib/store/sow-slice';
 
 export default function SpecTree() {
   return <SpecTreeContent />;
@@ -38,24 +36,12 @@ function SpecTreeContent() {
   const [chatApi, setChatApi] = useState<string | null>(null);
   const [apps, setApps] = useState<App[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [expressUrl, setExpressUrl] = useState<string | null>(null);
-  const [apiSettings, setApiSettings] = useState<any>(null);
-
-  // TODO: use apiSettings and expressUrl then remove console.log
-  console.log({ apiSettings, expressUrl });
 
   // State for create app dialog and logic
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [applicationInformation, setApplicationInformation] = useState('');
   const [createAppError, setCreateAppError] = useState<string | null>(null);
   const [isCreateAppLoading, setIsCreateAppLoading] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const handleUpdate = (newValue: string) => {
-    setChatApi(newValue);
-    dispatch(setSow({ chatApi: newValue }));
-  };
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -64,22 +50,6 @@ function SpecTreeContent() {
         const fetchAppsResponse = await strapiService.fetchApps();
         if (fetchAppsResponse) {
           setApps(fetchAppsResponse);
-        }
-
-        const settings = await strapiService.getSettings();
-        if (settings) {
-          setApiSettings(settings.data);
-        }
-
-        const configResponse = await strapiService.getConfig();
-        const express_url = configResponse?.data?.config?.expressUrl;
-        const configChatApi = configResponse?.data?.config?.chatApi;
-
-        if (express_url) {
-          setExpressUrl(express_url);
-        }
-        if (configChatApi) {
-          handleUpdate(configChatApi);
         }
       } catch (error) {
         console.error('Failed to load initial data:', error);
