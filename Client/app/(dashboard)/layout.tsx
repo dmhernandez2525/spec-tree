@@ -49,6 +49,11 @@ const sidebarNavItems: Array<{
     href: '/user-dashboard/support',
     icon: 'alert',
   },
+  {
+    title: 'Organization',
+    href: '/user-dashboard/organization',
+    icon: 'users',
+  },
 ];
 
 interface DashboardLayoutProps {
