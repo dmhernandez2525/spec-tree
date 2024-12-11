@@ -29,6 +29,10 @@ import {
   Download,
   Gitlab,
   Microchip,
+  Link,
+  BookOpen,
+  Settings,
+  Key,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -65,4 +69,8 @@ export const Icons = {
   creditCard: CreditCard,
   shield: Shield,
   download: Download,
+  externalLink: Link,
+  openai: BookOpen,
+  settings: Settings,
+  key: Key,
 } as const;
