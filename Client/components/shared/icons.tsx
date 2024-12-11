@@ -20,7 +20,15 @@ import {
   X,
   ArrowRight,
   Search,
+  LoaderCircle,
   type LucideIcon,
+  Slack,
+  Plus,
+  CreditCard,
+  Shield,
+  Download,
+  Gitlab,
+  Microchip,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -46,5 +54,15 @@ export const Icons = {
   check: Check,
   x: X,
   arrowRight: ArrowRight,
+  spinner: LoaderCircle,
   search: Search,
+  jira: Download,
+  slack: Slack,
+  gitLab: Gitlab,
+  microsoft: Microchip,
+  bitbucket: Microchip,
+  plus: Plus,
+  creditCard: CreditCard,
+  shield: Shield,
+  download: Download,
 } as const;

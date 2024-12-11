@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from './auth-slice';
 import { userReducer } from './user-slice';
+import { organizationReducer } from './organization-slice';
+import subscriptionReducer from './subscription-slice';
 import sowReducer from './sow-slice';
 
 export const makeStore = () => {
@@ -8,6 +10,8 @@ export const makeStore = () => {
     reducer: {
       auth: authReducer,
       user: userReducer,
+      organization: organizationReducer,
+      subscription: subscriptionReducer,
       sow: sowReducer,
     },
   });
