@@ -27,6 +27,8 @@ export const makeProxyCall = async ({
   errorContext,
   maxTokens = 4096,
 }: ProxyCallParams) => {
+  // TODO: use maxTokens Remove this console.log
+  console.log(maxTokens);
   if (!systemPrompt || !userPrompt) {
     throw new OpenAIProxyError(
       'Missing required prompts',
