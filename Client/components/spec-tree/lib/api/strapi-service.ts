@@ -496,13 +496,6 @@ class StrapiService {
   }
 
   // Settings & Configuration
-  async getSettings(): Promise<any> {
-    return this.fetch<any>('/settings');
-  }
-
-  async getConfig(): Promise<any> {
-    return this.fetch<any>('/config');
-  }
 
   // Fetch all data for an app
   async fetchAllAppData(documentId: string): Promise<any> {
