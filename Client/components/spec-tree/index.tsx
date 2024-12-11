@@ -34,6 +34,8 @@ export default function SpecTree() {
 function SpecTreeContent() {
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
   const [chatApi, setChatApi] = useState<string | null>(null);
+  // TODO: use setChatApi Remove this console.log
+  console.log(setChatApi);
   const [apps, setApps] = useState<App[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
