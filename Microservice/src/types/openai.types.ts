@@ -1,6 +1,5 @@
 export interface OpenAIRequestBody {
-  systemPrompt: string;
-  userPrompt: string;
+  messages: Array<{ role: string; content: string }>;
   selectedModel?: string;
   maxTokens?: number;
 }

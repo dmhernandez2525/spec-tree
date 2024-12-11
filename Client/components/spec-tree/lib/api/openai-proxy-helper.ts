@@ -53,8 +53,7 @@ export const makeProxyCall = async ({
       messages,
       selectedModel
     );
-
-    if (!response?.data?.choices?.[0]?.message?.content) {
+    if (!response?.data) {
       throw new OpenAIProxyError(
         'Invalid response format',
         errorContext,
