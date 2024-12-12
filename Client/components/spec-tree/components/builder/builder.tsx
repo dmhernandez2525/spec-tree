@@ -284,7 +284,7 @@ const Builder: React.FC<BuilderProps> = ({
 
   return (
     <div className="flex h-screen">
-      <div className="w-80 border-r bg-background p-6 space-y-4">
+      <div className="w-min w-80 border-r bg-background  space-y-4">
         <ContextualQuestions content="Global" workItemType="Global" />
         {/* TODO-p1: this is here essentially to call and fetch the data/update the state whenever we initially load and it seems like we're also doing it whenever we create new items we could probably not do it whenever we create new items/update the items but just initial load. We should probably turn this into a provider or a hook. */}
         <FormatData chatApi={chatApi} selectedApp={selectedApp} />
