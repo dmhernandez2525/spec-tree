@@ -4,7 +4,8 @@
   "info": {
     "singularName": "support-ticket",
     "pluralName": "support-tickets",
-    "displayName": "SupportTicket"
+    "displayName": "SupportTicket",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -36,6 +37,12 @@
     },
     "description": {
       "type": "text"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "supportTickets"
     }
   }
 }
