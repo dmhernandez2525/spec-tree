@@ -6,7 +6,7 @@ const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 // ======================== Reusable Parameters ========================
 // TODO-p2: make this into a file
 // This is a section for repeatable parameters that are used in the api calls
-const userData = 'populate[confirmed]=*&populate[blocked]=*';
+const userData = 'populate[confirmed]=*&populate[blocked]=*&populate[avatar]=*';
 
 // ======================== Reusable Parameters ========================
 

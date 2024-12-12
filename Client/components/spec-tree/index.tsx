@@ -141,11 +141,11 @@ function SpecTreeContent() {
           />
         ) : (
           <Card className="w-full bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden">
-            <CardHeader className="p-6 border-b border-gray-200">
+            <CardHeader className="p-6 border-b border-gray-200 flex-row justify-between align-middle">
               <CardTitle className="text-xl font-semibold text-gray-900">
                 Select an App
               </CardTitle>
-              <CardDescription className="text-sm text-gray-600 mt-1">
+              <CardDescription className="text-lg text-gray-600 mt-1">
                 Choose an existing app to work with or create a new one
               </CardDescription>
               <div className="flex justify-between items-center">
@@ -163,7 +163,7 @@ function SpecTreeContent() {
               <AppSelector
                 selectedApp={selectedApp}
                 setSelectedApp={setSelectedApp}
-                apps={apps}
+                apps={apps as any}
                 onAppCreated={onAppCreated}
               />
             </CardContent>

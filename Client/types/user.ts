@@ -1,9 +1,10 @@
-import { Timestamps } from '@/types/main';
+import { Timestamps, ImageAttributes } from '@/types/main';
 export interface UserData {
   id: number;
   documentId: string;
   attributes: UserAttributes;
 }
+
 export interface UserAttributes extends Timestamps {
   id: number;
   documentId: string;
@@ -23,6 +24,7 @@ export interface UserAttributes extends Timestamps {
   updatedAt: string;
   stripUserId: string;
   qboUserId: string;
+  avatar: ImageAttributes;
   address: {
     street: string;
     city: string;

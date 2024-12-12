@@ -70,6 +70,14 @@
     },
     "lastName": {
       "type": "string"
+    },
+    "avatar": {
+      "allowedTypes": [
+        "images",
+        "files"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }

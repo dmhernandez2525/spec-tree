@@ -7,8 +7,8 @@ interface NewsFeedData {
 interface NewsFeedAttributes extends Timestamps {
   title: string;
   description: string;
-  flyer?: SingleApiResponse<ImageAttributes>;
-  backgroundImage?: SingleApiResponse<ImageAttributes>;
+  flyer?: ImageAttributes;
+  backgroundImage?: ImageAttributes;
   button: ButtonAttributes;
 }
 interface ButtonAttributes {
@@ -98,7 +98,7 @@ interface Info {
   text: string;
 }
 interface Links {
-  icon: SingleApiResponse<ImageAttributes>;
+  icon: ImageAttributes;
   link: string;
 }
 interface Section2 extends Section1 {
@@ -113,7 +113,7 @@ interface Section3 extends Section1 {
 }
 interface metricCards extends Section1 {
   cards: Section1[];
-  backgroundImage: SingleApiResponse<ImageAttributes>;
+  backgroundImage: ImageAttributes;
 }
 
 interface Review {
@@ -172,7 +172,7 @@ interface IEmergencyContact {
 interface NewsPopupAttributes extends Timestamps {
   title: string;
   description: string;
-  flyer?: SingleApiResponse<ImageAttributes>;
+  flyer?: ImageAttributes;
   button: ButtonAttributes;
 }
 interface NewsPopupData {
