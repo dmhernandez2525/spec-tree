@@ -53,7 +53,7 @@ export default function RootLayout({
               <BaseLayout>
                 <AuthLayout>
                   <MainNav />
-                  <main className="mt-44 min-h-screen w-full bg-background">
+                  <main className="mt-20 min-h-screen w-full bg-background">
                     {children}
                   </main>
                   <Footer />
