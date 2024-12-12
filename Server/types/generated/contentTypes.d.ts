@@ -435,6 +435,7 @@ export interface PluginUsersPermissionsUser
     >;
     firstName: Schema.Attribute.String;
     lastName: Schema.Attribute.String;
+    avatar: Schema.Attribute.Media<'images' | 'files'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
