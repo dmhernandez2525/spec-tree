@@ -447,10 +447,11 @@ export default function AnalyticsDashboard() {
                 </BarChart>
               </ResponsiveContainer>
 
-              <TutorialProgress />
+              {/* TODO: bring back when fixed */}
+              {/* <TutorialProgress />
               <div className="mt-6">
                 <AchievementsDisplay />
-              </div>
+              </div> */}
             </div>
           </CardContent>
         </Card>
