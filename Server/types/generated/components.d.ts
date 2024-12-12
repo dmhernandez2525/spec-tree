@@ -13,6 +13,43 @@ export interface SeoSeoInformation extends Struct.ComponentSchema {
   };
 }
 
+export interface MicroComponentResolve extends Struct.ComponentSchema {
+  collectionName: 'components_micro_component_resolves';
+  info: {
+    displayName: 'resolve';
+    description: '';
+  };
+  attributes: {
+    text: Schema.Attribute.String;
+  };
+}
+
+export interface MicroComponentButton extends Struct.ComponentSchema {
+  collectionName: 'components_micro_component_buttons';
+  info: {
+    displayName: 'button';
+  };
+  attributes: {
+    text: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+    url: Schema.Attribute.String;
+  };
+}
+
+export interface MicroComponentAcceptanceCriteria
+  extends Struct.ComponentSchema {
+  collectionName: 'components_micro_component_acceptance_criteria';
+  info: {
+    displayName: 'acceptanceCriteria';
+  };
+  attributes: {
+    text: Schema.Attribute.Text;
+  };
+}
+
 export interface SectionCardTitleCard extends Struct.ComponentSchema {
   collectionName: 'components_section_card_title_cards';
   info: {
@@ -131,40 +168,14 @@ export interface SectionCardBackgroundCards extends Struct.ComponentSchema {
   };
 }
 
-export interface MicroComponentResolve extends Struct.ComponentSchema {
-  collectionName: 'components_micro_component_resolves';
+export interface CopyrightCopyrightFooter extends Struct.ComponentSchema {
+  collectionName: 'components_copyright_copyright_footers';
   info: {
-    displayName: 'resolve';
+    displayName: 'CopyrightFooter';
     description: '';
   };
   attributes: {
-    text: Schema.Attribute.String;
-  };
-}
-
-export interface MicroComponentButton extends Struct.ComponentSchema {
-  collectionName: 'components_micro_component_buttons';
-  info: {
-    displayName: 'button';
-  };
-  attributes: {
-    text: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 180;
-      }>;
-    url: Schema.Attribute.String;
-  };
-}
-
-export interface MicroComponentAcceptanceCriteria
-  extends Struct.ComponentSchema {
-  collectionName: 'components_micro_component_acceptance_criteria';
-  info: {
-    displayName: 'acceptanceCriteria';
-  };
-  attributes: {
-    text: Schema.Attribute.Text;
+    ownerStatement: Schema.Attribute.String;
   };
 }
 
@@ -456,17 +467,6 @@ export interface DatasetsAccept extends Struct.ComponentSchema {
   };
 }
 
-export interface CopyrightCopyrightFooter extends Struct.ComponentSchema {
-  collectionName: 'components_copyright_copyright_footers';
-  info: {
-    displayName: 'CopyrightFooter';
-    description: '';
-  };
-  attributes: {
-    ownerStatement: Schema.Attribute.String;
-  };
-}
-
 export interface BannerLogo extends Struct.ComponentSchema {
   collectionName: 'components_banner_logos';
   info: {
@@ -497,6 +497,9 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'seo.seo-information': SeoSeoInformation;
+      'micro-component.resolve': MicroComponentResolve;
+      'micro-component.button': MicroComponentButton;
+      'micro-component.acceptance-criteria': MicroComponentAcceptanceCriteria;
       'section-card.title-card': SectionCardTitleCard;
       'section-card.title-card-helper-text': SectionCardTitleCardHelperText;
       'section-card.title-card-cta': SectionCardTitleCardCta;
@@ -506,9 +509,7 @@ declare module '@strapi/strapi' {
       'section-card.info-button-image': SectionCardInfoButtonImage;
       'section-card.faq': SectionCardFaq;
       'section-card.background-cards': SectionCardBackgroundCards;
-      'micro-component.resolve': MicroComponentResolve;
-      'micro-component.button': MicroComponentButton;
-      'micro-component.acceptance-criteria': MicroComponentAcceptanceCriteria;
+      'copyright.copyright-footer': CopyrightCopyrightFooter;
       'datasets.sms-partial-user': DatasetsSmsPartialUser;
       'datasets.service-list': DatasetsServiceList;
       'datasets.risks-and-mitigation': DatasetsRisksAndMitigation;
@@ -532,7 +533,6 @@ declare module '@strapi/strapi' {
       'datasets.email-options': DatasetsEmailOptions;
       'datasets.email-content': DatasetsEmailContent;
       'datasets.accept': DatasetsAccept;
-      'copyright.copyright-footer': CopyrightCopyrightFooter;
       'banner.logo': BannerLogo;
       'address.address': AddressAddress;
     }

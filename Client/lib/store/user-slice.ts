@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { UserAttributes } from '@/types/main';
+import { UserAttributes } from '@/types/user';
 import {
   refreshUser as refreshUserCall,
   updateUserInfo,

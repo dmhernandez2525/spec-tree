@@ -12,12 +12,10 @@ const userData = 'populate[confirmed]=*&populate[blocked]=*';
 
 import type {
   ApiSettings,
-  UserData,
   NewsFeedData,
   PostAttributes,
   ApiResponse,
   SingleApiResponse,
-  UserAttributes,
   ImageAttributes,
   Section1,
   Section4,
@@ -28,6 +26,8 @@ import type {
   metricCards,
   HomePageData,
 } from '../types/main';
+
+import type { UserData, UserAttributes } from '@/types/user';
 
 const handleError = (
   error: any,

@@ -11,6 +11,45 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "size": {
+      "type": "enumeration",
+      "enum": [
+        "micro_1_10",
+        "small_11_50",
+        "medium_51_200",
+        "large_201_500",
+        "xlarge_501_1000",
+        "enterprise_1001_plus"
+      ],
+      "required": true
+    },
+    "industry": {
+      "type": "enumeration",
+      "enum": [
+        "technology",
+        "finance",
+        "healthcare",
+        "education",
+        "manufacturing",
+        "retail",
+        "other"
+      ],
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "websiteUrl": {
+      "type": "string"
+    },
+    "ownerId": {
+      "type": "string",
+      "required": true
+    },
     "apps": {
       "type": "relation",
       "relation": "oneToMany",
