@@ -880,6 +880,10 @@ export interface ApiOrganizationOrganization
     websiteUrl: Schema.Attribute.String;
     ownerId: Schema.Attribute.String & Schema.Attribute.Required;
     apps: Schema.Attribute.Relation<'oneToMany', 'api::app.app'>;
+    supportTickets: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::support-ticket.support-ticket'
+    >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -923,6 +927,7 @@ export interface ApiSupportTicketSupportTicket
     singularName: 'support-ticket';
     pluralName: 'support-tickets';
     displayName: 'SupportTicket';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -935,6 +940,10 @@ export interface ApiSupportTicketSupportTicket
     priority: Schema.Attribute.Enumeration<['low', 'medium', 'high']>;
     category: Schema.Attribute.String;
     description: Schema.Attribute.Text;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
