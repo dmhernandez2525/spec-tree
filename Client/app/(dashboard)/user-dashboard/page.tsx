@@ -6,7 +6,6 @@ import { AnalyticsSummary } from '@/components/dashboard/AnalyticsSummary';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { TaskSummary } from '@/components/dashboard/TaskSummary';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAppSelector } from '@/lib/hooks/use-store';
 import { useFeatureAnnouncement } from '@/lib/hooks/use-feature-announcement';
 import { Icons } from '@/components/shared/icons';
 
@@ -30,10 +29,6 @@ const itemVariants = {
 };
 
 export default function DashboardPage() {
-  const user = useAppSelector((state) => state.user.user);
-  // if (!user) {
-  //   redirect('/login');
-  // }
   useFeatureAnnouncement('new-dashboard-2024');
 
   return (
@@ -43,12 +38,6 @@ export default function DashboardPage() {
       animate="visible"
       className="space-y-8 p-8"
     >
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">
-          Welcome back, {user?.firstName}
-        </h2>
-      </div>
-
       <motion.div
         variants={itemVariants}
         className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
