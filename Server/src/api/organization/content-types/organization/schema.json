@@ -55,6 +55,12 @@
       "relation": "oneToMany",
       "target": "api::app.app",
       "mappedBy": "organization"
+    },
+    "supportTickets": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::support-ticket.support-ticket",
+      "mappedBy": "organization"
     }
   }
 }
