@@ -852,6 +852,33 @@ export interface ApiOrganizationOrganization
     draftAndPublish: true;
   };
   attributes: {
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    size: Schema.Attribute.Enumeration<
+      [
+        'micro_1_10',
+        'small_11_50',
+        'medium_51_200',
+        'large_201_500',
+        'xlarge_501_1000',
+        'enterprise_1001_plus',
+      ]
+    > &
+      Schema.Attribute.Required;
+    industry: Schema.Attribute.Enumeration<
+      [
+        'technology',
+        'finance',
+        'healthcare',
+        'education',
+        'manufacturing',
+        'retail',
+        'other',
+      ]
+    > &
+      Schema.Attribute.Required;
+    description: Schema.Attribute.Text;
+    websiteUrl: Schema.Attribute.String;
+    ownerId: Schema.Attribute.String & Schema.Attribute.Required;
     apps: Schema.Attribute.Relation<'oneToMany', 'api::app.app'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -878,6 +905,36 @@ export interface ApiPrivacyPagePrivacyPage extends Struct.SingleTypeSchema {
   attributes: {
     aboutSection: Schema.Attribute.Component<'section-card.title-card', false>;
     contentSection: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+  };
+}
+
+export interface ApiSupportTicketSupportTicket
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'support_tickets';
+  info: {
+    singularName: 'support-ticket';
+    pluralName: 'support-tickets';
+    displayName: 'SupportTicket';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Schema.Attribute.String;
+    ticketStatus: Schema.Attribute.Enumeration<
+      ['open', 'in_progress', 'resolved', 'closed']
+    >;
+    priority: Schema.Attribute.Enumeration<['low', 'medium', 'high']>;
+    category: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -1362,6 +1419,7 @@ declare module '@strapi/strapi' {
       'api::navbar.navbar': ApiNavbarNavbar;
       'api::organization.organization': ApiOrganizationOrganization;
       'api::privacy-page.privacy-page': ApiPrivacyPagePrivacyPage;
+      'api::support-ticket.support-ticket': ApiSupportTicketSupportTicket;
       'api::task.task': ApiTaskTask;
       'api::terms-page.terms-page': ApiTermsPageTermsPage;
       'api::user-story.user-story': ApiUserStoryUserStory;

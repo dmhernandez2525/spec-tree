@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { UserAttributes } from '@/types/main';
+import { UserAttributes } from '@/types/user';
 import { updateUserProfile } from '../../lib/store/user-slice';
 
 import { Button } from '@/components/ui/button';

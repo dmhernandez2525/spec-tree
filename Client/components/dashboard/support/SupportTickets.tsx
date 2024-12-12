@@ -48,23 +48,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { toast } from 'sonner';
+import { SupportTicket } from '@/types/support-ticket';
 
-interface Ticket {
-  id: string;
-  title: string;
-  status: 'open' | 'in_progress' | 'resolved' | 'closed';
-  priority: 'low' | 'medium' | 'high';
-  category: string;
-  createdAt: string;
-  updatedAt: string;
-  description: string;
-}
-
-const tickets: Ticket[] = [
+const tickets: SupportTicket[] = [
   {
     id: 'TICK-001',
     title: 'Cannot access project settings',
-    status: 'open',
+    ticketStatus: 'open',
     priority: 'high',
     category: 'Access Issues',
     createdAt: '2024-03-20T10:30:00Z',
@@ -75,7 +65,7 @@ const tickets: Ticket[] = [
   {
     id: 'TICK-002',
     title: 'Integration not working',
-    status: 'in_progress',
+    ticketStatus: 'in_progress',
     priority: 'medium',
     category: 'Integrations',
     createdAt: '2024-03-19T15:45:00Z',
@@ -283,9 +273,9 @@ export function SupportTickets() {
                   <TableCell>
                     <Badge
                       variant="secondary"
-                      className={statusColors[ticket.status]}
+                      className={statusColors[ticket.ticketStatus]}
                     >
-                      {ticket.status.replace('_', ' ')}
+                      {ticket.ticketStatus.replace('_', ' ')}
                     </Badge>
                   </TableCell>
                   <TableCell>
