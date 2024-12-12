@@ -33,6 +33,7 @@ import {
   BookOpen,
   Settings,
   Key,
+  XIcon,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -73,4 +74,5 @@ export const Icons = {
   openai: BookOpen,
   settings: Settings,
   key: Key,
+  xIcon: XIcon,
 } as const;
