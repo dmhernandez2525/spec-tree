@@ -10,7 +10,7 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background">
-      <div className="mr-20	ml-20	flex h-16 items-center justify-between py-4">
+      <div className="mr-10	ml-10	flex h-16 items-center justify-between py-4">
         <div>
           <>Hello user </>
           <Notifications />
