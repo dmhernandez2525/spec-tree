@@ -1,56 +1,146 @@
 'use client';
-import React from 'react';
+
+import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Icons } from '@/components/shared/icons';
-import { motion } from 'framer-motion';
 
-interface SidebarNavItem {
-  title: string;
-  href: string;
-  icon: keyof typeof Icons;
-}
+interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: SidebarNavItem[];
-}
-
-export function SidebarNav({ items, className, ...props }: SidebarNavProps) {
+export function SidebarNav({ className }: SidebarNavProps) {
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
   const pathname = usePathname();
 
   return (
-    <nav className={cn('flex flex-col space-y-1', className)} {...props}>
-      {items.map((item, index) => {
-        return (
-          <motion.div
-            key={item.href}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
+    <div
+      className={cn(
+        'relative border-r bg-white transition-all duration-300 ease-in-out',
+        isCollapsed ? 'w-[52px]' : 'w-[240px]',
+        className
+      )}
+    >
+      <Button
+        variant="ghost"
+        size="icon"
+        className={cn(
+          'absolute -right-0 top-0 z-10 h-8 w-8 rounded-full border bg-white',
+          'hover:bg-accent hover:text-accent-foreground'
+        )}
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
+        <Icons.chevronLeft
+          className={cn(
+            'h-4 w-4 transition-transform duration-300',
+            isCollapsed && 'rotate-180'
+          )}
+        />
+      </Button>
+
+      <ScrollArea className="h-full">
+        <div
+          className={cn(
+            'flex flex-col gap-2 p-6',
+            isCollapsed && 'items-center p-2'
+          )}
+        >
+          <Nav
+            isCollapsed={isCollapsed}
+            links={[
+              {
+                title: 'Overview',
+                href: '/user-dashboard',
+                icon: 'brain',
+                variant: pathname === '/user-dashboard' ? 'default' : 'ghost',
+              },
+              {
+                title: 'Builder',
+                href: '/user-dashboard/spec-tree',
+                icon: 'brain',
+                variant:
+                  pathname === '/user-dashboard/spec-tree'
+                    ? 'default'
+                    : 'ghost',
+              },
+              {
+                title: 'Analytics',
+                href: '/user-dashboard/analytics',
+                icon: 'barChart',
+                variant:
+                  pathname === '/user-dashboard/analytics'
+                    ? 'default'
+                    : 'ghost',
+              },
+              {
+                title: 'Settings',
+                href: '/user-dashboard/settings',
+                icon: 'menu',
+                variant:
+                  pathname === '/user-dashboard/settings' ? 'default' : 'ghost',
+              },
+              {
+                title: 'Support',
+                href: '/user-dashboard/support',
+                icon: 'alert',
+                variant:
+                  pathname === '/user-dashboard/support' ? 'default' : 'ghost',
+              },
+              {
+                title: 'Organization',
+                href: '/user-dashboard/organization',
+                icon: 'users',
+                variant:
+                  pathname === '/user-dashboard/organization'
+                    ? 'default'
+                    : 'ghost',
+              },
+            ]}
+          />
+        </div>
+      </ScrollArea>
+    </div>
+  );
+}
+
+interface NavProps {
+  isCollapsed: boolean;
+  links: {
+    title: string;
+    href: string;
+    icon: keyof typeof Icons;
+    variant: 'default' | 'ghost';
+  }[];
+}
+
+function Nav({ links, isCollapsed }: NavProps) {
+  return (
+    <div
+      data-collapsed={isCollapsed}
+      className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+    >
+      <nav className="grid gap-4 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        {links.map((link, index) => {
+          const Icon = Icons[link.icon];
+          return (
             <Link
-              href={item.href}
+              key={index}
+              href={link.href}
               className={cn(
-                buttonVariants({ variant: 'ghost' }),
-                'justify-start w-full',
-                pathname === item.href
-                  ? 'bg-muted hover:bg-muted'
-                  : 'hover:bg-transparent hover:underline',
-                'group flex items-center rounded-md px-3 py-2 text-sm font-medium'
+                'flex items-center rounded-lg px-3 py-2 text-sm font-medium',
+                'hover:bg-accent hover:text-accent-foreground',
+                link.variant === 'default' &&
+                  'bg-accent text-accent-foreground',
+                isCollapsed ? 'justify-center' : 'gap-3'
               )}
             >
-              {item.icon && Icons[item.icon] && (
-                <div className="mr-2 h-4 w-4">
-                  {React.createElement(Icons[item.icon])}
-                </div>
-              )}
-              <span>{item.title}</span>
+              <Icon className="h-4 w-4" />
+              {!isCollapsed && <span>{link.title}</span>}
             </Link>
-          </motion.div>
-        );
-      })}
-    </nav>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

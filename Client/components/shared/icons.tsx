@@ -34,6 +34,7 @@ import {
   Settings,
   Key,
   XIcon,
+  ChevronLeft,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -75,4 +76,5 @@ export const Icons = {
   settings: Settings,
   key: Key,
   xIcon: XIcon,
+  chevronLeft: ChevronLeft,
 } as const;
