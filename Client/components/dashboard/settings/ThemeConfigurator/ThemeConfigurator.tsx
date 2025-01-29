@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -27,6 +26,51 @@ import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ExportManager from './ExportManager';
+
+// Type definitions
+interface FontConfig {
+  value: string;
+  weights: string[];
+}
+
+interface FontFamilyTokens {
+  [key: string]: FontConfig;
+}
+
+interface FontSizeTokens {
+  [key: string]: string;
+}
+
+interface FontWeightTokens {
+  [key: string]: string;
+}
+
+interface LineHeightTokens {
+  [key: string]: string;
+}
+
+interface TypographyTokens {
+  fontFamily: FontFamilyTokens;
+  fontSize: FontSizeTokens;
+  fontWeight: FontWeightTokens;
+  lineHeight: LineHeightTokens;
+}
+
+interface ColorToken {
+  name: string;
+  light: string;
+  dark: string;
+  opacity?: string;
+}
+
+interface TokenSection {
+  deviation: boolean;
+  items: ColorToken[];
+}
+
+interface ColorTokens {
+  [section: string]: TokenSection;
+}
 
 // Color token sections
 const initialColorTokens = {
@@ -582,10 +626,21 @@ const isPercentageToken = (section, tokenName) => {
 };
 
 const isStyleToken = (section, tokenName) => {
+  console.log({
+    location: 'isStyleToken',
+    section,
+  });
+
   return tokenName.includes('style');
 };
 
 const TokenInput = ({ type, value, onChange, token, section }) => {
+  console.log({
+    location: 'TokenInput',
+    token,
+    section,
+  });
+
   if (type === 'color') {
     return <ColorPicker value={value} onChange={onChange} />;
   }
@@ -730,8 +785,11 @@ const FontPreview = ({ fontFamily, fontSize, fontWeight, lineHeight }) => (
   </div>
 );
 
-const TypographyManager = ({ tokens, onUpdate }) => {
-  const [googleFonts, setGoogleFonts] = useState([]);
+const TypographyManager: React.FC<{
+  tokens: TypographyTokens;
+  onUpdate: (category: string, key: string, value: string) => void;
+}> = ({ tokens, onUpdate }) => {
+  const [googleFonts, setGoogleFonts] = useState<Array<{ family: string }>>([]);
   const [selectedFamily, setSelectedFamily] = useState('sans');
   const [previewSize, setPreviewSize] = useState('base');
   const [previewWeight, setPreviewWeight] = useState('normal');
@@ -757,8 +815,10 @@ const TypographyManager = ({ tokens, onUpdate }) => {
   useEffect(() => {
     // Load selected fonts
     const loadFonts = async () => {
-      const fontFamilies = Object.values(tokens.fontFamily).map((f) => f.value);
-      const uniqueFamilies = [...new Set(fontFamilies)];
+      const fontFamilies = Object.values(tokens.fontFamily).map(
+        (f: FontConfig) => f.value
+      );
+      const uniqueFamilies = Array.from(new Set(fontFamilies));
 
       uniqueFamilies.forEach((family) => {
         const link = document.createElement('link');
@@ -779,43 +839,53 @@ const TypographyManager = ({ tokens, onUpdate }) => {
       {/* Font Families */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Font Families</h3>
-        {Object.entries(tokens.fontFamily).map(([familyType, config]) => (
-          <div key={familyType} className="grid grid-cols-2 gap-4 items-center">
-            <Label>{familyType}</Label>
-            <Select
-              value={config.value}
-              onValueChange={(value) =>
-                onUpdate('fontFamily', familyType, value)
-              }
+        {Object.entries(tokens.fontFamily).map(
+          ([familyType, config]: [
+            string,
+            { value: string; weights: string[] }
+          ]) => (
+            <div
+              key={familyType}
+              className="grid grid-cols-2 gap-4 items-center"
             >
-              <SelectTrigger>
-                <SelectValue>{config.value}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {googleFonts.map((font) => (
-                  <SelectItem key={font.family} value={font.family}>
-                    {font.family}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        ))}
+              <Label>{familyType}</Label>
+              <Select
+                value={config.value}
+                onValueChange={(value) =>
+                  onUpdate('fontFamily', familyType, value)
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue>{config.value}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {googleFonts.map((font) => (
+                    <SelectItem key={font.family} value={font.family}>
+                      {font.family}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )
+        )}
       </div>
 
       {/* Font Sizes */}
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Font Sizes</h3>
         <div className="grid grid-cols-2 gap-4">
-          {Object.entries(tokens.fontSize).map(([size, value]) => (
-            <div key={size} className="grid grid-cols-2 gap-4 items-center">
-              <Label>{size}</Label>
-              <Input
-                value={value}
-                onChange={(e) => onUpdate('fontSize', size, e.target.value)}
-              />
-            </div>
-          ))}
+          {Object.entries(tokens.fontSize).map(
+            ([size, value]: [string, string]) => (
+              <div key={size} className="grid grid-cols-2 gap-4 items-center">
+                <Label>{size}</Label>
+                <Input
+                  value={value}
+                  onChange={(e) => onUpdate('fontSize', size, e.target.value)}
+                />
+              </div>
+            )
+          )}
         </div>
       </div>
 
@@ -887,19 +957,19 @@ const TypographyManager = ({ tokens, onUpdate }) => {
   );
 };
 
-const DesignSystemManager = () => {
-  const [colorTokens, setColorTokens] = useState(() => {
-    // Convert initialColorTokens to new format with deviation flags
+const DesignSystemManager: React.FC = () => {
+  // Convert initialColorTokens to new format with deviation flags
+  const [colorTokens, setColorTokens] = useState<ColorTokens>(() => {
     return Object.entries(initialColorTokens).reduce((acc, [key, value]) => {
       acc[key] = {
         deviation: false,
         items: value,
       };
       return acc;
-    }, {});
+    }, {} as ColorTokens);
   });
 
-  const [typographyTokens, setTypographyTokens] = useState(
+  const [typographyTokens, setTypographyTokens] = useState<TypographyTokens>(
     initialTypographyTokens
   );
 
@@ -976,4 +1046,5 @@ const DesignSystemManager = () => {
   );
 };
 
+export type { TypographyTokens, ColorTokens, ColorToken, TokenSection };
 export default DesignSystemManager;
