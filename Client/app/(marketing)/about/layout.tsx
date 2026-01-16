@@ -1,18 +1,18 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'About Spec Tree - AI-Powered Project Planning',
+  title: 'About Spec Tree - AI-Powered Project Specifications',
   description:
-    "Learn about Spec Tree's mission to revolutionize project planning with AI-powered tools and intelligent context gathering.",
+    "Learn about Spec Tree's mission to revolutionize project planning with AI-powered tools that transform ideas into structured specifications.",
   openGraph: {
-    title: 'About Spec Tree - AI-Powered Project Planning',
+    title: 'About Spec Tree - AI-Powered Project Specifications',
     description:
-      "Learn about Spec Tree's mission to revolutionize project planning with AI-powered tools and intelligent context gathering.",
+      "Learn about Spec Tree's mission to revolutionize project planning with AI-powered tools that transform ideas into structured specifications.",
     type: 'website',
-    url: 'https://blueprintbuilder.com/about',
+    url: 'https://spectree.dev/about',
     images: [
       {
-        url: 'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'About Spec Tree',
@@ -21,12 +21,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'About Spec Tree - AI-Powered Project Planning',
+    title: 'About Spec Tree - AI-Powered Project Specifications',
     description:
-      "Learn about Spec Tree's mission to revolutionize project planning with AI-powered tools and intelligent context gathering.",
-    images: [
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    ],
+      "Learn about Spec Tree's mission to revolutionize project planning with AI-powered tools that transform ideas into structured specifications.",
+    images: ['/og-image.png'],
   },
 };
 

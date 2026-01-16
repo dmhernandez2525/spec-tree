@@ -10,33 +10,77 @@ import { AuthLayout } from '@/components/auth/AuthLayout';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Spec Tree - AI-Powered Project Planning',
+  title: {
+    default: 'Spec Tree - AI-Powered Project Specifications',
+    template: '%s | Spec Tree',
+  },
   description:
-    'Transform how you plan and execute projects with Spec Tree',
+    'Transform project ideas into structured, actionable specifications with AI. From idea to implementation, organized.',
+  keywords: [
+    'project management',
+    'AI',
+    'specifications',
+    'agile',
+    'software planning',
+    'work items',
+    'epics',
+    'user stories',
+    'tasks',
+    'GPT',
+    'OpenAI',
+  ],
+  authors: [{ name: 'Daniel Hernandez' }],
+  creator: 'Daniel Hernandez',
+  publisher: 'Spec Tree',
+  metadataBase: new URL('https://spectree.dev'),
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Spec Tree - AI-Powered Project Planning',
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://spectree.dev',
+    title: 'Spec Tree - AI-Powered Project Specifications',
     description:
-      'Transform how you plan and execute projects with Spec Tree',
-    url: 'https://myblueprintbuilder.com',
+      'Transform project ideas into structured, actionable specifications with AI. From idea to implementation, organized.',
     siteName: 'Spec Tree',
     images: [
       {
-        url: 'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Spec Tree',
+        alt: 'Spec Tree - From idea to implementation, structured',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Spec Tree - AI-Powered Project Planning',
+    title: 'Spec Tree - AI-Powered Project Specifications',
     description:
-      'Transform how you plan and execute projects with Spec Tree',
-    images: [
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    ],
+      'Transform project ideas into structured, actionable specifications with AI.',
+    images: ['/og-image.png'],
+    creator: '@spectreedev',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({

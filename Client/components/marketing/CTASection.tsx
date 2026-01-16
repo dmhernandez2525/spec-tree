@@ -17,8 +17,8 @@ export function CTASection() {
                 Ready to Transform Your Project Planning?
               </h2>
               <p className="text-xl opacity-90">
-                Join thousands of teams using Spec Tree to deliver
-                better projects, faster.
+                Join thousands of teams using Spec Tree to deliver better
+                projects, faster.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button size="lg" variant="secondary" asChild>
