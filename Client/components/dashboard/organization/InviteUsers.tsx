@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { sendInvite, cancelInvite } from '@/lib/store/organization-slice';
+import { sendInvite, cancelInvite, resendInvite } from '@/lib/store/organization-slice';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -138,9 +138,9 @@ export function InviteUsers({
     }
   }
 
-  async function handleResendInvite(_inviteId: string) {
+  async function handleResendInvite(inviteId: string) {
     try {
-      // TODO: Implement resend functionality using _inviteId
+      await dispatch(resendInvite(inviteId)).unwrap();
       toast.success('Invitation resent successfully');
     } catch {
       toast.error('Failed to resend invitation');

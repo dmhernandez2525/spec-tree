@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useAppSelector } from '@/lib/hooks/use-store';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks/use-store';
+import { updateMemberRole, removeMember } from '@/lib/store/organization-slice';
 import { OrganizationMember, OrganizationRole } from '@/types/organization';
 import { toast } from 'sonner';
 
@@ -49,6 +50,7 @@ const roleOptions: { value: OrganizationRole; label: string }[] = [
 ];
 
 export function MemberManagement() {
+  const dispatch = useAppDispatch();
   const members = useAppSelector((state) => state.organization.members);
   const currentUserRole = useAppSelector(
     (state) => state.auth.organizationRole
@@ -61,8 +63,8 @@ export function MemberManagement() {
     currentUserRole === 'owner' || currentUserRole === 'admin';
 
   const handleRoleChange = async (
-    _memberId: string,
-    _newRole: OrganizationRole
+    memberId: string,
+    newRole: OrganizationRole
   ) => {
     if (!canManageRoles) {
       toast.error("You don't have permission to change member roles");
@@ -71,7 +73,7 @@ export function MemberManagement() {
 
     setIsUpdating(true);
     try {
-      // TODO: Implement role update API call using _memberId and _newRole
+      await dispatch(updateMemberRole({ memberId, newRole })).unwrap();
       toast.success('Member role updated successfully');
     } catch {
       toast.error('Failed to update member role');
@@ -93,7 +95,7 @@ export function MemberManagement() {
     if (!memberToRemove) return;
 
     try {
-      // TODO: Implement member removal API call
+      await dispatch(removeMember(memberToRemove.id)).unwrap();
       toast.success('Member removed successfully');
     } catch {
       toast.error('Failed to remove member');
