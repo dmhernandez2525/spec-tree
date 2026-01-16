@@ -542,8 +542,8 @@ export default function AboutPage() {
                 Ready to Transform Your Project Planning?
               </h2>
               <p className="text-lg mb-8 opacity-90">
-                Join thousands of teams using Spec Tree to deliver
-                better projects.
+                Join thousands of teams using Spec Tree to deliver better
+                projects.
               </p>
               <div className="flex justify-center gap-4">
                 <Button variant="secondary" size="lg" asChild>
