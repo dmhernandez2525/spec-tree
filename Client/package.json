@@ -1,10 +1,24 @@
 {
   "name": "spec-tree",
   "version": "1.0.0",
-  "description": "AI-powered software planning and specification generation tool",
+  "description": "AI-powered project specifications - transform ideas into structured, actionable work items",
   "private": true,
-  "author": "Daniel",
+  "author": "Daniel Hernandez",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danielh/spec-tree"
+  },
+  "keywords": [
+    "nextjs",
+    "ai",
+    "project-management",
+    "openai",
+    "specifications",
+    "agile",
+    "work-items",
+    "software-planning"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
