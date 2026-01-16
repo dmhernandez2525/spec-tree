@@ -1,15 +1,17 @@
-# Spec Tree - Render Infrastructure Configuration
-# ============================================
-# This configuration deploys all services for the Spec Tree application:
-# - Client: Next.js frontend
-# - Server: Strapi CMS backend
-# - Microservice: OpenAI API proxy
-# - Database: PostgreSQL for Strapi
+# Spec Tree - Render Infrastructure Configuration (FREE TIER)
+# ======================================================
+# This configuration deploys all services using FREE tiers for development/demo.
 #
-# Pricing (as of January 2026):
-# - Web Services (starter): $7/month each
-# - PostgreSQL (basic-256mb): $6/month
-# - Total estimated: ~$27/month for full stack
+# IMPORTANT LIMITATIONS (as of January 2026):
+# - All web services spin down after 15 minutes of inactivity (~30s cold start)
+# - Free PostgreSQL database EXPIRES AFTER 30 DAYS (must upgrade or recreate)
+# - No persistent disks on free tier (uploads are lost on redeploy)
+# - 750 free instance hours/month per workspace
+#
+# Cost: $0/month (with above limitations)
+#
+# For production, change plans to 'starter' and add disk to Strapi.
+# See: https://render.com/docs/free
 #
 # NOTE: Values marked "UPDATE_ME" must be configured manually after deployment
 
@@ -20,7 +22,7 @@ services:
   - type: web
     name: spec-tree-client
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: cd Client && npm install && npm run build
     startCommand: cd Client && npm run start
     envVars:
@@ -44,7 +46,7 @@ services:
           property: hostport
       - key: NEXT_PUBLIC_MICROSERVICE_API_KEY
         value: UPDATE_ME
-      # Stripe configuration
+      # Stripe configuration (optional for dev)
       - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
         value: UPDATE_ME
       - key: NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID
@@ -62,17 +64,17 @@ services:
   # =============================================
   # Server - Strapi CMS Backend
   # =============================================
+  # NOTE: Free tier has no persistent disk. Uploads will be lost on redeploy.
+  # For persistent uploads, either:
+  # 1. Upgrade to 'starter' plan and add disk
+  # 2. Configure AWS S3 for uploads (set AWS_* env vars below)
   - type: web
     name: spec-tree-strapi
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: cd Server && npm install --force && npm run build
     startCommand: cd Server && npm run start
     healthCheckPath: /_health
-    disk:
-      name: strapi-uploads
-      mountPath: /opt/render/project/src/Server/public/uploads
-      sizeGB: 1
     envVars:
       - key: NODE_VERSION
         value: "18"
@@ -105,7 +107,7 @@ services:
       # Email (SendGrid) - optional
       - key: SENDGRID_API_KEY
         value: UPDATE_ME
-      # AWS S3 for uploads - optional
+      # AWS S3 for uploads - recommended for free tier (no local disk)
       - key: AWS_ACCESS_KEY_ID
         value: UPDATE_ME
       - key: AWS_SECRET_ACCESS_KEY
@@ -121,7 +123,7 @@ services:
   - type: web
     name: spec-tree-microservice
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: cd Microservice && npm install && npm run build
     startCommand: cd Microservice && npm run start
     envVars:
@@ -147,8 +149,11 @@ services:
 # =============================================
 # Database - PostgreSQL for Strapi
 # =============================================
+# WARNING: Free tier database EXPIRES after 30 days!
+# You will need to upgrade to 'basic-256mb' ($7/month) or recreate.
+# Data will be lost if the database expires.
 databases:
   - name: spec-tree-db
-    plan: basic-256mb
+    plan: free
     databaseName: spec_tree
     user: spec_tree_user
