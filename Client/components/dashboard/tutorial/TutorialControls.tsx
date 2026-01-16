@@ -74,9 +74,7 @@ const TutorialSummaryCard = ({
 
 export function TutorialControls() {
   const { startTutorial, isActive, progress } = useTutorial();
-  const { achievements, hasUnlockedAchievement } = useAchievements();
-  // TODO: use achievements and remove console.log
-  console.log(achievements);
+  const { hasUnlockedAchievement } = useAchievements();
 
   const calculateSectionProgress = (sectionId: string): number => {
     const section = tutorialData.find((s) => s.id === sectionId);

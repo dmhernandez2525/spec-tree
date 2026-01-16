@@ -70,17 +70,14 @@ export function SSOSettings() {
     },
   });
 
-  async function onSubmit(data: SSOConfigFormData) {
-    // TODO: Remove this console.log statement when we are are using data
-    console.log({ data });
+  async function onSubmit(_data: SSOConfigFormData) {
     setIsConfiguring(true);
     try {
       // TODO: Implement SSO configuration API call
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated API call
       toast.success('SSO configuration updated successfully');
-    } catch (error) {
+    } catch {
       toast.error('Failed to update SSO configuration');
-      console.error('SSO configuration error:', error);
     } finally {
       setIsConfiguring(false);
     }

@@ -1,6 +1,12 @@
+import { logger } from '@/lib/logger';
+
 interface OpenAIProxyConfig {
   baseURL: string;
   apiKey: string;
+}
+
+interface CompletionOptions {
+  maxTokens?: number;
 }
 
 export class OpenAIProxy {
@@ -14,7 +20,8 @@ export class OpenAIProxy {
 
   async createCompletion(
     messages: Array<{ role: string; content: string }>,
-    model?: string
+    model?: string,
+    options?: CompletionOptions
   ) {
     try {
       const response = await fetch(`${this.baseURL}/api/openai/completion`, {
@@ -26,17 +33,19 @@ export class OpenAIProxy {
         body: JSON.stringify({
           messages,
           model: model || 'gpt-3.5-turbo-16k',
+          max_tokens: options?.maxTokens,
         }),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text().catch(() => 'Unknown error');
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('OpenAI Proxy Error:', error);
+      logger.error('OpenAI Proxy Error:', error);
       throw error;
     }
   }

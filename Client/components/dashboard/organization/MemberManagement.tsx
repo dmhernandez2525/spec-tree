@@ -61,11 +61,9 @@ export function MemberManagement() {
     currentUserRole === 'owner' || currentUserRole === 'admin';
 
   const handleRoleChange = async (
-    memberId: string,
-    newRole: OrganizationRole
+    _memberId: string,
+    _newRole: OrganizationRole
   ) => {
-    // TODO: Remove this console.log statement when we are are using memberId, newRole
-    console.log({ memberId, newRole });
     if (!canManageRoles) {
       toast.error("You don't have permission to change member roles");
       return;
@@ -73,11 +71,9 @@ export function MemberManagement() {
 
     setIsUpdating(true);
     try {
-      // TODO: Implement role update API call
+      // TODO: Implement role update API call using _memberId and _newRole
       toast.success('Member role updated successfully');
-    } catch (error) {
-      console.log(`Failed to update member role: ${error}`);
-
+    } catch {
       toast.error('Failed to update member role');
     } finally {
       setIsUpdating(false);
@@ -99,8 +95,7 @@ export function MemberManagement() {
     try {
       // TODO: Implement member removal API call
       toast.success('Member removed successfully');
-    } catch (error) {
-      console.log(`Failed to remove member: ${error}`);
+    } catch {
       toast.error('Failed to remove member');
     } finally {
       setMemberToRemove(null);

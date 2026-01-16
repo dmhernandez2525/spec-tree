@@ -6,6 +6,7 @@ import {
   generateMockSubscriptionData,
   mockSubscriptionScenarios,
 } from '@/lib/data/mocks/subscription-mocks';
+import { logger } from '@/lib/logger';
 
 // Mock data
 const mockSubscription: OrganizationSubscription = {
@@ -89,8 +90,8 @@ export const fetchSubscriptionData = createAsyncThunk(
 export const fetchSubscription = createAsyncThunk(
   'subscription/fetchSubscription',
   async (organizationId: string) => {
-    // TODO: Remove this console.log statement when we are are using organizationId
-    console.log({ organizationId });
+    // TODO: Remove this logger.log statement when we are are using organizationId
+    logger.log({ organizationId });
     // Simulating API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return mockSubscription;

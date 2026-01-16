@@ -109,16 +109,13 @@ export function SupportTickets() {
     },
   });
 
-  const onSubmit = async (data: TicketFormValues) => {
-    // TODO: use data and remove console.log
-    console.log(data);
+  const onSubmit = async (_data: TicketFormValues) => {
     try {
       // Handle ticket creation
       toast.success('Support ticket created successfully');
       setIsCreating(false);
       form.reset();
-    } catch (error) {
-      console.error('Failed to create support ticket:', error);
+    } catch {
       toast.error('Failed to create support ticket');
     }
   };

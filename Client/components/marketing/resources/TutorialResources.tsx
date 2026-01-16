@@ -46,9 +46,7 @@ const resourceIcons = {
   zip: Icons.alert,
 } as const;
 
-export function TutorialResources({ tutorialId }: TutorialResourcesProps) {
-  // TODO: use tutorialId and remove console.log
-  console.log(tutorialId);
+export function TutorialResources({ tutorialId: _tutorialId }: TutorialResourcesProps) {
   return (
     <Card>
       <CardHeader>

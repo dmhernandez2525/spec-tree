@@ -131,22 +131,18 @@ export function InviteUsers({
       ).unwrap();
       toast.success('Invitation sent successfully');
       form.reset();
-    } catch (error) {
-      console.log(`Failed to send invitation: ${error}`);
+    } catch {
       toast.error('Failed to send invitation. Please try again.');
     } finally {
       setIsInviting(false);
     }
   }
 
-  async function handleResendInvite(inviteId: string) {
-    // TODO: Remove this console.log statement when we are are using inviteId
-    console.log({ inviteId });
+  async function handleResendInvite(_inviteId: string) {
     try {
-      // TODO: Implement resend functionality
+      // TODO: Implement resend functionality using _inviteId
       toast.success('Invitation resent successfully');
-    } catch (error) {
-      console.log(`Failed to resend invitation: ${error}`);
+    } catch {
       toast.error('Failed to resend invitation');
     }
   }
@@ -155,8 +151,7 @@ export function InviteUsers({
     try {
       await dispatch(cancelInvite(inviteId)).unwrap();
       toast.success('Invitation cancelled successfully');
-    } catch (error) {
-      console.log(`Failed to cancel invitation: ${error}`);
+    } catch {
       toast.error('Failed to cancel invitation');
     }
   }

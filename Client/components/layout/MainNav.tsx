@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/lib/hooks/use-store';
@@ -286,9 +287,11 @@ export function MainNav() {
       >
         <div className="flex-none">
           <Link href="/" className="flex items-center space-x-2 h-14">
-            <img
-              src={img.src}
+            <Image
+              src={img}
               alt="Spec Tree Logo"
+              height={80}
+              width={80}
               className="h-20 w-auto"
             />
             <span className="font-bold text-lg">Spec Tree</span>

@@ -70,7 +70,7 @@ const GlobalContextualInfo: React.FC<GlobalContextualInfoProps> = ({
     if (mainGlobalInformation) {
       setGlobalInformation(mainGlobalInformation);
     }
-  }, [mainGlobalContextualQuestions, mainGlobalInformation]);
+  }, [mainGlobalContextualQuestions, mainGlobalInformation, setQuestions]);
 
   const handleGenerateQuestions = async (): Promise<void> => {
     if (!globalInformation) {

@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { useLocalStorage } from '@/lib/hooks/use-local-storage';
 import {
@@ -29,15 +29,12 @@ export function FeatureAnnouncementProvider({
 
   const [currentAnnouncement, setCurrentAnnouncement] =
     useState<FeatureAnnouncement>();
-  const seenAnnouncements = new Set(
-    announcementState.seenAnnouncements.map((a) => a.id)
+  const seenAnnouncements = useMemo(
+    () => new Set(announcementState.seenAnnouncements.map((a) => a.id)),
+    [announcementState.seenAnnouncements]
   );
 
-  useEffect(() => {
-    checkForAnnouncements();
-  }, [pathname]);
-
-  const checkForAnnouncements = () => {
+  const checkForAnnouncements = useCallback(() => {
     const availableAnnouncements = FEATURE_ANNOUNCEMENTS.filter(
       (announcement) => {
         // Check if announcement is valid for current route
@@ -61,7 +58,11 @@ export function FeatureAnnouncementProvider({
     if (availableAnnouncements.length > 0) {
       setCurrentAnnouncement(availableAnnouncements[0]);
     }
-  };
+  }, [pathname, seenAnnouncements]);
+
+  useEffect(() => {
+    checkForAnnouncements();
+  }, [checkForAnnouncements]);
 
   const showAnnouncement = (id: string) => {
     const announcement = FEATURE_ANNOUNCEMENTS.find((a) => a.id === id);

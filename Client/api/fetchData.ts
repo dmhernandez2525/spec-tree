@@ -35,12 +35,6 @@ const handleError = (
 ): {
   error: any;
 } => {
-  console.error(`Error in API call to ${API_URL}/${endpoint}`);
-  console.error(
-    'Error details for fetching ${endpoint} data:',
-    JSON.stringify(error, null, 2)
-  );
-
   return {
     error,
   };
@@ -602,7 +596,6 @@ const registerNewUser = async (
     }
     return false;
   } catch (error) {
-    console.error('Registration failed:', error);
     return false;
   }
 };
@@ -635,7 +628,6 @@ const fetchGoogleReviews = async (placeId: string): Promise<any> => {
     const response = await axios.get(url);
     return response.data?.result?.reviews;
   } catch (error) {
-    console.error('Error fetching Google reviews:', error);
     return null;
   }
 };

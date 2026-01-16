@@ -21,8 +21,15 @@ interface UserNavProps {
   user: {
     name: string;
     email: string;
-    image: string;
+    image?: string;
   };
+}
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(' ').filter(Boolean);
+  if (parts.length === 0) return '?';
+  if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
 export function UserNav({ user }: UserNavProps) {
@@ -35,13 +42,21 @@ export function UserNav({ user }: UserNavProps) {
     router.push('/');
   };
 
+  const initials = getInitials(user.name);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full"
+          aria-label="User menu"
+        >
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.image} alt={user.name} />
-            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+            {user.image && <AvatarImage src={user.image} alt={user.name} />}
+            <AvatarFallback className="bg-primary text-primary-foreground">
+              {initials}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

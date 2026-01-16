@@ -2,6 +2,7 @@
 
 import { ResourceDetail } from '@/components/marketing/resources/ResourceDetail';
 import { notFound } from 'next/navigation';
+import { logger } from '@/lib/logger';
 
 interface ResourcePageProps {
   params: {
@@ -13,7 +14,7 @@ interface ResourcePageProps {
 // TODO: pull form API
 const getMockResourceData = (type: string, slug: string) => {
   // Mock data - replace with actual data fetching
-  console.log(type, slug);
+  logger.log(type, slug);
   return {
     title: 'Getting Started with Spec Tree',
     description:

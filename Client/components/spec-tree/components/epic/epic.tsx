@@ -65,9 +65,8 @@ const initialFeatureFormState: FeatureFormState = {
   notes: '',
 };
 
-const Epic: React.FC<EpicProps> = ({ epic, index }) => {
-  // TODO: use index then remove console.log
-  console.log(index);
+const Epic: React.FC<EpicProps> = ({ epic, index: _index }) => {
+  // TODO: use _index then remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -99,7 +98,6 @@ const Epic: React.FC<EpicProps> = ({ epic, index }) => {
     value: string
   ) => {
     // TODO: use index then remove console.log
-    console.log(index);
     const updatedRiskMitigation = [...epic.risksAndMitigation];
     updatedRiskMitigation[0] = {
       ...updatedRiskMitigation[0],
@@ -130,8 +128,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index }) => {
           state: localState,
         })
       );
-    } catch (err) {
-      console.error(`Failed to generate features: ${err}`);
+    } catch (_err) {
       setError('Failed to generate features. Please try again.');
     } finally {
       setIsLoading(false);

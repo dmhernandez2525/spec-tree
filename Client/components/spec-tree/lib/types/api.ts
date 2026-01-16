@@ -43,7 +43,7 @@ interface Image {
 }
 interface AppAttributes extends Timestamps {
   id: number;
-  applactionInformation: string;
+  applicationInformation: string;
 }
 interface AppData {
   id: number;

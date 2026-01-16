@@ -5,6 +5,7 @@ import {
   selectUserStoryById,
   selectTaskById,
 } from '../../../../lib/store/sow-slice';
+import { logger } from '@/lib/logger';
 
 const calculateTotalTasks = (
   state: RootState,
@@ -38,7 +39,7 @@ const calculateTotalTasks = (
   } else if (input && 'taskIds' in input) {
     totalTasks += input?.taskIds?.length || 0;
   } else {
-    console.log('Invalid input');
+    logger.log('Invalid input');
   }
 
   return totalTasks;

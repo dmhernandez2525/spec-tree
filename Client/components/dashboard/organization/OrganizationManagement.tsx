@@ -12,6 +12,7 @@ import { AISettings } from './settings/AISettings';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logger';
 
 import { Icons } from '@/components/shared/icons';
 
@@ -55,7 +56,7 @@ export function OrganizationManagement() {
 
   const handleUpdateOrganization = async (data: any) => {
     // TODO: Implement organization update
-    console.log('Updating organization:', data);
+    logger.log('Updating organization:', data);
   };
 
   const canManageSettings = userRole === 'owner' || userRole === 'admin';

@@ -77,9 +77,7 @@ export function InteractiveDemo() {
     },
   });
 
-  async function generateContextualQuestions(data: FormValues) {
-    // TODO: use data then remove console.log
-    console.log(data);
+  async function generateContextualQuestions(_data: FormValues) {
     // Simulated AI response - in production, this would call your AI service
     const questions = [
       'What are the primary business objectives for this project?',

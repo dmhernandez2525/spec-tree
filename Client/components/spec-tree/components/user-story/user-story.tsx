@@ -64,9 +64,8 @@ const initialFormState: FormState = {
   Notes: '',
 };
 
-const UserStory: React.FC<UserStoryProps> = ({ userStory, feature, epic }) => {
-  // TODO: use feature and epic then remove console.log
-  console.log({ feature, epic });
+const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epic: _epic }) => {
+  // TODO: use _feature and _epic then remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -104,9 +103,8 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature, epic }) => {
           state: localState,
         })
       );
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to generate tasks');
-      console.error(err);
     } finally {
       setIsLoading(false);
     }
