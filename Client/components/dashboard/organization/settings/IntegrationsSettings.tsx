@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAppDispatch } from '@/lib/hooks/use-store';
+import { connectIntegration, disconnectIntegration } from '@/lib/store/settings-slice';
 
 import {
   Card,
@@ -114,6 +116,7 @@ const categories = {
 } as const;
 
 export function IntegrationsSettings() {
+  const dispatch = useAppDispatch();
   const [_activeIntegration, setActiveIntegration] =
     useState<Integration | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -132,10 +135,13 @@ export function IntegrationsSettings() {
   const handleConnect = async (integration: Integration) => {
     setIsConfiguring(true);
     try {
-      // TODO: Implement integration connection logic
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulated API call
+      await dispatch(
+        connectIntegration({
+          integrationId: integration.id,
+          configuration: integration.configuration,
+        })
+      ).unwrap();
       toast.success(`Successfully connected to ${integration.name}`);
-      integration.status = 'connected';
     } catch {
       toast.error(`Failed to connect to ${integration.name}`);
     } finally {
@@ -146,10 +152,8 @@ export function IntegrationsSettings() {
 
   const handleDisconnect = async (integration: Integration) => {
     try {
-      // TODO: Implement integration disconnection logic
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated API call
+      await dispatch(disconnectIntegration(integration.id)).unwrap();
       toast.success(`Successfully disconnected from ${integration.name}`);
-      integration.status = 'disconnected';
     } catch {
       toast.error(`Failed to disconnect from ${integration.name}`);
     }
