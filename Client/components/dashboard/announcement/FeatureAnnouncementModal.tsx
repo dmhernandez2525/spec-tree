@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
@@ -102,9 +103,10 @@ export function FeatureAnnouncementModal({
                 </p>
                 {currentSlide.imageUrl && (
                   <div className="relative h-48 w-full">
-                    <img
+                    <Image
                       src={currentSlide.imageUrl}
                       alt={currentSlide.title}
+                      fill
                       className="object-cover rounded-lg"
                     />
                   </div>

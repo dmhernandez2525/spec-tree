@@ -21,9 +21,8 @@ interface ChatProps {
   onClose?: () => void;
 }
 
-const Chat: React.FC<ChatProps> = ({ onClose }) => {
-  // TODO: use onClose and remove console.log
-  console.log(onClose);
+const Chat: React.FC<ChatProps> = ({ onClose: _onClose }) => {
+  // TODO: use _onClose and remove this comment
   const selectedModel = useSelector(
     (state: RootState) => state.sow.selectedModel
   );
@@ -47,8 +46,7 @@ const Chat: React.FC<ChatProps> = ({ onClose }) => {
       });
       const responseData = response.data.choices[0].message.content;
       setResponse(responseData);
-    } catch (err) {
-      console.error(`Failed to get response: ${err}`);
+    } catch (_err) {
       setError('Failed to get response. Please try again.');
     } finally {
       setIsLoading(false);

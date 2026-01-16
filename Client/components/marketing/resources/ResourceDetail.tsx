@@ -25,15 +25,13 @@ interface ResourceDetailProps {
 export function ResourceDetail({
   title,
   description,
-  content,
+  content: _content,
   type,
   readTime,
   lastUpdated,
-  category,
+  category: _category,
   relatedResources,
 }: ResourceDetailProps) {
-  // TODO: use content,category then remove console.log
-  console.log({ content, category });
   return (
     <Section className=" max-w-4xl py-8 md:py-12">
       <Button variant="ghost" className="mb-8" asChild>

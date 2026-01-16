@@ -51,13 +51,10 @@ interface StepProgressProps {
 }
 
 const StepProgress = ({
-  currentStep,
   totalSteps,
   currentStepIndex,
 }: StepProgressProps) => {
   const progress = ((currentStepIndex + 1) / totalSteps) * 100;
-  // TODO: use currentStep and remove console.log
-  console.log(currentStep);
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
@@ -112,7 +109,7 @@ export function TutorialOverlay() {
     if (currentStep?.id) {
       markStepComplete(currentStep.id);
     }
-  }, [currentStep]);
+  }, [currentStep, markStepComplete]);
 
   if (!isActive || !currentStep || !currentSection) return null;
 

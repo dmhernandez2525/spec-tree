@@ -54,8 +54,7 @@ export const refreshUser = async (dispatch: any) => {
       return response;
     }
     return false;
-  } catch (error) {
-    console.error('Login failed:', error);
+  } catch {
     return false;
   }
 };
@@ -85,8 +84,7 @@ export const loginUser = async (
       return true;
     }
     return false;
-  } catch (error) {
-    console.error('Login failed:', error);
+  } catch {
     return false;
   }
 };
@@ -109,15 +107,11 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(updateUserProfile.fulfilled, (state, action) => {
+      .addCase(updateUserProfile.fulfilled, (_state, _action) => {
         // Handle successful profile update
-
-        // TODO: use state, action and remove console.log
-        console.log({ state, action });
       })
-      .addCase(updateUserProfile.rejected, (state, action) => {
-        // TODO: use state, action and remove console.log
-        console.log({ state, action });
+      .addCase(updateUserProfile.rejected, (_state, _action) => {
+        // Handle profile update rejection
       });
   },
 });

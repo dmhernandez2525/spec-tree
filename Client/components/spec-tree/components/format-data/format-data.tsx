@@ -220,7 +220,7 @@ const FormatData: React.FC<FormatDataProps> = ({ selectedApp, chatApi }) => {
     };
 
     fetchAndFormatData();
-  }, [selectedApp, chatApi]);
+  }, [selectedApp, chatApi, dispatch]);
 
   if (isLoading) {
     return (

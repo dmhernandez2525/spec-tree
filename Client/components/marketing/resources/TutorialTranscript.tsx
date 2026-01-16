@@ -2,14 +2,15 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { logger } from '@/lib/logger';
 
 interface TutorialTranscriptProps {
   tutorialId: string;
 }
 
 export function TutorialTranscript({ tutorialId }: TutorialTranscriptProps) {
-  // TODO: use tutorialId and remove console.log
-  console.log(tutorialId);
+  // TODO: use tutorialId and remove logger.log
+  logger.log(tutorialId);
   return (
     <Card>
       <CardContent className="p-6">

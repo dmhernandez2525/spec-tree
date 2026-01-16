@@ -40,17 +40,14 @@ export function DashboardNotifications() {
     },
   });
 
-  async function onSubmit(data: NotificationsFormValues) {
-    // TODO: use data then remove console.log
-    console.log(data);
+  async function onSubmit(_data: NotificationsFormValues) {
     setIsLoading(true);
     try {
       // Replace with your API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       toast.success('Notification preferences updated');
-    } catch (error) {
+    } catch {
       toast.error('Failed to update preferences');
-      console.error('Notification preferences error:', error);
     } finally {
       setIsLoading(false);
     }

@@ -6,7 +6,7 @@ export interface App {
   name: string;
   globalInformation: string;
   documentId?: string;
-  applactionInformation: string;
+  applicationInformation: string;
   createdAt: string;
 }
 export type WorkItemType = 'epics' | 'features' | 'userStories' | 'tasks';

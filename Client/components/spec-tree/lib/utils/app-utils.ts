@@ -37,7 +37,7 @@ export const filterApps = (
     // Search query
     if (filters.searchQuery) {
       const searchLower = filters.searchQuery.toLowerCase();
-      const inTitle = app.applactionInformation
+      const inTitle = app.applicationInformation
         .toLowerCase()
         .includes(searchLower);
       const inDescription = app.globalInformation
@@ -66,7 +66,7 @@ export const sortApps = (
       case 'name':
         return (
           multiplier *
-          a.applactionInformation.localeCompare(b.applactionInformation)
+          a.applicationInformation.localeCompare(b.applicationInformation)
         );
       case 'modified':
         return (

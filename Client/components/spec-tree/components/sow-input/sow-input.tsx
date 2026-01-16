@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Upload } from 'lucide-react';
 import { strapiService } from '../../lib/api/strapi-service';
+import { logger } from '@/lib/logger';
 
 interface SowInputProps {
   selectedApp: string | null;
@@ -30,7 +31,7 @@ const SowInput: React.FC<SowInputProps> = ({ selectedApp }) => {
         setIsLoading(true);
         try {
           const data = await strapiService.fetchAppById(selectedApp);
-          console.log('Fetched data:', data);
+          logger.log('Fetched data:', data);
         } catch (err) {
           setError('Failed to fetch application data');
           console.error(err);

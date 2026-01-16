@@ -43,14 +43,13 @@ const WorkitemsContextualInfo: React.FC<WorkitemsContextualInfoProps> = ({
 
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [answers, setAnswers] = useState<string[]>([]);
-  const [workItemStatus, setWorkItemStatus] = useState<
+  const [_workItemStatus, setWorkItemStatus] = useState<
     'original' | 'edited' | 'accepted'
   >('original');
-  const [editableWorkItem, setEditableWorkItem] =
+  const [_editableWorkItem, setEditableWorkItem] =
     useState<WorkItemTypeTypes | null>(null);
 
-  // TODO: use workItemStatus and editableWorkItem then remove console.log
-  console.log({ workItemStatus, editableWorkItem });
+  // TODO: use _workItemStatus and _editableWorkItem then remove this comment
 
   const {
     loading: updateLoading,
@@ -68,7 +67,7 @@ const WorkitemsContextualInfo: React.FC<WorkitemsContextualInfoProps> = ({
         )
       );
     }
-  }, [workItem]);
+  }, [workItem, setQuestions]);
 
   const handleGenerateInitialQuestions = async (): Promise<void> => {
     const newQuestions = await generateQuestions(workItem);
