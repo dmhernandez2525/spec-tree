@@ -11,7 +11,7 @@ export function useFeatureAnnouncement(featureId: string) {
     if (!seenAnnouncements.has(featureId)) {
       showAnnouncement(featureId);
     }
-  }, [featureId, seenAnnouncements]);
+  }, [featureId, seenAnnouncements, showAnnouncement]);
 
   return {
     hasSeenFeature: seenAnnouncements.has(featureId),

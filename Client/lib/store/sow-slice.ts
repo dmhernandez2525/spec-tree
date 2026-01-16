@@ -173,8 +173,7 @@ export const requestAdditionalEpics = createAsyncThunk<
       .map((value: string) => {
         try {
           return JSON.parse(value);
-        } catch (error) {
-          console.log(error);
+        } catch {
           return null;
         }
       })
@@ -238,8 +237,7 @@ export const requestAdditionalFeatures = createAsyncThunk<
           .map((value: string) => {
             try {
               return JSON.parse(value);
-            } catch (error) {
-              console.log(error);
+            } catch {
               return null;
             }
           })
@@ -300,8 +298,7 @@ export const requestUserStories = createAsyncThunk<
           .map((value: string) => {
             try {
               return JSON.parse(value);
-            } catch (error) {
-              console.log(error);
+            } catch {
               return null;
             }
           })
@@ -336,8 +333,7 @@ export const requestUserStories = createAsyncThunk<
               developmentOrder: res.developmentOrder || 0,
               contextualQuestions: res.contextualQuestions || [],
             };
-          } catch (error) {
-            console.error('Failed to create user story:', error);
+          } catch {
             return null;
           }
         })
@@ -366,8 +362,7 @@ export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
           .map((value: string) => {
             try {
               return JSON.parse(value);
-            } catch (error) {
-              console.log(error);
+            } catch {
               return null;
             }
           })
@@ -393,8 +388,7 @@ export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
               parentUserStoryId: res.userStory.documentId,
               contextualQuestions: res.contextualQuestions || [],
             };
-          } catch (error) {
-            console.error('Failed to create task:', error);
+          } catch {
             return null;
           }
         })
@@ -471,13 +465,6 @@ export const sowSlice: Slice<SowState> = createSlice({
 
       // Replace the entire epics state
       state.epics = newEpics;
-
-      console.log(
-        'Added epic:',
-        epic.id,
-        'Current epics:',
-        Object.keys(newEpics)
-      );
     },
     addFeature: (state, action: PayloadAction<FeatureType>) => {
       const feature = action.payload;
@@ -827,13 +814,6 @@ export const sowSlice: Slice<SowState> = createSlice({
           ...state.epics,
           [epicId]: newEpic,
         };
-
-        console.log(
-          'Added features:',
-          Object.keys(newFeatures).length,
-          'to epic:',
-          epicId
-        );
       })
       .addCase(requestAdditionalFeatures.pending, (state) => {
         state.isLoading = true;
@@ -884,12 +864,11 @@ export const sowSlice: Slice<SowState> = createSlice({
                 contextualQuestions: [],
               };
               newEpics[epicId] = epic;
-            } catch (error) {
-              console.error('Failed to add epic:', error);
+            } catch {
+              // Failed to add epic
             }
           });
           state.epics = newEpics;
-          console.log('Current epics state:', Object.keys(state.epics));
         }
       )
       .addCase(requestUserStories.pending, (state) => {
@@ -954,13 +933,6 @@ export const sowSlice: Slice<SowState> = createSlice({
           ...state.features,
           [featureId]: newFeature,
         };
-
-        console.log(
-          'Added user stories:',
-          Object.keys(newUserStories).length,
-          'to feature:',
-          featureId
-        );
       })
 
       .addCase(requestTasks.pending, (state) => {
@@ -1014,13 +986,6 @@ export const sowSlice: Slice<SowState> = createSlice({
           ...state.userStories,
           [userStoryId]: newUserStory,
         };
-
-        console.log(
-          'Added tasks:',
-          Object.keys(newTasks).length,
-          'to user story:',
-          userStoryId
-        );
       });
   },
 });
@@ -1078,5 +1043,7 @@ export const selectGlobalContextualQuestions = (state: RootState) =>
 export const selectGlobalInformation = (state: RootState) =>
   state?.sow?.globalInformation;
 export const selectChatApi = (state: RootState) => state?.sow?.chatApi;
+export const selectSelectedModel = (state: RootState) =>
+  state?.sow?.selectedModel || 'gpt-3.5-turbo-16k';
 
 export default sowSlice.reducer;

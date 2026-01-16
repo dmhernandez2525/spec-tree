@@ -56,14 +56,11 @@ export function AccountSettings() {
     },
   });
 
-  async function onSubmit(data: AccountFormValues) {
-    // TODO: use data and remove console.log
-    console.log(data);
+  async function onSubmit(_data: AccountFormValues) {
     try {
       // Handle account update
       toast.success('Account settings updated');
-    } catch (error) {
-      console.error('Failed to update account settings:', error);
+    } catch {
       toast.error('Failed to update account settings');
     }
   }

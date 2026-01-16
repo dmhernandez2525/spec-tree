@@ -2,9 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { AppExtended, SearchFilters } from '@/types/app';
 import { addRecentSearch, getRecentSearches } from '../utils/app-utils';
 
-export const useAppSearch = (initialApps: AppExtended[]) => {
-  // TODO:  Remove this console.log
-  console.log('initialApps', initialApps);
+export const useAppSearch = (_initialApps: AppExtended[]) => {
+  // TODO: use _initialApps for filtering
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
     searchQuery: '',

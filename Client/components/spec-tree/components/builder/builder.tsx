@@ -81,12 +81,11 @@ const initialFormState: FormState = {
 };
 
 const Builder: React.FC<BuilderProps> = ({
-  setSelectedApp,
+  setSelectedApp: _setSelectedApp,
   selectedApp,
   chatApi,
 }) => {
-  // TODO: use setSelectedApp and remove console.log
-  console.log(setSelectedApp);
+  // TODO: use _setSelectedApp and remove this comment
   const dispatch = useDispatch<AppDispatch>();
   const [isAddEpicDialogOpen, setIsAddEpicDialogOpen] = React.useState(false);
   const [formState, setFormState] = React.useState<FormState>(initialFormState);
@@ -134,7 +133,6 @@ const Builder: React.FC<BuilderProps> = ({
         err instanceof Error
           ? err.message
           : 'Failed to generate epics. Please try again.';
-      console.error('Failed to generate epics:', err);
       handleError(errorMessage);
     }
   }, [dispatch, localState, startLoading, stopLoading, handleError]);
@@ -155,7 +153,6 @@ const Builder: React.FC<BuilderProps> = ({
         err instanceof Error
           ? err.message
           : 'Failed to generate features. Please try again.';
-      console.error('Failed to generate features:', err);
       handleError(errorMessage);
     }
   }, [dispatch, epics, localState, startLoading, stopLoading, handleError]);
@@ -181,7 +178,6 @@ const Builder: React.FC<BuilderProps> = ({
         err instanceof Error
           ? err.message
           : 'Failed to generate user stories. Please try again.';
-      console.error('Failed to generate user stories:', err);
       handleError(errorMessage);
     }
   }, [
@@ -210,7 +206,6 @@ const Builder: React.FC<BuilderProps> = ({
         err instanceof Error
           ? err.message
           : 'Failed to generate tasks. Please try again.';
-      console.error('Failed to generate tasks:', err);
       handleError(errorMessage);
     }
   }, [
@@ -246,7 +241,6 @@ const Builder: React.FC<BuilderProps> = ({
         err instanceof Error
           ? err.message
           : 'Failed to add epic. Please try again.';
-      console.error('Failed to add epic:', err);
       handleError(errorMessage);
     }
   }, [dispatch, formState, selectedApp, handleError]);

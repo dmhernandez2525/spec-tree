@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/tooltip';
 import { AppExtended } from '@/types/app';
 import { cn } from '@/lib/utils';
+import { logger } from '@/lib/logger';
 
 interface AppCardProps {
   app: AppExtended;
@@ -39,8 +40,8 @@ const AppCard: React.FC<AppCardProps> = ({
   onToggleExpand,
   onArchive,
 }) => {
-  // TODO:  Remove this console.log
-  console.log('onToggleExpand', onToggleExpand);
+  // TODO:  Remove this logger.log
+  logger.log('onToggleExpand', onToggleExpand);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const getStatusColor = (status: string) => {
@@ -86,7 +87,7 @@ const AppCard: React.FC<AppCardProps> = ({
           <div className="flex items-start justify-between">
             <div className="space-y-1">
               <CardTitle className="text-lg font-semibold text-gray-900 truncate">
-                {app.applactionInformation}
+                {app.applicationInformation}
               </CardTitle>
               <div className="flex items-center space-x-2">
                 <div

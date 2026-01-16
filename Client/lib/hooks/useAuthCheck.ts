@@ -11,7 +11,7 @@ const useAuthCheck = () => {
     if (protectedRoutes.includes(Router.pathname) && !token) {
       Router.replace('/login');
     }
-  }, [Router.pathname, token]);
+  }, [Router, token]);
 };
 
 export default useAuthCheck;

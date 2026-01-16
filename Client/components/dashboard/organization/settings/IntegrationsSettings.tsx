@@ -114,10 +114,8 @@ const categories = {
 } as const;
 
 export function IntegrationsSettings() {
-  const [activeIntegration, setActiveIntegration] =
+  const [_activeIntegration, setActiveIntegration] =
     useState<Integration | null>(null);
-  // TODO: remove console.log when the integration connection logic is implemented
-  console.log('activeIntegration:', activeIntegration);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isConfiguring, setIsConfiguring] = useState(false);
@@ -138,9 +136,8 @@ export function IntegrationsSettings() {
       await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulated API call
       toast.success(`Successfully connected to ${integration.name}`);
       integration.status = 'connected';
-    } catch (error) {
+    } catch {
       toast.error(`Failed to connect to ${integration.name}`);
-      console.error('Integration connection error:', error);
     } finally {
       setIsConfiguring(false);
       setActiveIntegration(null);
@@ -153,9 +150,8 @@ export function IntegrationsSettings() {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated API call
       toast.success(`Successfully disconnected from ${integration.name}`);
       integration.status = 'disconnected';
-    } catch (error) {
+    } catch {
       toast.error(`Failed to disconnect from ${integration.name}`);
-      console.error('Integration disconnection error:', error);
     }
   };
 

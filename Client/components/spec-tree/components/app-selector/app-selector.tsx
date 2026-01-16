@@ -23,10 +23,8 @@ const AppSelector: React.FC<AppSelectorProps> = ({
   apps,
   setSelectedApp,
   selectedApp,
-  onAppCreated,
+  onAppCreated: _onAppCreated,
 }) => {
-  // TODO:  Remove this console.log
-  console.log('onAppCreated', onAppCreated);
   const dispatch = useDispatch();
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
@@ -70,19 +68,16 @@ const AppSelector: React.FC<AppSelectorProps> = ({
     dispatch(setSow({ id }));
   };
 
-  const handleToggleFavorite = (appId: string) => {
+  const handleToggleFavorite = (_appId: string) => {
     // This would typically be handled through your state management system
-    console.log('Toggle favorite for app:', appId);
   };
 
-  const handleToggleExpand = (appId: string) => {
+  const handleToggleExpand = (_appId: string) => {
     // This would typically be handled through your state management system
-    console.log('Toggle expand for app:', appId);
   };
 
-  const handleArchive = (appId: string) => {
+  const handleArchive = (_appId: string) => {
     // This would typically be handled through your state management system
-    console.log('Archive app:', appId);
   };
 
   return (

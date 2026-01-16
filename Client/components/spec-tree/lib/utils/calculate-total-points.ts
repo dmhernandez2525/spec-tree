@@ -4,6 +4,7 @@ import {
   selectFeatureById,
   selectUserStoryById,
 } from '../../../../lib/store/sow-slice';
+import { logger } from '@/lib/logger';
 
 const calculateTotalPoints = (
   state: RootState,
@@ -37,7 +38,7 @@ const calculateTotalPoints = (
   } else if (input && 'points' in input) {
     totalPoints += parseInt(input.points || '0', 10);
   } else {
-    console.log('Invalid input');
+    logger.log('Invalid input');
   }
 
   return totalPoints;

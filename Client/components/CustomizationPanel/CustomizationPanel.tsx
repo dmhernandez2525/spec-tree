@@ -130,7 +130,7 @@ export function CustomizationPanel({ onThemeChange }: Props): JSX.Element {
 
     applyThemeVariables(mode === 'dark');
     onThemeChange?.(theme);
-  }, [config, customColors, mode]);
+  }, [config, customColors, mode, onThemeChange]);
 
   const handleCustomColorChange = (
     mode: 'light' | 'dark',

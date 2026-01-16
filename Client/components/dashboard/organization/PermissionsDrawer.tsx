@@ -78,13 +78,11 @@ const permissions: Permission[] = [
 ];
 
 export function PermissionsDrawer({
-  organization,
-  subscription,
+  organization: _organization,
+  subscription: _subscription,
   openPermissions,
   setOpenPermissions,
 }: PermissionsDrawerProps) {
-  // TODO: Remove this console.log statement when we are are using organization, subscription
-  console.log({ organization, subscription });
   const [modifiedPermissions, setModifiedPermissions] =
     useState<Permission[]>(permissions);
 

@@ -33,9 +33,8 @@ export default function SpecTree() {
 
 function SpecTreeContent() {
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
-  const [chatApi, setChatApi] = useState<string | null>(null);
-  // TODO: use setChatApi Remove this console.log
-  console.log(setChatApi);
+  const [chatApi, _setChatApi] = useState<string | null>(null);
+  // TODO: use _setChatApi then remove underscore prefix
   const [apps, setApps] = useState<App[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,8 +52,7 @@ function SpecTreeContent() {
         if (fetchAppsResponse) {
           setApps(fetchAppsResponse);
         }
-      } catch (error) {
-        console.error('Failed to load initial data:', error);
+      } catch (_error) {
       } finally {
         setIsLoading(false);
       }
@@ -87,7 +85,7 @@ function SpecTreeContent() {
 
     try {
       const newApp = await strapiService.createApp({
-        applactionInformation:
+        applicationInformation:
           applicationInformation.split('\n')[0] || 'New App',
         globalInformation: applicationInformation,
       });

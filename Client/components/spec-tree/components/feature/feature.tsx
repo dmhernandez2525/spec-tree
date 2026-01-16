@@ -75,9 +75,8 @@ const initialFormState: FormState = {
   Points: '',
 };
 
-const Feature: React.FC<FeatureProps> = ({ feature, epic, index }) => {
-  // TODO: use index and remove console.log
-  console.log({ index });
+const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
+  // TODO: use _index and remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -118,9 +117,8 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index }) => {
           state: localState,
         })
       );
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to generate user stories');
-      console.error(err);
     } finally {
       setIsLoading(false);
     }

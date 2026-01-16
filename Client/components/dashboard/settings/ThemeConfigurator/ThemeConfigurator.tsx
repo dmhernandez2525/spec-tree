@@ -626,21 +626,10 @@ const isPercentageToken = (section, tokenName) => {
 };
 
 const isStyleToken = (section, tokenName) => {
-  console.log({
-    location: 'isStyleToken',
-    section,
-  });
-
   return tokenName.includes('style');
 };
 
-const TokenInput = ({ type, value, onChange, token, section }) => {
-  console.log({
-    location: 'TokenInput',
-    token,
-    section,
-  });
-
+const TokenInput = ({ type, value, onChange, token: _token, section: _section }) => {
   if (type === 'color') {
     return <ColorPicker value={value} onChange={onChange} />;
   }
@@ -804,8 +793,8 @@ const TypographyManager: React.FC<{
         );
         const data = await response.json();
         setGoogleFonts(data.items.slice(0, 100)); // Get top 100 fonts
-      } catch (error) {
-        console.error('Error fetching Google Fonts:', error);
+      } catch {
+        // Error fetching Google Fonts
       }
     };
 

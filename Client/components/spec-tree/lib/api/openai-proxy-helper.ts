@@ -27,8 +27,6 @@ export const makeProxyCall = async ({
   errorContext,
   maxTokens = 4096,
 }: ProxyCallParams) => {
-  // TODO: use maxTokens Remove this console.log
-  console.log(maxTokens);
   if (!systemPrompt || !userPrompt) {
     throw new OpenAIProxyError(
       'Missing required prompts',
@@ -51,7 +49,8 @@ export const makeProxyCall = async ({
 
     const response = await openAIProxy.createCompletion(
       messages,
-      selectedModel
+      selectedModel,
+      { maxTokens }
     );
     if (!response?.data) {
       throw new OpenAIProxyError(
@@ -74,12 +73,6 @@ export const makeProxyCall = async ({
     };
   } catch (error) {
     const proxyError = error as ProxyError;
-    console.error(`Failed to ${errorContext}:`, {
-      error: proxyError,
-      status: proxyError.status,
-      message: proxyError.message,
-      response: proxyError.response?.data?.error,
-    });
 
     throw new OpenAIProxyError(
       proxyError.response?.data?.error?.message ||

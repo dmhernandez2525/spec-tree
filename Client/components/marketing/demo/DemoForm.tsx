@@ -107,9 +107,7 @@ export function DemoForm() {
     },
   });
 
-  async function onSubmit(data: FormValues) {
-    // TODO: use data and remove console.log
-    console.log(data);
+  async function onSubmit(_data: FormValues) {
     setIsSubmitting(true);
     try {
       // This would be replaced with your actual API call
@@ -117,8 +115,7 @@ export function DemoForm() {
 
       toast.success('Demo request submitted successfully!');
       form.reset();
-    } catch (error) {
-      console.error('Demo request error:', error);
+    } catch {
       toast.error('Failed to submit demo request. Please try again.');
     } finally {
       setIsSubmitting(false);

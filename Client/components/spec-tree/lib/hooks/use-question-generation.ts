@@ -6,18 +6,18 @@ import {
   generateQuestionsForTask,
   generateQuestionsForGlobalRefinement,
 } from '../api/openai';
-// TODO: use
-// import validateAnswers from '../helpers/validateAnswers';
 import { ExtendedWorkItemType, ContextualQuestion } from '../types/work-items';
 import generateId from '../utils/generate-id';
 import { useSelector } from 'react-redux';
-import { selectChatApi } from '../../../../lib/store/sow-slice';
+import { selectChatApi, selectSelectedModel } from '../../../../lib/store/sow-slice';
+import { logger } from '../../../../lib/logger';
 
 const useQuestionGeneration = (
   workItemType: ExtendedWorkItemType,
   initialQuestions: ContextualQuestion[] = []
 ) => {
   const chatApi = useSelector(selectChatApi);
+  const selectedModel = useSelector(selectSelectedModel);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,54 +35,74 @@ const useQuestionGeneration = (
           response = await generateQuestionsForEpic({
             chatApi,
             epic: workItem,
-            selectedModel: 'gpt-3.5-turbo',
+            selectedModel,
           });
           break;
         case 'features':
           response = await generateQuestionsForFeature({
             chatApi,
             feature: workItem,
-            selectedModel: 'gpt-3.5-turbo',
+            selectedModel,
           });
           break;
         case 'userStories':
           response = await generateQuestionsForUserStory({
             chatApi,
             userStory: workItem,
-            selectedModel: 'gpt-3.5-turbo',
+            selectedModel,
           });
           break;
         case 'tasks':
           response = await generateQuestionsForTask({
             chatApi,
             task: workItem,
-            selectedModel: 'gpt-3.5-turbo',
+            selectedModel,
           });
           break;
         case 'Global':
           response = await generateQuestionsForGlobalRefinement({
             chatApi,
             globalInformation: workItem,
-            selectedModel: 'gpt-3.5-turbo',
+            selectedModel,
           });
           break;
         default:
-          throw new Error('Invalid work item type.');
+          throw new Error(`Invalid work item type: ${workItemType}`);
       }
-      const parsedQuestions = response.data.choices[0].message.content
-        .split('=+=')
+
+      // Validate response structure
+      const content = response?.data?.choices?.[0]?.message?.content;
+      if (!content || typeof content !== 'string') {
+        throw new Error('Invalid response format from AI service');
+      }
+
+      // Parse questions with delimiter fallback
+      const delimiter = '=+=';
+      const questionStrings = content.includes(delimiter)
+        ? content.split(delimiter)
+        : [content]; // Fallback to single question if no delimiter
+
+      const parsedQuestions = questionStrings
         .map((question: string) => question.trim())
         .filter((question: string) => question.length > 0)
         .map((question: string) => ({
           id: generateId(),
           question,
         }));
+
+      if (parsedQuestions.length === 0) {
+        throw new Error('No valid questions generated');
+      }
+
       setQuestions(parsedQuestions);
       setLoading(false);
       return parsedQuestions;
     } catch (err) {
-      console.error('Failed to generate questions:', err);
-      setError('Failed to generate questions.');
+      logger.error('Failed to generate questions:', err);
+      const errorMessage = err instanceof Error
+        ? `Failed to generate questions: ${err.message}`
+        : 'Failed to generate questions. Please try again.';
+      setError(errorMessage);
       setLoading(false);
       return null;
     }

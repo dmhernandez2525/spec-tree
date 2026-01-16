@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import { CustomizationPanel } from '@/components/CustomizationPanel/CustomizationPanel';
 import { Button } from '@/components/ui/button';
 import { useFonts } from '@/components/FontManager';
+import { logger } from '@/lib/logger';
 
 // TODO: create a separate Layout component to keep the page component clean
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -28,7 +29,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
 const ComponentLibraryPage = () => {
   const handleThemeChange = (theme: any) => {
-    console.log('Theme changed:', theme);
+    logger.log('Theme changed:', theme);
   };
 
   const { getCurrentFonts } = useFonts();

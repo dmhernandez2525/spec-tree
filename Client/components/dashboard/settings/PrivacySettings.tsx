@@ -55,9 +55,7 @@ export function PrivacySettings() {
     },
   });
 
-  function onSubmit(data: PrivacyFormValues) {
-    // TODO: use data and remove console.log
-    console.log(data);
+  function onSubmit(_data: PrivacyFormValues) {
     toast.success('Privacy settings updated');
   }
 

@@ -146,16 +146,14 @@ export function AISettings() {
     },
   });
 
-  async function onSubmit(data: AISettingsFormData) {
+  async function onSubmit(_data: AISettingsFormData) {
     // TODO: Remove console.log
-    console.log(data);
     setIsUpdating(true);
     try {
       // TODO: Implement API call to update AI settings
       await new Promise((resolve) => setTimeout(resolve, 1000));
       toast.success('AI settings updated successfully');
-    } catch (error) {
-      console.log(`Failed to update AI settings: ${error}`);
+    } catch {
       toast.error('Failed to update AI settings');
     } finally {
       setIsUpdating(false);
