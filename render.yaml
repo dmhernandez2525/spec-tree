@@ -1,29 +1,154 @@
+# Spec Tree - Render Infrastructure Configuration
+# ============================================
+# This configuration deploys all services for the Spec Tree application:
+# - Client: Next.js frontend
+# - Server: Strapi CMS backend
+# - Microservice: OpenAI API proxy
+# - Database: PostgreSQL for Strapi
+#
+# Pricing (as of January 2026):
+# - Web Services (starter): $7/month each
+# - PostgreSQL (basic-256mb): $6/month
+# - Total estimated: ~$27/month for full stack
+#
+# NOTE: Values marked "UPDATE_ME" must be configured manually after deployment
+
 services:
+  # =============================================
+  # Client - Next.js Frontend
+  # =============================================
   - type: web
-    name: strapi
-    env: node
+    name: spec-tree-client
+    runtime: node
+    plan: starter
+    buildCommand: cd Client && npm install && npm run build
+    startCommand: cd Client && npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      # Strapi CMS connection
+      - key: NEXT_PUBLIC_STRAPI_API_URL
+        fromService:
+          name: spec-tree-strapi
+          type: web
+          property: hostport
+      - key: NEXT_PUBLIC_STRAPI_TOKEN
+        value: UPDATE_ME
+      # Microservice connection
+      - key: NEXT_PUBLIC_MICROSERVICE_URL
+        fromService:
+          name: spec-tree-microservice
+          type: web
+          property: hostport
+      - key: NEXT_PUBLIC_MICROSERVICE_API_KEY
+        value: UPDATE_ME
+      # Stripe configuration
+      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        value: UPDATE_ME
+      - key: NEXT_PUBLIC_STRIPE_STARTER_PRICE_ID
+        value: UPDATE_ME
+      - key: NEXT_PUBLIC_STRIPE_PRO_PRICE_ID
+        value: UPDATE_ME
+      - key: NEXT_PUBLIC_STRIPE_ENTERPRISE_PRICE_ID
+        value: UPDATE_ME
+      # Optional: Analytics & Error Tracking
+      - key: NEXT_PUBLIC_GA_ID
+        value: ""
+      - key: NEXT_PUBLIC_SENTRY_DSN
+        value: ""
+
+  # =============================================
+  # Server - Strapi CMS Backend
+  # =============================================
+  - type: web
+    name: spec-tree-strapi
+    runtime: node
     plan: starter
     buildCommand: cd Server && npm install --force && npm run build
     startCommand: cd Server && npm run start
     healthCheckPath: /_health
     disk:
       name: strapi-uploads
-      mountPath: /opt/render/project/src/public/uploads
+      mountPath: /opt/render/project/src/Server/public/uploads
       sizeGB: 1
     envVars:
       - key: NODE_VERSION
-        value: 18.15.0
+        value: "18"
       - key: NODE_ENV
         value: production
+      - key: HOST
+        value: "0.0.0.0"
+      - key: PORT
+        value: "1337"
+      # Database connection (auto-populated from Render PostgreSQL)
       - key: DATABASE_URL
         fromDatabase:
-          name: strapi
+          name: spec-tree-db
           property: connectionString
-      - key: JWT_SECRET
+      - key: DATABASE_CLIENT
+        value: postgres
+      - key: DATABASE_SSL
+        value: "true"
+      # Security keys (auto-generated)
+      - key: APP_KEYS
+        generateValue: true
+      - key: API_TOKEN_SALT
         generateValue: true
       - key: ADMIN_JWT_SECRET
         generateValue: true
+      - key: TRANSFER_TOKEN_SALT
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+      # Email (SendGrid) - optional
+      - key: SENDGRID_API_KEY
+        value: UPDATE_ME
+      # AWS S3 for uploads - optional
+      - key: AWS_ACCESS_KEY_ID
+        value: UPDATE_ME
+      - key: AWS_SECRET_ACCESS_KEY
+        value: UPDATE_ME
+      - key: AWS_REGION
+        value: UPDATE_ME
+      - key: AWS_BUCKET_NAME
+        value: UPDATE_ME
 
+  # =============================================
+  # Microservice - OpenAI API Proxy
+  # =============================================
+  - type: web
+    name: spec-tree-microservice
+    runtime: node
+    plan: starter
+    buildCommand: cd Microservice && npm install && npm run build
+    startCommand: cd Microservice && npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      # OpenAI API key (REQUIRED - set manually)
+      - key: OPENAI_API_KEY
+        value: UPDATE_ME
+      # CORS - allow requests from client
+      - key: CORS_ORIGIN
+        fromService:
+          name: spec-tree-client
+          type: web
+          property: hostport
+      # API key for client authentication
+      - key: API_KEY
+        generateValue: true
+
+# =============================================
+# Database - PostgreSQL for Strapi
+# =============================================
 databases:
-  - name: strapi
-    plan: free
+  - name: spec-tree-db
+    plan: basic-256mb
+    databaseName: spec_tree
+    user: spec_tree_user
