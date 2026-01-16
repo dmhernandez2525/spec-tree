@@ -68,11 +68,11 @@
 
 ## Code in Other Repos
 
-### Tailored-Golf BB Code
-- **Found**: 2 files with "schematic" references
-  - `apps/tailored-ecosystem/server/config/plugins.ts` - Plugin config (not BB code)
-  - `apps/tailored-ecosystem/client/src/api/fetchData.ts` - API helper (not BB code)
-- **Actual BB code**: None
+### Tailored-Golf Code
+- **Found**: 2 files with previous references (cleaned)
+  - `apps/tailored-ecosystem/server/config/plugins.ts` - Plugin config (not Spec Tree code)
+  - `apps/tailored-ecosystem/client/src/api/fetchData.ts` - API helper (not Spec Tree code)
+- **Actual Spec Tree code**: None
 - **MultiAgentWorkTracking**: Contains templates only (already copied in Phase 1)
 
 ### Old spec-tree Unique Code

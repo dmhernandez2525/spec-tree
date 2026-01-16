@@ -480,9 +480,9 @@ export function generateTheme({
     // Apply radius
     root.style.setProperty('--radius', `${radius}rem`);
 
-    // For the schematic theme, let's add a subtle schematic pattern as a background overlay.
+    // For the schematic theme, add a subtle grid pattern as a background overlay.
     if (style === 'schematic') {
-      // The schematic theme: Adding a subtle schematic grid pattern using CSS masks or background images.
+      // The schematic theme: Adding a subtle grid pattern using CSS masks or background images.
       // We'll define a pattern that looks like grid lines, subtle and modern.
       // We'll apply this pattern to the :root and .dark selectors.
       // Since we cannot use placeholders, we directly define the pattern here.

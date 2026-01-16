@@ -145,7 +145,7 @@ Spec Tree is configured for one-click deployment on [Render](https://render.com)
 ### Deploy to Render
 
 1. Fork this repository
-2. Create a new **Infrastructure** in Render
+2. Create a new **Infrastructure** deployment in Render
 3. Connect your forked repository
 4. Render will automatically provision:
    - Next.js client (web service)
