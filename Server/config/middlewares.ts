@@ -94,7 +94,7 @@ export default [
   {
     name: "strapi::poweredBy",
     config: {
-      poweredBy: "BrainyDeveloper <https://www.spectree.dev/>",
+      poweredBy: "Spec Tree <https://spectree.dev>",
     },
   },
   "strapi::poweredBy",

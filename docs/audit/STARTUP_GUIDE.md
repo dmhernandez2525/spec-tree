@@ -193,7 +193,7 @@ curl -X POST http://localhost:3001/api/openai/completion \
 **Solution:**
 1. Verify PostgreSQL is running: `pg_isready`
 2. Check database credentials in `.env`
-3. Ensure database exists: `psql -l | grep spec`
+3. Ensure database exists: `psql -l | grep spec_tree`
 
 ### Issue: Client can't connect to Strapi
 **Error:** `Network error` or `401 Unauthorized`
