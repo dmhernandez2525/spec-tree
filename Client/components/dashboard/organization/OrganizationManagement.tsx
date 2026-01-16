@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks/use-store';
-import { fetchOrganizationData } from '@/lib/store/organization-slice';
+import { fetchOrganizationData, updateOrganization } from '@/lib/store/organization-slice';
 import { InviteUsers } from './InviteUsers';
 import { MemberManagement } from './MemberManagement';
 import { SubscriptionManagement } from './SubscriptionManagement';
@@ -55,8 +55,12 @@ export function OrganizationManagement() {
   };
 
   const handleUpdateOrganization = async (data: any) => {
-    // TODO: Implement organization update
-    logger.log('Updating organization:', data);
+    try {
+      await dispatch(updateOrganization(data)).unwrap();
+    } catch (error) {
+      logger.error('Failed to update organization:', error);
+      throw error;
+    }
   };
 
   const canManageSettings = userRole === 'owner' || userRole === 'admin';

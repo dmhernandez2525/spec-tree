@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { toast } from 'sonner';
+import { useAppDispatch } from '@/lib/hooks/use-store';
+import { updateSSOConfig } from '@/lib/store/settings-slice';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -51,6 +53,7 @@ const ssoConfigSchema = z.object({
 type SSOConfigFormData = z.infer<typeof ssoConfigSchema>;
 
 export function SSOSettings() {
+  const dispatch = useAppDispatch();
   const [activeProvider, setActiveProvider] = useState<string | null>(null);
   const [isConfiguring, setIsConfiguring] = useState(false);
 
@@ -70,11 +73,10 @@ export function SSOSettings() {
     },
   });
 
-  async function onSubmit(_data: SSOConfigFormData) {
+  async function onSubmit(data: SSOConfigFormData) {
     setIsConfiguring(true);
     try {
-      // TODO: Implement SSO configuration API call
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulated API call
+      await dispatch(updateSSOConfig(data)).unwrap();
       toast.success('SSO configuration updated successfully');
     } catch {
       toast.error('Failed to update SSO configuration');
