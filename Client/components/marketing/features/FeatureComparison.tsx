@@ -10,7 +10,7 @@ import { Icons } from '@/components/shared/icons';
 
 interface ComparisonFeature {
   name: string;
-  schematic: boolean;
+  specTree: boolean;
   traditional: boolean;
   description: string;
 }
@@ -18,39 +18,39 @@ interface ComparisonFeature {
 const features: ComparisonFeature[] = [
   {
     name: 'AI-Powered Context Gathering',
-    schematic: true,
+    specTree: true,
     traditional: false,
     description:
       'Intelligent system that asks relevant questions based on project type',
   },
   {
     name: 'Automated Work Item Generation',
-    schematic: true,
+    specTree: true,
     traditional: false,
     description:
       'Generate complete project hierarchies from high-level concepts',
   },
   {
     name: 'Context Propagation',
-    schematic: true,
+    specTree: true,
     traditional: false,
     description: 'Automatically sync context across related items',
   },
   {
     name: 'Template System',
-    schematic: true,
+    specTree: true,
     traditional: true,
     description: 'Save and reuse project templates',
   },
   {
     name: 'Integration Capabilities',
-    schematic: true,
+    specTree: true,
     traditional: true,
     description: 'Connect with other project management tools',
   },
   {
     name: 'Analytics & Reporting',
-    schematic: true,
+    specTree: true,
     traditional: true,
     description: 'Track project progress and performance',
   },
