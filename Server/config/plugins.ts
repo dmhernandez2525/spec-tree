@@ -18,7 +18,7 @@ export default ({ env }) => {
         settings: {
           defaultFrom: env(
             "DEFAULT_FROM",
-            "brainydev@em4602.spectree.dev"
+            "noreply@spectree.dev"
           ),
           defaultReplyTo: env(
             "DEFAULT_REPLY_TO",
