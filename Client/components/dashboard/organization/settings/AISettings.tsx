@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { toast } from 'sonner';
+import { useAppDispatch } from '@/lib/hooks/use-store';
+import { updateAISettings } from '@/lib/store/settings-slice';
 
 import {
   Card,
@@ -125,6 +127,7 @@ const aiSettingsSchema = z.object({
 type AISettingsFormData = z.infer<typeof aiSettingsSchema>;
 
 export function AISettings() {
+  const dispatch = useAppDispatch();
   const [selectedProvider, setSelectedProvider] = useState<AIProvider>(
     aiProviders[0]
   );
@@ -146,12 +149,10 @@ export function AISettings() {
     },
   });
 
-  async function onSubmit(_data: AISettingsFormData) {
-    // TODO: Remove console.log
+  async function onSubmit(data: AISettingsFormData) {
     setIsUpdating(true);
     try {
-      // TODO: Implement API call to update AI settings
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await dispatch(updateAISettings(data)).unwrap();
       toast.success('AI settings updated successfully');
     } catch {
       toast.error('Failed to update AI settings');

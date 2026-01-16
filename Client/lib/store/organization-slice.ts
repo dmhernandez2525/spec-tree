@@ -77,6 +77,109 @@ export const cancelInvite = createAsyncThunk(
   }
 );
 
+export const resendInvite = createAsyncThunk(
+  'organization/resendInvite',
+  async (inviteId: string) => {
+    const response = await fetch(`/api/organizations/invites/${inviteId}/resend`, {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to resend invite');
+    }
+
+    return response.json();
+  }
+);
+
+export const updateOrganization = createAsyncThunk(
+  'organization/update',
+  async (
+    data: Partial<{
+      name: string;
+      size: string;
+      industry: string;
+      description: string;
+      websiteUrl: string;
+    }>,
+    { getState }
+  ) => {
+    const state = getState() as RootState;
+    const organizationId = state.organization.currentOrganization?.id;
+
+    if (!organizationId) {
+      throw new Error('No organization selected');
+    }
+
+    const response = await fetch(`/api/organizations/${organizationId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update organization');
+    }
+
+    return response.json();
+  }
+);
+
+export const updateMemberRole = createAsyncThunk(
+  'organization/updateMemberRole',
+  async (
+    { memberId, newRole }: { memberId: string; newRole: OrganizationRole },
+    { getState }
+  ) => {
+    const state = getState() as RootState;
+    const organizationId = state.organization.currentOrganization?.id;
+
+    if (!organizationId) {
+      throw new Error('No organization selected');
+    }
+
+    const response = await fetch(
+      `/api/organizations/${organizationId}/members/${memberId}`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role: newRole }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update member role');
+    }
+
+    return { memberId, newRole };
+  }
+);
+
+export const removeMember = createAsyncThunk(
+  'organization/removeMember',
+  async (memberId: string, { getState }) => {
+    const state = getState() as RootState;
+    const organizationId = state.organization.currentOrganization?.id;
+
+    if (!organizationId) {
+      throw new Error('No organization selected');
+    }
+
+    const response = await fetch(
+      `/api/organizations/${organizationId}/members/${memberId}`,
+      {
+        method: 'DELETE',
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to remove member');
+    }
+
+    return memberId;
+  }
+);
+
 const organizationSlice = createSlice({
   name: 'organization',
   initialState,
@@ -113,6 +216,18 @@ const organizationSlice = createSlice({
         state.invites = state.invites.filter(
           (invite) => invite.id !== action.payload
         );
+      })
+      .addCase(updateOrganization.fulfilled, (state, action) => {
+        state.currentOrganization = action.payload;
+      })
+      .addCase(updateMemberRole.fulfilled, (state, action) => {
+        const member = state.members.find((m) => m.id === action.payload.memberId);
+        if (member) {
+          member.role = action.payload.newRole;
+        }
+      })
+      .addCase(removeMember.fulfilled, (state, action) => {
+        state.members = state.members.filter((m) => m.id !== action.payload);
       });
   },
 });
