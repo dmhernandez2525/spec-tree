@@ -5,6 +5,7 @@ import { organizationReducer } from './organization-slice';
 import { settingsReducer } from './settings-slice';
 import subscriptionReducer from './subscription-slice';
 import sowReducer from './sow-slice';
+import demoReducer from './demo-slice';
 
 export const makeStore = () => {
   return configureStore({
@@ -15,6 +16,7 @@ export const makeStore = () => {
       settings: settingsReducer,
       subscription: subscriptionReducer,
       sow: sowReducer,
+      demo: demoReducer,
     },
   });
 };
