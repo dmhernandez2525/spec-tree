@@ -505,6 +505,119 @@ class StrapiService {
   async fetchAllAppData(documentId: string): Promise<StrapiApp> {
     return this.fetchAppById(documentId);
   }
+
+  // Reorder operations - update position field
+  async updateEpicPosition(
+    documentId: string,
+    position: number
+  ): Promise<ResEpicType> {
+    return this.updateEpic(documentId, { position } as Partial<EpicType>);
+  }
+
+  async updateFeaturePosition(
+    documentId: string,
+    position: number,
+    epicId?: string
+  ): Promise<ResFeatureType> {
+    const data: Record<string, unknown> = { position };
+    if (epicId) {
+      data.epic = { connect: [epicId] };
+    }
+    try {
+      const response = await this.instance.put(
+        `/features/${documentId}`,
+        { data },
+        {
+          params: {
+            populate: {
+              epic: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async updateUserStoryPosition(
+    documentId: string,
+    position: number,
+    featureId?: string
+  ): Promise<ResUserStoryType> {
+    const data: Record<string, unknown> = { position };
+    if (featureId) {
+      data.feature = { connect: [featureId] };
+    }
+    try {
+      const response = await this.instance.put(
+        `/user-stories/${documentId}`,
+        { data },
+        {
+          params: {
+            populate: {
+              feature: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async updateTaskPosition(
+    documentId: string,
+    position: number,
+    userStoryId?: string
+  ): Promise<ResTaskType> {
+    const data: Record<string, unknown> = { position };
+    if (userStoryId) {
+      data.userStory = { connect: [userStoryId] };
+    }
+    try {
+      const response = await this.instance.put(
+        `/tasks/${documentId}`,
+        { data },
+        {
+          params: {
+            populate: {
+              userStory: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  // Batch reorder - update positions for multiple items of the same type
+  async batchUpdatePositions(
+    itemType: 'epics' | 'features' | 'user-stories' | 'tasks',
+    items: Array<{ documentId: string; position: number }>
+  ): Promise<void> {
+    try {
+      await Promise.all(
+        items.map((item) =>
+          this.instance.put(`/${itemType}/${item.documentId}`, {
+            data: { position: item.position },
+          })
+        )
+      );
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
 }
 
 export const strapiService = new StrapiService();
