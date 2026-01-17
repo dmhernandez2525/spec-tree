@@ -58,16 +58,25 @@ export interface AIProviderConfig {
   maxTokens?: number;
 }
 
-// Provider-specific model lists
+// Provider-specific model lists - Pricing updated January 2026
 export const OPENAI_MODELS: AIModel[] = [
   {
     id: 'gpt-4o',
     name: 'GPT-4o',
     provider: 'openai',
     contextWindow: 128000,
-    maxOutputTokens: 4096,
-    inputPricePerMillion: 5,
-    outputPricePerMillion: 15,
+    maxOutputTokens: 16384,
+    inputPricePerMillion: 2.5,
+    outputPricePerMillion: 10,
+  },
+  {
+    id: 'gpt-4o-mini',
+    name: 'GPT-4o Mini',
+    provider: 'openai',
+    contextWindow: 128000,
+    maxOutputTokens: 16384,
+    inputPricePerMillion: 0.15,
+    outputPricePerMillion: 0.6,
   },
   {
     id: 'gpt-4-turbo',
@@ -79,26 +88,53 @@ export const OPENAI_MODELS: AIModel[] = [
     outputPricePerMillion: 30,
   },
   {
-    id: 'gpt-4',
-    name: 'GPT-4',
+    id: 'o1',
+    name: 'o1 (Reasoning)',
     provider: 'openai',
-    contextWindow: 8192,
-    maxOutputTokens: 4096,
-    inputPricePerMillion: 30,
+    contextWindow: 200000,
+    maxOutputTokens: 100000,
+    inputPricePerMillion: 15,
     outputPricePerMillion: 60,
   },
   {
-    id: 'gpt-3.5-turbo',
-    name: 'GPT-3.5 Turbo',
+    id: 'o1-mini',
+    name: 'o1 Mini',
     provider: 'openai',
-    contextWindow: 16385,
-    maxOutputTokens: 4096,
-    inputPricePerMillion: 0.5,
-    outputPricePerMillion: 1.5,
+    contextWindow: 128000,
+    maxOutputTokens: 65536,
+    inputPricePerMillion: 3,
+    outputPricePerMillion: 12,
   },
 ];
 
 export const ANTHROPIC_MODELS: AIModel[] = [
+  {
+    id: 'claude-opus-4-5-20251101',
+    name: 'Claude Opus 4.5',
+    provider: 'anthropic',
+    contextWindow: 200000,
+    maxOutputTokens: 32000,
+    inputPricePerMillion: 5,
+    outputPricePerMillion: 25,
+  },
+  {
+    id: 'claude-sonnet-4-5-20251101',
+    name: 'Claude Sonnet 4.5',
+    provider: 'anthropic',
+    contextWindow: 200000,
+    maxOutputTokens: 16000,
+    inputPricePerMillion: 3,
+    outputPricePerMillion: 15,
+  },
+  {
+    id: 'claude-haiku-4-5-20251022',
+    name: 'Claude Haiku 4.5',
+    provider: 'anthropic',
+    contextWindow: 200000,
+    maxOutputTokens: 8192,
+    inputPricePerMillion: 1,
+    outputPricePerMillion: 5,
+  },
   {
     id: 'claude-3-5-sonnet-20241022',
     name: 'Claude 3.5 Sonnet',
@@ -107,15 +143,6 @@ export const ANTHROPIC_MODELS: AIModel[] = [
     maxOutputTokens: 8192,
     inputPricePerMillion: 3,
     outputPricePerMillion: 15,
-  },
-  {
-    id: 'claude-3-opus-20240229',
-    name: 'Claude 3 Opus',
-    provider: 'anthropic',
-    contextWindow: 200000,
-    maxOutputTokens: 4096,
-    inputPricePerMillion: 15,
-    outputPricePerMillion: 75,
   },
   {
     id: 'claude-3-haiku-20240307',
@@ -130,13 +157,31 @@ export const ANTHROPIC_MODELS: AIModel[] = [
 
 export const GEMINI_MODELS: AIModel[] = [
   {
+    id: 'gemini-2.5-pro',
+    name: 'Gemini 2.5 Pro',
+    provider: 'gemini',
+    contextWindow: 1000000,
+    maxOutputTokens: 65536,
+    inputPricePerMillion: 1.25,
+    outputPricePerMillion: 10,
+  },
+  {
+    id: 'gemini-2.5-flash',
+    name: 'Gemini 2.5 Flash',
+    provider: 'gemini',
+    contextWindow: 1000000,
+    maxOutputTokens: 65536,
+    inputPricePerMillion: 0.5,
+    outputPricePerMillion: 3,
+  },
+  {
     id: 'gemini-1.5-pro',
     name: 'Gemini 1.5 Pro',
     provider: 'gemini',
     contextWindow: 1000000,
     maxOutputTokens: 8192,
-    inputPricePerMillion: 3.5,
-    outputPricePerMillion: 10.5,
+    inputPricePerMillion: 1.25,
+    outputPricePerMillion: 5,
   },
   {
     id: 'gemini-1.5-flash',
@@ -146,15 +191,6 @@ export const GEMINI_MODELS: AIModel[] = [
     maxOutputTokens: 8192,
     inputPricePerMillion: 0.075,
     outputPricePerMillion: 0.3,
-  },
-  {
-    id: 'gemini-pro',
-    name: 'Gemini Pro',
-    provider: 'gemini',
-    contextWindow: 32000,
-    maxOutputTokens: 8192,
-    inputPricePerMillion: 0.5,
-    outputPricePerMillion: 1.5,
   },
 ];
 
