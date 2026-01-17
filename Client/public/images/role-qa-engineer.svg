@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="400" cy="180" r="70" fill="url(#accent)" opacity="0.2"/>
+  <path d="M370 180 L390 200 L430 160" fill="none" stroke="#10b981" stroke-width="6" stroke-linecap="round"/>
+  <rect x="150" y="280" width="200" height="150" rx="8" fill="#1e1e3f" stroke="#7c3aed" stroke-width="2"/>
+  <text x="250" y="310" font-family="system-ui" font-size="12" fill="#94a3b8" text-anchor="middle">Test Matrix</text>
+  <rect x="170" y="330" width="30" height="30" fill="#10b981" opacity="0.8"/>
+  <rect x="210" y="330" width="30" height="30" fill="#10b981" opacity="0.8"/>
+  <rect x="250" y="330" width="30" height="30" fill="#ef4444" opacity="0.8"/>
+  <rect x="290" y="330" width="30" height="30" fill="#10b981" opacity="0.8"/>
+  <rect x="170" y="370" width="30" height="30" fill="#10b981" opacity="0.8"/>
+  <rect x="210" y="370" width="30" height="30" fill="#fbbf24" opacity="0.8"/>
+  <rect x="250" y="370" width="30" height="30" fill="#10b981" opacity="0.8"/>
+  <rect x="290" y="370" width="30" height="30" fill="#10b981" opacity="0.8"/>
+  <rect x="450" y="280" width="200" height="150" rx="8" fill="#1e1e3f" stroke="#10b981" stroke-width="2"/>
+  <text x="550" y="310" font-family="system-ui" font-size="12" fill="#94a3b8" text-anchor="middle">Bug Tracking</text>
+  <rect x="470" y="330" width="160" height="20" rx="4" fill="#ef4444" opacity="0.4"/>
+  <rect x="470" y="330" width="40" height="20" rx="4" fill="#ef4444"/>
+  <rect x="470" y="360" width="160" height="20" rx="4" fill="#fbbf24" opacity="0.4"/>
+  <rect x="470" y="360" width="80" height="20" rx="4" fill="#fbbf24"/>
+  <rect x="470" y="390" width="160" height="20" rx="4" fill="#10b981" opacity="0.4"/>
+  <rect x="470" y="390" width="140" height="20" rx="4" fill="#10b981"/>
+  <text x="400" y="500" font-family="system-ui" font-size="24" fill="white" text-anchor="middle" font-weight="bold">QA Engineer</text>
+  <text x="400" y="530" font-family="system-ui" font-size="14" fill="#94a3b8" text-anchor="middle">Quality Assurance & Testing</text>
+</svg>

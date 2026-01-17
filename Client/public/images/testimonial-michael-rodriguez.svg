@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="400" cy="200" r="80" fill="url(#accent)" opacity="0.3"/>
+  <circle cx="400" cy="200" r="60" fill="#06b6d4"/>
+  <circle cx="400" cy="180" r="20" fill="#1a1a2e"/>
+  <path d="M360 210 Q400 250 440 210" fill="none" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+  <rect x="250" y="320" width="300" height="150" rx="8" fill="#1e1e3f" stroke="url(#accent)" stroke-width="2"/>
+  <text x="400" y="360" font-family="system-ui" font-size="18" fill="white" text-anchor="middle" font-weight="bold">Michael Rodriguez</text>
+  <text x="400" y="390" font-family="system-ui" font-size="14" fill="#06b6d4" text-anchor="middle">Engineering Manager</text>
+  <text x="400" y="420" font-family="system-ui" font-size="12" fill="#94a3b8" text-anchor="middle">Software Development</text>
+  <rect x="300" y="440" width="200" height="6" rx="3" fill="url(#accent)" opacity="0.5"/>
+  <text x="400" y="540" font-family="system-ui" font-size="14" fill="#94a3b8" text-anchor="middle">"Our team velocity doubled with SpecTree"</text>
+</svg>

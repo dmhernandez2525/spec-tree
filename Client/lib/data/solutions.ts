@@ -6,8 +6,7 @@ export const industries: IndustrySolution[] = [
     title: 'Enterprise Organizations',
     description:
       'Scale your project management across teams while maintaining consistency and clarity.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/enterprise-dashboard.png',
     features: [
       {
         title: 'Cross-team collaboration tools',
@@ -66,8 +65,7 @@ export const industries: IndustrySolution[] = [
     title: 'Software Development',
     description:
       'Streamline your development process with AI-powered planning and context management.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/software-development.png',
     features: [
       {
         title: 'AI-powered sprint planning',
@@ -126,8 +124,7 @@ export const industries: IndustrySolution[] = [
     title: 'Digital Marketing Agencies',
     description:
       'Optimize campaign management and client reporting with data-driven insights.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/marketing-agency.png',
     features: [
       {
         title: 'Campaign performance tracking',
@@ -186,8 +183,7 @@ export const industries: IndustrySolution[] = [
     title: 'Healthcare Organizations',
     description:
       'Ensure compliance and patient care excellence through structured project management.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/healthcare-compliance.png',
     features: [
       {
         title: 'HIPAA-compliant workflows',
@@ -246,8 +242,7 @@ export const industries: IndustrySolution[] = [
     title: 'Construction & Engineering',
     description:
       'Coordinate complex projects and teams while maintaining safety and quality standards.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/construction-project.png',
     features: [
       {
         title: 'Project timeline tracking',
@@ -306,8 +301,7 @@ export const industries: IndustrySolution[] = [
     title: 'Educational Institutions',
     description:
       'Transform educational program management with collaborative tools and progress tracking.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/education-learning.png',
     features: [
       {
         title: 'Curriculum planning tools',
@@ -366,8 +360,7 @@ export const industries: IndustrySolution[] = [
     title: 'Tech Startups',
     description:
       'Accelerate your growth with AI-powered project management built for fast-moving startups.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/startup-growth.png',
     features: [
       {
         title: 'Agile workflow automation',
@@ -426,8 +419,7 @@ export const industries: IndustrySolution[] = [
     title: 'Digital Agencies',
     description:
       'Streamline client management and project delivery with tools built for modern agencies.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/solution-fintech.png',
     features: [
       {
         title: 'Client portal dashboard',
@@ -486,8 +478,7 @@ export const industries: IndustrySolution[] = [
     title: 'Creative Agencies',
     description:
       'Manage creative workflows and client deliverables with intuitive tools built for creative teams.',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/creative-agency.png',
     features: [
       {
         title: 'Asset management system',
@@ -548,8 +539,7 @@ export const roles: RoleSolution[] = [
     title: 'Product Owners',
     description:
       'Take control of your product roadmap with AI-assisted planning',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/product-owner-planning.png',
     keyResponsibilities: [
       'Feature prioritization',
       'Backlog management',
@@ -596,8 +586,7 @@ export const roles: RoleSolution[] = [
     title: 'Project Managers',
     description:
       'Deliver projects on time and within budget with intelligent planning tools',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/agile-sprint-planning.png',
     keyResponsibilities: [
       'Project planning',
       'Team coordination',
@@ -644,8 +633,7 @@ export const roles: RoleSolution[] = [
     title: 'Software Developers',
     description:
       'Write better code faster with AI-powered development workflows',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/software-development.png',
     keyResponsibilities: [
       'Code implementation',
       'Code review',
@@ -692,8 +680,7 @@ export const roles: RoleSolution[] = [
     title: 'UX/UI Designers',
     description:
       'Create exceptional user experiences with AI-enhanced design tools',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/designer-workflow.png',
     keyResponsibilities: [
       'User interface design',
       'Prototyping',
@@ -739,8 +726,7 @@ export const roles: RoleSolution[] = [
     slug: 'marketing-managers',
     title: 'Marketing Managers',
     description: 'Optimize marketing campaigns with data-driven insights',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/marketing-agency.png',
     keyResponsibilities: [
       'Campaign planning',
       'Performance tracking',
@@ -786,8 +772,7 @@ export const roles: RoleSolution[] = [
     slug: 'scrum-masters',
     title: 'Scrum Masters',
     description: 'Facilitate agile processes with intelligent team management',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/scrum-master-view.png',
     keyResponsibilities: [
       'Sprint planning',
       'Team facilitation',
@@ -833,8 +818,7 @@ export const roles: RoleSolution[] = [
     slug: 'quality-analysts',
     title: 'Quality Analysts',
     description: 'Ensure product quality with comprehensive testing tools',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/role-qa-engineer.svg',
     keyResponsibilities: [
       'Test planning',
       'Test execution',
@@ -880,8 +864,7 @@ export const roles: RoleSolution[] = [
     slug: 'business-analysts',
     title: 'Business Analysts',
     description: 'Transform business requirements into actionable solutions',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/role-business-analyst.png',
     keyResponsibilities: [
       'Requirements gathering',
       'Process analysis',

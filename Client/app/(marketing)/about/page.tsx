@@ -113,8 +113,7 @@ const aboutData: AboutPageData = {
       name: 'Sarah Chen',
       role: 'CEO & Founder',
       bio: 'Former tech lead with 15 years of project management experience',
-      imageUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      imageUrl: '/images/testimonial-avatar-1.png',
       socialLinks: {
         linkedin: 'https://linkedin.com/in/sarah-chen',
         twitter: 'https://twitter.com/sarahchen',
@@ -125,8 +124,7 @@ const aboutData: AboutPageData = {
       name: 'Michael Rodriguez',
       role: 'CTO',
       bio: 'AI researcher and full-stack developer with a focus on developer tools',
-      imageUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      imageUrl: '/images/testimonial-avatar-2.png',
       socialLinks: {
         linkedin: 'https://linkedin.com/in/michael-rodriguez',
         github: 'https://github.com/mrodriguez',
@@ -140,22 +138,19 @@ const aboutData: AboutPageData = {
         {
           name: 'Next.js',
           description: 'React framework for production',
-          iconUrl:
-            'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          iconUrl: '/images/about-team.svg',
           link: 'https://nextjs.org',
         },
         {
           name: 'TypeScript',
           description: 'JavaScript with syntax for types',
-          iconUrl:
-            'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          iconUrl: '/images/about-team.svg',
           link: 'https://www.typescriptlang.org',
         },
         {
           name: 'Tailwind CSS',
           description: 'Utility-first CSS framework',
-          iconUrl:
-            'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          iconUrl: '/images/about-team.svg',
           link: 'https://tailwindcss.com',
         },
       ],
@@ -166,15 +161,13 @@ const aboutData: AboutPageData = {
         {
           name: 'OpenAI',
           description: 'Advanced language models for context analysis',
-          iconUrl:
-            'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          iconUrl: '/images/about-team.svg',
           link: 'https://openai.com',
         },
         {
           name: 'TensorFlow',
           description: 'Machine learning framework',
-          iconUrl:
-            'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          iconUrl: '/images/about-team.svg',
           link: 'https://tensorflow.org',
         },
       ],
@@ -185,16 +178,14 @@ const aboutData: AboutPageData = {
       id: '1',
       name: 'TechCorp Solutions',
       description: 'Enterprise software integration partner',
-      logoUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      logoUrl: '/images/company-timeline.png',
       websiteUrl: 'https://techcorp.com',
     },
     {
       id: '2',
       name: 'AgileFlow',
       description: 'Agile project management tools',
-      logoUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      logoUrl: '/images/company-vision.png',
       websiteUrl: 'https://agileflow.com',
     },
   ],
