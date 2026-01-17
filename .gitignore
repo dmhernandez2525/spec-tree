@@ -1,5 +1,8 @@
 # Local documentation (not for public repo)
 docs/COMPETITIVE_ANALYSIS_AND_ROADMAP.md
 
+# Roadmap and agent tracking (internal only)
+roadmap/
+
 # OS files
 .DS_Store
