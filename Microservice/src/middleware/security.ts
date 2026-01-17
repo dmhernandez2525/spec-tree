@@ -15,7 +15,7 @@ export const validateRequest = (
   res: Response,
   next: NextFunction
 ) => {
-  const { messages, model } = req.body;
+  const { messages } = req.body;
 
   if (!Array.isArray(messages) || !messages.length) {
     return res.status(400).json({ error: 'Invalid messages format' });

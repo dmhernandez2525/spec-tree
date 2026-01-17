@@ -1,8 +1,8 @@
 {
-  "name": "server",
+  "name": "spec-tree-server",
   "private": true,
-  "version": "0.1.0",
-  "description": "A Strapi application",
+  "version": "1.0.0",
+  "description": "Spec Tree - Strapi CMS Backend",
   "scripts": {
     "dev": "strapi develop",
     "start": "strapi start",
