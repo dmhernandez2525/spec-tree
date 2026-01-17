@@ -61,14 +61,20 @@ export function CommentSection({
         user: 'current-user', // Replace with actual user ID
       });
 
-      if (response) {
-        setComments((prev) => [...prev, response]);
+      if (response && 'id' in response && 'content' in response) {
+        const newComment: Comment = {
+          id: response.id,
+          content: response.content,
+          createdAt: response.createdAt,
+        };
+        setComments((prev) => [...prev, newComment]);
         form.reset();
         toast.success('Comment posted successfully');
+      } else if (response && 'error' in response) {
+        toast.error(response.error.message || 'Failed to post comment');
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to post comment');
-      console.error('Comment submission error:', error);
     } finally {
       setIsSubmitting(false);
     }

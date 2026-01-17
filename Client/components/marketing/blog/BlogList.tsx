@@ -26,8 +26,8 @@ export function BlogList() {
         }
         setIsLoading(false);
       } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-        setError(errorMessage);
+        const message = err instanceof Error ? err.message : 'An error occurred';
+        setError(message);
         setIsLoading(false);
       }
     };

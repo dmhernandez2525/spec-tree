@@ -1,14 +1,19 @@
+/**
+ * Strapi API Data Fetching Module
+ *
+ * This module provides type-safe API calls to the Strapi CMS backend.
+ * Future improvements planned:
+ * - Centralize environment variable configuration
+ * - Extract reusable query parameters to dedicated config file
+ * - Migrate all functions to use the generic fetchCmsData pattern
+ */
 import axios, { AxiosResponse, Method } from 'axios';
-// TODO-p2: update how we pull env variables
+
 const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 
-// ======================== Reusable Parameters ========================
-// TODO-p2: make this into a file
-// This is a section for repeatable parameters that are used in the api calls
+// Reusable query parameters for common API calls
 const userData = 'populate[confirmed]=*&populate[blocked]=*&populate[avatar]=*';
-
-// ======================== Reusable Parameters ========================
 
 import type {
   ApiSettings,
@@ -407,7 +412,7 @@ const fetchPostsById = async (
   return await fetchSingleData<PostAttributes>('blog-posts', id);
 };
 
-const fetchUserInfo = async ({ name }: { name: string }): Promise<any> => {
+const fetchUserInfo = async ({ name }: { name: string }): Promise<ApiResponse<UserAttributes> | ApiErrorResponse> => {
   const nameStructure = name?.split(' ');
   const firstName = nameStructure?.[0];
   const lastName = nameStructure?.[1];
@@ -562,13 +567,13 @@ const fetchBlogPageData = async (): Promise<
 const updateUserEmail = async (
   userId: string | number,
   newEmail: string
-): Promise<any> => {
+): Promise<UserData | ApiErrorResponse> => {
   return await updateUserData('users', userId, { email: newEmail });
 };
 const updateUserPassword = async (
   userId: string | number,
   newPassword: string
-): Promise<any> => {
+): Promise<UserData | ApiErrorResponse> => {
   return await updateUserData('users', userId, { password: newPassword });
 };
 const updateUserInfo = async ({
@@ -577,7 +582,7 @@ const updateUserInfo = async ({
 }: {
   userId: string;
   data: Partial<UserAttributes>;
-}): Promise<any> => {
+}): Promise<UserData | ApiErrorResponse> => {
   return await updateUserData('users', userId, data);
 };
 const registerNewUser = async (
@@ -638,6 +643,14 @@ const resendConfirmationEmail = async (
   }
 };
 
+interface NewsletterSubscription {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}
+
 const addToNewsletter = async ({
   email,
   firstName,
@@ -648,7 +661,7 @@ const addToNewsletter = async ({
   firstName: string;
   lastName: string;
   phoneNumber: string;
-}): Promise<any> => {
+}): Promise<NewsletterSubscription | ApiErrorResponse> => {
   // If not, add the email to the user-group
   return await createData('user-groups/newsletter', {
     email,
@@ -658,24 +671,37 @@ const addToNewsletter = async ({
   });
 };
 
-const fetchGoogleReviews = async (placeId: string): Promise<any> => {
+interface GoogleReview {
+  author_name: string;
+  rating: number;
+  text: string;
+  time: number;
+  relative_time_description: string;
+}
+
+const fetchGoogleReviews = async (placeId: string): Promise<GoogleReview[] | null> => {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${apiKey}`;
 
   try {
     const response = await axios.get(url);
-    return response.data?.result?.reviews;
-  } catch (error) {
+    return response.data?.result?.reviews ?? null;
+  } catch {
     return null;
   }
 };
+interface ContactFormResponse {
+  success: boolean;
+  message?: string;
+}
+
 const sendContactUsEmail = async (emailDetails: {
   senderEmail: string;
   message: string;
   businessInfo: string;
   name: string;
   phoneNumber: string;
-}): Promise<any> => {
+}): Promise<ContactFormResponse | ApiErrorResponse> => {
   const emailData = {
     email: emailDetails.senderEmail,
     message: `Message: ${emailDetails.message} Business Info: ${emailDetails.businessInfo}`,
@@ -684,6 +710,15 @@ const sendContactUsEmail = async (emailDetails: {
   };
   return await createData('contact-page/contact', emailData);
 };
+
+interface CommentData {
+  id: number;
+  post: string;
+  user: string;
+  content: string;
+  createdAt: string;
+}
+
 const createComment = async (
   postId: string,
   commentData: {
@@ -691,7 +726,7 @@ const createComment = async (
     user: string;
     content: string;
   }
-): Promise<any> => {
+): Promise<CommentData | ApiErrorResponse> => {
   commentData.post = postId;
   return await createData('comments', commentData);
 };

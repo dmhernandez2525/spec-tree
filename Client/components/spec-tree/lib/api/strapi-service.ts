@@ -11,6 +11,7 @@ import {
   ResTaskType,
   RiskMitigationType,
 } from '../types/work-items';
+import type { StrapiApp } from '@/types/strapi';
 
 // Base Strapi response types
 interface StrapiResponse<T> {
@@ -125,8 +126,8 @@ class StrapiService {
     return this.fetch<App[]>('/apps');
   }
 
-  async fetchAppById(documentId: string): Promise<App> {
-    return this.fetch<App>(`/apps/${documentId}`, {
+  async fetchAppById(documentId: string): Promise<StrapiApp> {
+    return this.fetch<StrapiApp>(`/apps/${documentId}`, {
       populate: {
         contextualQuestions: true,
         epics: {
@@ -500,8 +501,8 @@ class StrapiService {
 
   // Settings & Configuration
 
-  // Fetch all data for an app
-  async fetchAllAppData(documentId: string): Promise<any> {
+  // Fetch all data for an app (deeply populated)
+  async fetchAllAppData(documentId: string): Promise<StrapiApp> {
     return this.fetchAppById(documentId);
   }
 }

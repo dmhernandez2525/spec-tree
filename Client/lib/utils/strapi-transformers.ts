@@ -15,7 +15,7 @@ import type {
   StrapiFeature,
   StrapiUserStory,
   StrapiTask,
-  StrapiAppDataResponse,
+  StrapiApp,
   StrapiContextualQuestion,
   TransformedSowData,
 } from '@/types/strapi';
@@ -130,7 +130,7 @@ export function transformTask(
  */
 export function transformStrapiDataToSow(
   documentId: string,
-  data: StrapiAppDataResponse
+  data: StrapiApp
 ): TransformedSowData {
   const epics: Record<string, EpicType> = {};
   const features: Record<string, FeatureType> = {};
@@ -138,7 +138,7 @@ export function transformStrapiDataToSow(
   const tasks: Record<string, TaskType> = {};
 
   // Process all epics and their nested data
-  for (const epic of data.epics) {
+  for (const epic of data.epics || []) {
     epics[epic.documentId] = transformEpic(epic);
 
     // Process features within this epic
