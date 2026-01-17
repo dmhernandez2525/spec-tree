@@ -300,7 +300,7 @@ export function MainNav() {
 
         {/* Center: Navigation links */}
         <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex">
-          <NavigationMenu>
+          <NavigationMenu delayDuration={0} skipDelayDuration={300}>
             <NavigationMenuList className="space-x-1">
               {routes.map((route) => (
                 <NavLink key={route.href} item={route} />

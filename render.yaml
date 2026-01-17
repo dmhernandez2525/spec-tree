@@ -72,7 +72,7 @@ services:
     name: spec-tree-strapi
     runtime: node
     plan: free
-    buildCommand: cd Server && npm install --force && npm run build
+    buildCommand: cd Server && npm install --legacy-peer-deps && npm run build
     startCommand: cd Server && npm run start
     healthCheckPath: /_health
     envVars:
