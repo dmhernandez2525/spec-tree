@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger';
 
 type ThemeObject = ReturnType<typeof generateTheme>['theme'];
 
-// TODO: create a separate Layout component to keep the page component clean
+// Theme Layout wrapper with hydration handling
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [mounted, setMounted] = React.useState(false);
 

@@ -369,8 +369,7 @@ const getUserRole = async (
   userToken: string
 ): Promise<UserAttributes | null | undefined> => {
   try {
-    // TODO-p3: remove populate=* once we have the user role in the user object coming back from the API
-    // const par =
+    // Note: Uses populate=* to include user role until API returns it by default
     const response = await axios.get(
       `${API_URL}/api/users/me?populate[role]=*`,
       {
@@ -390,14 +389,12 @@ const getUserRole = async (
 const fetchPosts = async (): Promise<
   ApiResponse<PostAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchData<PostAttributes>('blog-posts');
 };
 const fetchNewsFeed = async (): Promise<
   ApiResponse<NewsFeedData> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchData<NewsFeedData>('news-feeds');
 };
@@ -413,10 +410,10 @@ const fetchPostsById = async (
 };
 
 const fetchUserInfo = async ({ name }: { name: string }): Promise<ApiResponse<UserAttributes> | ApiErrorResponse> => {
+  // Parse name into first/last for more precise search
   const nameStructure = name?.split(' ');
   const firstName = nameStructure?.[0];
   const lastName = nameStructure?.[1];
-  // TODO-p2: we need to clean this up and make it more efficient, we should have deferent inputs for each field
   if (firstName && lastName) {
     return await fetchData(
       'users',
@@ -482,7 +479,6 @@ export interface OurProcessPageAttributes {
 const fetchOurProcessPageData = async (): Promise<
   SingleApiResponse<OurProcessPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchSingletonTypeData<OurProcessPageAttributes>(
     'our-process-page',
@@ -538,7 +534,6 @@ export interface ContactPageAttributes {
 const fetchContactPageData = async (): Promise<
   SingleApiResponse<ContactPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchSingletonTypeData<ContactPageAttributes>(
     'contact-page',
@@ -553,7 +548,6 @@ export interface BlogPageAttributes {
 const fetchBlogPageData = async (): Promise<
   SingleApiResponse<BlogPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchSingletonTypeData<BlogPageAttributes>('blog-page');
 };

@@ -23,8 +23,7 @@ export default function CareersPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // TODO: fetch jobs from an API.
-    // Here, we have a static array above, so this is just a no-op.
+    // Demo: Using static job data. Connect to CMS for production.
     setJobs(jobOpenings);
   }, []);
 

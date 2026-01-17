@@ -81,8 +81,7 @@ export default function ApplyPage() {
     }
 
     try {
-      // TODO: submit this form data to backend.
-      // For now, we will simulate a delay and then show a success message.
+      // Demo: Simulating form submission. Connect to backend API for production.
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // After successful submission:
