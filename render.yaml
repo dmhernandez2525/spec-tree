@@ -23,7 +23,7 @@ services:
     name: spec-tree-client
     runtime: node
     plan: free
-    buildCommand: cd Client && rm -rf node_modules && npm install && npm run build
+    buildCommand: cd Client && rm -rf node_modules && npm install --include=dev && npm run build
     startCommand: cd Client && npm run start
     envVars:
       - key: NODE_VERSION
