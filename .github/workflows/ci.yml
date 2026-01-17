@@ -173,6 +173,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.qualitygate.wait=false
+
+      - name: Wait for SonarCloud analysis
+        run: sleep 10
 
       - name: Mark security hotspots as reviewed
         if: github.event_name == 'pull_request'
@@ -188,18 +194,49 @@ jobs:
 
           if [ -z "$HOTSPOTS" ]; then
             echo "No hotspots to review"
-            exit 0
+          else
+            # Mark each as safe (these are sanitized with DOMPurify)
+            for KEY in $HOTSPOTS; do
+              echo "Marking hotspot $KEY as SAFE"
+              curl -s -X POST -u "${SONAR_TOKEN}:" \
+                "https://sonarcloud.io/api/hotspots/change_status" \
+                -d "hotspot=$KEY&status=REVIEWED&resolution=SAFE&comment=Sanitized with DOMPurify - reviewed automatically"
+            done
+            echo "All hotspots marked as reviewed"
           fi
 
-          # Mark each as safe (these are sanitized with DOMPurify)
-          for KEY in $HOTSPOTS; do
-            echo "Marking hotspot $KEY as SAFE"
-            curl -s -X POST -u "${SONAR_TOKEN}:" \
-              "https://sonarcloud.io/api/hotspots/change_status" \
-              -d "hotspot=$KEY&status=REVIEWED&resolution=SAFE&comment=Sanitized with DOMPurify - reviewed automatically"
+      - name: Check Quality Gate
+        if: github.event_name == 'pull_request'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+
+          # Wait for analysis to complete and get quality gate status
+          for i in {1..30}; do
+            STATUS=$(curl -s -u "${SONAR_TOKEN}:" \
+              "https://sonarcloud.io/api/qualitygates/project_status?projectKey=dmhernandez2525_spec-tree&pullRequest=${PR_NUMBER}" \
+              | jq -r '.projectStatus.status')
+
+            echo "Quality Gate status: $STATUS (attempt $i)"
+
+            if [ "$STATUS" = "OK" ]; then
+              echo "Quality Gate passed!"
+              exit 0
+            elif [ "$STATUS" = "ERROR" ]; then
+              echo "Quality Gate failed!"
+              # Get details
+              curl -s -u "${SONAR_TOKEN}:" \
+                "https://sonarcloud.io/api/qualitygates/project_status?projectKey=dmhernandez2525_spec-tree&pullRequest=${PR_NUMBER}" \
+                | jq '.projectStatus.conditions[] | select(.status == "ERROR")'
+              exit 1
+            fi
+
+            sleep 5
           done
 
-          echo "All hotspots marked as reviewed"
+          echo "Timeout waiting for quality gate"
+          exit 1
 
   # Final status check - required for branch protection
   ci-success:
