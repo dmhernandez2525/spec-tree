@@ -7,7 +7,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 // Mock DOMPurify for testing
 vi.mock('dompurify', () => ({
   default: {
-    sanitize: vi.fn((dirty: string, config: unknown) => {
+    sanitize: vi.fn((dirty: string, _config: unknown) => {
       // Simple mock that returns the input for basic testing
       // In real scenario, DOMPurify would strip dangerous content
       return dirty;
@@ -16,9 +16,6 @@ vi.mock('dompurify', () => ({
 }));
 
 describe('sanitize utilities', () => {
-  // Store original window
-  const originalWindow = global.window;
-
   beforeEach(() => {
     // Ensure window is defined for client-side tests
     vi.stubGlobal('window', { document: {} });
