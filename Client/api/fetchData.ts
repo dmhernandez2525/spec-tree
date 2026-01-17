@@ -559,10 +559,8 @@ const fetchBlogPageData = async (): Promise<
 };
 
 // ===================================
-// TODO
+// User Profile Management
 // ===================================
-
-//// Get user associated users
 
 const updateUserEmail = async (
   userId: string | number,

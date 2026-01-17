@@ -819,15 +819,19 @@ const TypographyManager: React.FC<{
 
   useEffect(() => {
     const fetchGoogleFonts = async () => {
+      const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_FONTS_API_KEY;
+      if (!API_KEY) {
+        // Google Fonts API not configured - use default system fonts
+        return;
+      }
       try {
-        const API_KEY = 'YOUR_GOOGLE_FONTS_API_KEY';
         const response = await fetch(
           `https://www.googleapis.com/webfonts/v1/webfonts?key=${API_KEY}&sort=popularity`
         );
         const data = await response.json();
         setGoogleFonts(data.items.slice(0, 100)); // Get top 100 fonts
       } catch {
-        // Error fetching Google Fonts
+        // Error fetching Google Fonts - using defaults
       }
     };
 

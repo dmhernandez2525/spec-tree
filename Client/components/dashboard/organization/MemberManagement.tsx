@@ -38,7 +38,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Icons } from '@/components/shared/icons';
 
 const roleOptions: { value: OrganizationRole; label: string }[] = [
@@ -129,10 +129,6 @@ export function MemberManagement() {
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage
-                        src="/placeholder-avatar.jpg"
-                        alt="User avatar"
-                      />
                       <AvatarFallback>
                         {member.userId[0].toUpperCase()}
                       </AvatarFallback>

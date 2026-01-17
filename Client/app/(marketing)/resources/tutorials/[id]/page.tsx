@@ -23,6 +23,7 @@ import { TutorialResources } from '@/components/marketing/resources/TutorialReso
 import { Tutorial } from '@/types/tutorials';
 import Section from '@/components/layout/Section';
 
+// Demo tutorial data - videos will be added when content is ready
 const tutorials: Tutorial[] = [
   {
     id: '1',
@@ -34,8 +35,7 @@ const tutorials: Tutorial[] = [
     duration: 15,
     lastUpdated: '2024-04-01',
     thumbnailUrl: '/images/tutorial-video.png',
-    videoUrl:
-      'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+    videoUrl: '', // Video coming soon
     chapters: [
       { title: 'Introduction', timestamp: '0:00' },
       { title: 'Creating Your First Project', timestamp: '2:30' },
@@ -44,7 +44,7 @@ const tutorials: Tutorial[] = [
     author: {
       name: 'Sarah Chen',
       role: 'Product Manager',
-      avatarUrl: '/api/placeholder/100/100',
+      avatarUrl: '/images/hierarchy-tree-view.png',
     },
   },
 ];
