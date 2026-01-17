@@ -25,8 +25,9 @@ export function BlogList() {
           setBlogPosts(data.data);
         }
         setIsLoading(false);
-      } catch (err: any) {
-        setError(err.message || 'An error occurred');
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+        setError(errorMessage);
         setIsLoading(false);
       }
     };
@@ -42,7 +43,7 @@ export function BlogList() {
     return (
       <div className="flex flex-col items-center justify-center h-[400px] text-center bg-muted rounded-lg p-8">
         <Image
-          src="https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src="/images/empty-blog-state.png"
           alt="No blog posts"
           width={200}
           height={200}

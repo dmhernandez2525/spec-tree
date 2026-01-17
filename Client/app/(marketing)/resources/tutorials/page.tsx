@@ -19,8 +19,7 @@ const tutorials: Tutorial[] = [
     category: 'beginner',
     duration: 15,
     lastUpdated: '2024-04-01',
-    thumbnailUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    thumbnailUrl: '/images/tutorial-video.png',
     videoUrl:
       'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
     chapters: [
@@ -31,8 +30,7 @@ const tutorials: Tutorial[] = [
     author: {
       name: 'Sarah Chen',
       role: 'Product Manager',
-      avatarUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      avatarUrl: '/images/hierarchy-tree-view.png',
     },
   },
   {
@@ -44,8 +42,7 @@ const tutorials: Tutorial[] = [
     category: 'advanced',
     duration: 25,
     lastUpdated: '2024-04-01',
-    thumbnailUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    thumbnailUrl: '/images/ai-project-planning.png',
     videoUrl:
       'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
     chapters: [
@@ -56,8 +53,7 @@ const tutorials: Tutorial[] = [
     author: {
       name: 'Michael Rodriguez',
       role: 'Technical Lead',
-      avatarUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      avatarUrl: '/images/context-propagation.png',
     },
   },
 ];
