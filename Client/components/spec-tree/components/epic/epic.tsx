@@ -69,8 +69,8 @@ const initialFeatureFormState: FeatureFormState = {
   notes: '',
 };
 
+// _index reserved for drag-and-drop reordering feature
 const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => {
-  // TODO: use _index then remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);

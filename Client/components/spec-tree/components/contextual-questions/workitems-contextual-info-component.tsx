@@ -46,10 +46,9 @@ const WorkitemsContextualInfo: React.FC<WorkitemsContextualInfoProps> = ({
   const [_workItemStatus, setWorkItemStatus] = useState<
     'original' | 'edited' | 'accepted'
   >('original');
+  // _editableWorkItem reserved for inline editing feature
   const [_editableWorkItem, setEditableWorkItem] =
     useState<WorkItemTypeTypes | null>(null);
-
-  // TODO: use _workItemStatus and _editableWorkItem then remove this comment
 
   const {
     loading: updateLoading,

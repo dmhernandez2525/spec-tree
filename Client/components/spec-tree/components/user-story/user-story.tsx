@@ -67,8 +67,8 @@ const initialFormState: FormState = {
   Notes: '',
 };
 
+// _feature and _epic reserved for context propagation and breadcrumb features
 const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epic: _epic, dragHandleProps }) => {
-  // TODO: use _feature and _epic then remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);

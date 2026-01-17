@@ -49,8 +49,8 @@ export default function SpecTree() {
 
 function SpecTreeContent() {
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
+  // chatApi setter reserved for future AI provider switching feature
   const [chatApi, _setChatApi] = useState<string | null>(null);
-  // TODO: use _setChatApi then remove underscore prefix
   const [apps, setApps] = useState<App[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
