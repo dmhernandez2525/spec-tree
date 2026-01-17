@@ -47,7 +47,7 @@ const useWorkItemUpdate = (workItemType: ExtendedWorkItemType) => {
             (await generateUpdatedEpic({
               chatApi,
               context,
-              requirements: 'TODO-p1: Add requirements',
+              requirements: state.sow.globalInformation || '',
               selectedModel: state.sow.selectedModel,
             }));
           break;
