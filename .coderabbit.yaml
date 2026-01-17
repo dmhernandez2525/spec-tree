@@ -48,13 +48,13 @@ reviews:
       - main
       - develop
 
+  # Ignore patterns for reviews
+  path_filters:
+    - "!**/*.lock"
+    - "!**/node_modules/**"
+    - "!**/.next/**"
+    - "!**/dist/**"
+    - "!**/*.min.js"
+
 chat:
   auto_reply: true
-
-# Ignore patterns
-path_filters:
-  - "!**/*.lock"
-  - "!**/node_modules/**"
-  - "!**/.next/**"
-  - "!**/dist/**"
-  - "!**/*.min.js"
