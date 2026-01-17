@@ -26,6 +26,7 @@ type BaseWorkItem = {
   id: string;
   contextualQuestions?: ContextualQuestion[];
   documentId?: string;
+  position?: number;
 };
 
 export interface TaskType extends BaseWorkItem {

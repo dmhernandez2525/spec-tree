@@ -24,6 +24,8 @@ import {
   reorderUserStories,
   reorderTasks,
 } from '../../../../lib/store/sow-slice';
+import { strapiService } from '../../lib/api/strapi-service';
+import { logger } from '../../../../lib/logger';
 import {
   EpicType,
   FeatureType,
@@ -294,8 +296,8 @@ const Builder: React.FC<BuilderProps> = ({
   }, [dispatch, formState, selectedApp, handleError]);
 
   const handleDragEnd = useCallback(
-    (result: DropResult) => {
-      const { destination, source, type } = result;
+    async (result: DropResult) => {
+      const { destination, source, type, draggableId } = result;
 
       if (!destination) return;
       if (
@@ -305,6 +307,46 @@ const Builder: React.FC<BuilderProps> = ({
         return;
       }
 
+      // Helper to persist position update to API
+      const persistPosition = async (
+        itemType: 'epic' | 'feature' | 'userStory' | 'task',
+        itemId: string,
+        newPosition: number,
+        parentId?: string
+      ) => {
+        try {
+          switch (itemType) {
+            case 'epic': {
+              const epic = localState.sow.epics[itemId];
+              const docId = epic?.documentId || itemId;
+              await strapiService.updateEpicPosition(docId, newPosition);
+              break;
+            }
+            case 'feature': {
+              const feature = localState.sow.features[itemId];
+              const docId = feature?.documentId || itemId;
+              await strapiService.updateFeaturePosition(docId, newPosition, parentId);
+              break;
+            }
+            case 'userStory': {
+              const userStory = localState.sow.userStories[itemId];
+              const docId = userStory?.documentId || itemId;
+              await strapiService.updateUserStoryPosition(docId, newPosition, parentId);
+              break;
+            }
+            case 'task': {
+              const task = localState.sow.tasks[itemId];
+              const docId = task?.documentId || itemId;
+              await strapiService.updateTaskPosition(docId, newPosition, parentId);
+              break;
+            }
+          }
+          logger.log('Builder', `${itemType} position updated`, { itemId, newPosition });
+        } catch (error) {
+          logger.error('Builder', `Failed to persist ${itemType} position`, { error, itemId });
+        }
+      };
+
       switch (type) {
         case 'EPIC':
           dispatch(
@@ -313,6 +355,7 @@ const Builder: React.FC<BuilderProps> = ({
               destinationIndex: destination.index,
             })
           );
+          persistPosition('epic', draggableId, destination.index);
           break;
         case 'FEATURE': {
           const epicId = source.droppableId.replace('features-', '');
@@ -323,6 +366,7 @@ const Builder: React.FC<BuilderProps> = ({
               destinationIndex: destination.index,
             })
           );
+          persistPosition('feature', draggableId, destination.index, epicId);
           break;
         }
         case 'USER_STORY': {
@@ -334,6 +378,7 @@ const Builder: React.FC<BuilderProps> = ({
               destinationIndex: destination.index,
             })
           );
+          persistPosition('userStory', draggableId, destination.index, featureId);
           break;
         }
         case 'TASK': {
@@ -345,11 +390,12 @@ const Builder: React.FC<BuilderProps> = ({
               destinationIndex: destination.index,
             })
           );
+          persistPosition('task', draggableId, destination.index, userStoryId);
           break;
         }
       }
     },
-    [dispatch]
+    [dispatch, localState]
   );
 
   // Memoize metrics
