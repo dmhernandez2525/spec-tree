@@ -11,6 +11,16 @@ reviews:
   review_status: true
   collapse_walkthrough: false
 
+  # Exclude generated files and dependencies from review
+  path_filters:
+    - "!**/*.lock"
+    - "!**/node_modules/**"
+    - "!**/.next/**"
+    - "!**/dist/**"
+    - "!**/*.min.js"
+    - "!**/coverage/**"
+    - "!**/*.generated.*"
+
   path_instructions:
     - path: "Client/**/*.tsx"
       instructions: |

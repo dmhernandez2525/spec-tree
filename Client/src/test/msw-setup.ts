@@ -8,8 +8,10 @@ import { beforeAll, afterEach, afterAll } from 'vitest';
 import { server } from './mocks/server';
 
 // Start server before all tests
+// Use 'error' in CI to catch unhandled requests, 'warn' locally for development
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'warn' });
+  const onUnhandledRequest = process.env.CI ? 'error' : 'warn';
+  server.listen({ onUnhandledRequest });
 });
 
 // Reset handlers after each test

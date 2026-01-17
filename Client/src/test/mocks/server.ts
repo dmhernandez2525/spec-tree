@@ -25,13 +25,14 @@ export const resetServer = () => {
   server.resetHandlers();
 };
 
-// Helper to add runtime handlers
+// Helper to add runtime handlers (prepends new handlers while keeping base handlers)
 export const addHandlers = (...newHandlers: Parameters<typeof server.use>) => {
   server.use(...newHandlers);
 };
 
-// Helper to override handlers for specific tests
-export const overrideHandlers = (
+// Helper to completely replace all handlers for specific tests
+// Note: This removes all base handlers and replaces them with the provided handlers
+export const replaceHandlers = (
   ...newHandlers: Parameters<typeof server.use>
 ) => {
   server.resetHandlers(...newHandlers);

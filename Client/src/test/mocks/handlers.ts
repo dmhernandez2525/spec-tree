@@ -12,9 +12,10 @@ import {
   createMockTask,
   createMockApp,
 } from '../fixtures/work-items';
+import { TEST_STRAPI_API_URL, TEST_MICROSERVICE_URL } from '../test-config';
 
-const STRAPI_API_URL = 'http://localhost:1337/api';
-const MICROSERVICE_URL = 'http://localhost:3001';
+const STRAPI_API_URL = TEST_STRAPI_API_URL;
+const MICROSERVICE_URL = TEST_MICROSERVICE_URL;
 
 // HTTP Handlers for Strapi API
 export const strapiHandlers = [
@@ -112,6 +113,13 @@ export const strapiHandlers = [
     });
   }),
 
+  http.get(`${STRAPI_API_URL}/features/:documentId`, ({ params }) => {
+    const feature = createMockFeature({ documentId: params.documentId as string });
+    return HttpResponse.json({
+      data: { id: feature.id, documentId: feature.documentId, attributes: feature },
+    });
+  }),
+
   http.post(`${STRAPI_API_URL}/features`, async ({ request }) => {
     const body = (await request.json()) as { data: Record<string, unknown> };
     const newFeature = createMockFeature(body.data);
@@ -153,6 +161,13 @@ export const strapiHandlers = [
     });
   }),
 
+  http.get(`${STRAPI_API_URL}/user-stories/:documentId`, ({ params }) => {
+    const story = createMockUserStory({ documentId: params.documentId as string });
+    return HttpResponse.json({
+      data: { id: story.id, documentId: story.documentId, attributes: story },
+    });
+  }),
+
   http.post(`${STRAPI_API_URL}/user-stories`, async ({ request }) => {
     const body = (await request.json()) as { data: Record<string, unknown> };
     const newUserStory = createMockUserStory(body.data);
@@ -191,6 +206,13 @@ export const strapiHandlers = [
         attributes: task,
       })),
       meta: { pagination: { total: tasks.length } },
+    });
+  }),
+
+  http.get(`${STRAPI_API_URL}/tasks/:documentId`, ({ params }) => {
+    const task = createMockTask({ documentId: params.documentId as string });
+    return HttpResponse.json({
+      data: { id: task.id, documentId: task.documentId, attributes: task },
     });
   }),
 

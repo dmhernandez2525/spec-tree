@@ -30,6 +30,7 @@ beforeAll(() => {
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),
+    takeRecords: vi.fn(() => []),
   }));
 
   // Mock ResizeObserver
@@ -37,6 +38,7 @@ beforeAll(() => {
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),
+    takeRecords: vi.fn(() => []),
   }));
 
   // Mock HTMLCanvasElement.getContext
@@ -81,7 +83,17 @@ beforeAll(() => {
     key: vi.fn(),
   };
   Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-  Object.defineProperty(window, 'sessionStorage', { value: localStorageMock });
+
+  // Mock sessionStorage (separate from localStorage to prevent cross-contamination)
+  const sessionStorageMock = {
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+    length: 0,
+    key: vi.fn(),
+  };
+  Object.defineProperty(window, 'sessionStorage', { value: sessionStorageMock });
 
   // Mock window.scrollTo
   window.scrollTo = vi.fn();

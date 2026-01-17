@@ -25,6 +25,9 @@ import {
   ContextualQuestion,
 } from '../types/work-items';
 
+// Partial type for mock slices that aren't being tested
+type MockSlice<T> = Partial<T>;
+
 // Helper to create a mock RootState with sow data
 function createMockState(overrides: Partial<RootState['sow']> = {}): RootState {
   return {
@@ -43,12 +46,13 @@ function createMockState(overrides: Partial<RootState['sow']> = {}): RootState {
       error: null,
       ...overrides,
     },
-    auth: {} as any,
-    user: {} as any,
-    organization: {} as any,
-    settings: {} as any,
-    subscription: {} as any,
-    demo: {} as any,
+    // These slices are not used by context propagation, provide minimal mocks
+    auth: {} as MockSlice<RootState['auth']> as RootState['auth'],
+    user: {} as MockSlice<RootState['user']> as RootState['user'],
+    organization: {} as MockSlice<RootState['organization']> as RootState['organization'],
+    settings: {} as MockSlice<RootState['settings']> as RootState['settings'],
+    subscription: {} as MockSlice<RootState['subscription']> as RootState['subscription'],
+    demo: {} as MockSlice<RootState['demo']> as RootState['demo'],
   };
 }
 
@@ -414,8 +418,11 @@ describe('Context Propagation', () => {
 
       const context = buildTaskContext(task, state);
 
-      // Should not throw
-      expect(context).toBeDefined();
+      // When parent is missing, should return empty string or only global context
+      // The function should not throw and should handle gracefully
+      expect(typeof context).toBe('string');
+      // Since no global info and no valid hierarchy, context should be empty
+      expect(context).toBe('');
     });
   });
 

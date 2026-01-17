@@ -7,7 +7,7 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { render, RenderOptions, RenderResult } from '@testing-library/react';
+import { render, RenderOptions, RenderResult, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { faker } from '@faker-js/faker';
 
@@ -20,7 +20,7 @@ import subscriptionReducer from '@/lib/store/subscription-slice';
 import sowReducer from '@/lib/store/sow-slice';
 import demoReducer from '@/lib/store/demo-slice';
 
-// Store type for testing
+// Store reducers for testing
 const testReducer = {
   auth: authReducer,
   user: userReducer,
@@ -31,17 +31,28 @@ const testReducer = {
   demo: demoReducer,
 };
 
+// Test store state type - matches actual RootState shape
+export interface TestStoreState {
+  auth: ReturnType<typeof authReducer>;
+  user: ReturnType<typeof userReducer>;
+  organization: ReturnType<typeof organizationReducer>;
+  settings: ReturnType<typeof settingsReducer>;
+  subscription: ReturnType<typeof subscriptionReducer>;
+  sow: ReturnType<typeof sowReducer>;
+  demo: ReturnType<typeof demoReducer>;
+}
+
 // Create a test store with optional preloaded state
-export const createTestStore = (preloadedState?: Partial<ReturnType<typeof configureStore<typeof testReducer>>['getState']>) => {
-  return configureStore({
+export const createTestStore = (preloadedState?: Partial<TestStoreState>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const store = configureStore({
     reducer: testReducer,
     preloadedState: preloadedState as Parameters<typeof configureStore>[0]['preloadedState'],
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ serializableCheck: false }),
   });
+  return store;
 };
-
-export type TestStoreState = ReturnType<ReturnType<typeof createTestStore>['getState']>;
 
 // All providers wrapper
 interface AllProvidersProps {
@@ -110,16 +121,22 @@ export const mockApiError = (
 };
 
 /**
- * Fill form fields
+ * Fill form fields using Testing Library patterns
+ * Falls back to direct DOM query if field not found via accessible queries
  */
 export const fillForm = async (
   user: ReturnType<typeof userEvent.setup>,
   formData: Record<string, string>
 ) => {
   for (const [fieldName, value] of Object.entries(formData)) {
-    const field = document.querySelector(
-      `[name="${fieldName}"]`
-    ) as HTMLInputElement;
+    // Try to find by label first (more accessible)
+    let field: HTMLElement | null = null;
+    try {
+      field = screen.getByLabelText(new RegExp(fieldName, 'i'));
+    } catch {
+      // Fall back to name attribute query
+      field = document.querySelector(`[name="${fieldName}"]`);
+    }
     if (field) {
       await user.clear(field);
       await user.type(field, value);
@@ -128,18 +145,25 @@ export const fillForm = async (
 };
 
 /**
- * Submit a form
+ * Submit a form using Testing Library patterns
  */
 export const submitForm = async (
   user: ReturnType<typeof userEvent.setup>,
   formSelector = 'form'
 ) => {
-  const form = document.querySelector(formSelector) as HTMLFormElement;
-  if (form) {
-    const submitButton = form.querySelector('[type="submit"]');
-    if (submitButton) {
-      await user.click(submitButton as HTMLElement);
+  // Try to find submit button via accessible query first
+  let submitButton: HTMLElement | null = null;
+  try {
+    submitButton = screen.getByRole('button', { name: /submit/i });
+  } catch {
+    // Fall back to form-based query
+    const form = document.querySelector(formSelector) as HTMLFormElement;
+    if (form) {
+      submitButton = form.querySelector('[type="submit"]');
     }
+  }
+  if (submitButton) {
+    await user.click(submitButton);
   }
 };
 
@@ -158,32 +182,36 @@ export const getTableRows = (tableSelector = 'table') => {
 };
 
 /**
- * Wait for a modal to appear
+ * Wait for a modal to appear using Testing Library's waitFor
+ * This properly handles cleanup and avoids timer leaks
  */
 export const waitForModal = async (
   modalSelector = '[role="dialog"]'
 ): Promise<HTMLElement> => {
-  return new Promise((resolve, reject) => {
-    const timeout = setTimeout(
-      () => reject(new Error('Modal did not appear')),
-      5000
-    );
-
-    const checkForModal = () => {
+  return waitFor(
+    () => {
       const modal = document.querySelector(modalSelector) as HTMLElement;
-      if (modal && getComputedStyle(modal).display !== 'none') {
-        clearTimeout(timeout);
-        resolve(modal);
-      } else {
-        setTimeout(checkForModal, 100);
+      if (!modal || getComputedStyle(modal).display === 'none') {
+        throw new Error('Modal not found or not visible');
       }
-    };
-    checkForModal();
-  });
+      return modal;
+    },
+    { timeout: 5000, interval: 100 }
+  );
 };
 
 /**
- * Basic accessibility check
+ * Basic accessibility check for quick sanity testing.
+ * NOTE: For comprehensive accessibility testing, consider using @axe-core/react
+ * which provides automated WCAG compliance checking.
+ *
+ * @example
+ * // For comprehensive a11y testing, install and use axe-core:
+ * // npm install -D @axe-core/react
+ * // import { axe, toHaveNoViolations } from 'jest-axe';
+ * // expect.extend(toHaveNoViolations);
+ * // const results = await axe(container);
+ * // expect(results).toHaveNoViolations();
  */
 export const checkAccessibility = (container: HTMLElement): string[] => {
   const issues: string[] = [];

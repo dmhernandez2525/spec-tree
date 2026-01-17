@@ -186,18 +186,43 @@ export const createMockTask = (overrides: Partial<MockTask> = {}): MockTask => (
 
 /**
  * Create a full mock hierarchy (App -> Epic -> Feature -> User Story -> Task)
+ * Creates objects leaf-first to avoid mutations after creation
  */
 export const createMockHierarchy = () => {
-  const app = createMockApp();
-  const epic = createMockEpic({ parentAppId: app.documentId });
-  const feature = createMockFeature({ parentEpicId: epic.documentId });
-  const userStory = createMockUserStory({ parentFeatureId: feature.documentId });
-  const task = createMockTask({ parentUserStoryId: userStory.documentId });
+  // Create IDs upfront
+  const appId = faker.string.uuid();
+  const epicId = faker.string.uuid();
+  const featureId = faker.string.uuid();
+  const userStoryId = faker.string.uuid();
+  const taskId = faker.string.uuid();
 
-  // Link IDs
-  epic.featureIds = [feature.documentId];
-  feature.userStoryIds = [userStory.documentId];
-  userStory.taskIds = [task.documentId];
+  // Create from leaf to root, passing child IDs upfront
+  const task = createMockTask({
+    documentId: taskId,
+    parentUserStoryId: userStoryId,
+  });
+
+  const userStory = createMockUserStory({
+    documentId: userStoryId,
+    parentFeatureId: featureId,
+    taskIds: [taskId],
+  });
+
+  const feature = createMockFeature({
+    documentId: featureId,
+    parentEpicId: epicId,
+    userStoryIds: [userStoryId],
+  });
+
+  const epic = createMockEpic({
+    documentId: epicId,
+    parentAppId: appId,
+    featureIds: [featureId],
+  });
+
+  const app = createMockApp({
+    documentId: appId,
+  });
 
   return { app, epic, feature, userStory, task };
 };

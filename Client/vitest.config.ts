@@ -1,6 +1,21 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import os from 'os';
+import { fileURLToPath } from 'url';
+
+// ESM-compatible __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Dynamic max workers based on environment or CPU count
+const getMaxWorkers = (): number => {
+  if (process.env.VITEST_MAX_WORKERS) {
+    return Math.max(1, parseInt(process.env.VITEST_MAX_WORKERS, 10) || 1);
+  }
+  // Use half of available CPUs, minimum 1, maximum 8
+  return Math.min(8, Math.max(1, Math.floor(os.cpus().length / 2)));
+};
 
 export default defineConfig({
   plugins: [react()],
@@ -57,8 +72,8 @@ export default defineConfig({
       },
     },
 
-    // Performance - Vitest 4 syntax
-    maxWorkers: 8,
+    // Performance - Dynamic workers based on environment
+    maxWorkers: getMaxWorkers(),
     isolate: true,
 
     // Timeout configuration
