@@ -193,8 +193,10 @@ export const mockUsageData = {
   },
 };
 
+export type SubscriptionScenarioType = 'free' | 'pro' | 'enterprise' | 'past_due' | 'canceled' | 'trial';
+
 export const generateMockSubscriptionData = (
-  type: 'free' | 'pro' | 'enterprise' | 'past_due' | 'canceled' | 'trial'
+  type: SubscriptionScenarioType
 ) => {
   const subscription =
     mockSubscriptions[

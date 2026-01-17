@@ -14,7 +14,7 @@ yarn dev
 
 ### `start`
 
-Start your Strapi application with autoReload disabled. ( this is closer to a production build) [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
+Start your Strapi application with autoReload disabled (production-like environment). [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
 
 ```
 npm run start

@@ -1,14 +1,19 @@
+/**
+ * Strapi API Data Fetching Module
+ *
+ * This module provides type-safe API calls to the Strapi CMS backend.
+ * Future improvements planned:
+ * - Centralize environment variable configuration
+ * - Extract reusable query parameters to dedicated config file
+ * - Migrate all functions to use the generic fetchCmsData pattern
+ */
 import axios, { AxiosResponse, Method } from 'axios';
-// TODO-p2: update how we pull env variables
+
 const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 const token = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 
-// ======================== Reusable Parameters ========================
-// TODO-p2: make this into a file
-// This is a section for repeatable parameters that are used in the api calls
+// Reusable query parameters for common API calls
 const userData = 'populate[confirmed]=*&populate[blocked]=*&populate[avatar]=*';
-
-// ======================== Reusable Parameters ========================
 
 import type {
   ApiSettings,
@@ -29,17 +34,60 @@ import type {
 
 import type { UserData, UserAttributes } from '@/types/user';
 
+/**
+ * Type for API error responses
+ */
+interface ApiErrorResponse {
+  error: {
+    message: string;
+    status?: number;
+    details?: Record<string, unknown>;
+  };
+}
+
+/**
+ * Type guard to check if a response is an error
+ */
+function isApiError(response: unknown): response is ApiErrorResponse {
+  return (
+    typeof response === 'object' &&
+    response !== null &&
+    'error' in response &&
+    typeof (response as ApiErrorResponse).error === 'object'
+  );
+}
+
 const handleError = (
-  error: any,
+  error: unknown,
   endpoint: string
-): {
-  error: any;
-} => {
+): ApiErrorResponse => {
+  console.error(`API Error on ${endpoint}:`, error);
+  if (axios.isAxiosError(error)) {
+    return {
+      error: {
+        message: error.response?.data?.message || error.message || 'Request failed',
+        status: error.response?.status,
+        details: error.response?.data,
+      },
+    };
+  }
+  if (error instanceof Error) {
+    return {
+      error: {
+        message: error.message,
+      },
+    };
+  }
   return {
-    error,
+    error: {
+      message: 'An unknown error occurred',
+    },
   };
 };
-// Generic API request function
+
+/**
+ * Generic API request function with proper typing
+ */
 async function makeApiRequest<T>({
   method,
   endpoint,
@@ -49,17 +97,10 @@ async function makeApiRequest<T>({
 }: {
   method: Method;
   endpoint: string;
-  data?: any;
-  params?: any;
+  data?: Record<string, unknown>;
+  params?: Record<string, unknown>;
   usersToken?: string;
-}): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> {
+}): Promise<T | null | undefined | ApiErrorResponse> {
   try {
     const url = `${API_URL}/api/${endpoint}`;
     const config = {
@@ -72,7 +113,6 @@ async function makeApiRequest<T>({
       },
     };
     const response: AxiosResponse<T> = await axios(config);
-    // console.log(`API Request successful: ${method} ${url}`);
     return response.data;
   } catch (error) {
     return handleError(error, endpoint);
@@ -87,8 +127,8 @@ async function makeSettingsApiRequest<T>({
 }: {
   method: Method;
   endpoint: string;
-  data?: any;
-  params?: any;
+  data?: Record<string, unknown>;
+  params?: Record<string, unknown>;
   usersToken?: string;
 }): Promise<T | null | undefined> {
   try {
@@ -103,10 +143,10 @@ async function makeSettingsApiRequest<T>({
       },
     };
     const response: AxiosResponse<T> = await axios(config);
-    // console.log(`API Request successful: ${method} ${url}`);
     return response.data;
   } catch (error) {
     handleError(error, endpoint);
+    return null;
   }
 }
 // Utility function to form query strings
@@ -118,18 +158,11 @@ const formQueryString = (queryParams: string): URLSearchParams => {
 const getData = async <T>(
   endpoint: string,
   params?: URLSearchParams
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'GET',
     endpoint,
-    params,
+    params: params ? Object.fromEntries(params.entries()) : undefined,
   });
 // Simplified API functions
 const getSettingsData = async <T>(
@@ -139,20 +172,13 @@ const getSettingsData = async <T>(
   makeSettingsApiRequest<T>({
     method: 'GET',
     endpoint,
-    params,
+    params: params ? Object.fromEntries(params.entries()) : undefined,
   });
 
 const createData = async <T>(
   endpoint: string,
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'POST',
     endpoint,
@@ -163,25 +189,18 @@ const createData = async <T>(
 const updateMemData = async <T>(
   endpoint: string,
   id: string | number,
-
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'POST',
     endpoint: `${endpoint}/${id}`,
     data,
     usersToken: localStorage.getItem('token') || '',
   });
+
 const createSettingsData = async <T>(
   endpoint: string,
-  data: any
+  data: Record<string, unknown>
 ): Promise<T | null | undefined> =>
   makeSettingsApiRequest<T>({
     method: 'POST',
@@ -192,26 +211,18 @@ const createSettingsData = async <T>(
 
 const getSettings = async (): Promise<ApiSettings | null | undefined> => {
   const data = await getSettingsData<ApiSettings>('spec-tree/settings');
-
   return data;
 };
 
-const setSettings = async (data: ApiSettings) => {
-  return createSettingsData('spec-tree/settings', data);
+const setSettings = async (data: ApiSettings): Promise<ApiSettings | null | undefined> => {
+  return createSettingsData<ApiSettings>('spec-tree/settings', data as Record<string, unknown>);
 };
 
 const updateUserData = async <T>(
   endpoint: string,
   id: string | number,
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'PUT',
     endpoint: `${endpoint}/${id}`,
@@ -222,15 +233,8 @@ const updateUserData = async <T>(
 const updateData = async <T>(
   endpoint: string,
   id: string | number,
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'PUT',
     endpoint: `${endpoint}/${id}`,
@@ -241,30 +245,28 @@ const updateData = async <T>(
 const deleteData = async <T>(
   endpoint: string,
   id: string
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'DELETE',
     endpoint: `${endpoint}/${id}`,
   });
-// Interface definitions for types (Example)
 
-const fetchCmsData = async (
+/**
+ * Fetch CMS data with proper typing
+ */
+const fetchCmsData = async <T>(
   endpoint: string,
   query = 'populate=*'
-): Promise<any> => {
+): Promise<T | null | undefined> => {
   try {
-    const response: any = await getData(endpoint, formQueryString(query));
-    // console.log('Data fetched successfully:', response.data);
-    return response.data;
+    const response = await getData<{ data: T }>(endpoint, formQueryString(query));
+    if (response && !isApiError(response)) {
+      return response.data;
+    }
+    return null;
   } catch (error) {
     handleError(error, endpoint);
+    return null;
   }
 };
 const fetchData = async <T = any>(
@@ -367,8 +369,7 @@ const getUserRole = async (
   userToken: string
 ): Promise<UserAttributes | null | undefined> => {
   try {
-    // TODO-p3: remove populate=* once we have the user role in the user object coming back from the API
-    // const par =
+    // Note: Uses populate=* to include user role until API returns it by default
     const response = await axios.get(
       `${API_URL}/api/users/me?populate[role]=*`,
       {
@@ -388,14 +389,12 @@ const getUserRole = async (
 const fetchPosts = async (): Promise<
   ApiResponse<PostAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchData<PostAttributes>('blog-posts');
 };
 const fetchNewsFeed = async (): Promise<
   ApiResponse<NewsFeedData> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchData<NewsFeedData>('news-feeds');
 };
@@ -410,11 +409,11 @@ const fetchPostsById = async (
   return await fetchSingleData<PostAttributes>('blog-posts', id);
 };
 
-const fetchUserInfo = async ({ name }: { name: string }): Promise<any> => {
+const fetchUserInfo = async ({ name }: { name: string }): Promise<ApiResponse<UserAttributes> | ApiErrorResponse> => {
+  // Parse name into first/last for more precise search
   const nameStructure = name?.split(' ');
   const firstName = nameStructure?.[0];
   const lastName = nameStructure?.[1];
-  // TODO-p2: we need to clean this up and make it more efficient, we should have deferent inputs for each field
   if (firstName && lastName) {
     return await fetchData(
       'users',
@@ -439,8 +438,6 @@ const fetchUserInfo = async ({ name }: { name: string }): Promise<any> => {
 const fetchHomePageData = async (): Promise<
   SingleApiResponse<HomePageData> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
-  // populate[testimonialSection]=*&populate[section]=*&populate[section][populate][image]=*&populate[section][populate][button]=*&populate[aboutSection]=*&populate[metricSection]=*&populate[newsletterSection]=*&populate[socialSection][populate][links][populate][icon]=*&
   return await fetchSingletonTypeData<HomePageData>(
     'home-page',
     'populate[heroData][populate][heroImage]=*&populate[ourMissionData]=*&populate[ourServicesData][populate][serviceList]=*&populate[WheelSection][populate][icon]=*&populate[reviews]=*&populate[ourWorkData][populate][image]=*&populate[ourWorkData][populate][icon]=*&populate[ourServicesHeader]=*&populate[OurProcess]=*&populate[ourWorkHeader]=*&populate[reviewsHeader]=*'
@@ -460,7 +457,6 @@ export interface AboutPageAttributes {
 const fetchAboutPageData = async (): Promise<
   SingleApiResponse<AboutPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<AboutPageAttributes>(
     'about-page',
     'populate[aboutSection][populate][cta]=*&populate[metricSection][populate][cards]=*&populate[metricSection][populate][backgroundImage]=*&populate[mediaContent]=*&populate[newsletterSection]=*&populate[socialSection][populate][links][populate][icon]=*'
@@ -480,7 +476,6 @@ export interface OurProcessPageAttributes {
 const fetchOurProcessPageData = async (): Promise<
   SingleApiResponse<OurProcessPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchSingletonTypeData<OurProcessPageAttributes>(
     'our-process-page',
@@ -496,7 +491,6 @@ export interface TermsPageAttributes {
 const fetchTermsPageData = async (): Promise<
   SingleApiResponse<TermsPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<TermsPageAttributes>('terms-page');
 };
 
@@ -508,7 +502,6 @@ export interface PrivacyPageAttributes {
 const fetchPrivacyPageData = async (): Promise<
   SingleApiResponse<PrivacyPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<PrivacyPageAttributes>('privacy-page');
 };
 
@@ -521,7 +514,6 @@ export interface CookiesPageAttributes {
 const fetchCookiesPageData = async (): Promise<
   SingleApiResponse<CookiesPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<CookiesPageAttributes>('cookies-page');
 };
 
@@ -536,7 +528,6 @@ export interface ContactPageAttributes {
 const fetchContactPageData = async (): Promise<
   SingleApiResponse<ContactPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchSingletonTypeData<ContactPageAttributes>(
     'contact-page',
@@ -551,27 +542,24 @@ export interface BlogPageAttributes {
 const fetchBlogPageData = async (): Promise<
   SingleApiResponse<BlogPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
 
   return await fetchSingletonTypeData<BlogPageAttributes>('blog-page');
 };
 
 // ===================================
-// TODO
+// User Profile Management
 // ===================================
-
-//// Get user associated users
 
 const updateUserEmail = async (
   userId: string | number,
   newEmail: string
-): Promise<any> => {
+): Promise<UserData | ApiErrorResponse> => {
   return await updateUserData('users', userId, { email: newEmail });
 };
 const updateUserPassword = async (
   userId: string | number,
   newPassword: string
-): Promise<any> => {
+): Promise<UserData | ApiErrorResponse> => {
   return await updateUserData('users', userId, { password: newPassword });
 };
 const updateUserInfo = async ({
@@ -580,7 +568,7 @@ const updateUserInfo = async ({
 }: {
   userId: string;
   data: Partial<UserAttributes>;
-}): Promise<any> => {
+}): Promise<UserData | ApiErrorResponse> => {
   return await updateUserData('users', userId, data);
 };
 const registerNewUser = async (
@@ -600,6 +588,55 @@ const registerNewUser = async (
   }
 };
 
+const confirmEmail = async (
+  confirmationToken: string
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/auth/email-confirmation?confirmation=${confirmationToken}`
+    );
+    if (response.status === 200) {
+      return { success: true, message: 'Email confirmed successfully' };
+    }
+    return { success: false, message: 'Failed to confirm email' };
+  } catch (error: unknown) {
+    let message = 'Invalid or expired confirmation token';
+    if (axios.isAxiosError(error) && error.response?.data?.error?.message) {
+      message = error.response.data.error.message;
+    }
+    return { success: false, message };
+  }
+};
+
+const resendConfirmationEmail = async (
+  email: string
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/api/auth/send-email-confirmation`,
+      { email }
+    );
+    if (response.status === 200) {
+      return { success: true, message: 'Confirmation email sent' };
+    }
+    return { success: false, message: 'Failed to send confirmation email' };
+  } catch (error: unknown) {
+    let message = 'Failed to send confirmation email';
+    if (axios.isAxiosError(error) && error.response?.data?.error?.message) {
+      message = error.response.data.error.message;
+    }
+    return { success: false, message };
+  }
+};
+
+interface NewsletterSubscription {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}
+
 const addToNewsletter = async ({
   email,
   firstName,
@@ -610,7 +647,7 @@ const addToNewsletter = async ({
   firstName: string;
   lastName: string;
   phoneNumber: string;
-}): Promise<any> => {
+}): Promise<NewsletterSubscription | ApiErrorResponse> => {
   // If not, add the email to the user-group
   return await createData('user-groups/newsletter', {
     email,
@@ -620,24 +657,37 @@ const addToNewsletter = async ({
   });
 };
 
-const fetchGoogleReviews = async (placeId: string): Promise<any> => {
+interface GoogleReview {
+  author_name: string;
+  rating: number;
+  text: string;
+  time: number;
+  relative_time_description: string;
+}
+
+const fetchGoogleReviews = async (placeId: string): Promise<GoogleReview[] | null> => {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   const url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${apiKey}`;
 
   try {
     const response = await axios.get(url);
-    return response.data?.result?.reviews;
-  } catch (error) {
+    return response.data?.result?.reviews ?? null;
+  } catch {
     return null;
   }
 };
+interface ContactFormResponse {
+  success: boolean;
+  message?: string;
+}
+
 const sendContactUsEmail = async (emailDetails: {
   senderEmail: string;
   message: string;
   businessInfo: string;
   name: string;
   phoneNumber: string;
-}): Promise<any> => {
+}): Promise<ContactFormResponse | ApiErrorResponse> => {
   const emailData = {
     email: emailDetails.senderEmail,
     message: `Message: ${emailDetails.message} Business Info: ${emailDetails.businessInfo}`,
@@ -646,6 +696,15 @@ const sendContactUsEmail = async (emailDetails: {
   };
   return await createData('contact-page/contact', emailData);
 };
+
+interface CommentData {
+  id: number;
+  post: string;
+  user: string;
+  content: string;
+  createdAt: string;
+}
+
 const createComment = async (
   postId: string,
   commentData: {
@@ -653,7 +712,7 @@ const createComment = async (
     user: string;
     content: string;
   }
-): Promise<any> => {
+): Promise<CommentData | ApiErrorResponse> => {
   commentData.post = postId;
   return await createData('comments', commentData);
 };
@@ -683,6 +742,8 @@ export {
   updateUserEmail,
   updateUserInfo,
   registerNewUser,
+  confirmEmail,
+  resendConfirmationEmail,
   updateUserPassword,
   createComment,
   sendContactUsEmail,

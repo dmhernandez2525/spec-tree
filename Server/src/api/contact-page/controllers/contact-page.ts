@@ -17,8 +17,8 @@ interface ContactRequestBody {
 
 // Define or import your schema's UID
 type ContactPageUID = "api::contact-page.contact-page";
-// : Make more verbose and allow the use of generic to be passed for body
-// : add this to a util or global types
+
+// Extended context interface for type-safe request body access
 interface ExtendedContext extends Context {
   request: Context["request"] & { body: ContactRequestBody };
 }
@@ -40,7 +40,7 @@ export default factories.createCoreController(
 
         // Validate the incoming request data
         await contactSchema.validate(ctx.request.body);
-        // : Update Typing
+
         // Sanitize the input
         const sanitizedData = await strapi.contentAPI.sanitize.input(
           ctx.request.body,

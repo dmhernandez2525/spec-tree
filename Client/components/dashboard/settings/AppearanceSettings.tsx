@@ -11,14 +11,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useFonts } from '@/components/FontManager';
+import { useFonts, styleFonts } from '@/components/FontManager';
 import { toast } from 'sonner';
 import Theme from '@/components/dashboard/theme';
+
+// Get style variants from FontManager's styleFonts keys
+const styleVariantKeys = Object.keys(styleFonts) as [keyof typeof styleFonts, ...Array<keyof typeof styleFonts>];
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark', 'system']),
   fontSize: z.enum(['small', 'medium', 'large']),
-  style: z.string(),
+  style: z.enum(styleVariantKeys),
   animationsEnabled: z.boolean(),
 });
 
@@ -38,7 +41,7 @@ export function AppearanceSettings() {
   });
 
   function onSubmit(data: AppearanceFormValues) {
-    setCurrentStyle(data.style as any);
+    setCurrentStyle(data.style);
     toast.success('Appearance settings updated');
   }
 

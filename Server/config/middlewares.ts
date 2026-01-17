@@ -2,10 +2,13 @@ export default [
   "strapi::logger",
   "strapi::errors",
   {
-    // TODO-p1: Security - CSP Configuration
-    // The current Content Security Policy (CSP) configuration allows 'unsafe-inline' and 'unsafe-eval' for script sources, which relaxes security restrictions. This should be used with caution.
-    // We should review and tighten the CSP configuration based on specific requirements and security needs of the PDF viewer.
-    // Possible solution: Remove 'unsafe-inline' and 'unsafe-eval' from the "script-src" directive and find alternative ways to achieve the desired functionality without relying on inline scripts or eval(). This may involve refactoring code to eliminate the need for these unsafe practices.
+    /**
+     * Security - CSP Configuration
+     *
+     * The current Content Security Policy allows 'unsafe-inline' and 'unsafe-eval'
+     * for script sources to support the PDF viewer functionality. This relaxes
+     * security restrictions and should be reviewed when updating the PDF viewer.
+     */
     name: "strapi::security",
     config: {
       contentSecurityPolicy: {

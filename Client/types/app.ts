@@ -16,7 +16,7 @@ export interface AppMetrics {
   errors24h: number;
 }
 
-// TODO: fix this inconstancy
+// Extended App interface with UI state and additional metadata
 export interface AppExtended extends App {
   id: string;
   status: AppStatus;

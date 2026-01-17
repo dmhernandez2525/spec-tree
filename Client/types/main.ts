@@ -75,7 +75,7 @@ interface ImageAttributes extends Timestamps {
   url: string;
   previewUrl: string | null;
   provider: string;
-  provider_metadata: any | null;
+  provider_metadata: Record<string, unknown> | null;
 }
 
 interface Section1 {

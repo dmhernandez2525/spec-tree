@@ -2,12 +2,14 @@
 
 import * as React from 'react';
 import { ThemeProvider } from 'next-themes';
-import { CustomizationPanel } from '@/components/CustomizationPanel/CustomizationPanel';
+import { CustomizationPanel, generateTheme } from '@/components/CustomizationPanel/CustomizationPanel';
 import { Button } from '@/components/ui/button';
 import { useFonts } from '@/components/FontManager';
 import { logger } from '@/lib/logger';
 
-// TODO: create a separate Layout component to keep the page component clean
+type ThemeObject = ReturnType<typeof generateTheme>['theme'];
+
+// Theme Layout wrapper with hydration handling
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [mounted, setMounted] = React.useState(false);
 
@@ -28,7 +30,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 const ComponentLibraryPage = () => {
-  const handleThemeChange = (theme: any) => {
+  const handleThemeChange = (theme: ThemeObject) => {
     logger.log('Theme changed:', theme);
   };
 

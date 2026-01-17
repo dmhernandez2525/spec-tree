@@ -27,6 +27,7 @@ export function StripeIntegration({
 }: StripeIntegrationProps) {
   const [isLoading, setIsLoading] = useState(false);
   const elements = useElements();
+  const user = useAppSelector((state) => state.user.user);
   const subscription = useAppSelector(
     (state) => state.organization.subscription
   );
@@ -46,11 +47,14 @@ export function StripeIntegration({
       const stripe = await stripePromise;
       if (!stripe) throw new Error('Stripe failed to load');
 
+      const userName = user
+        ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
+        : '';
       const result = await stripe.confirmCardSetup(clientSecret, {
         payment_method: {
           card: elements.getElement('card')!,
           billing_details: {
-            name: 'Test User', // TODO: Get from user profile
+            name: userName || 'Card Holder',
           },
         },
       });

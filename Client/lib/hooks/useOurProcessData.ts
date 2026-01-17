@@ -3,26 +3,29 @@ import {
   fetchOurProcessPageData,
   OurProcessPageAttributes,
 } from '../../api/fetchData';
+import { fallbackOurProcessPageData } from '../data/fallback-content';
 
 export const useOurProcessPageData = () => {
-  const [aboutSections, OurProcessPageSections] =
+  const [aboutSections, setOurProcessPageSections] =
     useState<OurProcessPageAttributes | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchGameAssessmentData = async () => {
+    const fetchOurProcessData = async () => {
       setLoading(true);
       try {
         const response = await fetchOurProcessPageData();
-        OurProcessPageSections(response?.data || null);
+        // Use fallback data if API returns null or empty
+        setOurProcessPageSections(response?.data || fallbackOurProcessPageData);
       } catch (error) {
-        console.error('Failed to fetch OurProcessPage page data', error);
+        console.error('Failed to fetch our process page data, using fallback:', error);
+        setOurProcessPageSections(fallbackOurProcessPageData);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchGameAssessmentData();
+    fetchOurProcessData();
   }, []);
 
   return { aboutSections, loading };

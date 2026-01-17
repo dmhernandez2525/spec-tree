@@ -23,8 +23,7 @@ export default function CareersPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // TODO: fetch jobs from an API.
-    // Here, we have a static array above, so this is just a no-op.
+    // Demo: Using static job data. Connect to CMS for production.
     setJobs(jobOpenings);
   }, []);
 
@@ -45,7 +44,7 @@ export default function CareersPage() {
         {/* Hero Section with Background Image */}
         <div className="absolute inset-0 -z-10">
           <Image
-            src="https://images.unsplash.com/photo-1531379410502-df47b6ad1391?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
+            src="/images/careers-hero.png"
             alt="Corporate building skyline"
             fill
             className="object-cover object-center"
@@ -109,7 +108,7 @@ export default function CareersPage() {
                 transition={{ duration: 0.6 }}
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1523608679140-b9f7f2c490f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
+                  src="/images/team-culture.png"
                   alt="Our team collaborating"
                   width={1950}
                   height={1300}

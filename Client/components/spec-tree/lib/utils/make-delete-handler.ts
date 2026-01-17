@@ -1,14 +1,14 @@
-import { Dispatch } from 'redux';
-import { AnyAction } from 'redux';
+import { Dispatch, AnyAction } from 'redux';
+import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 
 type ParametersType = {
   [key: string]: string;
 };
 
-const makeDeleteHandler = (
+const makeDeleteHandler = <P extends ParametersType>(
   dispatch: Dispatch<AnyAction>,
-  action: any,
-  parameters: ParametersType
+  action: ActionCreatorWithPayload<P>,
+  parameters: P
 ) => {
   return (): void => {
     dispatch(action(parameters));

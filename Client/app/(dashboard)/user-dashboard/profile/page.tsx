@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   Card,
   CardContent,
@@ -12,9 +12,18 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAppSelector } from '@/lib/hooks/use-store';
 
 export default function UserProfile() {
   const router = useRouter();
+  const user = useAppSelector((state) => state.user.user);
+
+  // Get user display values with fallbacks for demo mode
+  const firstName = user?.firstName || 'Demo';
+  const lastName = user?.lastName || 'User';
+  const fullName = `${firstName} ${lastName}`.trim();
+  const email = user?.email || 'demo@spectree.app';
+  const initials = `${firstName[0] || ''}${lastName[0] || ''}`.toUpperCase() || 'DU';
 
   return (
     <div className="container mx-auto py-12 px-6 lg:px-12">
@@ -30,12 +39,11 @@ export default function UserProfile() {
       {/* Profile Header */}
       <div className="flex items-center gap-6 mb-8">
         <Avatar className="w-24 h-24">
-          <AvatarImage src="/images/avatar-placeholder.png" alt="User Avatar" />
-          <AvatarFallback>JD</AvatarFallback>
+          <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
         </Avatar>
         <div>
-          <h1 className="text-3xl font-bold">John Doe</h1>
-          <p className="text-muted-foreground">johndoe@example.com</p>
+          <h1 className="text-3xl font-bold">{fullName}</h1>
+          <p className="text-muted-foreground">{email}</p>
         </div>
       </div>
 
@@ -51,7 +59,7 @@ export default function UserProfile() {
             <Label htmlFor="name" className="mb-2 block">
               Name
             </Label>
-            <Input id="name" placeholder="John Doe" defaultValue="John Doe" />
+            <Input id="name" placeholder="Your name" defaultValue={fullName} />
           </div>
 
           {/* Email */}
@@ -62,8 +70,8 @@ export default function UserProfile() {
             <Input
               id="email"
               type="email"
-              placeholder="johndoe@example.com"
-              defaultValue="johndoe@example.com"
+              placeholder="your@email.com"
+              defaultValue={email}
             />
           </div>
 

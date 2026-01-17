@@ -5,8 +5,8 @@ import { OrganizationSubscription } from '@/types/organization';
 import {
   generateMockSubscriptionData,
   mockSubscriptionScenarios,
+  SubscriptionScenarioType,
 } from '@/lib/data/mocks/subscription-mocks';
-import { logger } from '@/lib/logger';
 
 // Mock data
 const mockSubscription: OrganizationSubscription = {
@@ -67,6 +67,10 @@ const initialState: SubscriptionState = {
   ],
 };
 
+const isValidScenarioType = (scenario: string): scenario is SubscriptionScenarioType => {
+  return ['free', 'pro', 'enterprise', 'past_due', 'canceled', 'trial'].includes(scenario);
+};
+
 export const fetchSubscriptionData = createAsyncThunk(
   'subscription/fetchData',
   async (scenario: string = 'pro') => {
@@ -81,7 +85,9 @@ export const fetchSubscriptionData = createAsyncThunk(
       case 'recentlyUpgraded':
         return mockSubscriptionScenarios.recentlyUpgraded;
       default:
-        return generateMockSubscriptionData(scenario as any);
+        // Validate and use proper type for scenario
+        const validScenario: SubscriptionScenarioType = isValidScenarioType(scenario) ? scenario : 'pro';
+        return generateMockSubscriptionData(validScenario);
     }
   }
 );
@@ -89,10 +95,8 @@ export const fetchSubscriptionData = createAsyncThunk(
 // Async thunks
 export const fetchSubscription = createAsyncThunk(
   'subscription/fetchSubscription',
-  async (organizationId: string) => {
-    // TODO: Remove this logger.log statement when we are are using organizationId
-    logger.log({ organizationId });
-    // Simulating API call
+  async (_organizationId: string) => {
+    // Simulating API call - will be replaced with actual API call using organizationId
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return mockSubscription;
   }

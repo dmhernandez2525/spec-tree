@@ -11,6 +11,7 @@ import {
   ResTaskType,
   RiskMitigationType,
 } from '../types/work-items';
+import type { StrapiApp } from '@/types/strapi';
 
 // Base Strapi response types
 interface StrapiResponse<T> {
@@ -108,13 +109,16 @@ class StrapiService {
     }
   }
 
-  private handleError(error: any): never {
-    if (error.response?.data?.error) {
+  private handleError(error: unknown): never {
+    if (axios.isAxiosError(error) && error.response?.data?.error) {
       const strapiError = error.response.data as StrapiError;
       console.error('Strapi API Error:', strapiError.error.message);
       throw new Error(strapiError.error.message);
     }
-    throw error;
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('An unknown error occurred');
   }
 
   // Apps
@@ -122,8 +126,8 @@ class StrapiService {
     return this.fetch<App[]>('/apps');
   }
 
-  async fetchAppById(documentId: string): Promise<App> {
-    return this.fetch<App>(`/apps/${documentId}`, {
+  async fetchAppById(documentId: string): Promise<StrapiApp> {
+    return this.fetch<StrapiApp>(`/apps/${documentId}`, {
       populate: {
         contextualQuestions: true,
         epics: {
@@ -497,8 +501,8 @@ class StrapiService {
 
   // Settings & Configuration
 
-  // Fetch all data for an app
-  async fetchAllAppData(documentId: string): Promise<any> {
+  // Fetch all data for an app (deeply populated)
+  async fetchAllAppData(documentId: string): Promise<StrapiApp> {
     return this.fetchAppById(documentId);
   }
 }

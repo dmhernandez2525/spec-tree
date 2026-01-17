@@ -31,7 +31,7 @@ export default {
       // 'zh',
     ],
   },
-  bootstrap(app: StrapiApp) {
-    console.log(app);
+  bootstrap(_app: StrapiApp) {
+    // Strapi admin bootstrap - app instance available for customization
   },
 };

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
   DropdownMenu,
@@ -9,10 +8,29 @@ import {
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { toast } from 'sonner';
+import type { ColorTokens, TypographyTokens } from './ThemeConfigurator';
 
-const ExportManager = ({ colorTokens, typographyTokens }) => {
-  const generateFigmaTheme = () => {
-    const theme = {
+interface ExportManagerProps {
+  colorTokens: ColorTokens;
+  typographyTokens: TypographyTokens;
+}
+
+interface FigmaTheme {
+  colors: {
+    light: Record<string, string>;
+    dark: Record<string, string>;
+  };
+  typography: {
+    fontFamily: Record<string, string>;
+    fontSize: Record<string, string>;
+    fontWeight: Record<string, string>;
+    lineHeight: Record<string, string>;
+  };
+}
+
+const ExportManager: React.FC<ExportManagerProps> = ({ colorTokens, typographyTokens }) => {
+  const generateFigmaTheme = (): FigmaTheme => {
+    const theme: FigmaTheme = {
       colors: {
         light: {},
         dark: {},
@@ -51,7 +69,7 @@ const ExportManager = ({ colorTokens, typographyTokens }) => {
     return theme;
   };
 
-  const generateLocalTheme = () => {
+  const generateLocalTheme = (): string => {
     let cssVariables = ':root {\n';
     let darkTheme = '.dark {\n';
 
@@ -67,7 +85,9 @@ const ExportManager = ({ colorTokens, typographyTokens }) => {
     // Process typography tokens
     Object.entries(typographyTokens).forEach(([category, tokens]) => {
       Object.entries(tokens).forEach(([key, value]) => {
-        const actualValue = typeof value === 'object' ? value.value : value;
+        const actualValue = typeof value === 'object' && value !== null && 'value' in value
+          ? (value as { value: string }).value
+          : value;
         cssVariables += `  --${category}-${key}: ${actualValue};\n`;
       });
     });
@@ -78,7 +98,7 @@ const ExportManager = ({ colorTokens, typographyTokens }) => {
     return cssVariables + darkTheme;
   };
 
-  const downloadTheme = (content, filename) => {
+  const downloadTheme = (content: FigmaTheme, filename: string): void => {
     const blob = new Blob([JSON.stringify(content, null, 2)], {
       type: 'application/json',
     });
@@ -93,7 +113,7 @@ const ExportManager = ({ colorTokens, typographyTokens }) => {
     toast.success(`Downloaded ${filename}`);
   };
 
-  const downloadCssTheme = (content, filename) => {
+  const downloadCssTheme = (content: string, filename: string): void => {
     const blob = new Blob([content], { type: 'text/css' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

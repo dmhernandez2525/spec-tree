@@ -38,7 +38,6 @@ class OpenAIService {
       if (!completion.choices[0]?.message?.content) {
         throw new AppError(500, 'No completion generated');
       }
-      console.log({ completion });
       return completion.choices[0].message.content;
     } catch (error: unknown) {
       console.error('OpenAI API Error:', error);

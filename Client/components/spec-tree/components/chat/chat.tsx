@@ -21,8 +21,8 @@ interface ChatProps {
   onClose?: () => void;
 }
 
+// _onClose reserved for modal/dialog close callback integration
 const Chat: React.FC<ChatProps> = ({ onClose: _onClose }) => {
-  // TODO: use _onClose and remove this comment
   const selectedModel = useSelector(
     (state: RootState) => state.sow.selectedModel
   );

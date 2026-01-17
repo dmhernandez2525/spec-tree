@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="400" cy="180" r="70" fill="url(#accent)" opacity="0.2"/>
+  <rect x="360" y="140" width="80" height="80" rx="8" fill="none" stroke="#f59e0b" stroke-width="3"/>
+  <rect x="375" y="155" width="20" height="50" rx="2" fill="#f59e0b"/>
+  <rect x="405" y="175" width="20" height="30" rx="2" fill="#7c3aed"/>
+  <rect x="150" y="280" width="200" height="150" rx="8" fill="#1e1e3f" stroke="#f59e0b" stroke-width="2"/>
+  <text x="250" y="310" font-family="system-ui" font-size="12" fill="#94a3b8" text-anchor="middle">Backlog</text>
+  <rect x="170" y="330" width="160" height="25" rx="4" fill="#f59e0b" opacity="0.6"/>
+  <rect x="170" y="365" width="160" height="25" rx="4" fill="#7c3aed" opacity="0.6"/>
+  <rect x="170" y="385" width="160" height="25" rx="4" fill="#06b6d4" opacity="0.6"/>
+  <rect x="450" y="280" width="200" height="150" rx="8" fill="#1e1e3f" stroke="#7c3aed" stroke-width="2"/>
+  <text x="550" y="310" font-family="system-ui" font-size="12" fill="#94a3b8" text-anchor="middle">Sprint Board</text>
+  <rect x="470" y="330" width="50" height="80" rx="4" fill="#7c3aed" opacity="0.3"/>
+  <rect x="530" y="330" width="50" height="80" rx="4" fill="#f59e0b" opacity="0.3"/>
+  <rect x="590" y="330" width="50" height="80" rx="4" fill="#10b981" opacity="0.3"/>
+  <rect x="480" y="345" width="30" height="15" rx="2" fill="#7c3aed"/>
+  <rect x="480" y="365" width="30" height="15" rx="2" fill="#7c3aed"/>
+  <rect x="540" y="345" width="30" height="15" rx="2" fill="#f59e0b"/>
+  <rect x="600" y="345" width="30" height="15" rx="2" fill="#10b981"/>
+  <text x="400" y="500" font-family="system-ui" font-size="24" fill="white" text-anchor="middle" font-weight="bold">Sprint Planning</text>
+  <text x="400" y="530" font-family="system-ui" font-size="14" fill="#94a3b8" text-anchor="middle">AI-Powered Sprint Management</text>
+</svg>

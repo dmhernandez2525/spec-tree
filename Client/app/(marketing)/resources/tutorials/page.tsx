@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tutorial, TutorialCategory } from '@/types/tutorials';
 import Section from '@/components/layout/Section';
 
+// Demo tutorial data - videos will be added when content is ready
 const tutorials: Tutorial[] = [
   {
     id: '1',
@@ -19,10 +20,8 @@ const tutorials: Tutorial[] = [
     category: 'beginner',
     duration: 15,
     lastUpdated: '2024-04-01',
-    thumbnailUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    videoUrl:
-      'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+    thumbnailUrl: '/images/tutorial-video.png',
+    videoUrl: '', // Video coming soon
     chapters: [
       { title: 'Introduction', timestamp: '0:00' },
       { title: 'Creating Your First Project', timestamp: '2:30' },
@@ -31,8 +30,7 @@ const tutorials: Tutorial[] = [
     author: {
       name: 'Sarah Chen',
       role: 'Product Manager',
-      avatarUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      avatarUrl: '/images/hierarchy-tree-view.png',
     },
   },
   {
@@ -44,10 +42,8 @@ const tutorials: Tutorial[] = [
     category: 'advanced',
     duration: 25,
     lastUpdated: '2024-04-01',
-    thumbnailUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    videoUrl:
-      'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+    thumbnailUrl: '/images/ai-project-planning.png',
+    videoUrl: '', // Video coming soon
     chapters: [
       { title: 'Understanding Context', timestamp: '0:00' },
       { title: 'AI Configuration', timestamp: '4:15' },
@@ -56,8 +52,7 @@ const tutorials: Tutorial[] = [
     author: {
       name: 'Michael Rodriguez',
       role: 'Technical Lead',
-      avatarUrl:
-        'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      avatarUrl: '/images/context-propagation.png',
     },
   },
 ];

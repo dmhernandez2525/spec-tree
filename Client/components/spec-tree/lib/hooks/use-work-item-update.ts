@@ -10,11 +10,14 @@ import {
   EpicType,
   FeatureType,
   UserStoryType,
+  TaskType,
 } from '../types/work-items';
 import { RootState } from '../../../../lib/store';
 
 import { useSelector } from 'react-redux';
 import { selectChatApi } from '../../../../lib/store/sow-slice';
+
+type UpdatedWorkItem = EpicType | FeatureType | UserStoryType | TaskType | null;
 
 interface IGenerateUpdatedWorkItemProps {
   context: string;
@@ -27,7 +30,7 @@ interface IGenerateUpdatedWorkItemProps {
 const useWorkItemUpdate = (workItemType: ExtendedWorkItemType) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [updatedWorkItem, setUpdatedWorkItem] = useState<any>(null);
+  const [updatedWorkItem, setUpdatedWorkItem] = useState<UpdatedWorkItem>(null);
   const chatApi = useSelector(selectChatApi);
 
   const generateUpdatedWorkItem = async ({
@@ -47,7 +50,7 @@ const useWorkItemUpdate = (workItemType: ExtendedWorkItemType) => {
             (await generateUpdatedEpic({
               chatApi,
               context,
-              requirements: 'TODO-p1: Add requirements',
+              requirements: state.sow.globalInformation || '',
               selectedModel: state.sow.selectedModel,
             }));
           break;

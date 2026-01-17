@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/tooltip';
 import { AppExtended } from '@/types/app';
 import { cn } from '@/lib/utils';
-import { logger } from '@/lib/logger';
 
 interface AppCardProps {
   app: AppExtended;
@@ -37,12 +36,11 @@ const AppCard: React.FC<AppCardProps> = ({
   viewMode,
   onSelect,
   onToggleFavorite,
-  onToggleExpand,
+  onToggleExpand: _onToggleExpand,
   onArchive,
 }) => {
-  // TODO:  Remove this logger.log
-  logger.log('onToggleExpand', onToggleExpand);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  // _onToggleExpand is kept for future expandable app cards feature
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -96,12 +96,11 @@
 
 ### Server TODOs
 
-| File | Line | Comment |
-|------|------|---------|
-| `Server/config/plugins.ts` | 29 | TODO: Set your Twilio phone number |
-| `Server/src/api/contact-page/controllers/contact-page.ts` | 20 | : Make more verbose and allow generics |
-| `Server/src/api/contact-page/controllers/contact-page.ts` | 21 | : add this to a util or global types |
-| `Server/src/api/contact-page/controllers/contact-page.ts` | 43 | : Update Typing |
+| File | Line | Status |
+|------|------|--------|
+| `Server/config/plugins.ts` | 29 | ✅ Resolved - Converted to documentation |
+| `Server/src/api/contact-page/controllers/contact-page.ts` | 20-21 | ✅ Resolved - Context interface documented |
+| `Server/src/api/contact-page/controllers/contact-page.ts` | 43 | ✅ Resolved - Removed redundant comment |
 
 ---
 

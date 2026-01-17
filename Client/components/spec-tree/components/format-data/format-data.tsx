@@ -8,7 +8,15 @@ import {
   UserStoryType,
   TaskType,
   Sow,
+  ContextualQuestion,
 } from '../../lib/types/work-items';
+import {
+  StrapiEpic,
+  StrapiFeature,
+  StrapiUserStory,
+  StrapiTask,
+  StrapiContextualQuestion,
+} from '@/types/strapi';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2 } from 'lucide-react';
@@ -22,12 +30,33 @@ interface FormattedData {
   sow: Sow;
 }
 
+interface AppDataResponse {
+  epics?: StrapiEpic[];
+  contextualQuestions?: StrapiContextualQuestion[];
+  globalInformation?: string;
+}
+
+/**
+ * Transform contextual questions from Strapi format
+ */
+const transformContextualQuestions = (
+  questions?: StrapiContextualQuestion[]
+): ContextualQuestion[] => {
+  return (
+    questions?.map((q) => ({
+      id: q.documentId,
+      question: q.question,
+      answer: q.answer,
+    })) || []
+  );
+};
+
 export const formatDBData = ({
   data,
   chatApi,
   id,
 }: {
-  data: any;
+  data: AppDataResponse;
   chatApi: string | null;
   id: string;
 }): FormattedData => {
@@ -45,12 +74,7 @@ export const formatDBData = ({
   };
 
   // Format contextual questions
-  sow.contextualQuestions =
-    data.contextualQuestions?.map((q: any) => ({
-      id: q.documentId,
-      question: q.question,
-      answer: q.answer,
-    })) || [];
+  sow.contextualQuestions = transformContextualQuestions(data.contextualQuestions);
 
   // Format global information
   sow.globalInformation = data?.globalInformation || '';
@@ -58,7 +82,7 @@ export const formatDBData = ({
   // Format epics
   if (data?.epics) {
     sow.epics = data.epics.reduce(
-      (acc: Record<string, EpicType>, epic: any) => {
+      (acc: Record<string, EpicType>, epic: StrapiEpic) => {
         acc[epic.documentId] = {
           id: epic.documentId,
           documentId: epic.documentId,
@@ -70,15 +94,11 @@ export const formatDBData = ({
           timeline: epic.timeline,
           resources: epic.resources,
           risksAndMitigation: epic.risksAndMitigation || [],
-          featureIds: epic.features?.map((f: any) => f.documentId) || [],
+          featureIds: epic.features?.map((f: StrapiFeature) => f.documentId) || [],
           parentAppId: id,
           notes: epic.notes,
-          contextualQuestions:
-            epic.contextualQuestions?.map((q: any) => ({
-              id: q.documentId,
-              question: q.question,
-              answer: q.answer,
-            })) || [],
+          contextualQuestions: transformContextualQuestions(
+            epic.contextualQuestions           ),
         };
         return acc;
       },
@@ -89,9 +109,9 @@ export const formatDBData = ({
   // Format features
   if (data?.epics) {
     sow.features = data.epics.reduce(
-      (acc: Record<string, FeatureType>, epic: any) => {
+      (acc: Record<string, FeatureType>, epic: StrapiEpic) => {
         if (epic.features) {
-          epic.features.forEach((feature: any) => {
+          epic.features.forEach((feature: StrapiFeature) => {
             acc[feature.documentId] = {
               id: feature.documentId,
               documentId: feature.documentId,
@@ -102,16 +122,12 @@ export const formatDBData = ({
               acceptanceCriteria: feature.acceptanceCriteria || [{ text: '' }],
               parentEpicId: epic.documentId,
               userStoryIds:
-                feature.userStories?.map((us: any) => us.documentId) || [],
+                feature.userStories?.map((us: StrapiUserStory) => us.documentId) || [],
               priority: feature.priority,
               effort: feature.effort,
               notes: feature.notes,
-              contextualQuestions:
-                feature.contextualQuestions?.map((q: any) => ({
-                  id: q.documentId,
-                  question: q.question,
-                  answer: q.answer,
-                })) || [],
+              contextualQuestions: transformContextualQuestions(
+                feature.contextualQuestions               ),
             };
           });
         }
@@ -124,9 +140,9 @@ export const formatDBData = ({
   // Format user stories
   if (data?.epics) {
     sow.userStories = data.epics.reduce(
-      (acc: Record<string, UserStoryType>, epic: any) => {
-        epic.features?.forEach((feature: any) => {
-          feature.userStories?.forEach((story: any) => {
+      (acc: Record<string, UserStoryType>, epic: StrapiEpic) => {
+        epic.features?.forEach((feature: StrapiFeature) => {
+          feature.userStories?.forEach((story: StrapiUserStory) => {
             acc[story.documentId] = {
               id: story.documentId,
               documentId: story.documentId,
@@ -138,15 +154,11 @@ export const formatDBData = ({
               acceptanceCriteria: story.acceptanceCriteria || [{ text: '' }],
               notes: story.notes,
               parentFeatureId: feature.documentId,
-              taskIds: story.tasks?.map((t: any) => t.documentId) || [],
+              taskIds: story.tasks?.map((t: StrapiTask) => t.documentId) || [],
               developmentOrder: story.developmentOrder || 0,
               dependentUserStoryIds: [],
-              contextualQuestions:
-                story.contextualQuestions?.map((q: any) => ({
-                  id: q.documentId,
-                  question: q.question,
-                  answer: q.answer,
-                })) || [],
+              contextualQuestions: transformContextualQuestions(
+                story.contextualQuestions               ),
             };
           });
         });
@@ -159,10 +171,10 @@ export const formatDBData = ({
   // Format tasks
   if (data?.epics) {
     sow.tasks = data.epics.reduce(
-      (acc: Record<string, TaskType>, epic: any) => {
-        epic.features?.forEach((feature: any) => {
-          feature.userStories?.forEach((story: any) => {
-            story.tasks?.forEach((task: any) => {
+      (acc: Record<string, TaskType>, epic: StrapiEpic) => {
+        epic.features?.forEach((feature: StrapiFeature) => {
+          feature.userStories?.forEach((story: StrapiUserStory) => {
+            story.tasks?.forEach((task: StrapiTask) => {
               acc[task.documentId] = {
                 id: task.documentId,
                 documentId: task.documentId,
@@ -172,12 +184,8 @@ export const formatDBData = ({
                 notes: task.notes,
                 parentUserStoryId: story.documentId,
                 dependentTaskIds: [],
-                contextualQuestions:
-                  task.contextualQuestions?.map((q: any) => ({
-                    id: q.documentId,
-                    question: q.question,
-                    answer: q.answer,
-                  })) || [],
+                contextualQuestions: transformContextualQuestions(
+                  task.contextualQuestions                 ),
               };
             });
           });
@@ -206,7 +214,7 @@ const FormatData: React.FC<FormatDataProps> = ({ selectedApp, chatApi }) => {
       try {
         const response = await strapiService.fetchAppById(selectedApp);
         const formattedData = formatDBData({
-          data: response,
+          data: response as AppDataResponse,
           chatApi,
           id: selectedApp,
         });
