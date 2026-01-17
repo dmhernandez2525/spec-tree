@@ -79,6 +79,13 @@ jobs:
           flags: client
           fail_ci_if_error: false
 
+      - name: Upload coverage for SonarCloud
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: Client/coverage/lcov.info
+          retention-days: 1
+
   # Server (Strapi CMS) - Lint and Build
   server:
     needs: changes
@@ -141,13 +148,19 @@ jobs:
 
   # SonarCloud Analysis
   sonarcloud:
-    needs: changes
+    needs: [changes, client]
     if: ${{ needs.changes.outputs.client == 'true' || github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Full history for better analysis
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          path: Client/coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
