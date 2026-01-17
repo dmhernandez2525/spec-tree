@@ -23,9 +23,7 @@ export function OrganizationManagement() {
   const [openPermissions, setOpenPermissions] = useState(false);
 
   const organizationId = useAppSelector((state) => state.auth.organizationId);
-  const userRole = 'owner';
-  // TODO-p1: Uncomment this line when the organization role is implemented
-  // const userRole = useAppSelector((state) => state.auth.organizationRole);
+  const userRole = useAppSelector((state) => state.auth.organizationRole) || 'member';
 
   useEffect(() => {
     if (organizationId) {
@@ -54,7 +52,15 @@ export function OrganizationManagement() {
     // This will be handled by the SubscriptionManagement component
   };
 
-  const handleUpdateOrganization = async (data: any) => {
+  interface OrganizationUpdateData {
+    name?: string;
+    size?: string;
+    industry?: string;
+    description?: string;
+    websiteUrl?: string;
+  }
+
+  const handleUpdateOrganization = async (data: OrganizationUpdateData) => {
     try {
       await dispatch(updateOrganization(data)).unwrap();
     } catch (error) {

@@ -144,8 +144,9 @@ function PaymentForm({ onSuccess, currentPlan }: PaymentFormProps) {
 
       toast.success('Subscription updated successfully');
       onSuccess();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to process payment');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to process payment';
+      toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
     }

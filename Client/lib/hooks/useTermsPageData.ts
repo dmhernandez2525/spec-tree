@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchTermsPageData, TermsPageAttributes } from '../../api/fetchData';
+import { fallbackTermsPageData } from '../data/fallback-content';
 
 export const useTermsPageData = () => {
   const [termsSections, setTermsSections] =
@@ -11,9 +12,11 @@ export const useTermsPageData = () => {
       setLoading(true);
       try {
         const response = await fetchTermsPageData();
-        setTermsSections(response?.data || null);
+        // Use fallback data if API returns null or empty
+        setTermsSections(response?.data || fallbackTermsPageData);
       } catch (error) {
-        console.error('Failed to fetch Terms page data', error);
+        console.error('Failed to fetch terms page data, using fallback:', error);
+        setTermsSections(fallbackTermsPageData);
       } finally {
         setLoading(false);
       }

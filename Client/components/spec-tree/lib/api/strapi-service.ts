@@ -108,13 +108,16 @@ class StrapiService {
     }
   }
 
-  private handleError(error: any): never {
-    if (error.response?.data?.error) {
+  private handleError(error: unknown): never {
+    if (axios.isAxiosError(error) && error.response?.data?.error) {
       const strapiError = error.response.data as StrapiError;
       console.error('Strapi API Error:', strapiError.error.message);
       throw new Error(strapiError.error.message);
     }
-    throw error;
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('An unknown error occurred');
   }
 
   // Apps

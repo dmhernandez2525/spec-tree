@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchAboutPageData, AboutPageAttributes } from '../../api/fetchData';
+import { fallbackAboutPageData } from '../data/fallback-content';
 
 export const useAboutPageData = () => {
   const [aboutSections, setAboutSections] =
@@ -11,9 +12,11 @@ export const useAboutPageData = () => {
       setLoading(true);
       try {
         const response = await fetchAboutPageData();
-        setAboutSections(response?.data || null);
+        // Use fallback data if API returns null or empty
+        setAboutSections(response?.data || fallbackAboutPageData);
       } catch (error) {
-        console.error('Failed to fetch about page data', error);
+        console.error('Failed to fetch about page data, using fallback:', error);
+        setAboutSections(fallbackAboutPageData);
       } finally {
         setLoading(false);
       }

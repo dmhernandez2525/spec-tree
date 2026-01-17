@@ -39,6 +39,7 @@ import type {
   ProjectMetric,
   UserActivityMetric,
 } from '@/types/analytics';
+import { CostTrackingPanel } from '@/components/dashboard/analytics/CostTrackingPanel';
 
 // Mock data - replace with real data fetching
 const taskMetrics: TaskMetric = {
@@ -687,6 +688,9 @@ export default function AnalyticsDashboard() {
           </div>
         </CardContent>
       </Card>
+      {/* AI Cost Tracking */}
+      <CostTrackingPanel />
+
       {/* Export Options */}
       <div className="flex justify-end space-x-4">
         <Button variant="outline">Export as CSV</Button>

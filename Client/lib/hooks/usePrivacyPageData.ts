@@ -3,6 +3,7 @@ import {
   fetchPrivacyPageData,
   PrivacyPageAttributes,
 } from '../../api/fetchData';
+import { fallbackPrivacyPageData } from '../data/fallback-content';
 
 export const usePrivacyPageData = () => {
   const [privacySections, setPrivacySections] =
@@ -14,9 +15,11 @@ export const usePrivacyPageData = () => {
       setLoading(true);
       try {
         const response = await fetchPrivacyPageData();
-        setPrivacySections(response?.data || null);
+        // Use fallback data if API returns null or empty
+        setPrivacySections(response?.data || fallbackPrivacyPageData);
       } catch (error) {
-        console.error('Failed to fetch Privacy page data', error);
+        console.error('Failed to fetch privacy page data, using fallback:', error);
+        setPrivacySections(fallbackPrivacyPageData);
       } finally {
         setLoading(false);
       }

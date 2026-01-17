@@ -1,14 +1,22 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { UserAttributes } from '@/types/user';
 import {
   refreshUser as refreshUserCall,
   updateUserInfo,
   getUserRole,
 } from '@/api/fetchData';
+import type { AppDispatch } from './index';
 
 interface UserState {
   user: UserAttributes | null;
   token: string | null;
+}
+
+interface UpdateUserProfilePayload {
+  userId: number | string;
+  newUserData: Partial<UserAttributes>;
+  isPos?: boolean;
+  posUserId: number | string | null;
 }
 
 const initialState: UserState = {
@@ -16,35 +24,24 @@ const initialState: UserState = {
   token: null,
 };
 
-export const updateUserProfile = createAsyncThunk(
+export const updateUserProfile = createAsyncThunk<
+  UserAttributes | false,
+  UpdateUserProfilePayload,
+  { dispatch: AppDispatch }
+>(
   'user/updateUserProfile',
-  async (
-    {
-      userId,
-      newUserData,
-    }: {
-      userId: number | string;
-      newUserData: Partial<UserAttributes>;
-      isPos?: boolean;
-      posUserId: number | string | null;
-    },
-    { dispatch }
-  ) => {
-    try {
-      await updateUserInfo({
-        userId: `${userId}`,
-        data: newUserData,
-      });
+  async ({ userId, newUserData }, { dispatch }) => {
+    await updateUserInfo({
+      userId: `${userId}`,
+      data: newUserData,
+    });
 
-      const response = await refreshUser(dispatch);
-      return response;
-    } catch (error: any) {
-      throw error;
-    }
+    const response = await refreshUser(dispatch);
+    return response;
   }
 );
 
-export const refreshUser = async (dispatch: any) => {
+export const refreshUser = async (dispatch: AppDispatch): Promise<UserAttributes | false> => {
   const token = localStorage.getItem('token');
   try {
     const response = await refreshUserCall(token as string);
@@ -59,10 +56,15 @@ export const refreshUser = async (dispatch: any) => {
   }
 };
 
+interface LoginCredentials {
+  identifier: string;
+  password: string;
+}
+
 export const loginUser = async (
-  dispatch: any,
-  { identifier, password }: { identifier: string; password: string }
-) => {
+  dispatch: AppDispatch,
+  { identifier, password }: LoginCredentials
+): Promise<boolean> => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/auth/local`,
@@ -93,10 +95,10 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action) => {
+    setUser: (state, action: PayloadAction<UserAttributes | null>) => {
       state.user = action.payload;
     },
-    setToken: (state, action) => {
+    setToken: (state, action: PayloadAction<string | null>) => {
       state.token = action.payload;
     },
     clearUser: (state) => {

@@ -10,6 +10,11 @@ import {
   selectUserStoryById,
   selectTaskById,
 } from '../../../../lib/store/sow-slice';
+import {
+  buildEpicContext,
+  buildFeatureContext,
+  buildUserStoryContext,
+} from '../utils/context-propagation';
 
 const mapFeatures = (featureIds: string[], state: RootState): string =>
   JSON.stringify(featureIds.map((id) => selectFeatureById(state, id)));
@@ -116,24 +121,32 @@ export const taskPrompt = (
   userStory: UserStoryType,
   state: RootState,
   context?: string
-): string => `
+): string => {
+  const propagatedContext = buildUserStoryContext(userStory, state);
+
+  return `
+  ${propagatedContext ? `=== Propagated Context ===\n${propagatedContext}\n` : ''}
   ${context ? `Additional Context: ${context}\n` : ''}
   Given the user story "${userStory.title}
   Role: ${userStory.role}
   Action: ${userStory.action}
   Acceptance criteria: ${userStory.acceptanceCriteria}
   Existing Tasks: ${mapTasks(userStory.taskIds, state)},
-  generate granular tasks from a development perspective. Each task should be detailed enough that it would take a developer approximately one day to implement. Please avoid repeating tasks that have already been mentioned.
+
+  Use the propagated context above to inform your task generation.
+
+  Generate granular tasks from a development perspective. Each task should be detailed enough that it would take a developer approximately one day to implement. Please avoid repeating tasks that have already been mentioned.
   Return each task in the following JSON format: {
-    "title": "task title", 
-    "details": "task details", 
-    "priority": "task priority", 
-    "notes": "notes", 
-    "parent": "parent task", 
+    "title": "task title",
+    "details": "task details",
+    "priority": "task priority",
+    "notes": "notes",
+    "parent": "parent task",
     "dependentTasks": ["task one", "task two"]
   }.
   Do not start a new JSON object if you cannot complete it within the character limit. Separate each JSON object with "=+=".
   `;
+};
 
 export const generateAdditionalEpicsPrompt = ({
   state,
@@ -175,7 +188,11 @@ export const generateAdditionalEpicsPrompt = ({
 export const generateAdditionalFeaturesPrompt = (
   epic: EpicType,
   state: RootState
-): string => `
+): string => {
+  const propagatedContext = buildEpicContext(epic, state);
+
+  return `
+  ${propagatedContext ? `=== Propagated Context ===\n${propagatedContext}\n` : ''}
   Given the epic with the following details:
   Title: ${epic.title}
   Description: ${epic.description}
@@ -186,12 +203,15 @@ export const generateAdditionalFeaturesPrompt = (
   Resources: ${epic.resources}
   Risks and Mitigation Strategies: ${JSON.stringify(epic.risksAndMitigation)}
   Existing Features: ${mapFeatures(epic.featureIds, state)}
-  Identify and generate as many additional features as possible, necessary from a development perspective. Each feature should be detailed, leveraging the provided information. Each feature should include a short descriptive title, a brief summary, an in-depth description, and any dependencies. Please avoid repeating features that have already been mentioned.
+
+  Use the propagated context above to inform your feature generation. The context includes information from the global application description and any contextual Q&A that has been gathered.
+
+  Identify and generate as many additional features as possible, necessary from a development perspective. Each feature should be detailed, leveraging the provided information and context. Each feature should include a short descriptive title, a brief summary, an in-depth description, and any dependencies. Please avoid repeating features that have already been mentioned.
   Return each feature in the following JSON format: {
-    "title": "feature title", 
-    "description": "feature description", 
-    "details": "feature details", 
-    "dependencies": "dependencies",  
+    "title": "feature title",
+    "description": "feature description",
+    "details": "feature details",
+    "dependencies": "dependencies",
     "acceptanceCriteria": [
       { "text": "criteria one" },
       { "text": "criteria two" }
@@ -200,11 +220,16 @@ export const generateAdditionalFeaturesPrompt = (
   }.
   Please ensure to adhere strictly to the JSON format. Do not start a new JSON object if you cannot complete it within the character limit. Separate each JSON object with "####".
   `;
+};
 
 export const generateAdditionalUserStoriesPrompt = (
   feature: FeatureType,
   state: RootState
-): string => `
+): string => {
+  const propagatedContext = buildFeatureContext(feature, state);
+
+  return `
+  ${propagatedContext ? `=== Propagated Context ===\n${propagatedContext}\n` : ''}
   Given the feature with the following details:
   Title: ${feature.title}
   Description: ${feature.description}
@@ -212,29 +237,37 @@ export const generateAdditionalUserStoriesPrompt = (
   Dependencies: ${feature.dependencies}
   Acceptance Criteria: ${JSON.stringify(feature.acceptanceCriteria)}
   Existing User Stories: ${mapUserStories(feature.userStoryIds, state)}
-  Generate as many additional user stories as possible from a development perspective. Each user story should be detailed, leveraging the provided information, and granular enough that it would take a developer approximately one week to implement. Please avoid repeating user stories that have already been mentioned.
+
+  Use the propagated context above to inform your user story generation. The context includes information from the global application, parent epic, and any contextual Q&A that has been gathered.
+
+  Generate as many additional user stories as possible from a development perspective. Each user story should be detailed, leveraging the provided information and context, and granular enough that it would take a developer approximately one week to implement. Please avoid repeating user stories that have already been mentioned.
   Return each user story in the following JSON format: {
-    "title": "user story title", 
-    "role": "user role", 
-    "action": "action", 
-    "goal": "goal", 
-    "points": "estimated points", 
+    "title": "user story title",
+    "role": "user role",
+    "action": "action",
+    "goal": "goal",
+    "points": "estimated points",
     "acceptanceCriteria": [
       { "text": "criteria one" },
       { "text": "criteria two" }
     ]
-    "notes": "notes", 
-    "parent": "parent user story", 
-    "developmentOrder": "development order", 
+    "notes": "notes",
+    "parent": "parent user story",
+    "developmentOrder": "development order",
     "dependentUserStories": ["user story one", "user story two"]
   }.
   Please ensure to adhere strictly to the JSON format. Do not start a new JSON object if you cannot complete it within the character limit. Separate each JSON object with "####".
   `;
+};
 
 export const generateAdditionalTasksPrompt = (
   userStory: UserStoryType,
   state: RootState
-): string => `
+): string => {
+  const propagatedContext = buildUserStoryContext(userStory, state);
+
+  return `
+  ${propagatedContext ? `=== Propagated Context ===\n${propagatedContext}\n` : ''}
   Given the user story with the following details:
   Title: ${userStory.title}
   Role: ${userStory.role}
@@ -246,17 +279,21 @@ export const generateAdditionalTasksPrompt = (
   Parent: ${userStory.parentFeatureId}
   Dependent User Stories: ${JSON.stringify(userStory.dependentUserStoryIds)}
   Existing Tasks: ${mapTasks(userStory.taskIds, state)}
-  Generate as many additional tasks as possible from a development perspective. Each task should be detailed, leveraging the provided information, and granular enough that it would take a developer approximately one day to implement. Please avoid repeating tasks that have already been mentioned.
+
+  Use the propagated context above to inform your task generation. The context includes information from the global application, parent epic, parent feature, and any contextual Q&A that has been gathered at each level.
+
+  Generate as many additional tasks as possible from a development perspective. Each task should be detailed, leveraging the provided information and context, and granular enough that it would take a developer approximately one day to implement. Please avoid repeating tasks that have already been mentioned.
   Return each task in the following JSON format: {
-    "title": "task title", 
-    "details": "task details", 
-    "priority": "number", 
-    "notes": "notes", 
-    "parent": "parent task", 
+    "title": "task title",
+    "details": "task details",
+    "priority": "number",
+    "notes": "notes",
+    "parent": "parent task",
     "dependentTasks": ["task one", "task two"]
   }.
   Please ensure to adhere strictly to the JSON format. Do not start a new JSON object if you cannot complete it within the character limit. Separate each JSON object with "####".
   `;
+};
 
 // ======================
 // ContextQuestions

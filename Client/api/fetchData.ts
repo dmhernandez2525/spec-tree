@@ -29,17 +29,60 @@ import type {
 
 import type { UserData, UserAttributes } from '@/types/user';
 
+/**
+ * Type for API error responses
+ */
+interface ApiErrorResponse {
+  error: {
+    message: string;
+    status?: number;
+    details?: Record<string, unknown>;
+  };
+}
+
+/**
+ * Type guard to check if a response is an error
+ */
+function isApiError(response: unknown): response is ApiErrorResponse {
+  return (
+    typeof response === 'object' &&
+    response !== null &&
+    'error' in response &&
+    typeof (response as ApiErrorResponse).error === 'object'
+  );
+}
+
 const handleError = (
-  error: any,
+  error: unknown,
   endpoint: string
-): {
-  error: any;
-} => {
+): ApiErrorResponse => {
+  console.error(`API Error on ${endpoint}:`, error);
+  if (axios.isAxiosError(error)) {
+    return {
+      error: {
+        message: error.response?.data?.message || error.message || 'Request failed',
+        status: error.response?.status,
+        details: error.response?.data,
+      },
+    };
+  }
+  if (error instanceof Error) {
+    return {
+      error: {
+        message: error.message,
+      },
+    };
+  }
   return {
-    error,
+    error: {
+      message: 'An unknown error occurred',
+    },
   };
 };
-// Generic API request function
+
+/**
+ * Generic API request function with proper typing
+ */
 async function makeApiRequest<T>({
   method,
   endpoint,
@@ -49,17 +92,10 @@ async function makeApiRequest<T>({
 }: {
   method: Method;
   endpoint: string;
-  data?: any;
-  params?: any;
+  data?: Record<string, unknown>;
+  params?: Record<string, unknown>;
   usersToken?: string;
-}): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> {
+}): Promise<T | null | undefined | ApiErrorResponse> {
   try {
     const url = `${API_URL}/api/${endpoint}`;
     const config = {
@@ -72,7 +108,6 @@ async function makeApiRequest<T>({
       },
     };
     const response: AxiosResponse<T> = await axios(config);
-    // console.log(`API Request successful: ${method} ${url}`);
     return response.data;
   } catch (error) {
     return handleError(error, endpoint);
@@ -87,8 +122,8 @@ async function makeSettingsApiRequest<T>({
 }: {
   method: Method;
   endpoint: string;
-  data?: any;
-  params?: any;
+  data?: Record<string, unknown>;
+  params?: Record<string, unknown>;
   usersToken?: string;
 }): Promise<T | null | undefined> {
   try {
@@ -103,10 +138,10 @@ async function makeSettingsApiRequest<T>({
       },
     };
     const response: AxiosResponse<T> = await axios(config);
-    // console.log(`API Request successful: ${method} ${url}`);
     return response.data;
   } catch (error) {
     handleError(error, endpoint);
+    return null;
   }
 }
 // Utility function to form query strings
@@ -118,18 +153,11 @@ const formQueryString = (queryParams: string): URLSearchParams => {
 const getData = async <T>(
   endpoint: string,
   params?: URLSearchParams
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'GET',
     endpoint,
-    params,
+    params: params ? Object.fromEntries(params.entries()) : undefined,
   });
 // Simplified API functions
 const getSettingsData = async <T>(
@@ -139,20 +167,13 @@ const getSettingsData = async <T>(
   makeSettingsApiRequest<T>({
     method: 'GET',
     endpoint,
-    params,
+    params: params ? Object.fromEntries(params.entries()) : undefined,
   });
 
 const createData = async <T>(
   endpoint: string,
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'POST',
     endpoint,
@@ -163,25 +184,18 @@ const createData = async <T>(
 const updateMemData = async <T>(
   endpoint: string,
   id: string | number,
-
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'POST',
     endpoint: `${endpoint}/${id}`,
     data,
     usersToken: localStorage.getItem('token') || '',
   });
+
 const createSettingsData = async <T>(
   endpoint: string,
-  data: any
+  data: Record<string, unknown>
 ): Promise<T | null | undefined> =>
   makeSettingsApiRequest<T>({
     method: 'POST',
@@ -192,26 +206,18 @@ const createSettingsData = async <T>(
 
 const getSettings = async (): Promise<ApiSettings | null | undefined> => {
   const data = await getSettingsData<ApiSettings>('spec-tree/settings');
-
   return data;
 };
 
-const setSettings = async (data: ApiSettings) => {
-  return createSettingsData('spec-tree/settings', data);
+const setSettings = async (data: ApiSettings): Promise<ApiSettings | null | undefined> => {
+  return createSettingsData<ApiSettings>('spec-tree/settings', data as Record<string, unknown>);
 };
 
 const updateUserData = async <T>(
   endpoint: string,
   id: string | number,
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'PUT',
     endpoint: `${endpoint}/${id}`,
@@ -222,15 +228,8 @@ const updateUserData = async <T>(
 const updateData = async <T>(
   endpoint: string,
   id: string | number,
-  data: any
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+  data: Record<string, unknown>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'PUT',
     endpoint: `${endpoint}/${id}`,
@@ -241,30 +240,28 @@ const updateData = async <T>(
 const deleteData = async <T>(
   endpoint: string,
   id: string
-): Promise<
-  | T
-  | null
-  | undefined
-  | {
-      error: any;
-    }
-> =>
+): Promise<T | null | undefined | ApiErrorResponse> =>
   makeApiRequest<T>({
     method: 'DELETE',
     endpoint: `${endpoint}/${id}`,
   });
-// Interface definitions for types (Example)
 
-const fetchCmsData = async (
+/**
+ * Fetch CMS data with proper typing
+ */
+const fetchCmsData = async <T>(
   endpoint: string,
   query = 'populate=*'
-): Promise<any> => {
+): Promise<T | null | undefined> => {
   try {
-    const response: any = await getData(endpoint, formQueryString(query));
-    // console.log('Data fetched successfully:', response.data);
-    return response.data;
+    const response = await getData<{ data: T }>(endpoint, formQueryString(query));
+    if (response && !isApiError(response)) {
+      return response.data;
+    }
+    return null;
   } catch (error) {
     handleError(error, endpoint);
+    return null;
   }
 };
 const fetchData = async <T = any>(
@@ -600,6 +597,47 @@ const registerNewUser = async (
   }
 };
 
+const confirmEmail = async (
+  confirmationToken: string
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/auth/email-confirmation?confirmation=${confirmationToken}`
+    );
+    if (response.status === 200) {
+      return { success: true, message: 'Email confirmed successfully' };
+    }
+    return { success: false, message: 'Failed to confirm email' };
+  } catch (error: unknown) {
+    let message = 'Invalid or expired confirmation token';
+    if (axios.isAxiosError(error) && error.response?.data?.error?.message) {
+      message = error.response.data.error.message;
+    }
+    return { success: false, message };
+  }
+};
+
+const resendConfirmationEmail = async (
+  email: string
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/api/auth/send-email-confirmation`,
+      { email }
+    );
+    if (response.status === 200) {
+      return { success: true, message: 'Confirmation email sent' };
+    }
+    return { success: false, message: 'Failed to send confirmation email' };
+  } catch (error: unknown) {
+    let message = 'Failed to send confirmation email';
+    if (axios.isAxiosError(error) && error.response?.data?.error?.message) {
+      message = error.response.data.error.message;
+    }
+    return { success: false, message };
+  }
+};
+
 const addToNewsletter = async ({
   email,
   firstName,
@@ -683,6 +721,8 @@ export {
   updateUserEmail,
   updateUserInfo,
   registerNewUser,
+  confirmEmail,
+  resendConfirmationEmail,
   updateUserPassword,
   createComment,
   sendContactUsEmail,

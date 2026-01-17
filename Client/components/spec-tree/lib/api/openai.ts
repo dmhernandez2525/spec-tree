@@ -134,18 +134,22 @@ export const generateTasks = async ({
   userStory,
   state,
   selectedModel,
+  context,
 }: {
   chatApi?: string;
   userStory: UserStoryType;
   state: RootState;
   selectedModel: string;
+  context?: string;
 }) => {
   return withErrorHandling(
     () =>
       makeProxyCall({
         systemPrompt:
           'You are an AI model trained to generate tasks for software development projects.',
-        userPrompt: generateAdditionalTasksPrompt(userStory, state),
+        userPrompt: context
+          ? context
+          : generateAdditionalTasksPrompt(userStory, state),
         selectedModel,
         errorContext: 'generate tasks',
       }),

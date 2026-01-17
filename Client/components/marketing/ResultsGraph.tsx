@@ -128,13 +128,25 @@ export function ResultsGraph() {
   const [activeMetric, setActiveMetric] = useState<MetricType>('productivity');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  interface TooltipEntry {
+    name: string;
+    value: number;
+    color: string;
+  }
+
+  interface TooltipProps {
+    active?: boolean;
+    payload?: TooltipEntry[];
+    label?: string;
+  }
+
+  const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <Card className="border-none p-2 shadow-lg">
           <CardContent className="p-2">
             <p className="text-sm font-medium">{label}</p>
-            {payload.map((entry: any, index: number) => (
+            {payload.map((entry: TooltipEntry, index: number) => (
               <p key={index} className="text-sm" style={{ color: entry.color }}>
                 {`${entry.name}: ${entry.value}%`}
               </p>

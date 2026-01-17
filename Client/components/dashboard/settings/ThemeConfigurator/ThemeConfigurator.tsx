@@ -465,7 +465,12 @@ const colors = {
   },
 };
 
-const ColorPicker = ({ value, onChange }) => {
+interface ColorPickerProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('libraries');
 
@@ -474,17 +479,22 @@ const ColorPicker = ({ value, onChange }) => {
   );
 
   // Helper function to get the display color
-  const getDisplayColor = (value) => {
-    if (!value) return null;
+  const getDisplayColor = (colorValue: string): string | null => {
+    if (!colorValue) return null;
 
     // Handle existing color format (e.g., "colors/accent-light")
-    if (value.startsWith('colors/')) {
+    if (colorValue.startsWith('colors/')) {
       return '#000000'; // Default color for now
     }
 
     // Handle Tailwind color format (e.g., "violet-500")
-    const [palette, shade] = value.split('-');
-    return colors[palette]?.[shade];
+    const [palette, shade] = colorValue.split('-');
+    const colorPalette = colors[palette as keyof typeof colors];
+    if (!colorPalette || !shade) return null;
+
+    // Shade is a numeric string like "50", "100", "200", etc.
+    const shadeKey = parseInt(shade, 10) as keyof typeof colorPalette;
+    return colorPalette[shadeKey] ?? null;
   };
 
   return (
@@ -595,7 +605,7 @@ const borderStyles = [
   'outset',
 ];
 
-const isColorToken = (section, tokenName) => {
+const isColorToken = (section: string, tokenName: string): boolean => {
   const colorSections = ['base', 'charts', 'sidebar'];
   if (colorSections.includes(section)) return true;
   if (
@@ -607,7 +617,7 @@ const isColorToken = (section, tokenName) => {
   return false;
 };
 
-const isDimensionToken = (section, tokenName) => {
+const isDimensionToken = (section: string, tokenName: string): boolean => {
   const dimensionSections = ['spacing', 'containers', 'grid'];
   if (dimensionSections.includes(section)) return true;
   if (
@@ -619,17 +629,27 @@ const isDimensionToken = (section, tokenName) => {
   return false;
 };
 
-const isPercentageToken = (section, tokenName) => {
+const isPercentageToken = (section: string, tokenName: string): boolean => {
   if (section === 'alpha') return true;
   if (tokenName.includes('opacity')) return true;
   return false;
 };
 
-const isStyleToken = (section, tokenName) => {
+const isStyleToken = (_section: string, tokenName: string): boolean => {
   return tokenName.includes('style');
 };
 
-const TokenInput = ({ type, value, onChange, token: _token, section: _section }) => {
+type TokenInputType = 'color' | 'dimension' | 'percentage' | 'style' | 'text';
+
+interface TokenInputProps {
+  type: TokenInputType;
+  value: string;
+  onChange: (value: string) => void;
+  token: ColorToken;
+  section: string;
+}
+
+const TokenInput: React.FC<TokenInputProps> = ({ type, value, onChange, token: _token, section: _section }) => {
   if (type === 'color') {
     return <ColorPicker value={value} onChange={onChange} />;
   }
@@ -684,8 +704,14 @@ const TokenInput = ({ type, value, onChange, token: _token, section: _section })
   );
 };
 
-const TokenTable = ({ title, tokens, onUpdate }) => {
-  const getInputType = (section, tokenName) => {
+interface TokenTableProps {
+  title: string;
+  tokens: TokenSection;
+  onUpdate: (tokenName: string, mode: 'light' | 'dark', value: string) => void;
+}
+
+const TokenTable: React.FC<TokenTableProps> = ({ title, tokens, onUpdate }) => {
+  const getInputType = (section: string, tokenName: string): TokenInputType => {
     if (isColorToken(section.toLowerCase(), tokenName.toLowerCase()))
       return 'color';
     if (isDimensionToken(section.toLowerCase(), tokenName.toLowerCase()))
@@ -757,7 +783,14 @@ const TokenTable = ({ title, tokens, onUpdate }) => {
   );
 };
 
-const FontPreview = ({ fontFamily, fontSize, fontWeight, lineHeight }) => (
+interface FontPreviewProps {
+  fontFamily: string;
+  fontSize: string;
+  fontWeight: string;
+  lineHeight: string;
+}
+
+const FontPreview: React.FC<FontPreviewProps> = ({ fontFamily, fontSize, fontWeight, lineHeight }) => (
   <div
     className="p-4 border rounded-md mt-4"
     style={{
@@ -970,7 +1003,12 @@ const DesignSystemManager: React.FC = () => {
     }));
   }, []);
 
-  const handleColorUpdate = (section, tokenName, mode, value) => {
+  const handleColorUpdate = (
+    section: string,
+    tokenName: string,
+    mode: 'light' | 'dark',
+    value: string
+  ): void => {
     setColorTokens((prev) => ({
       ...prev,
       [section]: {
@@ -982,7 +1020,11 @@ const DesignSystemManager: React.FC = () => {
     }));
   };
 
-  const handleTypographyUpdate = (category, key, value) => {
+  const handleTypographyUpdate = (
+    category: keyof TypographyTokens,
+    key: string,
+    value: string
+  ): void => {
     setTypographyTokens((prev) => ({
       ...prev,
       [category]: {

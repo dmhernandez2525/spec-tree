@@ -1,5 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Droppable, Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
+import { GripVertical } from 'lucide-react';
 import { RootState, AppDispatch } from '../../../../lib/store';
 import {
   deleteFeature,
@@ -7,7 +9,6 @@ import {
   updateFeatureField,
   addUserStory,
   selectUserStoryById,
-  // addContextualQuestionToWorkItem,
 } from '../../../../lib/store/sow-slice';
 import {
   EpicType,
@@ -40,6 +41,7 @@ import MetricsDisplay from '../metrics-display';
 import AcceptanceCriteriaList from '../acceptance-criteria-list';
 import { useAcceptanceCriteria } from '../../lib/hooks/use-acceptance-criteria';
 import ContextualQuestions from '../contextual-questions';
+import RegenerateFeedback from '../regenerate-feedback';
 import generateId from '../../lib/utils/generate-id';
 import {
   calculateTotalTasks,
@@ -51,6 +53,7 @@ interface FeatureProps {
   feature: FeatureType;
   epic: EpicType;
   index: number;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 
 interface FormState {
@@ -75,7 +78,7 @@ const initialFormState: FormState = {
   Points: '',
 };
 
-const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
+const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index, dragHandleProps }) => {
   // TODO: use _index and remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
@@ -102,12 +105,32 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
     );
   };
 
+  // Adapter for useAcceptanceCriteria hook which expects string-based handler
+  const handleAcceptanceCriteriaUpdate = (params: {
+    field: string;
+    newValue: string | string[];
+    arrayIndex?: number;
+    isArrayItem?: boolean;
+  }) => {
+    // Convert string[] to Array<{ text: string }> for acceptance criteria
+    const convertedValue: string | Array<{ text: string }> = Array.isArray(params.newValue)
+      ? params.newValue.map((text) => ({ text }))
+      : params.newValue;
+
+    handleUpdateFeature({
+      field: params.field as FeatureFields,
+      newValue: convertedValue,
+      arrayIndex: params.arrayIndex,
+      isArrayItem: params.isArrayItem,
+    });
+  };
+
   const { add, remove, update } = useAcceptanceCriteria(
     feature.acceptanceCriteria.map((criteria) => criteria.text),
-    handleUpdateFeature as any
+    handleAcceptanceCriteriaUpdate
   );
 
-  const handleGenerateUserStories = async () => {
+  const handleGenerateUserStories = async (feedback?: string) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -115,6 +138,7 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
         requestUserStories({
           feature,
           state: localState,
+          context: feedback,
         })
       );
     } catch (_err) {
@@ -169,10 +193,19 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
   }
 
   return (
-    <>
+    <div id={`work-item-${feature.id}`} className="transition-all">
       <AccordionTrigger className="hover:bg-slate-50 rounded-lg px-4">
         <CardTitle className="flex justify-between items-center w-full text-md">
           <div className="flex items-center gap-3">
+            {dragHandleProps && (
+              <div
+                {...dragHandleProps}
+                className="cursor-grab active:cursor-grabbing p-1 hover:bg-slate-200 rounded"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <GripVertical className="h-4 w-4 text-slate-400" />
+              </div>
+            )}
             <span className="text-purple-600 font-semibold">Feature</span>
             <span className="text-slate-600">{feature.title}</span>
           </div>
@@ -267,9 +300,11 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">User Stories</h3>
-                <Button onClick={handleGenerateUserStories}>
-                  Generate User Stories
-                </Button>
+                <RegenerateFeedback
+                  onRegenerate={handleGenerateUserStories}
+                  isLoading={isLoading}
+                  itemType="user stories"
+                />
               </div>
 
               <ContextualQuestions
@@ -278,17 +313,42 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
                 workItem={feature}
               />
 
-              <Accordion type="single" collapsible className="w-full">
-                {userStories?.map((userStory) => (
-                  <AccordionItem key={userStory.id} value={userStory.id}>
-                    <UserStory
-                      userStory={userStory}
-                      feature={feature}
-                      epic={epic}
-                    />
-                  </AccordionItem>
-                ))}
-              </Accordion>
+              <Droppable droppableId={`userStories-${feature.id}`} type="USER_STORY">
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    <Accordion type="single" collapsible className="w-full">
+                      {userStories?.map((userStory, i) => (
+                        <Draggable
+                          key={userStory.id}
+                          draggableId={userStory.id}
+                          index={i}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              className={snapshot.isDragging ? 'opacity-75 bg-white rounded shadow-lg' : ''}
+                            >
+                              <AccordionItem value={userStory.id}>
+                                <UserStory
+                                  userStory={userStory}
+                                  feature={feature}
+                                  epic={epic}
+                                  dragHandleProps={provided.dragHandleProps}
+                                />
+                              </AccordionItem>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </Accordion>
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
             </div>
           </div>
         </CardContent>
@@ -342,7 +402,7 @@ const Feature: React.FC<FeatureProps> = ({ feature, epic, index: _index }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
 

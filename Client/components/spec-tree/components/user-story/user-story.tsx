@@ -1,5 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Droppable, Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
+import { GripVertical } from 'lucide-react';
 import { RootState, AppDispatch } from '../../../../lib/store';
 import {
   deleteUserStory,
@@ -7,7 +9,6 @@ import {
   addTask,
   requestTasks,
   selectTaskById,
-  // addContextualQuestionToWorkItem,
 } from '../../../../lib/store/sow-slice';
 import {
   EpicType,
@@ -41,6 +42,7 @@ import MetricsDisplay from '../metrics-display';
 import AcceptanceCriteriaList from '../acceptance-criteria-list';
 import { useAcceptanceCriteria } from '../../lib/hooks/use-acceptance-criteria';
 import ContextualQuestions from '../contextual-questions';
+import RegenerateFeedback from '../regenerate-feedback';
 import generateId from '../../lib/utils/generate-id';
 import { calculateTotalTasks } from '../../lib/utils/calculation-utils';
 
@@ -48,6 +50,7 @@ interface UserStoryProps {
   userStory: UserStoryType;
   feature: FeatureType;
   epic: EpicType;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 
 interface FormState {
@@ -64,7 +67,7 @@ const initialFormState: FormState = {
   Notes: '',
 };
 
-const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epic: _epic }) => {
+const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epic: _epic, dragHandleProps }) => {
   // TODO: use _feature and _epic then remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
@@ -89,18 +92,40 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
     );
   };
 
+  // Adapter for useAcceptanceCriteria hook which expects string-based handler
+  const handleAcceptanceCriteriaUpdate = (params: {
+    field: string;
+    newValue: string | string[];
+    arrayIndex?: number;
+    isArrayItem?: boolean;
+  }) => {
+    // Convert string[] to Array<{ text: string }> for acceptance criteria
+    const convertedValue: string | Array<{ text: string }> = Array.isArray(params.newValue)
+      ? params.newValue.map((text) => ({ text }))
+      : params.newValue;
+
+    handleUpdateUserStory({
+      field: params.field as UserStoryFields,
+      newValue: convertedValue,
+      arrayIndex: params.arrayIndex,
+      isArrayItem: params.isArrayItem,
+    });
+  };
+
   const { add, remove, update } = useAcceptanceCriteria(
     userStory.acceptanceCriteria.map((criteria) => criteria.text),
-    handleUpdateUserStory as any
+    handleAcceptanceCriteriaUpdate
   );
 
-  const handleGenerateTasks = async () => {
+  const handleGenerateTasks = async (feedback?: string) => {
     setIsLoading(true);
+    setError(null);
     try {
       await dispatch(
         requestTasks({
           userStory,
           state: localState,
+          context: feedback,
         })
       );
     } catch (_err) {
@@ -147,10 +172,19 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
   }
 
   return (
-    <>
+    <div id={`work-item-${userStory.id}`} className="transition-all">
       <AccordionTrigger className="hover:bg-slate-50 rounded-lg px-4">
         <CardTitle className="flex justify-between items-center w-full text-sm">
           <div className="flex items-center gap-3">
+            {dragHandleProps && (
+              <div
+                {...dragHandleProps}
+                className="cursor-grab active:cursor-grabbing p-1 hover:bg-slate-200 rounded"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <GripVertical className="h-4 w-4 text-slate-400" />
+              </div>
+            )}
             <span className="text-green-600 font-semibold">User Story</span>
             <span className="text-slate-600">{userStory.title}</span>
           </div>
@@ -262,7 +296,11 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
             <div className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">Tasks</h3>
-                <Button onClick={handleGenerateTasks}>Generate Tasks</Button>
+                <RegenerateFeedback
+                  onRegenerate={handleGenerateTasks}
+                  isLoading={isLoading}
+                  itemType="tasks"
+                />
               </div>
 
               <ContextualQuestions
@@ -271,13 +309,37 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                 workItem={userStory}
               />
 
-              <Accordion type="single" collapsible className="w-full">
-                {tasks?.map((task) => (
-                  <AccordionItem key={task.id} value={task.id}>
-                    <Task task={task} />
-                  </AccordionItem>
-                ))}
-              </Accordion>
+              <Droppable droppableId={`tasks-${userStory.id}`} type="TASK">
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    <Accordion type="single" collapsible className="w-full">
+                      {tasks?.map((task, i) => (
+                        <Draggable
+                          key={task.id}
+                          draggableId={task.id}
+                          index={i}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              className={snapshot.isDragging ? 'opacity-75 bg-white rounded shadow-lg' : ''}
+                            >
+                              <AccordionItem value={task.id}>
+                                <Task task={task} dragHandleProps={provided.dragHandleProps} />
+                              </AccordionItem>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    </Accordion>
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
             </div>
           </div>
         </CardContent>
@@ -326,7 +388,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
 

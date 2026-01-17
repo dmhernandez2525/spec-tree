@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   createSlice,
   createAsyncThunk,
@@ -37,12 +36,21 @@ import {
   UpdateEpicFieldPayload,
   TaskType,
   UserStoryFields,
+  TaskFields,
   WorkItemType,
 } from '../../components/spec-tree/lib/types/work-items';
 import { RootState } from './index';
-// import {epicMockNewData} from "../data/mockData"
+import { transformStrapiDataToSow } from '../utils/strapi-transformers';
+import { getAxiosErrorMessage } from '../../types/strapi';
 
 import generateId from '../../components/spec-tree/lib/utils/generate-id';
+
+/**
+ * Payload type for setSow action
+ */
+interface SetSowPayload {
+  sow?: Partial<SowState>;
+}
 
 const initialState: SowState = {
   epics: {},
@@ -59,93 +67,14 @@ const initialState: SowState = {
   error: null,
 };
 
-// New Strapi data fetching thunk
+// Strapi data fetching thunk with proper type transformations
 export const fetchStrapiData = createAsyncThunk(
   'sow/fetchStrapiData',
   async (documentId: string, { rejectWithValue }) => {
     try {
       const data = await strapiService.fetchAllAppData(documentId);
-      return {
-        sow: {
-          id: documentId,
-          epics: data.epics.reduce((acc: any, epic: any) => {
-            acc[epic.documentId] = {
-              id: epic.documentId,
-              title: epic.title,
-              description: epic.description,
-              goal: epic.goal,
-              successCriteria: epic.successCriteria,
-              dependencies: epic.dependencies,
-              timeline: epic.timeline,
-              resources: epic.resources,
-              risksAndMitigation: epic.risksAndMitigation || [],
-              featureIds: epic.features?.map((f: any) => f.documentId) || [],
-              notes: epic.notes,
-              contextualQuestions: epic.contextualQuestions || [],
-            };
-            return acc;
-          }, {}),
-          features: data.epics.reduce((acc: any, epic: any) => {
-            epic.features?.forEach((feature: any) => {
-              acc[feature.documentId] = {
-                id: feature.documentId,
-                title: feature.title,
-                description: feature.description,
-                details: feature.details,
-                dependencies: feature.dependencies || '',
-                acceptanceCriteria: feature.acceptanceCriteria,
-                parentEpicId: epic.documentId,
-                userStoryIds:
-                  feature.userStories?.map((us: any) => us.documentId) || [],
-                notes: feature.notes,
-                contextualQuestions: feature.contextualQuestions || [],
-              };
-            });
-            return acc;
-          }, {}),
-          userStories: data.epics.reduce((acc: any, epic: any) => {
-            epic.features?.forEach((feature: any) => {
-              feature.userStories?.forEach((story: any) => {
-                acc[story.documentId] = {
-                  id: story.documentId,
-                  title: story.title,
-                  role: story.role,
-                  action: story.action,
-                  goal: story.goal,
-                  points: story.points,
-                  acceptanceCriteria: story.acceptanceCriteria,
-                  notes: story.notes,
-                  parentFeatureId: feature.documentId,
-                  taskIds: story.tasks?.map((t: any) => t.documentId) || [],
-                  developmentOrder: story.developmentOrder || 0,
-                  contextualQuestions: story.contextualQuestions || [],
-                };
-              });
-            });
-            return acc;
-          }, {}),
-          tasks: data.epics.reduce((acc: any, epic: any) => {
-            epic.features?.forEach((feature: any) => {
-              feature.userStories?.forEach((story: any) => {
-                story.tasks?.forEach((task: any) => {
-                  acc[task.documentId] = {
-                    id: task.documentId,
-                    title: task.title,
-                    details: task.details,
-                    priority: task.priority,
-                    notes: task.notes,
-                    parentUserStoryId: story.documentId,
-                    contextualQuestions: task.contextualQuestions || [],
-                  };
-                });
-              });
-            });
-            return acc;
-          }, {}),
-          contextualQuestions: data.contextualQuestions || [],
-          globalInformation: data.globalInformation || '',
-        },
-      };
+      const transformedData = transformStrapiDataToSow(documentId, data);
+      return { sow: transformedData };
     } catch (error) {
       return rejectWithValue(
         error instanceof Error ? error.message : 'Failed to fetch data'
@@ -177,7 +106,7 @@ export const requestAdditionalEpics = createAsyncThunk<
           return null;
         }
       })
-      .filter((item: any): item is GeneratedEpic => item !== null);
+      .filter((item): item is GeneratedEpic => item !== null);
 
     const newData: GeneratedEpic[] = await Promise.all(
       parseGpt3.map(async (epic: GeneratedEpic) => {
@@ -209,10 +138,9 @@ export const requestAdditionalEpics = createAsyncThunk<
       })
     );
 
-    // return { epics: epicMockNewData };
     return { epics: newData };
-  } catch (err: any) {
-    return rejectWithValue(err.response.data);
+  } catch (error) {
+    return rejectWithValue({ message: getAxiosErrorMessage(error) });
   }
 });
 export const requestAdditionalFeatures = createAsyncThunk<
@@ -243,7 +171,7 @@ export const requestAdditionalFeatures = createAsyncThunk<
           })
           .filter((item): item is GeneratedFeature => item !== null);
 
-      const newFeatures = await Promise.all(
+      const newFeatures: GeneratedFeature[] = await Promise.all(
         parseGpt3.map(async (feature: GeneratedFeature) => {
           // Use Strapi service for creation
           const res = await strapiService.createFeature({
@@ -259,20 +187,19 @@ export const requestAdditionalFeatures = createAsyncThunk<
             title: res.title || '',
             description: res.description || '',
             acceptanceCriteria: res.acceptanceCriteria || [],
-            priority: res.priority || 0,
-            effort: res.effort || 0,
+            priority: String(res.priority || ''),
+            effort: String(res.effort || ''),
             dependencies: res.dependencies || '',
             parentEpicId: res.epic.documentId,
             details: res.details || '',
             notes: res.notes || '',
-            userStoryIds: [],
           };
         })
       );
 
       return { features: newFeatures, epicId: epic.id };
-    } catch (err: any) {
-      return rejectWithValue(err.response.data);
+    } catch (error) {
+      return rejectWithValue({ message: getAxiosErrorMessage(error) });
     }
   }
 );
@@ -305,8 +232,8 @@ export const requestUserStories = createAsyncThunk<
           .filter((item): item is GeneratedUserStory => item !== null);
 
       // Use Strapi service to create user stories
-      const userStories = await Promise.all(
-        parseGpt3.map(async (story) => {
+      const userStoriesRaw = await Promise.all(
+        parseGpt3.map(async (story): Promise<GeneratedUserStory | null> => {
           try {
             const res = await strapiService.createUserStory({
               title: story.title,
@@ -326,12 +253,11 @@ export const requestUserStories = createAsyncThunk<
               role: res.role || '',
               action: res.action || '',
               goal: res.goal || '',
-              points: res.points || 0,
+              points: String(res.points || ''),
               acceptanceCriteria: res.acceptanceCriteria || [],
               notes: res.notes || '',
               parentFeatureId: res.feature.documentId,
               developmentOrder: res.developmentOrder || 0,
-              contextualQuestions: res.contextualQuestions || [],
             };
           } catch {
             return null;
@@ -339,21 +265,26 @@ export const requestUserStories = createAsyncThunk<
         })
       );
 
-      return { userStories: userStories, featureId: feature.id };
-    } catch (err: any) {
-      return rejectWithValue(err.response.data);
+      const userStories = userStoriesRaw.filter(
+        (story): story is GeneratedUserStory => story !== null
+      );
+
+      return { userStories, featureId: feature.id };
+    } catch (error) {
+      return rejectWithValue({ message: getAxiosErrorMessage(error) });
     }
   }
 );
 export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
   'sow/requestTasks',
-  async ({ userStory, state }, { rejectWithValue }) => {
+  async ({ userStory, state, context }, { rejectWithValue }) => {
     try {
       const response = await generateTasks({
         chatApi: state?.sow?.chatApi,
         userStory,
         state,
         selectedModel: state.sow.selectedModel,
+        context,
       });
 
       const parseGpt3: GeneratedTask[] =
@@ -398,8 +329,8 @@ export const requestTasks = createAsyncThunk<TaskResponse, TaskRequest, {}>(
         userStoryId: userStory.id,
         tasks: tasks,
       };
-    } catch (err: any) {
-      return rejectWithValue({ errorMessage: err.response.data.message });
+    } catch (error) {
+      return rejectWithValue({ message: getAxiosErrorMessage(error) });
     }
   }
 );
@@ -410,7 +341,7 @@ export const sowSlice: Slice<SowState> = createSlice({
     updateSelectedModel: (state, action: PayloadAction<string>) => {
       state.selectedModel = action.payload;
     },
-    setSow: (state, action: PayloadAction<any>) => {
+    setSow: (state, action: PayloadAction<SetSowPayload>) => {
       if (!action?.payload?.sow) {
         return;
       }
@@ -423,7 +354,7 @@ export const sowSlice: Slice<SowState> = createSlice({
         contextualQuestions,
         globalInformation,
         id,
-      } = action?.payload?.sow;
+      } = action.payload.sow;
 
       if (chatApi) {
         state.chatApi = chatApi;
@@ -560,7 +491,20 @@ export const sowSlice: Slice<SowState> = createSlice({
       const { taskId, field, newValue } = action.payload;
       const task = state.tasks[taskId];
       if (task) {
-        (task as any)[field] = newValue;
+        switch (field) {
+          case TaskFields.Title:
+            task.title = newValue;
+            break;
+          case TaskFields.Details:
+            task.details = newValue;
+            break;
+          case TaskFields.Priority:
+            task.priority = parseInt(newValue, 10) || 0;
+            break;
+          case TaskFields.Notes:
+            task.notes = newValue;
+            break;
+        }
       }
     },
     updateUserStoryField: (
@@ -579,11 +523,14 @@ export const sowSlice: Slice<SowState> = createSlice({
           } else if (isArrayItem) {
             userStory.acceptanceCriteria.push({ text: newValue as string });
           } else {
-            userStory.acceptanceCriteria = newValue as string[];
+            // For deletion or full replacement - convert string[] to Array<{ text: string }>
+            if (Array.isArray(newValue)) {
+              userStory.acceptanceCriteria = newValue.map((text) => ({ text }));
+            }
           }
         } else {
           if (Array.isArray(newValue)) {
-            userStory.acceptanceCriteria = newValue;
+            userStory.acceptanceCriteria = newValue.map((text) => ({ text }));
           }
         }
       }
@@ -606,8 +553,10 @@ export const sowSlice: Slice<SowState> = createSlice({
             // Add a new item to the end of the acceptanceCriteria array
             feature.acceptanceCriteria.push({ text: newValue as string });
           } else {
-            // used for deletion
-            feature.acceptanceCriteria = newValue as string[];
+            // For deletion or full replacement - convert string[] to Array<{ text: string }>
+            if (Array.isArray(newValue)) {
+              feature.acceptanceCriteria = newValue.map((text) => ({ text }));
+            }
           }
         } else {
           // Handle other fields
@@ -751,6 +700,227 @@ export const sowSlice: Slice<SowState> = createSlice({
     },
     updateGlobalInformation: (state, action: PayloadAction<string>) => {
       state.globalInformation = action.payload;
+    },
+    // Batch add actions for import functionality
+    addFeatures: (state, action: PayloadAction<FeatureType>) => {
+      const feature = action.payload;
+      state.features = {
+        ...state.features,
+        [feature.id]: feature,
+      };
+      // Add to parent epic's featureIds if not already there
+      if (feature.parentEpicId && state.epics[feature.parentEpicId]) {
+        const epic = state.epics[feature.parentEpicId];
+        if (!epic.featureIds.includes(feature.id)) {
+          epic.featureIds = [...epic.featureIds, feature.id];
+        }
+      }
+    },
+    addUserStories: (state, action: PayloadAction<UserStoryType>) => {
+      const userStory = action.payload;
+      state.userStories = {
+        ...state.userStories,
+        [userStory.id]: userStory,
+      };
+      // Add to parent feature's userStoryIds if not already there
+      if (userStory.parentFeatureId && state.features[userStory.parentFeatureId]) {
+        const feature = state.features[userStory.parentFeatureId];
+        if (!feature.userStoryIds.includes(userStory.id)) {
+          feature.userStoryIds = [...feature.userStoryIds, userStory.id];
+        }
+      }
+    },
+    addTasks: (state, action: PayloadAction<TaskType>) => {
+      const task = action.payload;
+      state.tasks = {
+        ...state.tasks,
+        [task.id]: task,
+      };
+      // Add to parent user story's taskIds if not already there
+      if (task.parentUserStoryId && state.userStories[task.parentUserStoryId]) {
+        const userStory = state.userStories[task.parentUserStoryId];
+        if (!userStory.taskIds.includes(task.id)) {
+          userStory.taskIds = [...userStory.taskIds, task.id];
+        }
+      }
+    },
+    // Reordering actions for drag-and-drop
+    reorderEpics: (
+      state,
+      action: PayloadAction<{ sourceIndex: number; destinationIndex: number }>
+    ) => {
+      const { sourceIndex, destinationIndex } = action.payload;
+      const epicIds = Object.keys(state.epics);
+      const [removed] = epicIds.splice(sourceIndex, 1);
+      epicIds.splice(destinationIndex, 0, removed);
+
+      // Rebuild epics object in new order
+      const newEpics: typeof state.epics = {};
+      epicIds.forEach((id) => {
+        newEpics[id] = state.epics[id];
+      });
+      state.epics = newEpics;
+    },
+    reorderFeatures: (
+      state,
+      action: PayloadAction<{
+        epicId: string;
+        sourceIndex: number;
+        destinationIndex: number;
+      }>
+    ) => {
+      const { epicId, sourceIndex, destinationIndex } = action.payload;
+      const epic = state.epics[epicId];
+      if (!epic) return;
+
+      const featureIds = [...epic.featureIds];
+      const [removed] = featureIds.splice(sourceIndex, 1);
+      featureIds.splice(destinationIndex, 0, removed);
+      epic.featureIds = featureIds;
+    },
+    reorderUserStories: (
+      state,
+      action: PayloadAction<{
+        featureId: string;
+        sourceIndex: number;
+        destinationIndex: number;
+      }>
+    ) => {
+      const { featureId, sourceIndex, destinationIndex } = action.payload;
+      const feature = state.features[featureId];
+      if (!feature) return;
+
+      const userStoryIds = [...feature.userStoryIds];
+      const [removed] = userStoryIds.splice(sourceIndex, 1);
+      userStoryIds.splice(destinationIndex, 0, removed);
+      feature.userStoryIds = userStoryIds;
+    },
+    reorderTasks: (
+      state,
+      action: PayloadAction<{
+        userStoryId: string;
+        sourceIndex: number;
+        destinationIndex: number;
+      }>
+    ) => {
+      const { userStoryId, sourceIndex, destinationIndex } = action.payload;
+      const userStory = state.userStories[userStoryId];
+      if (!userStory) return;
+
+      const taskIds = [...userStory.taskIds];
+      const [removed] = taskIds.splice(sourceIndex, 1);
+      taskIds.splice(destinationIndex, 0, removed);
+      userStory.taskIds = taskIds;
+    },
+    moveFeatureToEpic: (
+      state,
+      action: PayloadAction<{
+        featureId: string;
+        sourceEpicId: string;
+        destinationEpicId: string;
+        destinationIndex: number;
+      }>
+    ) => {
+      const { featureId, sourceEpicId, destinationEpicId, destinationIndex } =
+        action.payload;
+
+      // Remove from source epic
+      const sourceEpic = state.epics[sourceEpicId];
+      if (sourceEpic) {
+        sourceEpic.featureIds = sourceEpic.featureIds.filter(
+          (id) => id !== featureId
+        );
+      }
+
+      // Add to destination epic
+      const destEpic = state.epics[destinationEpicId];
+      if (destEpic) {
+        const newFeatureIds = [...destEpic.featureIds];
+        newFeatureIds.splice(destinationIndex, 0, featureId);
+        destEpic.featureIds = newFeatureIds;
+      }
+
+      // Update feature's parent
+      const feature = state.features[featureId];
+      if (feature) {
+        feature.parentEpicId = destinationEpicId;
+      }
+    },
+    moveUserStoryToFeature: (
+      state,
+      action: PayloadAction<{
+        userStoryId: string;
+        sourceFeatureId: string;
+        destinationFeatureId: string;
+        destinationIndex: number;
+      }>
+    ) => {
+      const {
+        userStoryId,
+        sourceFeatureId,
+        destinationFeatureId,
+        destinationIndex,
+      } = action.payload;
+
+      // Remove from source feature
+      const sourceFeature = state.features[sourceFeatureId];
+      if (sourceFeature) {
+        sourceFeature.userStoryIds = sourceFeature.userStoryIds.filter(
+          (id) => id !== userStoryId
+        );
+      }
+
+      // Add to destination feature
+      const destFeature = state.features[destinationFeatureId];
+      if (destFeature) {
+        const newUserStoryIds = [...destFeature.userStoryIds];
+        newUserStoryIds.splice(destinationIndex, 0, userStoryId);
+        destFeature.userStoryIds = newUserStoryIds;
+      }
+
+      // Update user story's parent
+      const userStory = state.userStories[userStoryId];
+      if (userStory) {
+        userStory.parentFeatureId = destinationFeatureId;
+      }
+    },
+    moveTaskToUserStory: (
+      state,
+      action: PayloadAction<{
+        taskId: string;
+        sourceUserStoryId: string;
+        destinationUserStoryId: string;
+        destinationIndex: number;
+      }>
+    ) => {
+      const {
+        taskId,
+        sourceUserStoryId,
+        destinationUserStoryId,
+        destinationIndex,
+      } = action.payload;
+
+      // Remove from source user story
+      const sourceUserStory = state.userStories[sourceUserStoryId];
+      if (sourceUserStory) {
+        sourceUserStory.taskIds = sourceUserStory.taskIds.filter(
+          (id) => id !== taskId
+        );
+      }
+
+      // Add to destination user story
+      const destUserStory = state.userStories[destinationUserStoryId];
+      if (destUserStory) {
+        const newTaskIds = [...destUserStory.taskIds];
+        newTaskIds.splice(destinationIndex, 0, taskId);
+        destUserStory.taskIds = newTaskIds;
+      }
+
+      // Update task's parent
+      const task = state.tasks[taskId];
+      if (task) {
+        task.parentUserStoryId = destinationUserStoryId;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -996,6 +1166,9 @@ export const {
   addFeature,
   addUserStory,
   addTask,
+  addFeatures,
+  addUserStories,
+  addTasks,
   addGlobalContextualQuestion,
   addGlobalContextualQuestions,
   deleteFeature,
@@ -1018,6 +1191,13 @@ export const {
   replaceGlobalContextualQuestions,
   updateGlobalInformation,
   updateSelectedModel,
+  reorderEpics,
+  reorderFeatures,
+  reorderUserStories,
+  reorderTasks,
+  moveFeatureToEpic,
+  moveUserStoryToFeature,
+  moveTaskToUserStory,
 } = sowSlice.actions;
 
 // Selectors

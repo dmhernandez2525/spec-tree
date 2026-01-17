@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import * as z from 'zod';
 import { toast } from 'sonner';
 import { useAppDispatch } from '@/lib/hooks/use-store';
@@ -29,6 +29,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Icons } from '@/components/shared/icons';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { X, Plus } from 'lucide-react';
 
 const ssoProviders = [
   { id: 'azure', name: 'Microsoft Azure AD', icon: 'microsoft' },
@@ -36,6 +37,8 @@ const ssoProviders = [
   { id: 'okta', name: 'Okta', icon: 'okta' },
   { id: 'custom', name: 'Custom SAML', icon: 'code' },
 ] as const;
+
+const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}$/;
 
 const ssoConfigSchema = z.object({
   provider: z.enum(['azure', 'google', 'okta', 'custom']),
@@ -47,7 +50,11 @@ const ssoConfigSchema = z.object({
     ssoUrl: z.string().url('Must be a valid URL'),
     certificateData: z.string().min(1, 'Certificate data is required'),
   }),
-  domainRestrictions: z.array(z.string().email('Must be a valid domain')),
+  domainRestrictions: z.array(
+    z.object({
+      domain: z.string().regex(domainRegex, 'Must be a valid domain (e.g., example.com)'),
+    })
+  ),
 });
 
 type SSOConfigFormData = z.infer<typeof ssoConfigSchema>;
@@ -56,6 +63,7 @@ export function SSOSettings() {
   const dispatch = useAppDispatch();
   const [activeProvider, setActiveProvider] = useState<string | null>(null);
   const [isConfiguring, setIsConfiguring] = useState(false);
+  const [newDomain, setNewDomain] = useState('');
 
   const form = useForm<SSOConfigFormData>({
     resolver: zodResolver(ssoConfigSchema),
@@ -73,10 +81,34 @@ export function SSOSettings() {
     },
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'domainRestrictions',
+  });
+
+  const handleAddDomain = () => {
+    if (newDomain && domainRegex.test(newDomain)) {
+      const exists = fields.some((field) => field.domain === newDomain);
+      if (!exists) {
+        append({ domain: newDomain });
+        setNewDomain('');
+      } else {
+        toast.error('Domain already exists');
+      }
+    } else {
+      toast.error('Please enter a valid domain (e.g., example.com)');
+    }
+  };
+
   async function onSubmit(data: SSOConfigFormData) {
     setIsConfiguring(true);
     try {
-      await dispatch(updateSSOConfig(data)).unwrap();
+      // Transform domain restrictions from form format to API format
+      const transformedData = {
+        ...data,
+        domainRestrictions: data.domainRestrictions.map((d) => d.domain),
+      };
+      await dispatch(updateSSOConfig(transformedData)).unwrap();
       toast.success('SSO configuration updated successfully');
     } catch {
       toast.error('Failed to update SSO configuration');
@@ -254,15 +286,66 @@ export function SSOSettings() {
                           Limit SSO access to specific email domains
                         </CardDescription>
                       </CardHeader>
-                      <CardContent>
-                        {/* TODO: Implement domain restrictions interface */}
+                      <CardContent className="space-y-4">
                         <Alert>
                           <AlertDescription>
                             Domain restrictions help ensure that only users from
                             your organization can access your Spec Tree
-                            instance.
+                            instance. Users must have an email address from one
+                            of the allowed domains to sign in.
                           </AlertDescription>
                         </Alert>
+
+                        <div className="flex gap-2">
+                          <Input
+                            placeholder="example.com"
+                            value={newDomain}
+                            onChange={(e) => setNewDomain(e.target.value.toLowerCase())}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleAddDomain();
+                              }
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleAddDomain}
+                          >
+                            <Plus className="h-4 w-4 mr-1" />
+                            Add
+                          </Button>
+                        </div>
+
+                        {fields.length > 0 ? (
+                          <div className="space-y-2">
+                            <FormLabel>Allowed Domains</FormLabel>
+                            <div className="flex flex-wrap gap-2">
+                              {fields.map((field, index) => (
+                                <Badge
+                                  key={field.id}
+                                  variant="secondary"
+                                  className="px-3 py-1 text-sm flex items-center gap-1"
+                                >
+                                  {field.domain}
+                                  <button
+                                    type="button"
+                                    onClick={() => remove(index)}
+                                    className="ml-1 hover:text-destructive"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </button>
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground">
+                            No domain restrictions configured. All domains are
+                            allowed.
+                          </p>
+                        )}
                       </CardContent>
                     </Card>
 

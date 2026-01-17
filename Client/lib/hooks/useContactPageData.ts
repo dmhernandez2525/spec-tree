@@ -3,6 +3,7 @@ import {
   fetchContactPageData,
   ContactPageAttributes,
 } from '../../api/fetchData';
+import { fallbackContactPageData } from '../data/fallback-content';
 
 export const useContactPageData = () => {
   const [contactSections, setContactSections] =
@@ -14,9 +15,11 @@ export const useContactPageData = () => {
       setLoading(true);
       try {
         const response = await fetchContactPageData();
-        setContactSections(response?.data || null);
+        // Use fallback data if API returns null or empty
+        setContactSections(response?.data || fallbackContactPageData);
       } catch (error) {
-        console.error('Failed to fetch contact page data', error);
+        console.error('Failed to fetch contact page data, using fallback:', error);
+        setContactSections(fallbackContactPageData);
       } finally {
         setLoading(false);
       }

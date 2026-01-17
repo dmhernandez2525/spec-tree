@@ -47,7 +47,7 @@ export interface UserStoryType extends BaseWorkItem {
   action: string;
   goal: string;
   points: string;
-  acceptanceCriteria: [{ text: string }];
+  acceptanceCriteria: Array<{ text: string }>;
   notes: string;
   parentFeatureId: string;
   taskIds: string[];
@@ -65,7 +65,7 @@ export interface FeatureType extends BaseWorkItem {
   description: string;
   details: string;
   dependencies?: string;
-  acceptanceCriteria: [{ text: string }];
+  acceptanceCriteria: Array<{ text: string }>;
   parentEpicId: string;
   userStoryIds: string[];
   notes: string;
@@ -186,7 +186,7 @@ export interface GeneratedEpic {
 
 export interface GeneratedFeature {
   id: string;
-  acceptanceCriteria: [{ text: string }];
+  acceptanceCriteria: Array<{ text: string }>;
   dependencies: string;
   description: string;
   details: string;
@@ -204,7 +204,7 @@ export interface GeneratedUserStory {
   action: string;
   goal: string;
   points: string;
-  acceptanceCriteria: [{ text: string }];
+  acceptanceCriteria: Array<{ text: string }>;
   notes: string;
   developmentOrder: number;
   parentFeatureId: string;
@@ -357,7 +357,7 @@ export interface AddFeaturePayload {
   title: string;
   epicName: string;
   notes: string;
-  acceptanceCriteria: [{ text: string }];
+  acceptanceCriteria: Array<{ text: string }>;
   details: string;
 }
 
@@ -381,7 +381,7 @@ export interface AddUserStoryPayload {
   description: string;
   role: string;
   actionStr: string;
-  acceptanceCriteria: [{ text: string }];
+  acceptanceCriteria: Array<{ text: string }>;
   notes: string;
   points: string;
 }

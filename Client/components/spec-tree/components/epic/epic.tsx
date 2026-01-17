@@ -1,5 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Droppable, Draggable, DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
+import { GripVertical } from 'lucide-react';
 import { RootState, AppDispatch } from '../../../../lib/store';
 import {
   deleteEpic,
@@ -38,6 +40,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import LoadingSpinner from '../loading-spinner';
 import MetricsDisplay from '../metrics-display';
+import RegenerateFeedback from '../regenerate-feedback';
 import generateId from '../../lib/utils/generate-id';
 import {
   calculateTotalTasks,
@@ -49,6 +52,7 @@ import calculateTotalPoints from '../../lib/utils/calculate-total-points';
 interface EpicProps {
   epic: EpicType;
   index: number;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 
 interface FeatureFormState {
@@ -65,7 +69,7 @@ const initialFeatureFormState: FeatureFormState = {
   notes: '',
 };
 
-const Epic: React.FC<EpicProps> = ({ epic, index: _index }) => {
+const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => {
   // TODO: use _index then remove underscore prefix
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
@@ -97,12 +101,18 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index }) => {
     index: number,
     value: string
   ) => {
-    // TODO: use index then remove console.log
     const updatedRiskMitigation = [...epic.risksAndMitigation];
-    updatedRiskMitigation[0] = {
-      ...updatedRiskMitigation[0],
-      [category]: [{ text: value }],
-    };
+    if (updatedRiskMitigation[index]) {
+      updatedRiskMitigation[index] = {
+        ...updatedRiskMitigation[index],
+        [category]: [{ text: value }],
+      };
+    } else {
+      updatedRiskMitigation[index] = {
+        ...updatedRiskMitigation[0],
+        [category]: [{ text: value }],
+      };
+    }
 
     dispatch(
       updateEpicField({
@@ -118,7 +128,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index }) => {
     setIsDeleteDialogOpen(false);
   };
 
-  const handleGenerateFeatures = async () => {
+  const handleGenerateFeatures = async (feedback?: string) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -126,6 +136,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index }) => {
         requestAdditionalFeatures({
           epic,
           state: localState,
+          context: feedback,
         })
       );
     } catch (_err) {
@@ -180,13 +191,22 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index }) => {
   }
 
   return (
-    <Card className="mb-8 border-l-4 border-l-blue-600">
+    <Card id={`work-item-${epic.id}`} className="mb-8 border-l-4 border-l-blue-600 transition-all">
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value={epic.id} className="border-none">
           <CardHeader className="bg-slate-50">
             <AccordionTrigger>
               <CardTitle className="flex justify-between items-center w-full text-lg">
                 <div className="flex items-center gap-3">
+                  {dragHandleProps && (
+                    <div
+                      {...dragHandleProps}
+                      className="cursor-grab active:cursor-grabbing p-1 hover:bg-slate-200 rounded"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <GripVertical className="h-5 w-5 text-slate-400" />
+                    </div>
+                  )}
                   <span className="text-blue-600 font-semibold">Epic</span>
                   <span className="text-slate-600">{epic.title}</span>
                 </div>
@@ -292,18 +312,49 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index }) => {
                 <div className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Features</h3>
-                    <Button onClick={handleGenerateFeatures}>
-                      Generate Features
-                    </Button>
+                    <RegenerateFeedback
+                      onRegenerate={handleGenerateFeatures}
+                      isLoading={isLoading}
+                      itemType="features"
+                    />
                   </div>
 
-                  <Accordion type="single" collapsible className="w-full">
-                    {features.map((feature, i) => (
-                      <AccordionItem key={feature.id} value={feature.id}>
-                        <Feature epic={epic} feature={feature} index={i} />
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
+                  <Droppable droppableId={`features-${epic.id}`} type="FEATURE">
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                      >
+                        <Accordion type="single" collapsible className="w-full">
+                          {features.map((feature, i) => (
+                            <Draggable
+                              key={feature.id}
+                              draggableId={feature.id}
+                              index={i}
+                            >
+                              {(provided, snapshot) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  className={snapshot.isDragging ? 'opacity-75 bg-white rounded shadow-lg' : ''}
+                                >
+                                  <AccordionItem value={feature.id}>
+                                    <Feature
+                                      epic={epic}
+                                      feature={feature}
+                                      index={i}
+                                      dragHandleProps={provided.dragHandleProps}
+                                    />
+                                  </AccordionItem>
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                        </Accordion>
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
                 </div>
               </div>
             </CardContent>

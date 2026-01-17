@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { User, Settings, Bell, Home } from 'lucide-react';
+import { User, Settings, Bell, Home, LucideIcon } from 'lucide-react';
 
 interface DashboardNavProps extends React.HTMLAttributes<HTMLElement> {
   items?: {
     href: string;
     title: string;
-    icon?: any;
+    icon?: LucideIcon;
   }[];
 }
 

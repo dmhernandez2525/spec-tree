@@ -1,2 +1,2 @@
-const protectedRoutes: any = [];
+const protectedRoutes: string[] = [];
 export default protectedRoutes;

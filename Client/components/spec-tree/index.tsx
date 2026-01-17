@@ -26,6 +26,22 @@ import Builder from './components/builder';
 import { strapiService } from './lib/api/strapi-service';
 
 import { App } from './lib/types/work-items';
+import { AppExtended } from '@/types/app';
+
+/**
+ * Convert App to AppExtended with default values for extended properties
+ */
+const toAppExtended = (app: App): AppExtended => ({
+  ...app,
+  id: app.documentId || app.name,
+  status: 'draft',
+  modifiedAt: new Date(),
+  tags: [],
+  teamMembers: [],
+  metrics: { health: 100, uptime: 100, errors24h: 0 },
+  isFavorite: false,
+  accessCount: 0,
+});
 
 export default function SpecTree() {
   return <SpecTreeContent />;
@@ -161,7 +177,7 @@ function SpecTreeContent() {
               <AppSelector
                 selectedApp={selectedApp}
                 setSelectedApp={setSelectedApp}
-                apps={apps as any}
+                apps={apps.map(toAppExtended)}
                 onAppCreated={onAppCreated}
               />
             </CardContent>

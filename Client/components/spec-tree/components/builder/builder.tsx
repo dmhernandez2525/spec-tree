@@ -1,5 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import { RootState, AppDispatch } from '../../../../lib/store';
 import {
   addEpics,
@@ -10,8 +16,13 @@ import {
   selectAllEpics,
   selectAllFeatures,
   selectAllUserStories,
+  selectAllTasks,
   selectFeatureById,
   selectUserStoryById,
+  reorderEpics,
+  reorderFeatures,
+  reorderUserStories,
+  reorderTasks,
 } from '../../../../lib/store/sow-slice';
 import {
   EpicType,
@@ -43,6 +54,9 @@ import SowInput from '../sow-input';
 import FormatData from '../format-data';
 import Config from '../config';
 import Chat from '../chat';
+import ImportExport from '../import-export';
+import Templates from '../templates';
+import BuilderSearch, { SearchResult } from '../builder-search';
 import generateId from '../../lib/utils/generate-id';
 import {
   calculateTotalTasks,
@@ -81,11 +95,10 @@ const initialFormState: FormState = {
 };
 
 const Builder: React.FC<BuilderProps> = ({
-  setSelectedApp: _setSelectedApp,
+  setSelectedApp,
   selectedApp,
   chatApi,
 }) => {
-  // TODO: use _setSelectedApp and remove this comment
   const dispatch = useDispatch<AppDispatch>();
   const [isAddEpicDialogOpen, setIsAddEpicDialogOpen] = React.useState(false);
   const [formState, setFormState] = React.useState<FormState>(initialFormState);
@@ -103,6 +116,41 @@ const Builder: React.FC<BuilderProps> = ({
   const epics = useSelector(selectAllEpics);
   const features = useSelector(selectAllFeatures);
   const userStories = useSelector(selectAllUserStories);
+  const allTasks = useSelector(selectAllTasks);
+
+  // Convert arrays to records for search component
+  const featuresRecord = useMemo(() => {
+    return features.reduce((acc, feature) => {
+      acc[feature.id] = feature;
+      return acc;
+    }, {} as Record<string, FeatureType>);
+  }, [features]);
+
+  const userStoriesRecord = useMemo(() => {
+    return userStories.reduce((acc, story) => {
+      acc[story.id] = story;
+      return acc;
+    }, {} as Record<string, UserStoryType>);
+  }, [userStories]);
+
+  const tasksRecord = useMemo(() => {
+    return allTasks.reduce((acc, task) => {
+      acc[task.id] = task;
+      return acc;
+    }, {} as Record<string, import('../../lib/types/work-items').TaskType>);
+  }, [allTasks]);
+
+  const handleSearchResultSelect = useCallback((result: SearchResult) => {
+    // Scroll to and highlight the selected item
+    const element = document.getElementById(`work-item-${result.item.id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('ring-2', 'ring-primary', 'ring-offset-2');
+      setTimeout(() => {
+        element.classList.remove('ring-2', 'ring-primary', 'ring-offset-2');
+      }, 2000);
+    }
+  }, []);
 
   // Memoize computed values
   const featuresById = useMemo(() => {
@@ -245,6 +293,65 @@ const Builder: React.FC<BuilderProps> = ({
     }
   }, [dispatch, formState, selectedApp, handleError]);
 
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
+      const { destination, source, type } = result;
+
+      if (!destination) return;
+      if (
+        destination.droppableId === source.droppableId &&
+        destination.index === source.index
+      ) {
+        return;
+      }
+
+      switch (type) {
+        case 'EPIC':
+          dispatch(
+            reorderEpics({
+              sourceIndex: source.index,
+              destinationIndex: destination.index,
+            })
+          );
+          break;
+        case 'FEATURE': {
+          const epicId = source.droppableId.replace('features-', '');
+          dispatch(
+            reorderFeatures({
+              epicId,
+              sourceIndex: source.index,
+              destinationIndex: destination.index,
+            })
+          );
+          break;
+        }
+        case 'USER_STORY': {
+          const featureId = source.droppableId.replace('userStories-', '');
+          dispatch(
+            reorderUserStories({
+              featureId,
+              sourceIndex: source.index,
+              destinationIndex: destination.index,
+            })
+          );
+          break;
+        }
+        case 'TASK': {
+          const userStoryId = source.droppableId.replace('tasks-', '');
+          dispatch(
+            reorderTasks({
+              userStoryId,
+              sourceIndex: source.index,
+              destinationIndex: destination.index,
+            })
+          );
+          break;
+        }
+      }
+    },
+    [dispatch]
+  );
+
   // Memoize metrics
   const metrics = useMemo(
     () => [
@@ -279,8 +386,22 @@ const Builder: React.FC<BuilderProps> = ({
   return (
     <div className="flex h-screen">
       <div className="w-min w-80 border-r bg-background  space-y-4">
+        <div className="flex flex-wrap justify-between items-center gap-2 p-2">
+          <div className="flex gap-2">
+            <Templates appId={selectedApp} />
+            <ImportExport appId={selectedApp} />
+          </div>
+          {selectedApp && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSelectedApp(null)}
+            >
+              Back to Apps
+            </Button>
+          )}
+        </div>
         <ContextualQuestions content="Global" workItemType="Global" />
-        {/* TODO-p1: this is here essentially to call and fetch the data/update the state whenever we initially load and it seems like we're also doing it whenever we create new items we could probably not do it whenever we create new items/update the items but just initial load. We should probably turn this into a provider or a hook. */}
         <FormatData chatApi={chatApi} selectedApp={selectedApp} />
 
         <div className="space-y-2">
@@ -330,19 +451,58 @@ const Builder: React.FC<BuilderProps> = ({
       {/* Main Content */}
       <div className="flex-1 overflow-hidden">
         <div className="p-6">
+          <div className="mb-6">
+            <BuilderSearch
+              epics={epics}
+              features={featuresRecord}
+              userStories={userStoriesRecord}
+              tasks={tasksRecord}
+              onResultSelect={handleSearchResultSelect}
+            />
+          </div>
+
           <Card className="mb-6">
             <CardContent className="pt-6">
               <MetricsDisplay metrics={metrics} />
             </CardContent>
           </Card>
 
-          <ScrollArea className="h-[calc(100vh-200px)]">
-            <div className="space-y-6 pr-4">
-              {epics.map((epic, index) => (
-                <Epic key={epic.id} epic={epic} index={index} />
-              ))}
-            </div>
-          </ScrollArea>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <ScrollArea className="h-[calc(100vh-200px)]">
+              <Droppable droppableId="epics" type="EPIC">
+                {(provided) => (
+                  <div
+                    className="space-y-6 pr-4"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    {epics.map((epic, index) => (
+                      <Draggable
+                        key={epic.id}
+                        draggableId={epic.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={snapshot.isDragging ? 'opacity-75' : ''}
+                          >
+                            <Epic
+                              epic={epic}
+                              index={index}
+                              dragHandleProps={provided.dragHandleProps}
+                            />
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </ScrollArea>
+          </DragDropContext>
         </div>
       </div>
 

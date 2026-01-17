@@ -32,9 +32,9 @@ interface ImageAttributes extends Timestamps {
   url: string;
   previewUrl: string | null;
   provider: string;
-  provider_metadata: any | null;
+  provider_metadata: Record<string, unknown> | null;
 
-  // TOOD-p2: add theses types to image
+  // TODO-p2: add these types to image
   //  formats.small.url
 }
 interface Image {

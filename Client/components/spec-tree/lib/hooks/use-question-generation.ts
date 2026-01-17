@@ -6,7 +6,19 @@ import {
   generateQuestionsForTask,
   generateQuestionsForGlobalRefinement,
 } from '../api/openai';
-import { ExtendedWorkItemType, ContextualQuestion } from '../types/work-items';
+import {
+  ExtendedWorkItemType,
+  ContextualQuestion,
+  EpicType,
+  FeatureType,
+  UserStoryType,
+  TaskType,
+} from '../types/work-items';
+
+/**
+ * Union type for work items that can have questions generated
+ */
+type QuestionableWorkItem = EpicType | FeatureType | UserStoryType | TaskType | string;
 import generateId from '../utils/generate-id';
 import { useSelector } from 'react-redux';
 import { selectChatApi, selectSelectedModel } from '../../../../lib/store/sow-slice';
@@ -25,7 +37,7 @@ const useQuestionGeneration = (
     useState<ContextualQuestion[]>(initialQuestions);
 
   const generateQuestions = async (
-    workItem?: any
+    workItem?: QuestionableWorkItem
   ): Promise<ContextualQuestion[] | null> => {
     setLoading(true);
     try {
@@ -34,35 +46,35 @@ const useQuestionGeneration = (
         case 'epics':
           response = await generateQuestionsForEpic({
             chatApi,
-            epic: workItem,
+            epic: workItem as EpicType,
             selectedModel,
           });
           break;
         case 'features':
           response = await generateQuestionsForFeature({
             chatApi,
-            feature: workItem,
+            feature: workItem as FeatureType,
             selectedModel,
           });
           break;
         case 'userStories':
           response = await generateQuestionsForUserStory({
             chatApi,
-            userStory: workItem,
+            userStory: workItem as UserStoryType,
             selectedModel,
           });
           break;
         case 'tasks':
           response = await generateQuestionsForTask({
             chatApi,
-            task: workItem,
+            task: workItem as TaskType,
             selectedModel,
           });
           break;
         case 'Global':
           response = await generateQuestionsForGlobalRefinement({
             chatApi,
-            globalInformation: workItem,
+            globalInformation: workItem as string,
             selectedModel,
           });
           break;
