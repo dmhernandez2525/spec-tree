@@ -1,0 +1,60 @@
+# CodeRabbit Configuration
+# Documentation: https://docs.coderabbit.ai/guides/configure-coderabbit
+
+language: "en-US"
+
+reviews:
+  profile: "chill"  # Options: chill, assertive
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+
+  path_instructions:
+    - path: "Client/**/*.tsx"
+      instructions: |
+        Focus on React best practices:
+        - Proper hook usage and dependencies
+        - Component composition patterns
+        - Accessibility (a11y) considerations
+        - TypeScript type safety
+
+    - path: "Client/**/*.ts"
+      instructions: |
+        Check for:
+        - Proper TypeScript types (no 'any')
+        - Error handling patterns
+        - Consistent naming conventions
+
+    - path: "Server/src/api/**"
+      instructions: |
+        Review Strapi patterns:
+        - Schema consistency
+        - Proper relations
+        - API security considerations
+
+    - path: "**/*.test.{ts,tsx}"
+      instructions: |
+        Ensure tests are:
+        - Testing behavior, not implementation
+        - Using proper assertions
+        - Covering edge cases
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+
+chat:
+  auto_reply: true
+
+# Ignore patterns
+path_filters:
+  - "!**/*.lock"
+  - "!**/node_modules/**"
+  - "!**/.next/**"
+  - "!**/dist/**"
+  - "!**/*.min.js"
