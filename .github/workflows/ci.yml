@@ -162,6 +162,12 @@ jobs:
           name: coverage-report
           path: Client/coverage
 
+      - name: Fix coverage paths for SonarCloud
+        run: |
+          # SonarCloud scans from repo root with sonar.sources=Client
+          # Coverage paths are relative to Client/, so prefix them
+          sed -i 's|^SF:|SF:Client/|g' Client/coverage/lcov.info
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
