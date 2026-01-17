@@ -4,7 +4,7 @@ import { OpenAIRequestBody } from '../types/openai.types';
 
 export class OpenAIController {
   async generateCompletion(
-    req: Request<{}, {}, OpenAIRequestBody>,
+    req: Request<Record<string, never>, unknown, OpenAIRequestBody>,
     res: Response
   ) {
     try {
