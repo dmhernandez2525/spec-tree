@@ -34,52 +34,57 @@ vi.mock('./use-toast', () => ({
   toast: vi.fn(),
 }));
 
+// Default state for tests
+const defaultSowState = {
+  currentApp: null,
+  epics: {
+    'epic-1': {
+      id: 'epic-1',
+      documentId: 'doc-epic-1',
+      title: 'Epic 1',
+      description: '',
+      position: 0,
+      featureIds: ['feature-1'],
+    },
+    'epic-2': {
+      id: 'epic-2',
+      documentId: 'doc-epic-2',
+      title: 'Epic 2',
+      description: '',
+      position: 1,
+      featureIds: [],
+    },
+  },
+  features: {
+    'feature-1': {
+      id: 'feature-1',
+      documentId: 'doc-feature-1',
+      title: 'Feature 1',
+      description: '',
+      position: 0,
+      parentEpicId: 'epic-1',
+      userStoryIds: [],
+    },
+  },
+  userStories: {},
+  tasks: {},
+  epicOrder: ['epic-1', 'epic-2'],
+  isLoading: false,
+  error: null,
+};
+
 // Create a test store
-const createTestStore = (preloadedState = {}) => {
+const createTestStore = (sowStateOverrides = {}) => {
   return configureStore({
     reducer: {
       sow: sowReducer,
     },
     preloadedState: {
       sow: {
-        currentApp: null,
-        epics: {
-          'epic-1': {
-            id: 'epic-1',
-            documentId: 'doc-epic-1',
-            title: 'Epic 1',
-            description: '',
-            position: 0,
-            featureIds: ['feature-1'],
-          },
-          'epic-2': {
-            id: 'epic-2',
-            documentId: 'doc-epic-2',
-            title: 'Epic 2',
-            description: '',
-            position: 1,
-            featureIds: [],
-          },
-        },
-        features: {
-          'feature-1': {
-            id: 'feature-1',
-            documentId: 'doc-feature-1',
-            title: 'Feature 1',
-            description: '',
-            position: 0,
-            parentEpicId: 'epic-1',
-            userStoryIds: [],
-          },
-        },
-        userStories: {},
-        tasks: {},
-        epicOrder: ['epic-1', 'epic-2'],
-        isLoading: false,
-        error: null,
-        ...preloadedState,
+        ...defaultSowState,
+        ...sowStateOverrides,
       },
-    },
+    } as Parameters<typeof configureStore>[0]['preloadedState'],
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ serializableCheck: false }),
   });
@@ -182,12 +187,13 @@ describe('useTreeReorder', () => {
   });
 
   it('handles reordering features within same epic', async () => {
-    const storeWithFeatures = createTestStore({
+    const store = createTestStore({
       features: {
         'feature-1': {
           id: 'feature-1',
           documentId: 'doc-feature-1',
           title: 'Feature 1',
+          description: '',
           position: 0,
           parentEpicId: 'epic-1',
           userStoryIds: [],
@@ -196,6 +202,7 @@ describe('useTreeReorder', () => {
           id: 'feature-2',
           documentId: 'doc-feature-2',
           title: 'Feature 2',
+          description: '',
           position: 1,
           parentEpicId: 'epic-1',
           userStoryIds: [],
@@ -206,13 +213,12 @@ describe('useTreeReorder', () => {
           id: 'epic-1',
           documentId: 'doc-epic-1',
           title: 'Epic 1',
+          description: '',
           position: 0,
           featureIds: ['feature-1', 'feature-2'],
         },
       },
     });
-
-    const store = createTestStore(storeWithFeatures);
     const onSuccess = vi.fn();
     const { result } = renderHook(
       () => useTreeReorder({ onSuccess, persistToApi: false }),
