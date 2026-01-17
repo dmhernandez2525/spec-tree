@@ -10,7 +10,7 @@ import {
 import { AppError } from '../error.service';
 
 export class OpenAIProvider implements AIProvider {
-  name: 'openai' = 'openai';
+  readonly name = 'openai' as const;
   private client: OpenAI | null = null;
   private defaultModel = 'gpt-4o';
 

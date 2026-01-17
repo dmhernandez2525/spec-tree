@@ -10,7 +10,7 @@ import {
 import { AppError } from '../error.service';
 
 export class GeminiProvider implements AIProvider {
-  name: 'gemini' = 'gemini';
+  readonly name = 'gemini' as const;
   private client: GoogleGenerativeAI | null = null;
   private defaultModel = 'gemini-1.5-pro';
 

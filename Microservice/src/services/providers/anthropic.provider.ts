@@ -10,7 +10,7 @@ import {
 import { AppError } from '../error.service';
 
 export class AnthropicProvider implements AIProvider {
-  name: 'anthropic' = 'anthropic';
+  readonly name = 'anthropic' as const;
   private client: Anthropic | null = null;
   private defaultModel = 'claude-3-5-sonnet-20241022';
 
