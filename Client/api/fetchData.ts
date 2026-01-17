@@ -438,8 +438,6 @@ const fetchUserInfo = async ({ name }: { name: string }): Promise<ApiResponse<Us
 const fetchHomePageData = async (): Promise<
   SingleApiResponse<HomePageData> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
-  // populate[testimonialSection]=*&populate[section]=*&populate[section][populate][image]=*&populate[section][populate][button]=*&populate[aboutSection]=*&populate[metricSection]=*&populate[newsletterSection]=*&populate[socialSection][populate][links][populate][icon]=*&
   return await fetchSingletonTypeData<HomePageData>(
     'home-page',
     'populate[heroData][populate][heroImage]=*&populate[ourMissionData]=*&populate[ourServicesData][populate][serviceList]=*&populate[WheelSection][populate][icon]=*&populate[reviews]=*&populate[ourWorkData][populate][image]=*&populate[ourWorkData][populate][icon]=*&populate[ourServicesHeader]=*&populate[OurProcess]=*&populate[ourWorkHeader]=*&populate[reviewsHeader]=*'
@@ -459,7 +457,6 @@ export interface AboutPageAttributes {
 const fetchAboutPageData = async (): Promise<
   SingleApiResponse<AboutPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<AboutPageAttributes>(
     'about-page',
     'populate[aboutSection][populate][cta]=*&populate[metricSection][populate][cards]=*&populate[metricSection][populate][backgroundImage]=*&populate[mediaContent]=*&populate[newsletterSection]=*&populate[socialSection][populate][links][populate][icon]=*'
@@ -494,7 +491,6 @@ export interface TermsPageAttributes {
 const fetchTermsPageData = async (): Promise<
   SingleApiResponse<TermsPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<TermsPageAttributes>('terms-page');
 };
 
@@ -506,7 +502,6 @@ export interface PrivacyPageAttributes {
 const fetchPrivacyPageData = async (): Promise<
   SingleApiResponse<PrivacyPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<PrivacyPageAttributes>('privacy-page');
 };
 
@@ -519,7 +514,6 @@ export interface CookiesPageAttributes {
 const fetchCookiesPageData = async (): Promise<
   SingleApiResponse<CookiesPageAttributes> | null | undefined
 > => {
-  // TODO: use fetchCmsData instead of fetchData once it is working
   return await fetchSingletonTypeData<CookiesPageAttributes>('cookies-page');
 };
 

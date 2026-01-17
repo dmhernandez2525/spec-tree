@@ -26,7 +26,7 @@ export default ({ env }) => {
           ),
         },
         smsSettings: {
-          // defaultFrom: env("TWILIO_PHONE_NUMBER"), // TODO: Set your Twilio phone number
+          // SMS integration: Configure TWILIO_PHONE_NUMBER in environment
         },
         templates: {},
       },
