@@ -10,6 +10,7 @@ import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
 import { CommentSection } from '@/components/marketing/blog/CommentSection';
 import { PostAttributes } from '@/types/main';
 import { marked } from 'marked';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 interface BlogPostProps {
   post: PostAttributes;
@@ -55,10 +56,10 @@ export function BlogPost({ post }: BlogPostProps) {
             <p className="text-xl text-muted-foreground">{post.description}</p>
           </div>
 
-          {/* Render converted HTML */}
+          {/* Render converted HTML (sanitized to prevent XSS) */}
           <div
             className="prose prose-blue dark:prose-invert max-w-none mb-16"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(htmlContent as string) }}
           />
 
           <CommentSection postId={post.id} />

@@ -9,6 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 interface DocCategory {
   id: string;
@@ -152,7 +153,7 @@ export function Documentation() {
                   </p>
                 </div>
                 <div
-                  dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedArticle.content) }}
                 />
               </motion.div>
             </CardContent>
