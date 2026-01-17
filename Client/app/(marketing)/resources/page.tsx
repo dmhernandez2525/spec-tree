@@ -17,8 +17,7 @@ const resourcesData: Resource[] = [
     category: 'getting-started',
     readTime: 5,
     lastUpdated: '2024-04-01',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/resource-user-guide.svg',
     href: '/resources/documentation/getting-started',
   },
   {
@@ -29,8 +28,7 @@ const resourcesData: Resource[] = [
     category: 'advanced',
     readTime: 15,
     lastUpdated: '2024-04-01',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/resource-tutorial.svg',
     href: '/resources/guides/ai-context',
   },
   {
@@ -41,8 +39,7 @@ const resourcesData: Resource[] = [
     category: 'development',
     readTime: 30,
     lastUpdated: '2024-04-01',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/resource-case-studies.svg',
     href: '/resources/api-reference/rest',
   },
   {
@@ -53,8 +50,7 @@ const resourcesData: Resource[] = [
     category: 'enterprise',
     readTime: 10,
     lastUpdated: '2024-04-01',
-    imageUrl:
-      '/https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/resource-api-docs.svg',
     href: '/resources/case-studies/techcorp',
   },
 ];

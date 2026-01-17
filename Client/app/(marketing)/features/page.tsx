@@ -108,7 +108,7 @@ export default function FeaturesPage() {
         <FeatureHighlight
           title="AI-Powered Context Gathering"
           description="Our intelligent system asks targeted questions to gather comprehensive project context, ensuring nothing is overlooked in your planning process."
-          image="https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          image="/images/ai-project-planning.png"
           features={[
             'Dynamic question generation based on project type',
             'Smart context propagation across work items',
@@ -120,7 +120,7 @@ export default function FeaturesPage() {
         <FeatureHighlight
           title="Intelligent Work Item Generation"
           description="Generate complete project hierarchies from high-level concepts, with smart dependency mapping and context inheritance."
-          image="https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          image="/images/context-propagation.png"
           features={[
             'Automatic epic, feature, and story generation',
             'Smart task breakdown and organization',
@@ -133,7 +133,7 @@ export default function FeaturesPage() {
         <FeatureHighlight
           title="Powerful Template System"
           description="Save time by creating and reusing templates for common project patterns, complete with context and dependencies."
-          image="https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          image="/images/template-library.png"
           features={[
             'Custom template creation and management',
             'Industry-specific template library',

@@ -105,8 +105,7 @@ const testimonials = [
     author: 'Sarah Chen',
     role: 'Director of PMO',
     company: 'Global Tech Solutions',
-    image:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    image: '/images/testimonial-sarah-chen.svg',
   },
   {
     quote:
@@ -114,8 +113,7 @@ const testimonials = [
     author: 'Michael Rodriguez',
     role: 'Engineering Manager',
     company: 'InnovateX',
-    image:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    image: '/images/testimonial-michael-rodriguez.svg',
   },
   {
     quote:
@@ -123,8 +121,7 @@ const testimonials = [
     author: 'Emma Thompson',
     role: 'Agency Director',
     company: 'Creative Solutions Agency',
-    image:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    image: '/images/testimonial-emma-thompson.svg',
   },
 ];
 
@@ -196,7 +193,7 @@ export default function SolutionsPage() {
               description: "Adapt the system to your organization's needs",
             },
           ]}
-          image="https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          image="/images/enterprise-dashboard.png"
         />
 
         <SolutionShowcase
@@ -216,7 +213,7 @@ export default function SolutionsPage() {
               description: 'Connect with your development tools',
             },
           ]}
-          image="https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          image="/images/agile-sprint-planning.png"
           imageLeft={false}
         />
       </div>

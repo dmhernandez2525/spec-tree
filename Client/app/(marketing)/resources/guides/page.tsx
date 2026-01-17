@@ -25,8 +25,7 @@ const guideData: Resource[] = [
     category: 'basics',
     readTime: 15,
     lastUpdated: '2024-04-01',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/getting-started-guide.png',
     href: '/resources/guides/mastering-context-creation',
   },
   {
@@ -38,8 +37,7 @@ const guideData: Resource[] = [
     category: 'advanced',
     readTime: 25,
     lastUpdated: '2024-04-01',
-    imageUrl:
-      'https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    imageUrl: '/images/documentation-guide.png',
     href: '/resources/guides/advanced-prompt-engineering',
   },
 ];

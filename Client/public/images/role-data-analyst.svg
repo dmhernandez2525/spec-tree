@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="400" cy="180" r="70" fill="url(#accent)" opacity="0.2"/>
+  <rect x="360" y="140" width="15" height="60" fill="#06b6d4"/>
+  <rect x="380" y="160" width="15" height="40" fill="#7c3aed"/>
+  <rect x="400" y="130" width="15" height="70" fill="#06b6d4"/>
+  <rect x="420" y="150" width="15" height="50" fill="#7c3aed"/>
+  <rect x="150" y="280" width="200" height="150" rx="8" fill="#1e1e3f" stroke="#06b6d4" stroke-width="2"/>
+  <path d="M170 380 Q220 320 270 350 T330 300" fill="none" stroke="#06b6d4" stroke-width="3"/>
+  <circle cx="270" cy="350" r="5" fill="#06b6d4"/>
+  <circle cx="330" cy="300" r="5" fill="#06b6d4"/>
+  <rect x="450" y="280" width="200" height="150" rx="8" fill="#1e1e3f" stroke="#7c3aed" stroke-width="2"/>
+  <text x="550" y="310" font-family="system-ui" font-size="12" fill="#94a3b8" text-anchor="middle">AI Insights</text>
+  <rect x="470" y="330" width="160" height="12" rx="4" fill="#7c3aed" opacity="0.6"/>
+  <rect x="470" y="350" width="140" height="12" rx="4" fill="#06b6d4" opacity="0.6"/>
+  <rect x="470" y="370" width="120" height="12" rx="4" fill="#7c3aed" opacity="0.6"/>
+  <rect x="470" y="390" width="100" height="12" rx="4" fill="#06b6d4" opacity="0.6"/>
+  <text x="400" y="500" font-family="system-ui" font-size="24" fill="white" text-anchor="middle" font-weight="bold">Data Analyst</text>
+  <text x="400" y="530" font-family="system-ui" font-size="14" fill="#94a3b8" text-anchor="middle">Analytics & Data Insights</text>
+</svg>
