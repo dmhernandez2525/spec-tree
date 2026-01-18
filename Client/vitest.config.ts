@@ -35,6 +35,7 @@ export default defineConfig({
       'components/**/*.{test,spec}.{js,jsx,ts,tsx}',
       'lib/**/*.{test,spec}.{js,jsx,ts,tsx}',
       'utils/**/*.{test,spec}.{js,jsx,ts,tsx}',
+      'api/**/*.{test,spec}.{js,jsx,ts,tsx}',
     ],
     exclude: [
       'node_modules',
@@ -55,6 +56,7 @@ export default defineConfig({
         'components/**/*.{js,jsx,ts,tsx}',
         'lib/**/*.{js,jsx,ts,tsx}',
         'utils/**/*.{js,jsx,ts,tsx}',
+        'api/**/*.{js,jsx,ts,tsx}',
       ],
       exclude: [
         '**/*.d.ts',

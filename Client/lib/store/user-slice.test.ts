@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { userReducer, setUser, setToken, clearUser } from './user-slice';
+import { configureStore } from '@reduxjs/toolkit';
+import { userReducer, setUser, setToken, clearUser, loginUser, refreshUser, updateUserProfile } from './user-slice';
 import type { UserAttributes } from '@/types/user';
+import * as fetchDataModule from '@/api/fetchData';
 
 // Mock localStorage
 const localStorageMock = {
@@ -16,7 +18,17 @@ Object.defineProperty(global, 'localStorage', {
 });
 
 // Mock fetch
-global.fetch = vi.fn();
+const mockFetch = vi.fn();
+vi.stubGlobal('fetch', mockFetch);
+
+// Mock process.env
+vi.stubGlobal('process', {
+  ...process,
+  env: {
+    ...process.env,
+    NEXT_PUBLIC_STRAPI_API_URL: 'http://localhost:1337',
+  },
+});
 
 // Mock the API
 vi.mock('@/api/fetchData', () => ({
@@ -44,6 +56,7 @@ describe('user-slice', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockFetch.mockReset();
   });
 
   describe('setUser', () => {
@@ -124,6 +137,174 @@ describe('user-slice', () => {
       userReducer(stateWithUser, clearUser());
 
       expect(stateWithUser).toEqual(originalState);
+    });
+  });
+
+  describe('loginUser', () => {
+    it('returns false when response has no jwt', async () => {
+      mockFetch.mockResolvedValueOnce({
+        json: () => Promise.resolve({ error: 'Invalid credentials' }),
+      });
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      const result = await loginUser(store.dispatch, {
+        identifier: 'test@example.com',
+        password: 'wrong-password',
+      });
+
+      expect(result).toBe(false);
+    });
+
+    it('returns false when data is null', async () => {
+      mockFetch.mockResolvedValueOnce({
+        json: () => Promise.resolve(null),
+      });
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      const result = await loginUser(store.dispatch, {
+        identifier: 'test@example.com',
+        password: 'password123',
+      });
+
+      expect(result).toBe(false);
+    });
+
+    it('returns false when fetch throws an error', async () => {
+      mockFetch.mockRejectedValueOnce(new Error('Network error'));
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      const result = await loginUser(store.dispatch, {
+        identifier: 'test@example.com',
+        password: 'password123',
+      });
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('refreshUser', () => {
+    it('successfully refreshes user when token exists', async () => {
+      localStorageMock.getItem.mockReturnValueOnce('existing-token');
+      vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(mockUser);
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      const result = await refreshUser(store.dispatch);
+
+      expect(result).toEqual(mockUser);
+      expect(store.getState().user.user).toEqual(mockUser);
+    });
+
+    it('returns false when refreshUser API returns null', async () => {
+      localStorageMock.getItem.mockReturnValueOnce('existing-token');
+      vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(null as unknown as UserAttributes);
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      const result = await refreshUser(store.dispatch);
+
+      expect(result).toBe(false);
+    });
+
+    it('returns false when an error occurs', async () => {
+      localStorageMock.getItem.mockReturnValueOnce('existing-token');
+      vi.mocked(fetchDataModule.refreshUser).mockRejectedValueOnce(new Error('API error'));
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      const result = await refreshUser(store.dispatch);
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('updateUserProfile thunk', () => {
+    it('handles fulfilled state', () => {
+      const action = {
+        type: updateUserProfile.fulfilled.type,
+        payload: mockUser,
+      };
+
+      const newState = userReducer(initialState, action);
+
+      // Fulfilled handler is a no-op, so state should be unchanged
+      expect(newState).toEqual(initialState);
+    });
+
+    it('handles rejected state', () => {
+      const action = {
+        type: updateUserProfile.rejected.type,
+        error: { message: 'Update failed' },
+      };
+
+      const newState = userReducer(initialState, action);
+
+      // Rejected handler is a no-op, so state should be unchanged
+      expect(newState).toEqual(initialState);
+    });
+
+    it('calls updateUserInfo and refreshUser on dispatch', async () => {
+      vi.mocked(fetchDataModule.updateUserInfo).mockResolvedValueOnce(undefined as unknown as ReturnType<typeof fetchDataModule.updateUserInfo>);
+      localStorageMock.getItem.mockReturnValueOnce('existing-token');
+      vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(mockUser);
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      await store.dispatch(
+        updateUserProfile({
+          userId: 1,
+          newUserData: { username: 'newusername' },
+          posUserId: null,
+        })
+      );
+
+      expect(fetchDataModule.updateUserInfo).toHaveBeenCalledWith({
+        userId: '1',
+        data: { username: 'newusername' },
+      });
+    });
+
+    it('updates state with refreshed user data after profile update', async () => {
+      const updatedUser = { ...mockUser, username: 'updateduser' };
+      vi.mocked(fetchDataModule.updateUserInfo).mockResolvedValueOnce(undefined as unknown as ReturnType<typeof fetchDataModule.updateUserInfo>);
+      localStorageMock.getItem.mockReturnValueOnce('existing-token');
+      vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(updatedUser);
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+
+      const store = configureStore({
+        reducer: { user: userReducer },
+      });
+
+      const result = await store.dispatch(
+        updateUserProfile({
+          userId: 1,
+          newUserData: { username: 'updateduser' },
+          posUserId: null,
+        })
+      );
+
+      expect(result.payload).toEqual(updatedUser);
+      expect(store.getState().user.user).toEqual(updatedUser);
     });
   });
 });
