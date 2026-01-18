@@ -1,11 +1,10 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import type { TreeItemData, TreeViewProps } from './types';
 
 // Store mock implementations for testing
 const mockUseTreeDragDrop = vi.fn();
-const mockHandleToggleExpand = vi.fn();
 
 // Mock dependencies before importing component
 vi.mock('@dnd-kit/core', () => ({
@@ -163,8 +162,8 @@ describe('TreeView', () => {
         createMockItem({ id: 'item-2', title: 'Item 2' }),
         createMockItem({ id: 'item-3', title: 'Item 3' }),
       ];
-      const onReorder = vi.fn();
-      render(<TreeView items={items} onReorder={onReorder} />);
+      const _onReorder = vi.fn();
+      render(<TreeView items={items} onReorder={_onReorder} />);
 
       expect(screen.getByTestId('tree-item-item-1')).toBeInTheDocument();
       expect(screen.getByTestId('tree-item-item-2')).toBeInTheDocument();
@@ -172,9 +171,9 @@ describe('TreeView', () => {
     });
 
     it('renders items at depth 0', () => {
-      const items = [createMockItem({ id: 'item-1' })];
-      const onReorder = vi.fn();
-      render(<TreeView items={items} onReorder={onReorder} />);
+      const _items = [createMockItem({ id: 'item-1' })];
+      const _onReorder = vi.fn();
+      render(<TreeView items={_items} onReorder={_onReorder} />);
 
       expect(screen.getByTestId('tree-item-item-1')).toHaveAttribute('data-depth', '0');
     });
@@ -335,8 +334,8 @@ describe('TreeView', () => {
         createMockItem({ id: 'item-1' }),
         createMockItem({ id: 'item-2' }),
       ];
-      const onReorder = vi.fn();
-      render(<TreeView items={items} onReorder={onReorder} />);
+      const _payload = vi.fn();
+      render(<TreeView items={items} onReorder={_payload} />);
 
       expect(screen.getByTestId('tree-item-item-1')).toHaveAttribute('data-is-over', 'false');
       expect(screen.getByTestId('tree-item-item-2')).toHaveAttribute('data-is-over', 'true');
@@ -352,7 +351,7 @@ describe('TreeView', () => {
       expect(screen.getByTestId('tree-item-item-1')).toHaveAttribute('data-is-expanded', 'true');
     });
 
-    it('toggles expanded state when toggle is clicked', async () => {
+    it('toggles expanded state when toggle is clicked', () => {
       const items = [createMockItem({ id: 'item-1' })];
       const onReorder = vi.fn();
       const { rerender } = render(<TreeView items={items} onReorder={onReorder} />);
@@ -361,9 +360,7 @@ describe('TreeView', () => {
       expect(screen.getByTestId('tree-item-item-1')).toHaveAttribute('data-is-expanded', 'true');
 
       // Click toggle
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('toggle-item-1'));
-      });
+      fireEvent.click(screen.getByTestId('toggle-item-1'));
 
       // After clicking, we need to rerender to see the state change
       // The toggle will add the id to expandedIds set, which means
@@ -377,8 +374,8 @@ describe('TreeView', () => {
 
   describe('renderItem prop', () => {
     it('passes renderItem to TreeItem as renderContent', () => {
-      const renderItem = vi.fn((item: TreeItemData, depth: number) => (
-        <span>Custom: {item.title}</span>
+      const renderItem = vi.fn((_item: TreeItemData, _depth: number) => (
+        <span>Custom: {_item.title}</span>
       ));
       const items = [createMockItem({ id: 'item-1', title: 'Test' })];
       const onReorder = vi.fn();

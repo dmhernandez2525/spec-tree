@@ -86,7 +86,7 @@ describe('TutorialResources', () => {
   });
 
   it('renders download buttons with ghost variant and small size', () => {
-    const { container } = render(<TutorialResources tutorialId="test-tutorial" />);
+    const { container: _container } = render(<TutorialResources tutorialId="test-tutorial" />);
 
     // Ghost variant buttons should have specific classes
     const buttons = screen.getAllByRole('button', { name: 'Download' });

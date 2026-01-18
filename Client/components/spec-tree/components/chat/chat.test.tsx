@@ -1,7 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 // Mock askQuestion function
 const mockAskQuestion = vi.fn();
@@ -156,7 +155,7 @@ vi.mock('lucide-react', () => ({
 
 // Import after mocks
 import Chat from './chat';
-import { askQuestion } from '../../lib/api/openai';
+import { askQuestion as _askQuestion } from '../../lib/api/openai';
 
 describe('Chat Component', () => {
   beforeEach(() => {

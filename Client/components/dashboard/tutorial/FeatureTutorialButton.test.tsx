@@ -18,7 +18,7 @@ vi.mock('./TutorialManager', () => ({
 // Mock Tooltip components
 vi.mock('@/components/ui/tooltip', () => ({
   Tooltip: ({ children }: any) => <div data-testid="tooltip">{children}</div>,
-  TooltipTrigger: ({ children, asChild }: any) => <div data-testid="tooltip-trigger">{children}</div>,
+  TooltipTrigger: ({ children, _asChild }: any) => <div data-testid="tooltip-trigger">{children}</div>,
   TooltipContent: ({ children }: any) => <div data-testid="tooltip-content">{children}</div>,
 }));
 

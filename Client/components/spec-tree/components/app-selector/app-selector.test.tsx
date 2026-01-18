@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
@@ -40,18 +40,18 @@ vi.mock('./AppCard', () => ({
 
 vi.mock('./AppToolbar', () => ({
   default: ({
-    viewMode,
+    _viewMode,
     onViewModeChange,
     searchQuery,
     onSearchChange,
-    onSort,
+    _onSort,
     currentSort,
   }: {
-    viewMode: string;
+    _viewMode: string;
     onViewModeChange: (mode: 'grid' | 'list') => void;
     searchQuery: string;
     onSearchChange: (query: string) => void;
-    onSort: (option: unknown) => void;
+    _onSort: (option: unknown) => void;
     currentSort: { label: string };
   }) => (
     <div data-testid="app-toolbar">

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MainNav } from './MainNav';
 
 // Mock next/navigation
@@ -19,13 +19,13 @@ vi.mock('next/link', () => ({
     href,
     className,
     legacyBehavior,
-    passHref,
+    _passHref,
   }: {
     children: React.ReactNode;
     href: string;
     className?: string;
     legacyBehavior?: boolean;
-    passHref?: boolean;
+    _passHref?: boolean;
   }) => {
     if (legacyBehavior) {
       return <>{children}</>;
@@ -43,14 +43,14 @@ vi.mock('next/image', () => ({
   default: ({
     src,
     alt,
-    height,
-    width,
+    _height,
+    _width,
     className,
   }: {
     src: any;
     alt: string;
-    height?: number;
-    width?: number;
+    _height?: number;
+    _width?: number;
     className?: string;
   }) => <img src={typeof src === 'string' ? src : 'mocked-image'} alt={alt} className={className} />,
 }));
@@ -127,15 +127,15 @@ vi.mock('./navigationRoutes', () => ({
 vi.mock('@/components/ui/button', () => ({
   Button: ({
     children,
-    variant,
-    size,
+    _variant,
+    _size,
     asChild,
     className,
     onClick,
   }: {
     children: React.ReactNode;
-    variant?: string;
-    size?: string;
+    _variant?: string;
+    _size?: string;
     asChild?: boolean;
     className?: string;
     onClick?: () => void;

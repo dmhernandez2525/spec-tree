@@ -40,15 +40,15 @@ describe('Avatar', () => {
 
 describe('AvatarImage', () => {
   it('renders with proper component structure', () => {
-    render(
+    const { container } = render(
       <Avatar>
         <AvatarImage src="/test-image.jpg" alt="Test user" />
       </Avatar>
     );
 
     // AvatarImage from Radix renders conditionally based on image load
-    // Just verify the Avatar container is rendered
-    expect(document.querySelector('[class*="aspect-square"]') || document.querySelector('img')).toBeTruthy;
+    // Just verify the Avatar container is rendered (AvatarImage exists but renders as span during SSR)
+    expect(container.firstChild).toBeTruthy();
   });
 
   it('accepts src and alt attributes', () => {

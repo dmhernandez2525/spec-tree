@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import { DemoForm } from './DemoForm';
 
 // Mock framer-motion
@@ -133,10 +132,10 @@ vi.mock('@/components/ui/popover', () => ({
   ),
   PopoverTrigger: ({
     children,
-    asChild,
+    _asChild,
   }: {
     children: React.ReactNode;
-    asChild?: boolean;
+    _asChild?: boolean;
   }) => <div data-testid="popover-trigger">{children}</div>,
   PopoverContent: ({
     children,

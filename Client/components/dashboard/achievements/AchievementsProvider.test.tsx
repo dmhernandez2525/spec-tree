@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { AchievementsProvider, useAchievements } from './AchievementsProvider';
 import * as useLocalStorageModule from '@/lib/hooks/use-local-storage';
 import * as useToastModule from '@/lib/hooks/use-toast';

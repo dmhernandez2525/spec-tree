@@ -19,10 +19,13 @@ vi.mock('@/lib/store/settings-slice', () => ({
 
 // Mock framer-motion
 vi.mock('framer-motion', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const React = require('react');
+  const MotionDiv = React.forwardRef((props: any, ref: any) => React.createElement('div', { ...props, ref }, props.children));
+  MotionDiv.displayName = 'MotionDiv';
   return {
     motion: {
-      div: React.forwardRef((props: any, ref: any) => React.createElement('div', { ...props, ref }, props.children)),
+      div: MotionDiv,
     },
     AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
   };

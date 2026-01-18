@@ -1,7 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 // Hoisted mocks for state management
 const mockStartLoading = vi.fn();
@@ -307,8 +306,8 @@ vi.mock('@/components/ui/scroll-area', () => ({
 
 // Import after mocks
 import Builder from './builder';
-import { addEpics, requestAdditionalEpics, requestAdditionalFeatures, requestUserStories, requestTasks, reorderEpics } from '../../../../lib/store/sow-slice';
-import { strapiService } from '../../lib/api/strapi-service';
+import { addEpics as _addEpics, requestAdditionalEpics as _requestAdditionalEpics, requestAdditionalFeatures as _requestAdditionalFeatures, requestUserStories as _requestUserStories, requestTasks as _requestTasks, reorderEpics as _reorderEpics } from '../../../../lib/store/sow-slice';
+import { strapiService as _strapiService } from '../../lib/api/strapi-service';
 
 describe('Builder Component', () => {
   const defaultProps = {

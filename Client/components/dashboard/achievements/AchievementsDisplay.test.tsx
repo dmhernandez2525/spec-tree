@@ -71,7 +71,7 @@ vi.mock('@/components/ui/tooltip', () => ({
 }));
 
 vi.mock('@/components/ui/select', () => ({
-  Select: ({ children, value, onValueChange }: any) => (
+  Select: ({ children, value, _onValueChange }: any) => (
     <div data-testid="select" data-value={value}>
       {children}
     </div>

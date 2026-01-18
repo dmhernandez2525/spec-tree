@@ -134,7 +134,7 @@ describe('ResourceDetail', () => {
   });
 
   it('renders arrow icon in back button', () => {
-    const { container } = render(<ResourceDetail {...defaultProps} />);
+    render(<ResourceDetail {...defaultProps} />);
 
     // Back button should have an SVG icon
     const backLink = screen.getByRole('link', { name: /Back to Resources/i });

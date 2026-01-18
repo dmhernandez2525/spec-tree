@@ -90,7 +90,7 @@ vi.mock('@/components/ui/alert', () => ({
 }));
 
 // Mock wizard with step tracking
-let mockCurrentStep = 0;
+let _mockCurrentStep = 0;
 let mockOnStepChange: ((step: number) => void) | undefined;
 vi.mock('../wizard/wizard', () => ({
   default: ({ steps, currentStep, onStepChange, loading, className }: {
@@ -100,7 +100,7 @@ vi.mock('../wizard/wizard', () => ({
     loading?: boolean;
     className?: string;
   }) => {
-    mockCurrentStep = currentStep;
+    _mockCurrentStep = currentStep;
     mockOnStepChange = onStepChange;
     const step = steps[currentStep];
     return (
@@ -179,29 +179,29 @@ describe('GlobalContextualInfo', () => {
     mockQuestions = [];
     mockQuestionsLoading = false;
     mockQuestionsError = null;
-    mockCurrentStep = 0;
+    _mockCurrentStep = 0;
   });
 
   it('module can be imported', async () => {
-    const module = await import('./global-contextual-info-component');
-    expect(module.default).toBeDefined();
+    const testModule = await import('./global-contextual-info-component');
+    expect(testModule.default).toBeDefined();
   });
 
   it('exports GlobalContextualInfo as default export', async () => {
-    const module = await import('./global-contextual-info-component');
-    expect(typeof module.default).toBe('function');
+    const testModule = await import('./global-contextual-info-component');
+    expect(typeof testModule.default).toBe('function');
   });
 
   it('component has correct name', async () => {
-    const module = await import('./global-contextual-info-component');
-    expect(module.default.name).toBe('GlobalContextualInfo');
+    const testModule = await import('./global-contextual-info-component');
+    expect(testModule.default.name).toBe('GlobalContextualInfo');
   });
 });
 
 describe('GlobalContextualInfo structure', () => {
   it('module is a valid React component', async () => {
-    const module = await import('./global-contextual-info-component');
-    const Component = module.default;
+    const testModule = await import('./global-contextual-info-component');
+    const Component = testModule.default;
     expect(typeof Component).toBe('function');
   });
 });

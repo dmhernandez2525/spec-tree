@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 
 // Mock sonner first (hoisted to top)
 vi.mock('sonner', () => ({
@@ -66,8 +65,8 @@ vi.mock('@/lib/hooks/use-store', () => ({
 }));
 
 import { InviteUsers } from './InviteUsers';
-import { toast } from 'sonner';
-import { sendInvite, cancelInvite, resendInvite } from '@/lib/store/organization-slice';
+import { toast as _toast } from 'sonner';
+import { sendInvite as _sendInvite, cancelInvite as _cancelInvite, resendInvite as _resendInvite } from '@/lib/store/organization-slice';
 
 describe('InviteUsers', () => {
   const defaultProps = {

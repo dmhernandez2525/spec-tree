@@ -126,7 +126,7 @@ vi.mock('lucide-react', () => ({
 
 // Import after mocks
 import Config from './config';
-import { updateSelectedModel } from '../../../../lib/store/sow-slice';
+import { updateSelectedModel as _updateSelectedModel } from '../../../../lib/store/sow-slice';
 
 describe('Config Component', () => {
   beforeEach(() => {

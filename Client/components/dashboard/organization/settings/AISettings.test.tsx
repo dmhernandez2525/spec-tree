@@ -71,7 +71,7 @@ vi.mock('@/components/ui/form', () => {
   return {
     Form: ({ children, ...props }: any) => {
       // Extract only data-testid and pass onSubmit to a wrapper div
-      const { onSubmit, ...restProps } = props;
+      const { onSubmit: _onSubmit, ...restProps } = props;
       return <div data-testid="form" {...restProps}>{children}</div>;
     },
     FormControl: ({ children }: any) => <div data-testid="form-control">{children}</div>,

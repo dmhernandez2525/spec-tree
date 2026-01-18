@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { PermissionsDrawer } from './PermissionsDrawer';
 import type { Organization, OrganizationSubscription } from '@/types/organization';
 

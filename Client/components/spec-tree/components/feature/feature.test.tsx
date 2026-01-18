@@ -192,7 +192,7 @@ vi.mock('lucide-react', () => ({
 
 // Import after mocks
 import Feature from './feature';
-import { FeatureType, EpicType, UserStoryType, FeatureFields } from '../../lib/types/work-items';
+import { FeatureType, EpicType, UserStoryType } from '../../lib/types/work-items';
 import { useAcceptanceCriteria } from '../../lib/hooks/use-acceptance-criteria';
 
 // Create mock data
@@ -939,7 +939,7 @@ describe('Feature Form State', () => {
 
     // Check form is reset
     const inputs = screen.getAllByRole('textbox');
-    inputs.forEach((input) => {
+    inputs.forEach((_input) => {
       // Note: Some fields may have default values
     });
   });

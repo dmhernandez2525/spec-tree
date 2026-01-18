@@ -30,7 +30,7 @@ vi.mock('@/components/ui/button', () => ({
 }));
 
 vi.mock('@/components/ui/dialog', () => ({
-  Dialog: ({ children, open, onOpenChange }: any) => (
+  Dialog: ({ children, open, _onOpenChange }: any) => (
     <div data-testid="dialog" data-open={open}>
       {children}
     </div>

@@ -182,7 +182,7 @@ describe('demo-slice', () => {
 
       // The reducer checks config.persistSettings before loading
       // Since initial state has persistSettings: true, it should work
-      const newState = demoReducer(initialState, loadDemoSettings());
+      const _newState = demoReducer(initialState, loadDemoSettings());
 
       // Verify getItem was called
       expect(localStorageMock.getItem).toHaveBeenCalledWith('spectree-demo-mode');

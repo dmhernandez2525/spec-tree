@@ -1,8 +1,8 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Toaster } from './toaster';
-import { useToast, toast } from '@/lib/hooks/use-toast';
+import { useToast } from '@/lib/hooks/use-toast';
 
 // Mock the useToast hook
 vi.mock('@/lib/hooks/use-toast', () => ({

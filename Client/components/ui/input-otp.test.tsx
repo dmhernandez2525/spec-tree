@@ -3,23 +3,28 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 // Mock the input-otp library
-vi.mock('input-otp', () => ({
-  OTPInput: React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'> & { containerClassName?: string }>(
+vi.mock('input-otp', () => {
+  const MockOTPInput = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'> & { containerClassName?: string }>(
     ({ className, containerClassName, children, ...props }, ref) => (
       <div ref={ref} data-testid="otp-input" className={containerClassName} {...props}>
         <input className={className} />
         {children}
       </div>
     )
-  ),
-  OTPInputContext: React.createContext({
-    slots: Array(6).fill(null).map((_, i) => ({
-      char: i < 3 ? String(i + 1) : '',
-      hasFakeCaret: i === 3,
-      isActive: i === 3,
-    })),
-  }),
-}));
+  );
+  MockOTPInput.displayName = 'OTPInput';
+
+  return {
+    OTPInput: MockOTPInput,
+    OTPInputContext: React.createContext({
+      slots: Array(6).fill(null).map((_, i) => ({
+        char: i < 3 ? String(i + 1) : '',
+        hasFakeCaret: i === 3,
+        isActive: i === 3,
+      })),
+    }),
+  };
+});
 
 // Mock DashIcon
 vi.mock('@radix-ui/react-icons', () => ({

@@ -13,25 +13,34 @@ vi.mock('@radix-ui/react-slider', () => {
   );
   MockRoot.displayName = 'Slider';
 
+  const MockTrack = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
+    ({ className, children, ...props }, ref) => (
+      <span ref={ref} className={className} data-testid="slider-track" {...props}>
+        {children}
+      </span>
+    )
+  );
+  MockTrack.displayName = 'SliderTrack';
+
+  const MockRange = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
+    ({ className, ...props }, ref) => (
+      <span ref={ref} className={className} data-testid="slider-range" {...props} />
+    )
+  );
+  MockRange.displayName = 'SliderRange';
+
+  const MockThumb = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
+    ({ className, ...props }, ref) => (
+      <span ref={ref} className={className} data-testid="slider-thumb" {...props} />
+    )
+  );
+  MockThumb.displayName = 'SliderThumb';
+
   return {
     Root: MockRoot,
-    Track: React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
-      ({ className, children, ...props }, ref) => (
-        <span ref={ref} className={className} data-testid="slider-track" {...props}>
-          {children}
-        </span>
-      )
-    ),
-    Range: React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
-      ({ className, ...props }, ref) => (
-        <span ref={ref} className={className} data-testid="slider-range" {...props} />
-      )
-    ),
-    Thumb: React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
-      ({ className, ...props }, ref) => (
-        <span ref={ref} className={className} data-testid="slider-thumb" {...props} />
-      )
-    ),
+    Track: MockTrack,
+    Range: MockRange,
+    Thumb: MockThumb,
   };
 });
 

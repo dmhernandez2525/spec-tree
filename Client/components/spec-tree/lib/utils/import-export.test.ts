@@ -554,7 +554,7 @@ Epic,epic-1,Epic One,Description,`;
   });
 
   describe('downloadFile', () => {
-    let originalDocument: typeof document;
+    let _originalDocument: typeof document;
     let mockLink: Partial<HTMLAnchorElement>;
     let createObjectURLSpy: ReturnType<typeof vi.fn>;
     let revokeObjectURLSpy: ReturnType<typeof vi.fn>;

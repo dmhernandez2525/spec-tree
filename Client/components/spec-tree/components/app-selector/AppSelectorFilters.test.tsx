@@ -1,11 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
 vi.mock('date-fns', () => ({
-  format: vi.fn((date: Date, formatStr: string) => {
+  format: vi.fn((date: Date, _formatStr: string) => {
     const month = date.toLocaleString('en-US', { month: 'short' });
     const day = date.getDate();
     return `${month} ${day}`;
@@ -19,7 +19,7 @@ vi.mock('lucide-react', () => ({
 }));
 
 vi.mock('@/components/ui/select', () => ({
-  Select: ({ children, value, onValueChange }: React.PropsWithChildren<{ value?: string; onValueChange?: (value: string) => void }>) => (
+  Select: ({ children, value, _onValueChange }: React.PropsWithChildren<{ value?: string; _onValueChange?: (value: string) => void }>) => (
     <div data-testid="select" data-value={value}>
       {children}
     </div>
@@ -37,7 +37,7 @@ vi.mock('@/components/ui/select', () => ({
 vi.mock('@/components/ui/popover', () => ({
   Popover: ({ children }: React.PropsWithChildren) => <div data-testid="popover">{children}</div>,
   PopoverContent: ({ children }: React.PropsWithChildren) => <div data-testid="popover-content">{children}</div>,
-  PopoverTrigger: ({ children, asChild }: React.PropsWithChildren<{ asChild?: boolean }>) => (
+  PopoverTrigger: ({ children, _asChild }: React.PropsWithChildren<{ _asChild?: boolean }>) => (
     <div data-testid="popover-trigger">{children}</div>
   ),
 }));
@@ -51,7 +51,7 @@ vi.mock('@/components/ui/button', () => ({
 }));
 
 vi.mock('@/components/ui/calendar', () => ({
-  Calendar: ({ mode, selected, onSelect }: { mode: string; selected?: Date; onSelect?: (date: Date | undefined) => void }) => (
+  Calendar: ({ mode, _selected, onSelect }: { mode: string; _selected?: Date; onSelect?: (date: Date | undefined) => void }) => (
     <div data-testid="calendar" data-mode={mode}>
       <button data-testid="select-date" onClick={() => onSelect?.(new Date('2024-01-15'))}>
         Select Date
@@ -81,7 +81,7 @@ vi.mock('@/components/ui/checkbox', () => ({
 
 // Import after mocks
 import AppSelectorFilters from './AppSelectorFilters';
-import { SearchFilters, AppTag, AppStatus } from '@/types/app';
+import { SearchFilters, AppTag } from '@/types/app';
 
 // Create mock data
 const createMockFilters = (overrides?: Partial<SearchFilters>): SearchFilters => ({

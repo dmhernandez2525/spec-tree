@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import { MemberManagement } from './MemberManagement';
 
 // Mock dispatch function that can be controlled
@@ -59,7 +58,7 @@ vi.mock('sonner', () => ({
 
 import { toast } from 'sonner';
 
-const mockToast = toast as unknown as {
+const _mockToast = toast as unknown as {
   success: ReturnType<typeof vi.fn>;
   error: ReturnType<typeof vi.fn>;
 };

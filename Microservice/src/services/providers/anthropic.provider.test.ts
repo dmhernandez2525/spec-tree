@@ -63,7 +63,7 @@ describe('AnthropicProvider', () => {
     });
 
     it('generates completion successfully', async () => {
-      const Anthropic = require('@anthropic-ai/sdk');
+      const Anthropic = jest.requireMock('@anthropic-ai/sdk');
       const mockCreate = jest.fn().mockResolvedValue({
         content: [{ type: 'text', text: 'Hello from Claude!' }],
         usage: { input_tokens: 5, output_tokens: 4 },
@@ -104,7 +104,7 @@ describe('AnthropicProvider', () => {
     });
 
     it('throws error when no text content in response', async () => {
-      const Anthropic = require('@anthropic-ai/sdk');
+      const Anthropic = jest.requireMock('@anthropic-ai/sdk');
       const mockCreate = jest.fn().mockResolvedValue({
         content: [{ type: 'tool_use', id: '123' }],
         usage: { input_tokens: 5, output_tokens: 0 },

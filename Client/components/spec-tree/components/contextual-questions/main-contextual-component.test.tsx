@@ -37,7 +37,7 @@ vi.mock('./global-contextual-info-component', () => ({
 }));
 
 vi.mock('./workitems-contextual-info-component', () => ({
-  default: ({ workItemType, workItem, onClose }: { workItemType: string; workItem?: unknown; onClose?: () => void }) => (
+  default: ({ workItemType, _workItem, onClose }: { workItemType: string; _workItem?: unknown; onClose?: () => void }) => (
     <div data-testid="workitems-contextual-info" data-work-item-type={workItemType}>
       WorkitemsContextualInfo - {workItemType}
       {onClose && <button onClick={onClose} data-testid="workitem-close-btn">Close</button>}
@@ -51,25 +51,25 @@ describe('MainContextualComponent', () => {
   });
 
   it('module can be imported', async () => {
-    const module = await import('./main-contextual-component');
-    expect(module.default).toBeDefined();
+    const testModule = await import('./main-contextual-component');
+    expect(testModule.default).toBeDefined();
   });
 
   it('exports MainContextualComponent as default export', async () => {
-    const module = await import('./main-contextual-component');
-    expect(typeof module.default).toBe('function');
+    const testModule = await import('./main-contextual-component');
+    expect(typeof testModule.default).toBe('function');
   });
 
   it('component has correct name', async () => {
-    const module = await import('./main-contextual-component');
-    expect(module.default.name).toBe('MainContextualComponent');
+    const testModule = await import('./main-contextual-component');
+    expect(testModule.default.name).toBe('MainContextualComponent');
   });
 });
 
 describe('MainContextualComponent structure', () => {
   it('module is a valid React component', async () => {
-    const module = await import('./main-contextual-component');
-    const Component = module.default;
+    const testModule = await import('./main-contextual-component');
+    const Component = testModule.default;
     expect(typeof Component).toBe('function');
   });
 });

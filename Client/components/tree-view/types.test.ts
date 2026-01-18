@@ -51,6 +51,7 @@ describe('types.ts', () => {
 
     it('allows all valid work item types in an array', () => {
       const allTypes: WorkItemType[] = ['epic', 'feature', 'userStory', 'task'];
+      // Verify expression is valid by checking length
       expect(allTypes).toHaveLength(4);
     });
   });
@@ -154,7 +155,7 @@ describe('types.ts', () => {
       const props: TreeViewProps = {
         items: [],
         onReorder: () => {},
-        renderItem: (item, depth) => null,
+        renderItem: (_item, _depth) => null,
       };
 
       expect(typeof props.renderItem).toBe('function');
@@ -214,8 +215,8 @@ describe('types.ts', () => {
         depth: 2,
         isActive: true,
         isOver: false,
-        renderContent: (item, depth) => null,
-        onToggleExpand: (id) => {},
+        renderContent: (_item, _depth) => null,
+        onToggleExpand: (_id) => {},
         isExpanded: true,
       };
 
@@ -318,7 +319,7 @@ describe('types.ts', () => {
 
     it('supports async onReorder function', () => {
       const options: UseTreeDragDropOptions = {
-        onReorder: async (payload) => {
+        onReorder: async (_payload) => {
           await Promise.resolve();
         },
       };

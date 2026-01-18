@@ -2,7 +2,7 @@
  * Tests for StrapiService
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
 import { strapiService } from './strapi-service';
 
@@ -560,6 +560,7 @@ describe('StrapiService', () => {
       vi.resetModules();
       const { strapiService: service } = await import('./strapi-service');
 
+      // originalDocument is intentionally unused - we just need to call the function
       await service.updateTask('task-1', { title: 'Updated Task' });
 
       expect(mockInstance.put).toHaveBeenCalledWith(
@@ -809,7 +810,7 @@ describe('StrapiService', () => {
       vi.resetModules();
       const { strapiService: service } = await import('./strapi-service');
 
-      const result = await service.fetchAllAppData('app-123');
+      await service.fetchAllAppData('app-123');
 
       expect(mockInstance.get).toHaveBeenCalledWith(
         '/apps/app-123',

@@ -72,7 +72,7 @@ describe('GeminiProvider', () => {
     });
 
     it('generates completion successfully', async () => {
-      const { GoogleGenerativeAI } = require('@google/generative-ai');
+      const { GoogleGenerativeAI } = jest.requireMock('@google/generative-ai');
       const mockSendMessage = jest.fn().mockResolvedValue({
         response: {
           text: () => 'Hello from Gemini!',
@@ -114,7 +114,7 @@ describe('GeminiProvider', () => {
     });
 
     it('throws error when last message is not from user', async () => {
-      const { GoogleGenerativeAI } = require('@google/generative-ai');
+      const { GoogleGenerativeAI } = jest.requireMock('@google/generative-ai');
       const mockStartChat = jest.fn().mockReturnValue({
         sendMessage: jest.fn(),
       });

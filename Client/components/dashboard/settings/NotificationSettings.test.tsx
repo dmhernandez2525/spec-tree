@@ -14,7 +14,7 @@ vi.mock('sonner', () => ({
 }));
 
 // Track form submit handler
-let formSubmitHandler: ((data: any) => void) | null = null;
+let _formSubmitHandler: ((data: unknown) => void) | null = null;
 
 // Mock react-hook-form
 vi.mock('react-hook-form', () => {
@@ -22,7 +22,7 @@ vi.mock('react-hook-form', () => {
     useForm: () => ({
       control: {},
       handleSubmit: (fn: any) => {
-        formSubmitHandler = fn;
+        _formSubmitHandler = fn;
         return (e: any) => {
           e?.preventDefault?.();
           fn({
@@ -81,12 +81,12 @@ vi.mock('@/components/ui/card', () => ({
 vi.mock('@/components/ui/form', () => {
   return {
     Form: ({ children, ...props }: any) => {
-      const { onSubmit, ...restProps } = props;
+      const { onSubmit: _onSubmit, ...restProps } = props;
       return <div data-testid="form" {...restProps}>{children}</div>;
     },
     FormControl: ({ children }: any) => <div data-testid="form-control">{children}</div>,
     FormDescription: ({ children }: any) => <p data-testid="form-description">{children}</p>,
-    FormField: ({ render, name }: any) =>
+    FormField: ({ render, _name }: any) =>
       render({
         field: { value: true, onChange: vi.fn(), onBlur: vi.fn() },
         fieldState: { error: undefined },
@@ -133,7 +133,7 @@ vi.mock('@/components/ui/separator', () => ({
 describe('NotificationSettings', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    formSubmitHandler = null;
+    _formSubmitHandler = null;
   });
 
   afterEach(async () => {

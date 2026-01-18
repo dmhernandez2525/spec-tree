@@ -3,25 +3,36 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 // Mock react-resizable-panels
-vi.mock('react-resizable-panels', () => ({
-  Panel: React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(
+vi.mock('react-resizable-panels', () => {
+  const MockPanel = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(
     (props, ref) => <div ref={ref} data-testid="resizable-panel" {...props} />
-  ),
-  PanelGroup: React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(
+  );
+  MockPanel.displayName = 'Panel';
+
+  const MockPanelGroup = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(
     ({ className, children, ...props }, ref) => (
       <div ref={ref} className={className} data-testid="resizable-panel-group" {...props}>
         {children}
       </div>
     )
-  ),
-  PanelResizeHandle: React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(
+  );
+  MockPanelGroup.displayName = 'PanelGroup';
+
+  const MockPanelResizeHandle = React.forwardRef<HTMLDivElement, React.ComponentPropsWithoutRef<'div'>>(
     ({ className, children, ...props }, ref) => (
       <div ref={ref} className={className} data-testid="resizable-handle" {...props}>
         {children}
       </div>
     )
-  ),
-}));
+  );
+  MockPanelResizeHandle.displayName = 'PanelResizeHandle';
+
+  return {
+    Panel: MockPanel,
+    PanelGroup: MockPanelGroup,
+    PanelResizeHandle: MockPanelResizeHandle,
+  };
+});
 
 // Mock DragHandleDots2Icon
 vi.mock('@radix-ui/react-icons', () => ({

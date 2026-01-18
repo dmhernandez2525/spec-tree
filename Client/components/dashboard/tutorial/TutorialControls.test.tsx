@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { TutorialControls } from './TutorialControls';
 
 // Mock TutorialContext
@@ -74,7 +74,7 @@ vi.mock('@/components/ui/button', () => ({
 
 vi.mock('@/components/ui/dropdown-menu', () => ({
   DropdownMenu: ({ children }: any) => <div data-testid="dropdown-menu">{children}</div>,
-  DropdownMenuTrigger: ({ children, asChild }: any) => <div data-testid="dropdown-trigger">{children}</div>,
+  DropdownMenuTrigger: ({ children, _asChild }: any) => <div data-testid="dropdown-trigger">{children}</div>,
   DropdownMenuContent: ({ children }: any) => <div data-testid="dropdown-content">{children}</div>,
   DropdownMenuItem: ({ children, onClick }: any) => (
     <div onClick={onClick} data-testid="dropdown-item">{children}</div>
@@ -84,13 +84,13 @@ vi.mock('@/components/ui/dropdown-menu', () => ({
 
 vi.mock('@/components/ui/tooltip', () => ({
   Tooltip: ({ children }: any) => <div data-testid="tooltip">{children}</div>,
-  TooltipTrigger: ({ children, asChild }: any) => <div data-testid="tooltip-trigger">{children}</div>,
+  TooltipTrigger: ({ children, _asChild }: any) => <div data-testid="tooltip-trigger">{children}</div>,
   TooltipContent: ({ children }: any) => <div data-testid="tooltip-content">{children}</div>,
 }));
 
 vi.mock('@/components/ui/dialog', () => ({
   Dialog: ({ children }: any) => <div data-testid="dialog">{children}</div>,
-  DialogTrigger: ({ children, asChild }: any) => <div data-testid="dialog-trigger">{children}</div>,
+  DialogTrigger: ({ children, _asChild }: any) => <div data-testid="dialog-trigger">{children}</div>,
   DialogContent: ({ children }: any) => <div data-testid="dialog-content">{children}</div>,
   DialogHeader: ({ children }: any) => <div data-testid="dialog-header">{children}</div>,
   DialogTitle: ({ children }: any) => <h2 data-testid="dialog-title">{children}</h2>,

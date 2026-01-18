@@ -12,7 +12,8 @@ vi.mock('sonner', () => ({
 
 // Mock react-hook-form to avoid concurrent mode issues
 vi.mock('react-hook-form', () => {
-  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const _React = require('react');
   return {
     useForm: () => ({
       control: {},
@@ -46,7 +47,8 @@ vi.mock('@hookform/resolvers/zod', () => ({
 
 // Mock Form components
 vi.mock('@/components/ui/form', () => {
-  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const _React = require('react');
   return {
     Form: ({ children, ...props }: any) => <form {...props}>{children}</form>,
     FormControl: ({ children }: any) => <div>{children}</div>,
@@ -65,9 +67,10 @@ vi.mock('@/components/ui/form', () => {
 
 // Mock Select component
 vi.mock('@/components/ui/select', () => {
-  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const _React = require('react');
   return {
-    Select: ({ children, onValueChange, defaultValue }: any) => (
+    Select: ({ children, _onValueChange, _defaultValue }: any) => (
       <div data-testid="select">{children}</div>
     ),
     SelectContent: ({ children }: any) => <div>{children}</div>,

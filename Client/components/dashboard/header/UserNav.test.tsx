@@ -1,5 +1,5 @@
 import { it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { UserNav } from './UserNav';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -84,7 +84,7 @@ export const userNavTests = () => {
   });
 
   it('renders button with correct variant', () => {
-    const { container } = renderWithStore(<UserNav user={mockUser} />);
+    const { container: _container } = renderWithStore(<UserNav user={mockUser} />);
 
     const button = screen.getByLabelText('User menu');
     expect(button).toHaveClass('rounded-full');

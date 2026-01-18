@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 // Mock all dependencies first
@@ -187,7 +187,7 @@ vi.mock('lucide-react', () => ({
 
 // Import after mocks
 import UserStory from './user-story';
-import { UserStoryType, FeatureType, EpicType, TaskType, UserStoryFields } from '../../lib/types/work-items';
+import { UserStoryType, FeatureType, EpicType, TaskType } from '../../lib/types/work-items';
 import { useAcceptanceCriteria } from '../../lib/hooks/use-acceptance-criteria';
 
 // Create mock data
@@ -1024,7 +1024,7 @@ describe('UserStory Form State', () => {
 
     // Check form is reset
     const inputs = screen.getAllByRole('textbox');
-    inputs.forEach((input) => {
+    inputs.forEach((_input) => {
       // Note: Some fields may have default values
     });
   });

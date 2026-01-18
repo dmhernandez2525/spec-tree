@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, cleanup, act } from '@testing-library/react';
+import { render, screen, cleanup, act } from '@testing-library/react';
 import DesignSystemManager from './ThemeConfigurator';
 
 // Mock lucide-react

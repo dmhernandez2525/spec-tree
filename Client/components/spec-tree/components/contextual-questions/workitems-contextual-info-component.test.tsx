@@ -88,7 +88,7 @@ vi.mock('@/components/ui/separator', () => ({
 }));
 
 // Mock wizard with step tracking
-let mockCurrentStep = 0;
+let _mockCurrentStep = 0;
 let mockOnStepChange: ((step: number) => void) | undefined;
 vi.mock('../wizard/wizard', () => ({
   default: ({ steps, currentStep, onStepChange, loading, className }: {
@@ -105,7 +105,7 @@ vi.mock('../wizard/wizard', () => ({
     loading?: boolean;
     className?: string;
   }) => {
-    mockCurrentStep = currentStep;
+    _mockCurrentStep = currentStep;
     mockOnStepChange = onStepChange;
     const step = steps[currentStep];
     return (
@@ -253,29 +253,29 @@ describe('WorkitemsContextualInfo', () => {
     mockUpdatedWorkItem = null;
     mockUpdateLoading = false;
     mockUpdateError = null;
-    mockCurrentStep = 0;
+    _mockCurrentStep = 0;
   });
 
   it('module can be imported', async () => {
-    const module = await import('./workitems-contextual-info-component');
-    expect(module.default).toBeDefined();
+    const testModule = await import('./workitems-contextual-info-component');
+    expect(testModule.default).toBeDefined();
   });
 
   it('exports WorkitemsContextualInfo as default export', async () => {
-    const module = await import('./workitems-contextual-info-component');
-    expect(typeof module.default).toBe('function');
+    const testModule = await import('./workitems-contextual-info-component');
+    expect(typeof testModule.default).toBe('function');
   });
 
   it('component has correct name', async () => {
-    const module = await import('./workitems-contextual-info-component');
-    expect(module.default.name).toBe('WorkitemsContextualInfo');
+    const testModule = await import('./workitems-contextual-info-component');
+    expect(testModule.default.name).toBe('WorkitemsContextualInfo');
   });
 });
 
 describe('WorkitemsContextualInfo structure', () => {
   it('module is a valid React component', async () => {
-    const module = await import('./workitems-contextual-info-component');
-    const Component = module.default;
+    const testModule = await import('./workitems-contextual-info-component');
+    const Component = testModule.default;
     expect(typeof Component).toBe('function');
   });
 });

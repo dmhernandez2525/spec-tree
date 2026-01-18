@@ -30,7 +30,7 @@ vi.mock('@/components/ui/card', () => ({
 }));
 
 vi.mock('@/components/ui/tabs', () => ({
-  Tabs: ({ children, value, onValueChange }: any) => (
+  Tabs: ({ children, value, _onValueChange }: any) => (
     <div data-testid="tabs" data-value={value}>
       {children}
     </div>

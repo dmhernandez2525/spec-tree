@@ -65,7 +65,7 @@ describe('OpenAIProvider', () => {
     });
 
     it('generates completion successfully', async () => {
-      const OpenAI = require('openai');
+      const OpenAI = jest.requireMock('openai');
       const mockCreate = jest.fn().mockResolvedValue({
         choices: [{ message: { content: 'Hello back!' }, finish_reason: 'stop' }],
         usage: { prompt_tokens: 5, completion_tokens: 3, total_tokens: 8 },
@@ -97,7 +97,7 @@ describe('OpenAIProvider', () => {
     });
 
     it('throws error when no content in response', async () => {
-      const OpenAI = require('openai');
+      const OpenAI = jest.requireMock('openai');
       const mockCreate = jest.fn().mockResolvedValue({
         choices: [{ message: { content: null }, finish_reason: 'stop' }],
       });

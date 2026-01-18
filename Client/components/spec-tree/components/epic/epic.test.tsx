@@ -553,7 +553,7 @@ describe('Epic Component', () => {
       // Error should be cleared during loading
       await waitFor(() => {
         // The error will be shown twice if still present, check alerts count
-        const alerts = screen.queryAllByText('Failed to generate features. Please try again.');
+        const _alerts = screen.queryAllByText('Failed to generate features. Please try again.');
         // After successful regeneration, there should be no error
       });
     });
