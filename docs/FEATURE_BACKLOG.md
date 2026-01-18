@@ -206,6 +206,18 @@ Each feature will receive its own branch and pull request when implemented, with
 | F2.1.15 | Epic-level export | Epic specification documents | Low | Planned |
 | F2.1.16 | Full project export | Complete hierarchy export | Medium | Partial |
 
+### P1 - High Priority (Project Generator Integration)
+
+| ID | Feature | Description | Effort | Status |
+|----|---------|-------------|--------|--------|
+| F2.1.17 | Universal JSON export | Export complete project context in Universal JSON format for Project Generator integration | Medium | Planned |
+| F2.1.18 | LifeContext import | Import Context Packets from LifeContext to enrich specifications with motivation/background | Medium | Planned |
+| F2.1.19 | Context packet viewer | UI to view and manage imported LifeContext packets | Low | Planned |
+| F2.1.20 | Project Generator trigger | One-click export to Project Generator format with LifeContext merge | Low | Planned |
+| F2.1.21 | CodeReview AI config export | Generate `.codereview-ai.yaml` with path instructions from SDDs | Medium | Planned |
+
+**Note:** See `docs/integrations/PROJECT_GENERATOR_INTEGRATION.md` for full integration details.
+
 ## 2.2 High-Impact, Medium-Effort Integrations
 
 ### P1 - High Priority
