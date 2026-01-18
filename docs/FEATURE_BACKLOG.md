@@ -281,6 +281,30 @@ Each feature will receive its own branch and pull request when implemented, with
 | F2.4.11 | GitHub Discussions sync | Link discussions to items | Medium | Planned |
 | F2.4.12 | Branch naming suggestions | Generate branch names from tasks | Low | Planned |
 
+## 2.5 Code Review Tool Integrations
+
+### P1 - High Priority
+
+| ID | Feature | Description | Effort | Target Tool | Status |
+|----|---------|-------------|--------|-------------|--------|
+| F2.5.1 | CodeRabbit config export | Generate `.coderabbit.yaml` from SDD | Low | CodeRabbit | Planned |
+| F2.5.2 | CodeRabbit path instructions | Auto-generate path-specific review rules from specs | Medium | CodeRabbit | Planned |
+| F2.5.3 | PR context injection | Include relevant SDD context in PR descriptions for AI review | Low | CodeRabbit | Planned |
+| F2.5.4 | Review checklist generation | Generate PR review checklists from acceptance criteria | Low | CodeRabbit | Planned |
+| F2.5.5 | SonarQube quality gates | Generate quality gate rules from SDD requirements | Medium | SonarQube | Planned |
+| F2.5.6 | Code coverage thresholds | Set coverage requirements per feature | Low | Codecov | Planned |
+
+### P2 - Medium Priority
+
+| ID | Feature | Description | Effort | Target Tool | Status |
+|----|---------|-------------|--------|-------------|--------|
+| F2.5.7 | CodeRabbit learning rules | Export patterns as learning rules for AI | Medium | CodeRabbit | Planned |
+| F2.5.8 | Danger.js rules export | Generate Danger rules from SDD conventions | Medium | Danger | Planned |
+| F2.5.9 | ESLint rules generation | Generate custom lint rules from coding standards | High | ESLint | Planned |
+| F2.5.10 | Security review rules | Generate security-focused review rules | Medium | CodeRabbit/SonarQube | Planned |
+| F2.5.11 | Architecture decision export | Export ADRs for code review context | Medium | All | Planned |
+| F2.5.12 | Review feedback loop | Import review comments to improve specs | High | CodeRabbit | Planned |
+
 ---
 
 # Phase 3: Advanced Integrations (Q3 2026)
@@ -492,7 +516,7 @@ Each feature will receive its own branch and pull request when implemented, with
 - Template System: 18 features
 - Import/Export: 27 features
 
-## Category 2: AI Tool Integrations (152 features)
+## Category 2: AI Tool Integrations (164 features)
 
 ### Subcategories
 - Cursor Integration: 15 features
@@ -504,6 +528,7 @@ Each feature will receive its own branch and pull request when implemented, with
 - Other AI Tools: 25 features
 - Universal Export Formats: 20 features
 - MCP Server: 24 features
+- Code Review Tools (CodeRabbit, SonarQube, etc.): 12 features
 
 ## Category 3: PM Tool Integrations (85 features)
 
