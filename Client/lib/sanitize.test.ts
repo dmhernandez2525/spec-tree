@@ -69,18 +69,17 @@ describe('sanitize utilities', () => {
   });
 
   describe('sanitizeCss', () => {
-    it('returns empty string on server side (no window)', async () => {
+    it('works on server side (no window) - pure regex processing', async () => {
       vi.stubGlobal('window', undefined);
 
       vi.resetModules();
       const { sanitizeCss } = await import('./sanitize');
 
-      expect(sanitizeCss('.class { color: red; }')).toBe('');
+      // sanitizeCss uses only regex, so it works on both server and client
+      expect(sanitizeCss('.class { color: red; }')).toBe('.class { color: red; }');
     });
 
     it('removes javascript: URLs from CSS', async () => {
-      vi.stubGlobal('window', { document: {} });
-
       vi.resetModules();
       const { sanitizeCss } = await import('./sanitize');
 
@@ -91,8 +90,6 @@ describe('sanitize utilities', () => {
     });
 
     it('removes expression() from CSS', async () => {
-      vi.stubGlobal('window', { document: {} });
-
       vi.resetModules();
       const { sanitizeCss } = await import('./sanitize');
 
@@ -103,8 +100,6 @@ describe('sanitize utilities', () => {
     });
 
     it('removes @import statements from CSS', async () => {
-      vi.stubGlobal('window', { document: {} });
-
       vi.resetModules();
       const { sanitizeCss } = await import('./sanitize');
 
@@ -115,8 +110,6 @@ describe('sanitize utilities', () => {
     });
 
     it('removes data: URLs from CSS', async () => {
-      vi.stubGlobal('window', { document: {} });
-
       vi.resetModules();
       const { sanitizeCss } = await import('./sanitize');
 
@@ -127,8 +120,6 @@ describe('sanitize utilities', () => {
     });
 
     it('preserves valid CSS', async () => {
-      vi.stubGlobal('window', { document: {} });
-
       vi.resetModules();
       const { sanitizeCss } = await import('./sanitize');
 

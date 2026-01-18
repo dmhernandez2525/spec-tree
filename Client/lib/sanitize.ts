@@ -52,12 +52,10 @@ export function sanitizeHtml(dirty: string): string {
  * @returns Sanitized CSS string safe for <style> tag
  */
 export function sanitizeCss(dirty: string): string {
-  if (typeof window === 'undefined') {
-    return '';
-  }
   // Remove any script or expression injections from CSS
   // CSS cannot contain javascript: URLs or expression() in modern browsers
   // but we sanitize anyway for safety
+  // Note: This uses only regex, so it's safe to run on both server and client
   return dirty
     .replace(/javascript:/gi, '')
     .replace(/expression\s*\(/gi, '')
