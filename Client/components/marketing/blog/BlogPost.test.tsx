@@ -44,8 +44,20 @@ describe('BlogPost', () => {
     title: 'Test Blog Post',
     description: 'This is a test blog post description',
     entireBlogPage: '# Test Content\n\nThis is the blog content.',
+    createdAt: '2024-01-10T10:00:00.000Z',
     updatedAt: '2024-01-15T10:00:00.000Z',
+    publishedAt: '2024-01-10T12:00:00.000Z',
     category: { name: 'Technology' },
+    createdBy: {
+      data: {
+        attributes: { firstname: 'John', lastname: 'Doe', createdAt: '2024-01-01T00:00:00.000Z' },
+      },
+    },
+    updatedBy: {
+      data: {
+        attributes: { firstname: 'Jane', lastname: 'Smith', updatedAt: '2024-01-15T10:00:00.000Z' },
+      },
+    },
   };
 
   beforeEach(() => {
@@ -58,8 +70,7 @@ describe('BlogPost', () => {
   });
 
   it('renders blog post not found when post is null', () => {
-    // @ts-expect-error - testing null case
-    render(<BlogPost post={null} />);
+    render(<BlogPost post={null as unknown as Parameters<typeof BlogPost>[0]['post']} />);
 
     expect(screen.getByText('Blog post not found.')).toBeInTheDocument();
   });

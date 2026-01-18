@@ -22,7 +22,7 @@ describe('useContactPageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchContactPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchContactPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useContactPageData());
 
@@ -35,7 +35,7 @@ describe('useContactPageData', () => {
       email: 'contact@example.com',
     };
 
-    vi.mocked(fetchContactPageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchContactPageData).mockResolvedValue({ data: mockData } as any);
 
     const { result } = renderHook(() => useContactPageData());
 
@@ -47,7 +47,7 @@ describe('useContactPageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchContactPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchContactPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useContactPageData());
 
@@ -73,7 +73,7 @@ describe('useContactPageData', () => {
   });
 
   it('calls fetchContactPageData on mount', async () => {
-    vi.mocked(fetchContactPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchContactPageData).mockResolvedValue({ data: null } as any);
 
     renderHook(() => useContactPageData());
 

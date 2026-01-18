@@ -38,7 +38,7 @@ vi.mock('@/api/fetchData', () => ({
 }));
 
 describe('user-slice', () => {
-  const mockUser: UserAttributes = {
+  const mockUser = {
     id: 1,
     username: 'testuser',
     email: 'test@example.com',
@@ -47,7 +47,7 @@ describe('user-slice', () => {
     blocked: false,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
-  };
+  } as unknown as UserAttributes;
 
   const initialState = {
     user: null,
@@ -195,7 +195,7 @@ describe('user-slice', () => {
     it('successfully refreshes user when token exists', async () => {
       localStorageMock.getItem.mockReturnValueOnce('existing-token');
       vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(mockUser);
-      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' } as unknown as UserAttributes);
 
       const store = configureStore({
         reducer: { user: userReducer },
@@ -210,7 +210,7 @@ describe('user-slice', () => {
     it('returns false when refreshUser API returns null', async () => {
       localStorageMock.getItem.mockReturnValueOnce('existing-token');
       vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(null as unknown as UserAttributes);
-      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' } as unknown as UserAttributes);
 
       const store = configureStore({
         reducer: { user: userReducer },
@@ -261,10 +261,10 @@ describe('user-slice', () => {
     });
 
     it('calls updateUserInfo and refreshUser on dispatch', async () => {
-      vi.mocked(fetchDataModule.updateUserInfo).mockResolvedValueOnce(undefined as unknown as ReturnType<typeof fetchDataModule.updateUserInfo>);
+      vi.mocked(fetchDataModule.updateUserInfo).mockResolvedValueOnce(undefined as unknown as Awaited<ReturnType<typeof fetchDataModule.updateUserInfo>>);
       localStorageMock.getItem.mockReturnValueOnce('existing-token');
       vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(mockUser);
-      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' } as unknown as UserAttributes);
 
       const store = configureStore({
         reducer: { user: userReducer },
@@ -286,10 +286,10 @@ describe('user-slice', () => {
 
     it('updates state with refreshed user data after profile update', async () => {
       const updatedUser = { ...mockUser, username: 'updateduser' };
-      vi.mocked(fetchDataModule.updateUserInfo).mockResolvedValueOnce(undefined as unknown as ReturnType<typeof fetchDataModule.updateUserInfo>);
+      vi.mocked(fetchDataModule.updateUserInfo).mockResolvedValueOnce(undefined as unknown as Awaited<ReturnType<typeof fetchDataModule.updateUserInfo>>);
       localStorageMock.getItem.mockReturnValueOnce('existing-token');
       vi.mocked(fetchDataModule.refreshUser).mockResolvedValueOnce(updatedUser);
-      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' });
+      vi.mocked(fetchDataModule.getUserRole).mockResolvedValueOnce({ role: 'user' } as unknown as UserAttributes);
 
       const store = configureStore({
         reducer: { user: userReducer },

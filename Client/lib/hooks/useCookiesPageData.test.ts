@@ -22,7 +22,7 @@ describe('useCookiesPageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchCookiesPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchCookiesPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useCookiesPageData());
 
@@ -35,7 +35,7 @@ describe('useCookiesPageData', () => {
       content: 'Our cookie policy...',
     };
 
-    vi.mocked(fetchCookiesPageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchCookiesPageData).mockResolvedValue({ data: mockData } as any);
 
     const { result } = renderHook(() => useCookiesPageData());
 
@@ -47,7 +47,7 @@ describe('useCookiesPageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchCookiesPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchCookiesPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useCookiesPageData());
 

@@ -24,7 +24,7 @@ describe('useAboutPageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useAboutPageData());
 
@@ -37,7 +37,7 @@ describe('useAboutPageData', () => {
       description: 'About our company',
     };
 
-    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: mockData } as any);
 
     const { result } = renderHook(() => useAboutPageData());
 
@@ -49,7 +49,7 @@ describe('useAboutPageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useAboutPageData());
 
@@ -76,7 +76,7 @@ describe('useAboutPageData', () => {
   });
 
   it('calls fetchAboutPageData on mount', async () => {
-    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchAboutPageData).mockResolvedValue({ data: null } as any);
 
     renderHook(() => useAboutPageData());
 
@@ -88,7 +88,7 @@ describe('useAboutPageData', () => {
   it('sets loading to false after fetch completes', async () => {
     vi.mocked(fetchAboutPageData).mockResolvedValue({
       data: { title: 'Test' },
-    });
+    } as any);
 
     const { result } = renderHook(() => useAboutPageData());
 

@@ -193,7 +193,7 @@ describe('TrialModal', () => {
 
     it('shows loading state while processing', async () => {
       const slowOnStartTrial = vi.fn(
-        () => new Promise((resolve) => setTimeout(resolve, 100))
+        (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 100))
       );
       render(
         <TrialModal {...defaultProps} onStartTrial={slowOnStartTrial} />

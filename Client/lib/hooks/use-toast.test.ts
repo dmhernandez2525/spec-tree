@@ -276,7 +276,7 @@ describe('use-toast', () => {
         });
       });
 
-      expect(result.current.toasts.some((t) => t.action === mockAction)).toBe(true);
+      expect(result.current.toasts.some((t) => t.action === (mockAction as unknown))).toBe(true);
     });
   });
 

@@ -22,7 +22,7 @@ describe('useHomePageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchHomePageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchHomePageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useHomePageData());
 
@@ -35,7 +35,7 @@ describe('useHomePageData', () => {
       hero: { title: 'Welcome' },
     };
 
-    vi.mocked(fetchHomePageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchHomePageData).mockResolvedValue({ data: mockData } as any);
 
     const { result } = renderHook(() => useHomePageData());
 
@@ -47,7 +47,7 @@ describe('useHomePageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchHomePageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchHomePageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useHomePageData());
 
@@ -73,7 +73,7 @@ describe('useHomePageData', () => {
   });
 
   it('calls fetchHomePageData on mount', async () => {
-    vi.mocked(fetchHomePageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchHomePageData).mockResolvedValue({ data: null } as any);
 
     renderHook(() => useHomePageData());
 

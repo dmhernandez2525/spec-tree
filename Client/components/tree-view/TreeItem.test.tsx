@@ -320,7 +320,7 @@ describe('TreeItem', () => {
         transform: null,
         transition: undefined,
         isDragging: true,
-      } as ReturnType<typeof useSortable>);
+      } as unknown as ReturnType<typeof useSortable>);
 
       const item = createMockItem();
       const { container } = render(<TreeItem item={item} depth={0} />);
@@ -338,7 +338,7 @@ describe('TreeItem', () => {
         transform: { x: 10, y: 20, scaleX: 1, scaleY: 1 },
         transition: 'transform 200ms ease',
         isDragging: false,
-      } as ReturnType<typeof useSortable>);
+      } as unknown as ReturnType<typeof useSortable>);
 
       const item = createMockItem();
       render(<TreeItem item={item} depth={0} />);

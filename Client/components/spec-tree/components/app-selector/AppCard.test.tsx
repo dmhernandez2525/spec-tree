@@ -86,10 +86,11 @@ vi.mock('@/lib/utils', () => ({
 const createMockApp = (overrides?: Partial<AppExtended>): AppExtended => ({
   id: 'test-app-1',
   documentId: 'doc-1',
+  name: 'Test Application',
   applicationInformation: 'Test Application',
   globalInformation: 'This is a test application for testing purposes',
   status: 'live',
-  createdAt: new Date('2024-01-01'),
+  createdAt: '2024-01-01T00:00:00.000Z',
   modifiedAt: new Date('2024-01-15'),
   tags: [
     { id: 'tag-1', name: 'Frontend', color: '#3B82F6' },
@@ -103,11 +104,8 @@ const createMockApp = (overrides?: Partial<AppExtended>): AppExtended => ({
       lastName: 'Doe',
       email: 'john@test.com',
       role: 'Developer',
-      avatar: null,
-      isActive: true,
-      createdAt: new Date('2024-01-01'),
-      updatedAt: new Date('2024-01-01'),
-    },
+      avatar: { url: '' } as unknown as import('@/types/main').ImageAttributes,
+    } as unknown as import('@/types/user').UserAttributes,
     {
       id: 2,
       documentId: 'user-2',
@@ -115,11 +113,8 @@ const createMockApp = (overrides?: Partial<AppExtended>): AppExtended => ({
       lastName: 'Smith',
       email: 'jane@test.com',
       role: 'Designer',
-      avatar: { url: 'https://example.com/avatar.jpg' },
-      isActive: true,
-      createdAt: new Date('2024-01-01'),
-      updatedAt: new Date('2024-01-01'),
-    },
+      avatar: { url: 'https://example.com/avatar.jpg' } as unknown as import('@/types/main').ImageAttributes,
+    } as unknown as import('@/types/user').UserAttributes,
   ],
   metrics: {
     health: 85,
@@ -325,11 +320,8 @@ describe('AppCard', () => {
         lastName: 'Test',
         email: `user${i + 1}@test.com`,
         role: 'Dev',
-        avatar: null,
-        isActive: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })),
+        avatar: { url: '' } as unknown as import('@/types/main').ImageAttributes,
+      } as unknown as import('@/types/user').UserAttributes)),
     });
     render(<AppCard {...defaultProps} app={app} />);
     expect(screen.getByText('+2')).toBeInTheDocument();

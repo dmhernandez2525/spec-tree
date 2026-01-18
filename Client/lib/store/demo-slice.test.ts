@@ -7,6 +7,7 @@ import demoReducer, {
   loadDemoSettings,
   resetDemoSettings,
   DEMO_SCENARIOS,
+  type DemoFeature,
 } from './demo-slice';
 
 // Mock localStorage with window object
@@ -37,7 +38,7 @@ describe('demo-slice', () => {
     user: {
       isDemoMode: false,
       demoLevel: 'basic' as const,
-      enabledFeatures: ['mock-data', 'mock-subscriptions'] as const,
+      enabledFeatures: ['mock-data', 'mock-subscriptions'] as DemoFeature[],
       activeScenario: null,
     },
     config: {
@@ -213,7 +214,7 @@ describe('demo-slice', () => {
         user: {
           isDemoMode: true,
           demoLevel: 'developer' as const,
-          enabledFeatures: ['mock-data', 'debug-panels'] as const,
+          enabledFeatures: ['mock-data', 'debug-panels'] as DemoFeature[],
           activeScenario: 'enterprise' as const,
           lastToggled: 12345,
         },
@@ -231,7 +232,7 @@ describe('demo-slice', () => {
         user: {
           isDemoMode: true,
           demoLevel: 'developer' as const,
-          enabledFeatures: ['mock-data', 'debug-panels'] as const,
+          enabledFeatures: ['mock-data', 'debug-panels'] as DemoFeature[],
           activeScenario: 'enterprise' as const,
           lastToggled: 12345,
         },

@@ -366,7 +366,7 @@ describe('settings-slice', () => {
           },
         });
 
-        const result = await store.dispatch(updateAISettings({ defaultModel: 'gpt-4', temperature: 0.5 }));
+        const result = await store.dispatch(updateAISettings({ defaultModel: 'gpt-4' }));
 
         expect(result.type).toBe('settings/updateAISettings/fulfilled');
       });

@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useTermsPageData } from './useTermsPageData';
+import type { TermsPageAttributes } from '../../api/fetchData';
+import type { SingleApiResponse } from '../../types/main';
 
 vi.mock('../../api/fetchData', () => ({
   fetchTermsPageData: vi.fn(),
@@ -10,7 +12,7 @@ vi.mock('../data/fallback-content', () => ({
   fallbackTermsPageData: {
     title: 'Fallback Terms',
     content: 'Terms content',
-  },
+  } as unknown as TermsPageAttributes,
 }));
 
 import { fetchTermsPageData } from '../../api/fetchData';
@@ -22,7 +24,7 @@ describe('useTermsPageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchTermsPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchTermsPageData).mockResolvedValue({ data: null } as unknown as SingleApiResponse<TermsPageAttributes>);
 
     const { result } = renderHook(() => useTermsPageData());
 
@@ -33,9 +35,9 @@ describe('useTermsPageData', () => {
     const mockData = {
       title: 'Terms of Service',
       content: 'Our terms...',
-    };
+    } as unknown as TermsPageAttributes;
 
-    vi.mocked(fetchTermsPageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchTermsPageData).mockResolvedValue({ data: mockData, meta: {} });
 
     const { result } = renderHook(() => useTermsPageData());
 
@@ -47,7 +49,7 @@ describe('useTermsPageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchTermsPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchTermsPageData).mockResolvedValue({ data: null } as unknown as SingleApiResponse<TermsPageAttributes>);
 
     const { result } = renderHook(() => useTermsPageData());
 

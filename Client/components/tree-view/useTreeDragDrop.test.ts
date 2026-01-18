@@ -31,21 +31,24 @@ describe('useTreeDragDrop', () => {
     {
       id: 'epic-1',
       type: 'epic',
-      name: 'Epic 1',
+      title: 'Epic 1',
       parentId: null,
+      position: 0,
       children: [
         {
           id: 'feature-1',
           type: 'feature',
-          name: 'Feature 1',
+          title: 'Feature 1',
           parentId: 'epic-1',
+          position: 0,
           children: [],
         },
         {
           id: 'feature-2',
           type: 'feature',
-          name: 'Feature 2',
+          title: 'Feature 2',
           parentId: 'epic-1',
+          position: 1,
           children: [],
         },
       ],
@@ -53,8 +56,9 @@ describe('useTreeDragDrop', () => {
     {
       id: 'epic-2',
       type: 'epic',
-      name: 'Epic 2',
+      title: 'Epic 2',
       parentId: null,
+      position: 1,
       children: [],
     },
   ];
@@ -117,8 +121,9 @@ describe('useTreeDragDrop', () => {
       expect(result.current.activeItem).toEqual({
         id: 'feature-1',
         type: 'feature',
-        name: 'Feature 1',
+        title: 'Feature 1',
         parentId: 'epic-1',
+        position: 0,
         children: [],
       });
     });

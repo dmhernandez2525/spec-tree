@@ -542,7 +542,7 @@ describe('ForgotPasswordForm', () => {
 
   describe('component structure', () => {
     it('component has correct display name or is named export', () => {
-      expect(ForgotPasswordForm.name || ForgotPasswordForm.displayName).toBeTruthy();
+      expect(ForgotPasswordForm.name || (ForgotPasswordForm as React.FC & { displayName?: string }).displayName).toBeTruthy();
     });
 
     it('component function signature accepts no required props', () => {

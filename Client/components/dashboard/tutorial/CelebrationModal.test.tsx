@@ -61,12 +61,8 @@ describe('CelebrationModal', () => {
     description: 'This is a test achievement',
     icon: 'trophy',
     category: 'mastery',
-    unlocked: true,
-    unlockedAt: new Date(),
-    condition: {
-      type: 'task_completion',
-      value: 1,
-    },
+    requiredSteps: ['step1'],
+    unlockedAt: new Date().toISOString(),
     reward: {
       type: 'badge',
       value: 'Test Badge',

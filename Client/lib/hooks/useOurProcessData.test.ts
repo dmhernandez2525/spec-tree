@@ -22,7 +22,7 @@ describe('useOurProcessPageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchOurProcessPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchOurProcessPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useOurProcessPageData());
 
@@ -35,7 +35,7 @@ describe('useOurProcessPageData', () => {
       steps: [{ id: 1, title: 'Step 1' }],
     };
 
-    vi.mocked(fetchOurProcessPageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchOurProcessPageData).mockResolvedValue({ data: mockData } as any);
 
     const { result } = renderHook(() => useOurProcessPageData());
 
@@ -47,7 +47,7 @@ describe('useOurProcessPageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchOurProcessPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchOurProcessPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useOurProcessPageData());
 

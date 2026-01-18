@@ -33,7 +33,7 @@ describe('useResources', () => {
       category: 'guides',
       url: 'https://example.com/advanced',
     },
-  ] as Resource[];
+  ] as unknown as Resource[];
 
   describe('initialization', () => {
     it('initializes with provided resources', () => {

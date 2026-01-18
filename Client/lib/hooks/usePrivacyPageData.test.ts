@@ -22,7 +22,7 @@ describe('usePrivacyPageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchPrivacyPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchPrivacyPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => usePrivacyPageData());
 
@@ -35,7 +35,7 @@ describe('usePrivacyPageData', () => {
       content: 'Our privacy policy...',
     };
 
-    vi.mocked(fetchPrivacyPageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchPrivacyPageData).mockResolvedValue({ data: mockData } as any);
 
     const { result } = renderHook(() => usePrivacyPageData());
 
@@ -47,7 +47,7 @@ describe('usePrivacyPageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchPrivacyPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchPrivacyPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => usePrivacyPageData());
 

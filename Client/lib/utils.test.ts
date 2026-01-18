@@ -71,8 +71,8 @@ describe('cn utility', () => {
   });
 
   it('handles complex nested conditions', () => {
-    const variant = 'primary';
-    const size = 'lg';
+    const variant: string = 'primary';
+    const size: string = 'lg';
     const result = cn(
       'btn',
       {

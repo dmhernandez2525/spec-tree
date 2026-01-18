@@ -111,6 +111,8 @@ describe('TrialBanner', () => {
         isActive: true,
         startDate: new Date('2024-03-11').toISOString(),
         endDate: new Date('2024-03-25').toISOString(),
+        planId: 'starter',
+        daysRemaining: 7,
       };
 
       render(<TrialBanner trialStatus={activeTrialStatus} />);
@@ -124,6 +126,8 @@ describe('TrialBanner', () => {
         isActive: true,
         startDate: new Date('2024-03-11').toISOString(),
         endDate: new Date('2024-03-25').toISOString(),
+        planId: 'starter',
+        daysRemaining: 7,
       };
 
       render(<TrialBanner trialStatus={activeTrialStatus} />);
@@ -180,6 +184,8 @@ describe('TrialBanner', () => {
         isActive: true,
         startDate: new Date('2024-03-11').toISOString(),
         endDate: new Date('2024-03-25').toISOString(),
+        planId: 'starter',
+        daysRemaining: 7,
       };
 
       render(<TrialBanner trialStatus={activeTrialStatus} />);
@@ -194,6 +200,8 @@ describe('TrialBanner', () => {
         isActive: true,
         startDate: new Date('2024-03-11').toISOString(),
         endDate: new Date('2024-03-25').toISOString(),
+        planId: 'starter',
+        daysRemaining: 7,
       };
 
       render(<TrialBanner trialStatus={activeTrialStatus} />);
@@ -216,6 +224,8 @@ describe('TrialBanner', () => {
         isActive: true,
         startDate: new Date('2024-03-11').toISOString(),
         endDate: new Date('2024-03-25').toISOString(),
+        planId: 'starter',
+        daysRemaining: 7,
       };
 
       render(<TrialBanner trialStatus={activeTrialStatus} />);

@@ -37,12 +37,12 @@ vi.mock('@/api/fetchData', () => ({
 }));
 
 // Mock the PasswordStrengthIndicator component
-const mockEvaluatePasswordStrength = vi.fn(() => 'medium');
+const mockEvaluatePasswordStrength = vi.fn((_password: string) => 'medium');
 vi.mock('@/components/auth/PasswordStrengthIndicator', () => ({
   PasswordStrengthIndicator: ({ password }: { password: string }) => (
     <div data-testid="password-strength-indicator">{password ? 'Strength indicator' : null}</div>
   ),
-  evaluatePasswordStrength: (...args: unknown[]) => mockEvaluatePasswordStrength(...args),
+  evaluatePasswordStrength: (...args: [string]) => mockEvaluatePasswordStrength(...args),
 }));
 
 // Mock Icons component
@@ -789,7 +789,7 @@ describe('RegisterForm', () => {
 
   describe('component structure', () => {
     it('component has correct display name or is named export', () => {
-      expect(RegisterForm.name || RegisterForm.displayName).toBeTruthy();
+      expect(RegisterForm.name || (RegisterForm as React.FC & { displayName?: string }).displayName).toBeTruthy();
     });
 
     it('component accepts props interface', () => {

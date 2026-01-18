@@ -25,44 +25,50 @@ describe('app-utils', () => {
   const mockApps: AppExtended[] = [
     {
       id: 'app-1',
+      name: 'Alpha',
       applicationInformation: 'Project Alpha',
       globalInformation: 'Description for Alpha project',
-      modifiedAt: '2024-01-15T00:00:00Z',
+      modifiedAt: new Date('2024-01-15T00:00:00Z'),
       createdAt: '2024-01-01T00:00:00Z',
-      status: 'active',
-      tags: [{ id: 'tag-1', name: 'Frontend' }],
+      status: 'live',
+      tags: [{ id: 'tag-1', name: 'Frontend', color: '#000' }],
       category: 'web',
       isFavorite: true,
       accessCount: 10,
-      metrics: { health: 90 },
+      teamMembers: [],
+      metrics: { health: 90, uptime: 99, errors24h: 0 },
     },
     {
       id: 'app-2',
+      name: 'Beta',
       applicationInformation: 'Project Beta',
       globalInformation: 'Description for Beta project',
-      modifiedAt: '2024-02-15T00:00:00Z',
+      modifiedAt: new Date('2024-02-15T00:00:00Z'),
       createdAt: '2024-01-10T00:00:00Z',
       status: 'draft',
-      tags: [{ id: 'tag-2', name: 'Backend' }],
+      tags: [{ id: 'tag-2', name: 'Backend', color: '#000' }],
       category: 'api',
       isFavorite: false,
       accessCount: 5,
-      metrics: { health: 75 },
+      teamMembers: [],
+      metrics: { health: 75, uptime: 98, errors24h: 2 },
     },
     {
       id: 'app-3',
+      name: 'Gamma',
       applicationInformation: 'Project Gamma',
       globalInformation: 'Description for Gamma project',
-      modifiedAt: '2024-03-15T00:00:00Z',
+      modifiedAt: new Date('2024-03-15T00:00:00Z'),
       createdAt: '2024-02-01T00:00:00Z',
-      status: 'active',
-      tags: [{ id: 'tag-1', name: 'Frontend' }, { id: 'tag-3', name: 'Mobile' }],
+      status: 'live',
+      tags: [{ id: 'tag-1', name: 'Frontend', color: '#000' }, { id: 'tag-3', name: 'Mobile', color: '#000' }],
       category: 'mobile',
       isFavorite: true,
       accessCount: 25,
-      metrics: { health: 95 },
+      teamMembers: [],
+      metrics: { health: 95, uptime: 100, errors24h: 0 },
     },
-  ] as AppExtended[];
+  ];
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -70,22 +76,22 @@ describe('app-utils', () => {
 
   describe('filterApps', () => {
     it('returns all apps when no filters are applied', () => {
-      const filters: SearchFilters = {};
+      const filters: SearchFilters = { searchQuery: '' };
       const result = filterApps(mockApps, filters);
 
       expect(result).toHaveLength(3);
     });
 
     it('filters by status', () => {
-      const filters: SearchFilters = { status: ['active'] };
+      const filters: SearchFilters = { status: ['live'], searchQuery: '' };
       const result = filterApps(mockApps, filters);
 
       expect(result).toHaveLength(2);
-      expect(result.every((app) => app.status === 'active')).toBe(true);
+      expect(result.every((app) => app.status === 'live')).toBe(true);
     });
 
     it('filters by multiple statuses', () => {
-      const filters: SearchFilters = { status: ['active', 'draft'] };
+      const filters: SearchFilters = { status: ['live', 'draft'], searchQuery: '' };
       const result = filterApps(mockApps, filters);
 
       expect(result).toHaveLength(3);
@@ -97,6 +103,7 @@ describe('app-utils', () => {
           start: new Date('2024-02-01T00:00:00Z'),
           end: new Date('2024-03-31T00:00:00Z'),
         },
+        searchQuery: '',
       };
       const result = filterApps(mockApps, filters);
 
@@ -104,14 +111,14 @@ describe('app-utils', () => {
     });
 
     it('filters by tags', () => {
-      const filters: SearchFilters = { tags: ['tag-1'] };
+      const filters: SearchFilters = { tags: ['tag-1'], searchQuery: '' };
       const result = filterApps(mockApps, filters);
 
       expect(result).toHaveLength(2);
     });
 
     it('filters by category', () => {
-      const filters: SearchFilters = { category: 'web' };
+      const filters: SearchFilters = { category: 'web', searchQuery: '' };
       const result = filterApps(mockApps, filters);
 
       expect(result).toHaveLength(1);
@@ -151,8 +158,9 @@ describe('app-utils', () => {
 
     it('combines multiple filters', () => {
       const filters: SearchFilters = {
-        status: ['active'],
+        status: ['live'],
         tags: ['tag-1'],
+        searchQuery: '',
       };
       const result = filterApps(mockApps, filters);
 
@@ -169,7 +177,7 @@ describe('app-utils', () => {
 
   describe('sortApps', () => {
     it('sorts by name ascending', () => {
-      const sortOption: SortOption = { value: 'name', direction: 'asc' };
+      const sortOption: SortOption = { label: 'Name', value: 'name', direction: 'asc' };
       const result = sortApps(mockApps, sortOption);
 
       expect(result[0].applicationInformation).toBe('Project Alpha');
@@ -178,7 +186,7 @@ describe('app-utils', () => {
     });
 
     it('sorts by name descending', () => {
-      const sortOption: SortOption = { value: 'name', direction: 'desc' };
+      const sortOption: SortOption = { label: 'Name', value: 'name', direction: 'desc' };
       const result = sortApps(mockApps, sortOption);
 
       expect(result[0].applicationInformation).toBe('Project Gamma');
@@ -186,7 +194,7 @@ describe('app-utils', () => {
     });
 
     it('sorts by modified date', () => {
-      const sortOption: SortOption = { value: 'modified', direction: 'asc' };
+      const sortOption: SortOption = { label: 'Modified', value: 'modified', direction: 'asc' };
       const result = sortApps(mockApps, sortOption);
 
       // Modified dates: app-1 (Jan 15), app-2 (Feb 15), app-3 (Mar 15)
@@ -194,7 +202,7 @@ describe('app-utils', () => {
     });
 
     it('sorts by created date', () => {
-      const sortOption: SortOption = { value: 'created', direction: 'desc' };
+      const sortOption: SortOption = { label: 'Created', value: 'created', direction: 'desc' };
       const result = sortApps(mockApps, sortOption);
 
       // Sort by created descending
@@ -202,7 +210,7 @@ describe('app-utils', () => {
     });
 
     it('sorts by access count', () => {
-      const sortOption: SortOption = { value: 'access', direction: 'asc' };
+      const sortOption: SortOption = { label: 'Access', value: 'access', direction: 'asc' };
       const result = sortApps(mockApps, sortOption);
 
       // Access counts: app-1 (10), app-2 (5), app-3 (25)
@@ -210,7 +218,7 @@ describe('app-utils', () => {
     });
 
     it('sorts by health', () => {
-      const sortOption: SortOption = { value: 'health', direction: 'desc' };
+      const sortOption: SortOption = { label: 'Health', value: 'health', direction: 'desc' };
       const result = sortApps(mockApps, sortOption);
 
       // Health: app-1 (90), app-2 (75), app-3 (95)
@@ -218,7 +226,7 @@ describe('app-utils', () => {
     });
 
     it('handles unknown sort option', () => {
-      const sortOption: SortOption = { value: 'unknown' as any, direction: 'asc' };
+      const sortOption: SortOption = { label: 'Unknown', value: 'unknown' as any, direction: 'asc' };
       const result = sortApps(mockApps, sortOption);
 
       expect(result).toHaveLength(3);
@@ -226,7 +234,7 @@ describe('app-utils', () => {
 
     it('does not mutate original array', () => {
       const original = [...mockApps];
-      const sortOption: SortOption = { value: 'name', direction: 'asc' };
+      const sortOption: SortOption = { label: 'Name', value: 'name', direction: 'asc' };
       sortApps(mockApps, sortOption);
 
       expect(mockApps).toEqual(original);

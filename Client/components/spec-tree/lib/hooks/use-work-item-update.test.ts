@@ -119,12 +119,57 @@ const mockTask: TaskType = {
 };
 
 // Create a mock RootState
-const createMockState = (overrides = {}): RootState => ({
+const createMockState = (overrides = {}) => ({
   sow: {
     ...defaultSowState,
     ...overrides,
   },
-});
+  auth: {
+    isLoggedIn: false,
+    organizationRole: undefined,
+    organizationId: undefined,
+  },
+  user: {
+    user: null,
+    token: null,
+  },
+  organization: {
+    currentOrganization: null,
+    members: [],
+    invites: [],
+    subscription: null,
+    isLoading: false,
+    error: null,
+  },
+  settings: {
+    aiSettings: null,
+    integrations: [],
+    ssoConfig: null,
+    isLoading: false,
+    error: null,
+  },
+  subscription: {
+    subscription: null,
+    isLoading: false,
+    error: null,
+    billingHistory: [],
+  },
+  demo: {
+    user: {
+      isDemoMode: false,
+      demoLevel: 'basic' as const,
+      enabledFeatures: [],
+      activeScenario: null,
+    },
+    config: {
+      enabled: true,
+      showInProduction: false,
+      defaultLevel: 'basic' as const,
+      allowToggle: true,
+      persistSettings: true,
+    },
+  },
+}) as RootState;
 
 describe('useWorkItemUpdate', () => {
   beforeEach(() => {
@@ -167,7 +212,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedEpic).mockResolvedValueOnce({
         data: updatedEpicData,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -224,7 +269,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedFeature).mockResolvedValueOnce({
         data: updatedFeatureData,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('features'), {
         wrapper: createWrapper(store),
@@ -304,7 +349,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedUserStory).mockResolvedValueOnce({
         data: updatedUserStoryData,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('userStories'), {
         wrapper: createWrapper(store),
@@ -384,7 +429,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedTask).mockResolvedValueOnce({
         data: updatedTaskData,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('tasks'), {
         wrapper: createWrapper(store),
@@ -499,7 +544,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedEpic).mockResolvedValueOnce({
         data: mockEpic,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -625,7 +670,7 @@ describe('useWorkItemUpdate', () => {
       const responseData = { ...mockEpic, title: 'New Title' };
       vi.mocked(generateUpdatedEpic).mockResolvedValueOnce({
         data: responseData,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -697,7 +742,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedEpic).mockResolvedValueOnce({
         data: mockEpic,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -725,7 +770,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedEpic).mockResolvedValueOnce({
         data: mockEpic,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -755,7 +800,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedEpic).mockResolvedValueOnce({
         data: mockEpic,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -787,7 +832,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedEpic).mockResolvedValueOnce({
         data: mockEpic,
-      });
+      } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -821,8 +866,8 @@ describe('useWorkItemUpdate', () => {
       const secondResult = { ...mockEpic, title: 'Second' };
 
       vi.mocked(generateUpdatedEpic)
-        .mockResolvedValueOnce({ data: firstResult })
-        .mockResolvedValueOnce({ data: secondResult });
+        .mockResolvedValueOnce({ data: firstResult } as never)
+        .mockResolvedValueOnce({ data: secondResult } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),
@@ -855,7 +900,7 @@ describe('useWorkItemUpdate', () => {
 
       vi.mocked(generateUpdatedEpic)
         .mockRejectedValueOnce(new Error('First error'))
-        .mockResolvedValueOnce({ data: mockEpic });
+        .mockResolvedValueOnce({ data: mockEpic } as never);
 
       const { result } = renderHook(() => useWorkItemUpdate('epics'), {
         wrapper: createWrapper(store),

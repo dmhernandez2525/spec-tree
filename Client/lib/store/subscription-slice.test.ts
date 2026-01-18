@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { configureStore } from '@reduxjs/toolkit';
 import subscriptionReducer, {
   setSubscription,
@@ -487,7 +487,8 @@ describe('subscription-slice', () => {
         const result = await promise;
 
         expect(result.payload).toHaveProperty('currentPeriodEnd');
-        expect(new Date(result.payload.currentPeriodEnd).getTime()).toBeGreaterThan(Date.now());
+        const payload = result.payload as { currentPeriodEnd: string };
+        expect(new Date(payload.currentPeriodEnd).getTime()).toBeGreaterThan(Date.now());
       });
     });
   });
@@ -867,7 +868,7 @@ describe('subscription-slice', () => {
 
   describe('complex scenarios', () => {
     it('handles subscription upgrade flow', () => {
-      let state = initialState;
+      let state: ReturnType<typeof subscriptionReducer> = initialState;
 
       // Start with free plan
       state = subscriptionReducer(state, setSubscription({
@@ -909,7 +910,7 @@ describe('subscription-slice', () => {
     });
 
     it('handles seat adjustment flow', () => {
-      let state = initialState;
+      let state: ReturnType<typeof subscriptionReducer> = initialState;
 
       // Add seats
       state = subscriptionReducer(state, updateSeats(20));
@@ -925,7 +926,7 @@ describe('subscription-slice', () => {
     });
 
     it('handles error recovery flow', () => {
-      let state = initialState;
+      let state: ReturnType<typeof subscriptionReducer> = initialState;
 
       // Fetch fails
       state = subscriptionReducer(state, { type: fetchSubscription.pending.type });
@@ -952,7 +953,7 @@ describe('subscription-slice', () => {
     });
 
     it('handles subscription cancellation flow', () => {
-      let state = initialState;
+      let state: ReturnType<typeof subscriptionReducer> = initialState;
 
       // Cancel subscription
       state = subscriptionReducer(state, {
@@ -1002,10 +1003,10 @@ describe('subscription-slice', () => {
         reducer: { subscription: subscriptionReducer },
       });
 
-      expect(selectSubscription(store.getState())).toBeDefined();
-      expect(selectBillingHistory(store.getState())).toBeDefined();
-      expect(selectIsLoading(store.getState())).toBe(false);
-      expect(selectError(store.getState())).toBeNull();
+      expect(selectSubscription(store.getState() as any)).toBeDefined();
+      expect(selectBillingHistory(store.getState() as any)).toBeDefined();
+      expect(selectIsLoading(store.getState() as any)).toBe(false);
+      expect(selectError(store.getState() as any)).toBeNull();
     });
   });
 });

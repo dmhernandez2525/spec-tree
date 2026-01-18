@@ -1,10 +1,20 @@
 import { describe, it, expect, vi } from 'vitest';
+import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import makeUpdateHandler from './make-update-handler';
+
+// Helper to create a mock action creator that satisfies ActionCreatorWithPayload
+function createMockAction<P>(): ActionCreatorWithPayload<P> & ReturnType<typeof vi.fn> {
+  const mockFn = vi.fn((payload: P) => ({ type: 'TEST_ACTION', payload }));
+  (mockFn as any).type = 'TEST_ACTION';
+  (mockFn as any).match = (action: any): action is { type: string; payload: P } =>
+    action?.type === 'TEST_ACTION';
+  return mockFn as ActionCreatorWithPayload<P> & ReturnType<typeof vi.fn>;
+}
 
 describe('makeUpdateHandler', () => {
   it('creates an update handler function', () => {
     const dispatch = vi.fn();
-    const action = vi.fn((payload) => ({ type: 'TEST_ACTION', payload }));
+    const action = createMockAction<any>();
     const parameters = { epicId: 'epic-1' };
 
     const handler = makeUpdateHandler(dispatch, action, parameters);
@@ -14,7 +24,7 @@ describe('makeUpdateHandler', () => {
 
   it('dispatches action with merged parameters and update params', () => {
     const dispatch = vi.fn();
-    const action = vi.fn((payload) => ({ type: 'TEST_ACTION', payload }));
+    const action = createMockAction<any>();
     const parameters = { epicId: 'epic-1' };
 
     const handler = makeUpdateHandler(dispatch, action, parameters);
@@ -34,7 +44,7 @@ describe('makeUpdateHandler', () => {
 
   it('includes riskMitigationIndex when provided', () => {
     const dispatch = vi.fn();
-    const action = vi.fn((payload) => ({ type: 'TEST_ACTION', payload }));
+    const action = createMockAction<any>();
     const parameters = { epicId: 'epic-1' };
 
     const handler = makeUpdateHandler(dispatch, action, parameters);
@@ -55,7 +65,7 @@ describe('makeUpdateHandler', () => {
 
   it('includes arrayIndex and isArrayItem when provided', () => {
     const dispatch = vi.fn();
-    const action = vi.fn((payload) => ({ type: 'TEST_ACTION', payload }));
+    const action = createMockAction<any>();
     const parameters = { featureId: 'feature-1' };
 
     const handler = makeUpdateHandler(dispatch, action, parameters);
@@ -78,7 +88,7 @@ describe('makeUpdateHandler', () => {
 
   it('handles array values for newValue', () => {
     const dispatch = vi.fn();
-    const action = vi.fn((payload) => ({ type: 'TEST_ACTION', payload }));
+    const action = createMockAction<any>();
     const parameters = { taskId: 'task-1' };
 
     const handler = makeUpdateHandler(dispatch, action, parameters);
@@ -97,7 +107,7 @@ describe('makeUpdateHandler', () => {
 
   it('works with multiple parameter types', () => {
     const dispatch = vi.fn();
-    const action = vi.fn((payload) => ({ type: 'TEST_ACTION', payload }));
+    const action = createMockAction<any>();
     const parameters = {
       epicId: 'epic-1',
       featureId: 'feature-1',
@@ -122,7 +132,7 @@ describe('makeUpdateHandler', () => {
 
   it('handles custom field names', () => {
     const dispatch = vi.fn();
-    const action = vi.fn((payload) => ({ type: 'TEST_ACTION', payload }));
+    const action = createMockAction<any>();
     const parameters = { epicId: 'epic-1' };
 
     const handler = makeUpdateHandler(dispatch, action, parameters);

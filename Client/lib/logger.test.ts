@@ -15,7 +15,7 @@ describe('logger', () => {
   });
 
   afterEach(() => {
-    process.env.NODE_ENV = originalNodeEnv;
+    vi.stubEnv('NODE_ENV', originalNodeEnv);
     vi.restoreAllMocks();
   });
 

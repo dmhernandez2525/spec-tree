@@ -9,8 +9,8 @@ describe('useMediaQuery', () => {
 
   const createMockMediaQueryList = (matches: boolean): Partial<MediaQueryList> => ({
     matches,
-    addEventListener: addEventListenerMock,
-    removeEventListener: removeEventListenerMock,
+    addEventListener: addEventListenerMock as MediaQueryList['addEventListener'],
+    removeEventListener: removeEventListenerMock as MediaQueryList['removeEventListener'],
   });
 
   beforeEach(() => {

@@ -17,7 +17,7 @@ import type {
 describe('strapi-transformers', () => {
   describe('transformEpic', () => {
     it('transforms a Strapi epic to EpicType', () => {
-      const strapiEpic: StrapiEpic = {
+      const strapiEpic = {
         documentId: 'epic-123',
         title: 'Epic Title',
         description: 'Epic Description',
@@ -26,16 +26,29 @@ describe('strapi-transformers', () => {
         dependencies: 'Dependencies',
         timeline: '2 weeks',
         resources: 'Resources needed',
-        risksAndMitigation: ['Risk 1', 'Risk 2'],
+        risksAndMitigation: [
+          {
+            resolve: [{ text: 'Resolve Risk 1' }],
+            own: [{ text: 'Own Risk 1' }],
+            accept: [{ text: 'Accept Risk 1' }],
+            mitigate: [{ text: 'Mitigate Risk 1' }],
+          },
+          {
+            resolve: [{ text: 'Resolve Risk 2' }],
+            own: [{ text: 'Own Risk 2' }],
+            accept: [{ text: 'Accept Risk 2' }],
+            mitigate: [{ text: 'Mitigate Risk 2' }],
+          },
+        ],
         notes: 'Some notes',
         features: [
-          { documentId: 'feature-1' } as StrapiFeature,
-          { documentId: 'feature-2' } as StrapiFeature,
+          { documentId: 'feature-1' } as unknown as StrapiFeature,
+          { documentId: 'feature-2' } as unknown as StrapiFeature,
         ],
         contextualQuestions: [
           { documentId: 'cq-1', question: 'Q1', answer: 'A1' },
         ],
-      };
+      } as unknown as StrapiEpic;
 
       const result = transformEpic(strapiEpic);
 
@@ -65,7 +78,7 @@ describe('strapi-transformers', () => {
 
   describe('transformFeature', () => {
     it('transforms a Strapi feature to FeatureType', () => {
-      const strapiFeature: StrapiFeature = {
+      const strapiFeature = {
         documentId: 'feature-123',
         title: 'Feature Title',
         description: 'Feature Description',
@@ -76,10 +89,10 @@ describe('strapi-transformers', () => {
         priority: 'High',
         effort: 'Medium',
         userStories: [
-          { documentId: 'story-1' } as StrapiUserStory,
+          { documentId: 'story-1' } as unknown as StrapiUserStory,
         ],
         contextualQuestions: [],
-      };
+      } as unknown as StrapiFeature;
 
       const result = transformFeature(strapiFeature, 'parent-epic-id');
 
@@ -106,7 +119,7 @@ describe('strapi-transformers', () => {
 
   describe('transformUserStory', () => {
     it('transforms a Strapi user story to UserStoryType', () => {
-      const strapiStory: StrapiUserStory = {
+      const strapiStory = {
         documentId: 'story-123',
         title: 'Story Title',
         role: 'User',
@@ -117,10 +130,10 @@ describe('strapi-transformers', () => {
         notes: 'Notes',
         developmentOrder: 1,
         tasks: [
-          { documentId: 'task-1' } as StrapiTask,
+          { documentId: 'task-1' } as unknown as StrapiTask,
         ],
         contextualQuestions: [],
-      };
+      } as unknown as StrapiUserStory;
 
       const result = transformUserStory(strapiStory, 'parent-feature-id');
 
@@ -149,14 +162,14 @@ describe('strapi-transformers', () => {
 
   describe('transformTask', () => {
     it('transforms a Strapi task to TaskType', () => {
-      const strapiTask: StrapiTask = {
+      const strapiTask = {
         documentId: 'task-123',
         title: 'Task Title',
         details: 'Task Details',
         priority: 1,
         notes: 'Notes',
         contextualQuestions: [],
-      };
+      } as unknown as StrapiTask;
 
       const result = transformTask(strapiTask, 'parent-story-id');
 

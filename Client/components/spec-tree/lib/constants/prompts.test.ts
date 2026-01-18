@@ -63,6 +63,8 @@ describe('prompts', () => {
     risksAndMitigation: [],
     featureIds: ['feature-1'],
     contextualQuestions: [],
+    parentAppId: 'app-1',
+    notes: '',
   };
 
   const mockFeature = {
@@ -76,6 +78,9 @@ describe('prompts', () => {
     parentEpicId: 'epic-1',
     userStoryIds: ['story-1'],
     contextualQuestions: [],
+    notes: '',
+    priority: 'High',
+    effort: 'Medium',
   };
 
   const mockUserStory = {
@@ -85,13 +90,14 @@ describe('prompts', () => {
     role: 'User',
     action: 'do something',
     goal: 'achieve goal',
-    points: 5,
+    points: '5',
     acceptanceCriteria: [{ text: 'AC' }],
     parentFeatureId: 'feature-1',
     taskIds: ['task-1'],
     developmentOrder: 1,
     dependentUserStoryIds: [],
     contextualQuestions: [],
+    notes: '',
   };
 
   const mockTask = {
@@ -99,10 +105,11 @@ describe('prompts', () => {
     documentId: 'task-1',
     title: 'Test Task',
     details: 'Task details',
-    priority: 'high',
+    priority: 1,
     parentUserStoryId: 'story-1',
     dependentTaskIds: [],
     contextualQuestions: [],
+    notes: '',
   };
 
   describe('epicPrompt', () => {
@@ -249,9 +256,10 @@ describe('prompts', () => {
 
   describe('generateExplanationForGlobalRefinement', () => {
     it('generates explanation for global refinement', () => {
-      const result = generateExplanationForGlobalRefinement('Project info');
+      const result = generateExplanationForGlobalRefinement('Project info', 'Q: What? A: Something');
 
       expect(result).toContain('Project info');
+      expect(result).toContain('Q: What? A: Something');
     });
   });
 });

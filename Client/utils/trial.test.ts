@@ -61,8 +61,11 @@ describe('trial utilities', () => {
 
     it('returns false when endDate is not set', () => {
       const trialStatus: TrialStatus = {
+        isActive: true,
         startDate: '2024-01-01T00:00:00Z',
-        endDate: undefined as unknown as string,
+        endDate: null,
+        planId: 'starter',
+        daysRemaining: 14,
       };
 
       expect(isTrialExpired(trialStatus)).toBe(false);
@@ -72,8 +75,11 @@ describe('trial utilities', () => {
       vi.setSystemTime(new Date('2024-01-10T00:00:00Z'));
 
       const trialStatus: TrialStatus = {
+        isActive: true,
         startDate: '2024-01-01T00:00:00Z',
         endDate: '2024-01-20T00:00:00Z',
+        planId: 'starter',
+        daysRemaining: 10,
       };
 
       expect(isTrialExpired(trialStatus)).toBe(false);
@@ -83,8 +89,11 @@ describe('trial utilities', () => {
       vi.setSystemTime(new Date('2024-01-25T00:00:00Z'));
 
       const trialStatus: TrialStatus = {
+        isActive: false,
         startDate: '2024-01-01T00:00:00Z',
         endDate: '2024-01-15T00:00:00Z',
+        planId: 'starter',
+        daysRemaining: -10,
       };
 
       expect(isTrialExpired(trialStatus)).toBe(true);
@@ -94,8 +103,11 @@ describe('trial utilities', () => {
       vi.setSystemTime(new Date('2024-01-15T00:00:01Z'));
 
       const trialStatus: TrialStatus = {
+        isActive: false,
         startDate: '2024-01-01T00:00:00Z',
         endDate: '2024-01-15T00:00:00Z',
+        planId: 'starter',
+        daysRemaining: 0,
       };
 
       expect(isTrialExpired(trialStatus)).toBe(true);

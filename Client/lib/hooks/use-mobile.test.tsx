@@ -13,8 +13,8 @@ describe('useIsMobile', () => {
     removeEventListenerMock = vi.fn();
     mockMediaQueryList = {
       matches: false,
-      addEventListener: addEventListenerMock,
-      removeEventListener: removeEventListenerMock,
+      addEventListener: addEventListenerMock as MediaQueryList['addEventListener'],
+      removeEventListener: removeEventListenerMock as MediaQueryList['removeEventListener'],
     };
     matchMediaMock = vi.fn().mockReturnValue(mockMediaQueryList);
 

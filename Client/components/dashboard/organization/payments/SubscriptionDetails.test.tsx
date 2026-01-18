@@ -34,9 +34,7 @@ describe('SubscriptionDetails', () => {
     seats: 10,
     usedSeats: 7,
     pricePerSeat: 10,
-    currentPeriodStart: new Date('2024-03-01').toISOString(),
     currentPeriodEnd: new Date('2024-04-01').toISOString(),
-    cancelAtPeriodEnd: false,
   };
 
   const defaultProps = {
@@ -230,7 +228,7 @@ describe('SubscriptionDetails', () => {
     });
 
     it('renders enterprise features for enterprise subscription', () => {
-      const enterpriseSubscription = {
+      const enterpriseSubscription: OrganizationSubscription = {
         ...mockSubscription,
         plan: 'enterprise',
       };
@@ -292,18 +290,18 @@ describe('SubscriptionDetails', () => {
     });
 
     it('uses destructive variant for non-active status', () => {
-      const cancelledSubscription = {
+      const canceledSubscription: OrganizationSubscription = {
         ...mockSubscription,
-        status: 'cancelled' as const,
+        status: 'canceled',
       };
       render(
         <SubscriptionDetails
           {...defaultProps}
-          subscription={cancelledSubscription}
+          subscription={canceledSubscription}
         />
       );
 
-      const badge = screen.getByText('cancelled');
+      const badge = screen.getByText('canceled');
       expect(badge).toBeInTheDocument();
     });
   });

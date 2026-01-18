@@ -54,18 +54,18 @@ describe('InputOTP', () => {
 
   describe('InputOTP component', () => {
     it('renders OTPInput', () => {
-      render(<InputOTP maxLength={6} />);
+      render(<InputOTP maxLength={6}><InputOTPGroup><InputOTPSlot index={0} /></InputOTPGroup></InputOTP>);
       expect(screen.getByTestId('otp-input')).toBeInTheDocument();
     });
 
     it('applies custom className', () => {
-      render(<InputOTP maxLength={6} className="custom-class" />);
+      render(<InputOTP maxLength={6} className="custom-class"><InputOTPGroup><InputOTPSlot index={0} /></InputOTPGroup></InputOTP>);
       const input = screen.getByTestId('otp-input').querySelector('input');
       expect(input).toHaveClass('custom-class');
     });
 
     it('applies containerClassName', () => {
-      render(<InputOTP maxLength={6} containerClassName="container-class" />);
+      render(<InputOTP maxLength={6} containerClassName="container-class"><InputOTPGroup><InputOTPSlot index={0} /></InputOTPGroup></InputOTP>);
       expect(screen.getByTestId('otp-input')).toHaveClass('container-class');
     });
 

@@ -580,7 +580,7 @@ describe('LoginForm', () => {
 
   describe('component structure', () => {
     it('component has correct display name or is named export', () => {
-      expect(LoginForm.name || LoginForm.displayName).toBeTruthy();
+      expect(LoginForm.name || (LoginForm as React.FC & { displayName?: string }).displayName).toBeTruthy();
     });
 
     it('component accepts props interface', () => {

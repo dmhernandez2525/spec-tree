@@ -24,7 +24,7 @@ describe('useBlogPageData', () => {
   });
 
   it('returns loading true initially', () => {
-    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useBlogPageData());
 
@@ -37,7 +37,7 @@ describe('useBlogPageData', () => {
       posts: [{ id: 1, title: 'Post 1' }],
     };
 
-    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: mockData });
+    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: mockData } as any);
 
     const { result } = renderHook(() => useBlogPageData());
 
@@ -49,7 +49,7 @@ describe('useBlogPageData', () => {
   });
 
   it('uses fallback data when API returns null', async () => {
-    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: null } as any);
 
     const { result } = renderHook(() => useBlogPageData());
 
@@ -76,7 +76,7 @@ describe('useBlogPageData', () => {
   });
 
   it('calls fetchBlogPageData on mount', async () => {
-    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: null });
+    vi.mocked(fetchBlogPageData).mockResolvedValue({ data: null } as any);
 
     renderHook(() => useBlogPageData());
 

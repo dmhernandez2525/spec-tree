@@ -60,16 +60,23 @@ describe('AchievementsProvider', () => {
     ]);
 
     vi.spyOn(TutorialContextModule, 'useTutorial').mockReturnValue({
+      isActive: false,
+      currentStep: null,
+      currentSection: null,
       progress: {
+        completedSections: [],
         completedSteps: [],
+        currentSection: null,
         currentStep: null,
-        isComplete: false,
       },
-      completeStep: vi.fn(),
-      resetProgress: vi.fn(),
+      startTutorial: vi.fn(),
+      endTutorial: vi.fn(),
+      nextStep: vi.fn(),
+      previousStep: vi.fn(),
       skipTutorial: vi.fn(),
-      restartTutorial: vi.fn(),
       goToStep: vi.fn(),
+      markStepComplete: vi.fn(),
+      markSectionComplete: vi.fn(),
     });
   });
 
