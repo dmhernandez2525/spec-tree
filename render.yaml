@@ -149,11 +149,8 @@ services:
 # =============================================
 # Database - PostgreSQL for Strapi
 # =============================================
-# WARNING: Free tier database EXPIRES after 30 days!
-# You will need to upgrade to 'basic-256mb' ($7/month) or recreate.
-# Data will be lost if the database expires.
 databases:
   - name: spec-tree-db
-    plan: free
+    plan: basic-256mb
     databaseName: spec_tree
     user: spec_tree_user
