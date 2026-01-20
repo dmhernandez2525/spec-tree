@@ -1,4 +1,5 @@
 # Spec Tree - Render Infrastructure Configuration (FREE TIER)
+# Build fix: Testing Render builds
 # ===========================================================
 # This configuration deploys all services using FREE tiers for development/demo.
 #
@@ -23,8 +24,8 @@ services:
     name: spec-tree-client
     runtime: node
     plan: free
-    buildCommand: cd Client && rm -rf node_modules && npm install --include=dev && npm run build
-    startCommand: cd Client && npm run start
+    buildCommand: cd Client && rm -rf node_modules && NODE_ENV=development npm install && npm run build
+    startCommand: cd Client && NODE_ENV=production npm run start
     envVars:
       - key: NODE_VERSION
         value: "20"
@@ -72,8 +73,8 @@ services:
     name: spec-tree-strapi
     runtime: node
     plan: free
-    buildCommand: cd Server && npm install --legacy-peer-deps && npm run build
-    startCommand: cd Server && npm run start
+    buildCommand: cd Server && NODE_ENV=development npm install --legacy-peer-deps && npm run build
+    startCommand: cd Server && NODE_ENV=production npm run start
     healthCheckPath: /_health
     envVars:
       - key: NODE_VERSION
@@ -124,8 +125,8 @@ services:
     name: spec-tree-microservice
     runtime: node
     plan: free
-    buildCommand: cd Microservice && npm install && npm run build
-    startCommand: cd Microservice && npm run start
+    buildCommand: cd Microservice && NODE_ENV=development npm install && npm run build
+    startCommand: cd Microservice && NODE_ENV=production npm run start
     envVars:
       - key: NODE_VERSION
         value: "20"
