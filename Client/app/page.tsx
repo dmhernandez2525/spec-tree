@@ -7,6 +7,7 @@ import { SampleWorkflows } from '@/components/marketing/SampleWorkflows';
 import { ClientSuccess } from '@/components/marketing/ClientSuccess';
 import { NewsletterForm } from '@/components/marketing/NewsletterForm';
 import { CTASection } from '@/components/marketing/CTASection';
+import { ComingSoon } from '@/components/marketing/ComingSoon';
 import { ColorHeader } from '@/components/shared/ColorHeader';
 import { useHomePageData } from '@/lib/hooks/useHomePageData';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
@@ -63,6 +64,9 @@ export default function HomePage() {
       <section className="bg-background py-16 md:py-24">
         <SampleWorkflows />
       </section>
+
+      {/* Coming Soon - PersonaPlex */}
+      <ComingSoon />
 
       {/* Client Success Stories */}
       <section className="bg-muted py-16 md:py-24">

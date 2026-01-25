@@ -237,7 +237,48 @@ Run these commands to verify completion:
 
 ---
 
-### Phase 5: AI Enhancement (2027)
+### Phase 5: Voice-Driven Specification (Coming Soon)
+
+**Powered by PersonaPlex Full Duplex AI**
+
+Transform how specifications are created with natural voice conversation. Instead of typing requirements, simply describe your project and let PersonaPlex guide you through the specification process.
+
+#### Current Experience
+```
+Open project → Click "Add Work Item" → Type title → Type description → Click save → Repeat
+```
+
+#### With PersonaPlex
+```
+You: "I need to add user authentication to this project"
+PersonaPlex: "Got it. What type of authentication - email/password, social login, or SSO?"
+You: "Start with email/password, we'll add Google later"
+PersonaPlex: "Okay, I'm creating the epic with two features. Should registration require email verification?"
+You: "Yes, and add password reset too"
+PersonaPlex: "Done. I've added registration, login, email verification, and password reset. Want me to break these down into tasks?"
+```
+
+#### Features
+
+| Feature | Priority | Description |
+|---------|----------|-------------|
+| Voice Dictation | P0 | Speak requirements instead of typing |
+| AI-Guided Discovery | P0 | PersonaPlex asks clarifying questions |
+| Back-channeling | P1 | Active listening with confirmations |
+| Real-time Tree Building | P1 | Work items created as you speak |
+| Context Awareness | P1 | AI understands project hierarchy and patterns |
+| Natural Interruption | P2 | Change direction mid-conversation |
+
+#### Technical Requirements
+
+- 24GB+ VRAM (Mac M2 Pro or higher)
+- 32GB RAM recommended
+- Runs 100% locally - no cloud required
+- <500ms response time
+
+---
+
+### Phase 6: AI Enhancement (2027)
 
 **Focus:** Advanced AI capabilities
 
