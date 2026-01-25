@@ -34,7 +34,7 @@ export function ComingSoon() {
             <ul className="space-y-3 text-purple-200/70 text-sm">
               <li className="flex items-start gap-2">
                 <span className="text-purple-400">•</span>
-                Click "Add Work Item"
+                Click &quot;Add Work Item&quot;
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-purple-400">•</span>
@@ -60,19 +60,19 @@ export function ComingSoon() {
               <div className="bg-black/20 rounded-lg px-3 py-2">
                 <span className="text-purple-300">You:</span>{" "}
                 <span className="text-white/80">
-                  "I need user authentication"
+                  &quot;I need user authentication&quot;
                 </span>
               </div>
               <div className="bg-purple-600/30 rounded-lg px-3 py-2">
                 <span className="text-purple-300">PersonaPlex:</span>{" "}
                 <span className="text-white/90">
-                  "Got it. Email/password, social login, or SSO?"
+                  &quot;Got it. Email/password, social login, or SSO?&quot;
                 </span>
               </div>
               <div className="bg-black/20 rounded-lg px-3 py-2">
                 <span className="text-purple-300">You:</span>{" "}
                 <span className="text-white/80">
-                  "Email first, then Google"
+                  &quot;Email first, then Google&quot;
                 </span>
               </div>
               <p className="text-purple-200/60 text-xs italic">
