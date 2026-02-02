@@ -55,3 +55,18 @@ export type {
   UseBreadcrumbOptions,
   UseBreadcrumbReturn,
 } from './useBreadcrumb';
+
+export {
+  useKeyboardShortcuts,
+  formatKey,
+  getShortcutDisplayString,
+  matchesShortcut,
+  DEFAULT_SHORTCUTS,
+} from './useKeyboardShortcuts';
+export type {
+  ModifierKey,
+  KeyboardShortcut,
+  ShortcutRegistration,
+  UseKeyboardShortcutsOptions,
+  UseKeyboardShortcutsReturn,
+} from './useKeyboardShortcuts';
