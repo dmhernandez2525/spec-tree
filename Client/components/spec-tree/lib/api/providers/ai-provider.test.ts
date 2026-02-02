@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   OPENAI_MODELS,
   ANTHROPIC_MODELS,
+  GEMINI_MODELS,
   ALL_MODELS,
   getModelInfo,
   getProviderFromModel,
@@ -65,14 +66,49 @@ describe('ai-provider', () => {
     });
   });
 
+  describe('GEMINI_MODELS', () => {
+    it('contains Gemini 1.5 Pro model', () => {
+      const pro = GEMINI_MODELS.find((m) => m.id === 'gemini-1.5-pro');
+      expect(pro).toBeDefined();
+      expect(pro?.provider).toBe('gemini');
+      expect(pro?.contextWindow).toBe(1000000);
+    });
+
+    it('contains Gemini 1.5 Flash model', () => {
+      const flash = GEMINI_MODELS.find((m) => m.id === 'gemini-1.5-flash');
+      expect(flash).toBeDefined();
+      expect(flash?.provider).toBe('gemini');
+    });
+
+    it('contains Gemini Pro model', () => {
+      const geminiPro = GEMINI_MODELS.find((m) => m.id === 'gemini-pro');
+      expect(geminiPro).toBeDefined();
+      expect(geminiPro?.provider).toBe('gemini');
+    });
+
+    it('all models have required fields', () => {
+      for (const model of GEMINI_MODELS) {
+        expect(model.id).toBeDefined();
+        expect(model.name).toBeDefined();
+        expect(model.provider).toBe('gemini');
+        expect(model.contextWindow).toBeGreaterThan(0);
+        expect(model.maxOutputTokens).toBeGreaterThan(0);
+      }
+    });
+  });
+
   describe('ALL_MODELS', () => {
-    it('contains models from both providers', () => {
+    it('contains models from all providers', () => {
       const openaiCount = ALL_MODELS.filter((m) => m.provider === 'openai').length;
       const anthropicCount = ALL_MODELS.filter((m) => m.provider === 'anthropic').length;
+      const geminiCount = ALL_MODELS.filter((m) => m.provider === 'gemini').length;
 
       expect(openaiCount).toBe(OPENAI_MODELS.length);
       expect(anthropicCount).toBe(ANTHROPIC_MODELS.length);
-      expect(ALL_MODELS.length).toBe(OPENAI_MODELS.length + ANTHROPIC_MODELS.length);
+      expect(geminiCount).toBe(GEMINI_MODELS.length);
+      expect(ALL_MODELS.length).toBe(
+        OPENAI_MODELS.length + ANTHROPIC_MODELS.length + GEMINI_MODELS.length
+      );
     });
   });
 
@@ -106,6 +142,11 @@ describe('ai-provider', () => {
       expect(getProviderFromModel('claude-3-sonnet-20240229')).toBe('anthropic');
     });
 
+    it('returns gemini for Gemini models', () => {
+      expect(getProviderFromModel('gemini-1.5-pro')).toBe('gemini');
+      expect(getProviderFromModel('gemini-1.5-flash')).toBe('gemini');
+    });
+
     it('returns undefined for unknown model', () => {
       expect(getProviderFromModel('unknown-model')).toBeUndefined();
     });
@@ -124,8 +165,15 @@ describe('ai-provider', () => {
       expect(models.every((m) => m.provider === 'anthropic')).toBe(true);
     });
 
-    it('returns empty array for unknown provider', () => {
+    it('returns Gemini models for gemini provider', () => {
       const models = getModelsForProvider('gemini');
+      expect(models.length).toBe(GEMINI_MODELS.length);
+      expect(models.every((m) => m.provider === 'gemini')).toBe(true);
+    });
+
+    it('returns empty array for unknown provider', () => {
+      // Cast to any to test unknown provider
+      const models = getModelsForProvider('unknown' as never);
       expect(models.length).toBe(0);
     });
   });
