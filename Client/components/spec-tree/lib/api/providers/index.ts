@@ -44,3 +44,15 @@ export {
   createCompletion,
   isModelAvailable,
 } from './provider-factory';
+
+// Provider fallback
+export {
+  type FallbackConfig,
+  type FallbackErrorType,
+  type FallbackCompletionResult,
+  DEFAULT_FALLBACK_CONFIG,
+  getFallbackModels,
+  shouldFallback,
+  createCompletionWithFallback,
+  getFallbackInfo,
+} from './provider-fallback';
