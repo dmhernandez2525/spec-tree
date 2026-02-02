@@ -19,6 +19,7 @@ import {
 } from './ai-provider';
 import { openAIProvider } from './openai-adapter';
 import { claudeProxy } from './claude-proxy';
+import { geminiProxy } from './gemini-proxy';
 import { logger } from '@/lib/logger';
 
 /**
@@ -27,6 +28,7 @@ import { logger } from '@/lib/logger';
 const providers = new Map<AIProviderType, AIProvider>();
 providers.set('openai', openAIProvider);
 providers.set('anthropic', claudeProxy);
+providers.set('gemini', geminiProxy);
 
 /**
  * Get a provider by type

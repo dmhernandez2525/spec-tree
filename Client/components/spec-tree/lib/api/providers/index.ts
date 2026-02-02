@@ -17,6 +17,7 @@ export {
   type AIModelInfo,
   OPENAI_MODELS,
   ANTHROPIC_MODELS,
+  GEMINI_MODELS,
   ALL_MODELS,
   getModelInfo,
   getProviderFromModel,
@@ -28,6 +29,9 @@ export { OpenAIProviderAdapter, openAIProvider } from './openai-adapter';
 
 // Claude provider
 export { ClaudeProxy, ClaudeRateLimitedError, claudeProxy } from './claude-proxy';
+
+// Gemini provider
+export { GeminiProxy, GeminiRateLimitedError, geminiProxy } from './gemini-proxy';
 
 // Provider factory
 export {

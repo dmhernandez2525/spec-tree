@@ -146,9 +146,43 @@ export const ANTHROPIC_MODELS: AIModelInfo[] = [
 ];
 
 /**
+ * Available Google Gemini models
+ */
+export const GEMINI_MODELS: AIModelInfo[] = [
+  {
+    id: 'gemini-1.5-pro',
+    name: 'Gemini 1.5 Pro',
+    provider: 'gemini',
+    contextWindow: 1000000,
+    maxOutputTokens: 8192,
+    description: 'Most capable Gemini model with 1M context window',
+  },
+  {
+    id: 'gemini-1.5-flash',
+    name: 'Gemini 1.5 Flash',
+    provider: 'gemini',
+    contextWindow: 1000000,
+    maxOutputTokens: 8192,
+    description: 'Fast and efficient for most tasks',
+  },
+  {
+    id: 'gemini-pro',
+    name: 'Gemini Pro',
+    provider: 'gemini',
+    contextWindow: 32768,
+    maxOutputTokens: 8192,
+    description: 'Balanced model for general use',
+  },
+];
+
+/**
  * All available models across providers
  */
-export const ALL_MODELS: AIModelInfo[] = [...OPENAI_MODELS, ...ANTHROPIC_MODELS];
+export const ALL_MODELS: AIModelInfo[] = [
+  ...OPENAI_MODELS,
+  ...ANTHROPIC_MODELS,
+  ...GEMINI_MODELS,
+];
 
 /**
  * Get model info by ID
