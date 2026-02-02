@@ -113,22 +113,39 @@ const DEFAULT_FILENAME = 'spec-tree-export.csv';
 // ============================================================================
 
 /**
+ * Characters that can trigger formula execution in spreadsheet applications
+ */
+const FORMULA_TRIGGER_CHARS = ['=', '+', '-', '@', '\t', '\r'];
+
+/**
  * Escape a value for CSV format
+ * Includes protection against CSV injection (formula execution in spreadsheets)
  */
 export function escapeCSVValue(value: string, delimiter = DEFAULT_DELIMITER): string {
   if (!value) return '';
 
+  let processedValue = value;
+
+  // CSV injection prevention: prefix formula-triggering characters with single quote
+  // This prevents spreadsheet applications from interpreting the cell as a formula
+  if (FORMULA_TRIGGER_CHARS.some((char) => value.startsWith(char))) {
+    processedValue = "'" + value;
+  }
+
   // Check if escaping is needed
   const needsEscaping =
-    value.includes(delimiter) || value.includes('"') || value.includes('\n') || value.includes('\r');
+    processedValue.includes(delimiter) ||
+    processedValue.includes('"') ||
+    processedValue.includes('\n') ||
+    processedValue.includes('\r');
 
   if (needsEscaping) {
     // Escape double quotes by doubling them
-    const escaped = value.replace(/"/g, '""');
+    const escaped = processedValue.replace(/"/g, '""');
     return `"${escaped}"`;
   }
 
-  return value;
+  return processedValue;
 }
 
 /**

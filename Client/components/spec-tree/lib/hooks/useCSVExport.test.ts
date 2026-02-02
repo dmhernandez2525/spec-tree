@@ -82,6 +82,40 @@ describe('escapeCSVValue', () => {
     expect(escapeCSVValue('value;with;semicolons', ';')).toBe('"value;with;semicolons"');
     expect(escapeCSVValue('value,with,commas', ';')).toBe('value,with,commas');
   });
+
+  describe('CSV injection prevention', () => {
+    it('should prefix values starting with = to prevent formula execution', () => {
+      expect(escapeCSVValue('=SUM(A1:A10)')).toBe("'=SUM(A1:A10)");
+    });
+
+    it('should prefix values starting with + to prevent formula execution', () => {
+      expect(escapeCSVValue('+1234567890')).toBe("'+1234567890");
+    });
+
+    it('should prefix values starting with - to prevent formula execution', () => {
+      expect(escapeCSVValue('-1234567890')).toBe("'-1234567890");
+    });
+
+    it('should prefix values starting with @ to prevent formula execution', () => {
+      expect(escapeCSVValue('@mention')).toBe("'@mention");
+    });
+
+    it('should handle formula injection with commas (needs quoting)', () => {
+      const result = escapeCSVValue('=cmd|/c calc.exe');
+      expect(result).toContain("'=");
+    });
+
+    it('should handle DDE injection attempts', () => {
+      const result = escapeCSVValue('=cmd|/c notepad.exe');
+      expect(result.startsWith("'=") || result.startsWith('"')).toBe(true);
+    });
+
+    it('should not prefix normal values', () => {
+      expect(escapeCSVValue('normal value')).toBe('normal value');
+      expect(escapeCSVValue('123')).toBe('123');
+      expect(escapeCSVValue('Title of Epic')).toBe('Title of Epic');
+    });
+  });
 });
 
 describe('getWorkItemTypeDisplayName', () => {
