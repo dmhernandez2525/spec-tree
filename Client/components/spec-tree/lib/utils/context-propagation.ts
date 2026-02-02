@@ -11,6 +11,7 @@ import {
   TaskType,
   ContextualQuestion,
 } from '../types/work-items';
+import { logger } from '@/lib/logger';
 
 /**
  * Format contextual Q&A pairs into a string
@@ -30,18 +31,83 @@ function formatContextualQuestions(
 }
 
 /**
- * Build context for an Epic
- * Includes: Global information, Epic's own contextual Q&A
+ * Format global contextual Q&A from state
  */
-export function buildEpicContext(
-  epic: EpicType,
-  state: RootState
-): string {
+function formatGlobalContextualQuestions(state: RootState): string {
+  const globalQuestions = state.sow.contextualQuestions;
+  return formatContextualQuestions(
+    globalQuestions,
+    '=== Global Project Context ===\n'
+  );
+}
+
+/**
+ * Calculate context quality metrics for logging
+ */
+export function getContextMetrics(context: string): {
+  length: number;
+  sections: number;
+  hasGlobalContext: boolean;
+  hasGlobalQuestions: boolean;
+  hasItemQuestions: boolean;
+} {
+  const sections = (context.match(/===/g) || []).length / 2;
+  return {
+    length: context.length,
+    sections,
+    hasGlobalContext: context.includes('=== Application Context ==='),
+    hasGlobalQuestions: context.includes('=== Global Project Context ==='),
+    hasItemQuestions:
+      context.includes('Contextual Information ===') &&
+      context.includes('Q:') &&
+      context.includes('A:'),
+  };
+}
+
+/**
+ * Log context quality for debugging and monitoring
+ */
+function logContextQuality(
+  contextType: string,
+  itemId: string,
+  context: string
+): void {
+  const metrics = getContextMetrics(context);
+
+  if (context.length === 0) {
+    logger.warn('context-propagation', `Empty context for ${contextType}`, {
+      itemId,
+    });
+  } else if (!metrics.hasGlobalContext && !metrics.hasGlobalQuestions) {
+    logger.debug(
+      'context-propagation',
+      `${contextType} context missing global info`,
+      { itemId, length: metrics.length }
+    );
+  } else {
+    logger.debug('context-propagation', `${contextType} context built`, {
+      itemId,
+      ...metrics,
+    });
+  }
+}
+
+/**
+ * Build context for an Epic
+ * Includes: Global information, Global Q&A, Epic's own contextual Q&A
+ */
+export function buildEpicContext(epic: EpicType, state: RootState): string {
   const globalInfo = state.sow.globalInformation;
   const parts: string[] = [];
 
   if (globalInfo) {
     parts.push(`=== Application Context ===\n${globalInfo}`);
+  }
+
+  // Add global contextual Q&A
+  const globalQuestions = formatGlobalContextualQuestions(state);
+  if (globalQuestions) {
+    parts.push(globalQuestions);
   }
 
   const epicQuestions = formatContextualQuestions(
@@ -52,12 +118,14 @@ export function buildEpicContext(
     parts.push(epicQuestions);
   }
 
-  return parts.join('\n\n');
+  const context = parts.join('\n\n');
+  logContextQuality('Epic', epic.id, context);
+  return context;
 }
 
 /**
  * Build context for a Feature
- * Includes: Global information, Parent Epic's info and Q&A, Feature's own Q&A
+ * Includes: Global information, Global Q&A, Parent Epic's info and Q&A, Feature's own Q&A
  */
 export function buildFeatureContext(
   feature: FeatureType,
@@ -68,6 +136,12 @@ export function buildFeatureContext(
 
   if (globalInfo) {
     parts.push(`=== Application Context ===\n${globalInfo}`);
+  }
+
+  // Add global contextual Q&A
+  const globalQuestions = formatGlobalContextualQuestions(state);
+  if (globalQuestions) {
+    parts.push(globalQuestions);
   }
 
   // Get parent epic context
@@ -97,12 +171,14 @@ export function buildFeatureContext(
     parts.push(featureQuestions);
   }
 
-  return parts.join('\n\n');
+  const context = parts.join('\n\n');
+  logContextQuality('Feature', feature.id, context);
+  return context;
 }
 
 /**
  * Build context for a User Story
- * Includes: Global info, Epic info and Q&A, Feature info and Q&A, User Story's own Q&A
+ * Includes: Global info, Global Q&A, Epic info and Q&A, Feature info and Q&A, User Story's own Q&A
  */
 export function buildUserStoryContext(
   userStory: UserStoryType,
@@ -113,6 +189,12 @@ export function buildUserStoryContext(
 
   if (globalInfo) {
     parts.push(`=== Application Context ===\n${globalInfo}`);
+  }
+
+  // Add global contextual Q&A
+  const globalQuestions = formatGlobalContextualQuestions(state);
+  if (globalQuestions) {
+    parts.push(globalQuestions);
   }
 
   // Get parent feature
@@ -160,17 +242,16 @@ export function buildUserStoryContext(
     parts.push(storyQuestions);
   }
 
-  return parts.join('\n\n');
+  const context = parts.join('\n\n');
+  logContextQuality('UserStory', userStory.id, context);
+  return context;
 }
 
 /**
  * Build context for a Task
- * Includes: Global info, Epic, Feature, User Story info and all Q&A
+ * Includes: Global info, Global Q&A, Epic, Feature, User Story info and all Q&A
  */
-export function buildTaskContext(
-  task: TaskType,
-  state: RootState
-): string {
+export function buildTaskContext(task: TaskType, state: RootState): string {
   const globalInfo = state.sow.globalInformation;
   const parts: string[] = [];
 
@@ -178,11 +259,20 @@ export function buildTaskContext(
     parts.push(`=== Application Context ===\n${globalInfo}`);
   }
 
+  // Add global contextual Q&A
+  const globalQuestions = formatGlobalContextualQuestions(state);
+  if (globalQuestions) {
+    parts.push(globalQuestions);
+  }
+
   // Get parent user story
   const parentUserStory = selectUserStoryById(state, task.parentUserStoryId);
   if (parentUserStory) {
     // Get parent feature
-    const parentFeature = selectFeatureById(state, parentUserStory.parentFeatureId);
+    const parentFeature = selectFeatureById(
+      state,
+      parentUserStory.parentFeatureId
+    );
     if (parentFeature) {
       // Get grandparent epic
       const parentEpic = selectEpicById(state, parentFeature.parentEpicId);
@@ -242,7 +332,9 @@ export function buildTaskContext(
     parts.push(taskQuestions);
   }
 
-  return parts.join('\n\n');
+  const context = parts.join('\n\n');
+  logContextQuality('Task', task.id, context);
+  return context;
 }
 
 /**
