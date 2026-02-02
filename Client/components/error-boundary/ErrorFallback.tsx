@@ -238,6 +238,7 @@ function ErrorIcon({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <circle cx="12" cy="12" r="10" />
       <line x1="12" x2="12" y1="8" y2="12" />
@@ -257,6 +258,7 @@ function ChevronIcon({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <path d="m9 18 6-6-6-6" />
     </svg>
@@ -274,6 +276,7 @@ function RefreshIcon({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
       <path d="M21 3v5h-5" />
@@ -294,6 +297,7 @@ function ReloadIcon({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
       <path d="M21 3v5h-5" />
@@ -312,6 +316,7 @@ function ReportIcon({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
       <line x1="4" x2="4" y1="22" y2="15" />
