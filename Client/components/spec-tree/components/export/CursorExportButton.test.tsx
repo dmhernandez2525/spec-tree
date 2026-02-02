@@ -229,4 +229,34 @@ describe('CursorExportButton', () => {
     const button = screen.getByRole('button');
     expect(button).not.toBeDisabled();
   });
+
+  it('renders icon SVGs in button', () => {
+    const store = createMockStore();
+
+    render(
+      <Provider store={store}>
+        <CursorExportButton />
+      </Provider>
+    );
+
+    // Button should contain SVG icons
+    const svgs = screen.getByRole('button').querySelectorAll('svg');
+    expect(svgs.length).toBeGreaterThan(0);
+  });
+
+  it('passes custom options prop', () => {
+    const store = createMockStore();
+    const customOptions = {
+      includeTechStack: false,
+    };
+
+    render(
+      <Provider store={store}>
+        <CursorExportButton options={customOptions} />
+      </Provider>
+    );
+
+    // Component should render without errors
+    expect(screen.getByText('Cursor Export')).toBeInTheDocument();
+  });
 });

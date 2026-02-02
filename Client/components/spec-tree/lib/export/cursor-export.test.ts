@@ -9,12 +9,19 @@ import {
   exportProjectToCursorRules,
   exportFeatureToCursorRules,
   exportEpicToCursorRules,
+  downloadCursorRules,
   copyCursorRulesToClipboard,
   getExportStatistics,
   CursorExportOptions,
 } from './cursor-export';
 import { RootState } from '@/lib/store';
 import { EpicType, FeatureType, UserStoryType, TaskType } from '../types/work-items';
+import * as importExport from '../utils/import-export';
+
+// Mock the import-export utils
+vi.mock('../utils/import-export', () => ({
+  downloadFile: vi.fn(),
+}));
 
 // Partial type for mock slices
 type MockSlice<T> = Partial<T>;
@@ -360,6 +367,175 @@ describe('Cursor Export', () => {
 
       expect(stats.totalEpics).toBe(2);
       expect(stats.totalFeatures).toBe(3);
+    });
+  });
+
+  describe('downloadCursorRules', () => {
+    it('calls downloadFile with correct parameters', () => {
+      const content = '# Test Content';
+      downloadCursorRules(content, 'custom.mdc');
+
+      expect(importExport.downloadFile).toHaveBeenCalledWith(
+        content,
+        'custom.mdc',
+        'text/markdown'
+      );
+    });
+
+    it('uses default filename when not provided', () => {
+      const content = '# Default filename test';
+      downloadCursorRules(content);
+
+      expect(importExport.downloadFile).toHaveBeenCalledWith(
+        content,
+        'project.mdc',
+        'text/markdown'
+      );
+    });
+  });
+
+  describe('exportEpicToCursorRules - additional tests', () => {
+    it('includes epic without goal or success criteria', () => {
+      const epic = createMockEpic({
+        goal: '',
+        successCriteria: '',
+      });
+
+      const state = createMockState({
+        epics: { 'epic-1': epic },
+      });
+
+      const result = exportEpicToCursorRules('epic-1', state);
+
+      expect(result).toContain('## Epic: Test Epic');
+      expect(result).not.toContain('**Goal:**');
+      expect(result).not.toContain('**Success Criteria:**');
+    });
+
+    it('includes epic with user stories and tasks', () => {
+      const epic = createMockEpic();
+      const feature = createMockFeature({ parentEpicId: 'epic-1' });
+      const userStory = createMockUserStory({ parentFeatureId: 'feature-1' });
+      const task = createMockTask({ parentUserStoryId: 'story-1' });
+
+      const state = createMockState({
+        epics: { 'epic-1': epic },
+        features: { 'feature-1': feature },
+        userStories: { 'story-1': userStory },
+        tasks: { 'task-1': task },
+      });
+
+      const result = exportEpicToCursorRules('epic-1', state);
+
+      expect(result).toContain('## Epic: Test Epic');
+      expect(result).toContain('Test Feature');
+    });
+
+    it('handles epic with no features', () => {
+      const epic = createMockEpic();
+
+      const state = createMockState({
+        epics: { 'epic-1': epic },
+      });
+
+      const result = exportEpicToCursorRules('epic-1', state);
+
+      expect(result).toContain('## Epic: Test Epic');
+    });
+
+    it('applies custom options correctly for epic', () => {
+      const epic = createMockEpic();
+      const state = createMockState({
+        epics: { 'epic-1': epic },
+      });
+
+      const options: CursorExportOptions = {
+        includeTechStack: false,
+        includeCodeStyle: true,
+        includeArchitecture: true,
+      };
+
+      const result = exportEpicToCursorRules('epic-1', state, options);
+
+      // Should include code style and architecture sections but not tech stack
+      expect(result).toContain('## Code Style');
+      expect(result).toContain('## Architecture');
+      expect(result).not.toContain('## Tech Stack');
+    });
+  });
+
+  describe('exportFeatureToCursorRules - additional tests', () => {
+    it('applies custom options correctly for feature', () => {
+      const feature = createMockFeature();
+      const state = createMockState({
+        features: { 'feature-1': feature },
+      });
+
+      const options: CursorExportOptions = {
+        includeTechStack: false,
+        includeCodeStyle: true,
+        includeArchitecture: false,
+      };
+
+      const result = exportFeatureToCursorRules('feature-1', state, options);
+
+      // Should include code style but not tech stack or architecture
+      expect(result).toContain('## Code Style');
+      expect(result).not.toContain('## Tech Stack');
+      expect(result).not.toContain('## Architecture');
+    });
+
+    it('handles feature with multiple user stories and tasks', () => {
+      const feature = createMockFeature();
+      const story1 = createMockUserStory({ id: 'story-1', title: 'First Story' });
+      const story2 = createMockUserStory({ id: 'story-2', title: 'Second Story' });
+      const task1 = createMockTask({ id: 'task-1', parentUserStoryId: 'story-1' });
+      const task2 = createMockTask({ id: 'task-2', parentUserStoryId: 'story-2' });
+
+      const state = createMockState({
+        features: { 'feature-1': feature },
+        userStories: { 'story-1': story1, 'story-2': story2 },
+        tasks: { 'task-1': task1, 'task-2': task2 },
+      });
+
+      const result = exportFeatureToCursorRules('feature-1', state);
+
+      expect(result).toContain('First Story');
+      expect(result).toContain('Second Story');
+    });
+  });
+
+  describe('exportProjectToCursorRules - additional tests', () => {
+    it('applies all section options correctly', () => {
+      const state = createMockState();
+
+      const options: CursorExportOptions = {
+        includeTechStack: true,
+        includeCodeStyle: true,
+        includeArchitecture: true,
+      };
+
+      const result = exportProjectToCursorRules(state, options);
+
+      expect(result).toContain('## Tech Stack');
+      expect(result).toContain('## Code Style');
+      expect(result).toContain('## Architecture');
+    });
+
+    it('excludes sections when options are false', () => {
+      const state = createMockState();
+
+      const options: CursorExportOptions = {
+        includeTechStack: false,
+        includeCodeStyle: false,
+        includeArchitecture: false,
+      };
+
+      const result = exportProjectToCursorRules(state, options);
+
+      expect(result).not.toContain('## Tech Stack');
+      expect(result).not.toContain('## Code Style');
+      expect(result).not.toContain('## Architecture');
     });
   });
 });
