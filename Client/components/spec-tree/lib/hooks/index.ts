@@ -194,3 +194,21 @@ export type {
   UseRegenerationFeedbackOptions,
   UseRegenerationFeedbackReturn,
 } from './useRegenerationFeedback';
+
+export {
+  useBatchGeneration,
+  getBatchItemStatusDisplayName,
+  getBatchStatusDisplayName,
+  createBatchItems,
+} from './useBatchGeneration';
+export type {
+  BatchWorkItemType,
+  BatchItemStatus,
+  BatchStatus,
+  BatchItem,
+  BatchProgress,
+  BatchStatistics,
+  BatchGenerator,
+  UseBatchGenerationOptions,
+  UseBatchGenerationReturn,
+} from './useBatchGeneration';
