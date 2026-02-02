@@ -406,7 +406,6 @@ export function useDragDropReorder(
 
       const result = items.map((item) => ({ ...item }));
       const draggedIndex = result.findIndex((i) => i.id === draggedId);
-      const targetIndex = result.findIndex((i) => i.id === targetId);
 
       // Determine new parent
       const newParentId = position === 'inside' ? targetId : targetItem.parentId;
