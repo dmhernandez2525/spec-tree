@@ -480,3 +480,47 @@ Body content`;
     expect(errors).toEqual([]);
   });
 });
+
+describe('cross-platform compatibility', () => {
+  it('should handle Windows line endings (CRLF)', () => {
+    const content = '---\r\ntitle: Test\r\n---\r\n\r\nBody content';
+    const { frontmatter, body } = parseFrontmatter(content);
+
+    expect(frontmatter.title).toBe('Test');
+    expect(body).toContain('Body content');
+  });
+
+  it('should handle mixed line endings', () => {
+    const content = '---\r\ntitle: Test\n---\n\r\nBody content';
+    const { frontmatter, body } = parseFrontmatter(content);
+
+    expect(frontmatter.title).toBe('Test');
+    expect(body).toContain('Body content');
+  });
+
+  it('should handle old Mac line endings (CR)', () => {
+    const content = '---\rtitle: Test\r---\r\rBody content';
+    const { frontmatter, body } = parseFrontmatter(content);
+
+    expect(frontmatter.title).toBe('Test');
+    expect(body).toContain('Body content');
+  });
+});
+
+describe('content size validation', () => {
+  it('should reject oversized files in importFromFiles', async () => {
+    const { result } = renderHook(() => useCursorRulesImport());
+
+    // Create a mock file that reports a large size
+    const largeFile = new File(['small content'], 'large.mdc', { type: 'text/plain' });
+    Object.defineProperty(largeFile, 'size', { value: 15 * 1024 * 1024 }); // 15MB
+
+    let importResult;
+    await act(async () => {
+      importResult = await result.current.importFromFiles([largeFile]);
+    });
+
+    expect(importResult!.errors.length).toBe(1);
+    expect(importResult!.errors[0].error).toContain('exceeds maximum size');
+  });
+});

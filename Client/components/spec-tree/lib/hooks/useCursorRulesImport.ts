@@ -143,7 +143,7 @@ export interface UseCursorRulesImportOptions {
  */
 export interface UseCursorRulesImportReturn {
   /** Import rules from MDC file content */
-  importFromContent: (content: string, filename?: string) => ParsedCursorRule;
+  importFromContent: (content: string) => ParsedCursorRule;
   /** Import multiple rules from files */
   importFromFiles: (files: File[]) => Promise<CursorRulesImportResult>;
   /** Parse frontmatter from MDC content */
@@ -169,14 +169,30 @@ export interface UseCursorRulesImportReturn {
 }
 
 /**
+ * Normalize line endings to Unix style (LF)
+ */
+function normalizeLineEndings(content: string): string {
+  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
+
+/**
+ * Maximum content size for import (10MB)
+ */
+const MAX_CONTENT_SIZE = 10 * 1024 * 1024;
+
+/**
  * Parse YAML frontmatter from MDC content
+ * @param content - The MDC file content
+ * @returns Object with parsed frontmatter and body content
  */
 export function parseFrontmatter(content: string): { frontmatter: CursorRuleFrontmatter; body: string } {
+  // Normalize line endings for cross-platform compatibility
+  const normalizedContent = normalizeLineEndings(content);
   const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
+  const match = normalizedContent.match(frontmatterRegex);
 
   if (!match) {
-    return { frontmatter: {}, body: content };
+    return { frontmatter: {}, body: normalizedContent };
   }
 
   const [, yamlContent, body] = match;
@@ -526,25 +542,30 @@ export function useCursorRulesImport(
 
   /**
    * Import from content string
+   * @param content - The MDC file content to parse
+   * @returns Parsed cursor rule with extracted data
+   * @throws Error if content exceeds maximum size
    */
-  const importFromContent = useCallback(
-    (content: string, _filename?: string): ParsedCursorRule => {
-      const { frontmatter, body } = parseFrontmatter(content);
+  const importFromContent = useCallback((content: string): ParsedCursorRule => {
+    // Validate content size
+    if (content.length > MAX_CONTENT_SIZE) {
+      throw new Error(`Content exceeds maximum size of ${MAX_CONTENT_SIZE / 1024 / 1024}MB`);
+    }
 
-      return {
-        frontmatter,
-        content: body,
-        projectName: extractProjectName(body),
-        techStack: extractTechStack(body),
-        conventions: extractConventions(body),
-        forbiddenPatterns: extractForbiddenPatterns(body),
-        fileStructure: extractFileStructure(body),
-        patterns: extractPatterns(body),
-        sections: extractAllSections(body),
-      };
-    },
-    []
-  );
+    const { frontmatter, body } = parseFrontmatter(content);
+
+    return {
+      frontmatter,
+      content: body,
+      projectName: extractProjectName(body),
+      techStack: extractTechStack(body),
+      conventions: extractConventions(body),
+      forbiddenPatterns: extractForbiddenPatterns(body),
+      fileStructure: extractFileStructure(body),
+      patterns: extractPatterns(body),
+      sections: extractAllSections(body),
+    };
+  }, []);
 
   /**
    * Import from file objects
@@ -568,8 +589,17 @@ export function useCursorRulesImport(
       try {
         for (const file of files) {
           try {
+            // Validate file size before reading
+            if (file.size > MAX_CONTENT_SIZE) {
+              result.errors.push({
+                file: file.name,
+                error: `File exceeds maximum size of ${MAX_CONTENT_SIZE / 1024 / 1024}MB`,
+              });
+              continue;
+            }
+
             const content = await file.text();
-            const rule = importFromContent(content, file.name);
+            const rule = importFromContent(content);
             result.rules.push(rule);
 
             // Aggregate context
