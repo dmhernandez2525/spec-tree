@@ -85,3 +85,21 @@ export type {
   UseWorkItemSearchOptions,
   UseWorkItemSearchReturn,
 } from './useWorkItemSearch';
+
+export {
+  useMoveWorkItem,
+  validateMove,
+  getParentTypeLabel,
+  getItemTypeLabel,
+  PARENT_TYPE_MAP,
+} from './useMoveWorkItem';
+export type {
+  MovableWorkItemType,
+  ParentType,
+  MoveableItem,
+  PotentialParent,
+  MoveResult,
+  MoveWorkItemData,
+  UseMoveWorkItemOptions,
+  UseMoveWorkItemReturn,
+} from './useMoveWorkItem';
