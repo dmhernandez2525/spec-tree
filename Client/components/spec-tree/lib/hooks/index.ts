@@ -175,3 +175,22 @@ export type {
   UseTokenUsageOptions,
   UseTokenUsageReturn,
 } from './useTokenUsage';
+
+export {
+  useRegenerationFeedback,
+  getFeedbackTypeDisplayName,
+  getFeedbackTypePrompt,
+  buildRegenerationPrompt,
+  FEEDBACK_OPTIONS,
+} from './useRegenerationFeedback';
+export type {
+  FeedbackType,
+  FeedbackWorkItemType,
+  SatisfactionRating,
+  FeedbackRecord,
+  FeedbackStatistics,
+  FeedbackSuggestion,
+  FeedbackStore,
+  UseRegenerationFeedbackOptions,
+  UseRegenerationFeedbackReturn,
+} from './useRegenerationFeedback';
