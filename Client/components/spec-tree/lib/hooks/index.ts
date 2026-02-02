@@ -370,3 +370,25 @@ export type {
   UseMarkdownExportOptions,
   UseMarkdownExportReturn,
 } from './useMarkdownExport';
+
+export {
+  useDragDropReorder,
+  getValidParentTypes,
+  canBeChildOf,
+  getItemTypeDisplayName as getDraggableItemTypeDisplayName,
+  isAncestorOf,
+  getSiblings,
+  getChildren,
+  calculateNewOrder,
+  getDropIndicatorPosition,
+} from './useDragDropReorder';
+export type {
+  DraggableItemType,
+  DraggableItem,
+  DropPosition,
+  DragState,
+  ReorderResult,
+  MoveValidation,
+  UseDragDropReorderOptions,
+  UseDragDropReorderReturn,
+} from './useDragDropReorder';
