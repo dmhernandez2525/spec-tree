@@ -103,3 +103,21 @@ export type {
   UseMoveWorkItemOptions,
   UseMoveWorkItemReturn,
 } from './useMoveWorkItem';
+
+export {
+  useWorkItemTemplate,
+  getTemplateTypeDisplayName,
+  BUILT_IN_TEMPLATES,
+} from './useWorkItemTemplate';
+export type {
+  TemplateWorkItemType,
+  WorkItemTemplate,
+  EpicTemplateContent,
+  FeatureTemplateContent,
+  UserStoryTemplateContent,
+  TaskTemplateContent,
+  TemplateContent,
+  TemplateStore,
+  UseWorkItemTemplateOptions,
+  UseWorkItemTemplateReturn,
+} from './useWorkItemTemplate';
