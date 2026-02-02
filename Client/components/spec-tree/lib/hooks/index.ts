@@ -41,3 +41,17 @@ export type {
 } from './useModelSelection';
 
 export { useAcceptanceCriteria } from './use-acceptance-criteria';
+
+export {
+  useBreadcrumb,
+  buildBreadcrumbPath,
+  getAncestorIds,
+} from './useBreadcrumb';
+export type {
+  WorkItemType,
+  WorkItemInfo,
+  BreadcrumbItem,
+  WorkItemData,
+  UseBreadcrumbOptions,
+  UseBreadcrumbReturn,
+} from './useBreadcrumb';
