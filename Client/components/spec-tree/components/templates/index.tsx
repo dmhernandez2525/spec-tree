@@ -748,3 +748,7 @@ export default function Templates({ appId }: TemplatesProps) {
     </Dialog>
   );
 }
+
+// Re-export work item template picker components (F1.1.18)
+export { TemplatePickerDialog } from './TemplatePickerDialog';
+export type { TemplatePickerDialogProps } from './TemplatePickerDialog';
