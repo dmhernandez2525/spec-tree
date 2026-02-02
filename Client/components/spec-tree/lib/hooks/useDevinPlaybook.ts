@@ -8,7 +8,7 @@
  * and verification commands.
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef } from 'react';
 
 // ============================================================================
 // Types
@@ -628,8 +628,6 @@ export function getDefaultVerificationCommands(options: PlaybookOptions = DEFAUL
 // Hook Implementation
 // ============================================================================
 
-let criterionIdCounter = 0;
-
 /**
  * Hook for generating Devin playbook specifications
  */
@@ -638,6 +636,7 @@ export function useDevinPlaybook(options: UseDevinPlaybookOptions = {}): UseDevi
 
   const [playbooks, setPlaybooks] = useState<DevinTaskSpec[]>([]);
   const [lastPlaybook, setLastPlaybook] = useState<DevinTaskSpec | null>(null);
+  const criterionIdCounterRef = useRef(0);
 
   /**
    * Create a user story
@@ -651,9 +650,9 @@ export function useDevinPlaybook(options: UseDevinPlaybookOptions = {}): UseDevi
    */
   const createAcceptanceCriterion = useCallback(
     (description: string, opts?: Partial<AcceptanceCriterion>): AcceptanceCriterion => {
-      criterionIdCounter += 1;
+      criterionIdCounterRef.current += 1;
       return {
-        id: `AC-${criterionIdCounter}`,
+        id: `AC-${criterionIdCounterRef.current}`,
         description,
         testable: true,
         verificationMethod: 'automated',
