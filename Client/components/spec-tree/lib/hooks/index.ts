@@ -157,3 +157,21 @@ export type {
   UseGenerationHistoryReturn,
   GenerationStatistics,
 } from './useGenerationHistory';
+
+export {
+  useTokenUsage,
+  formatTokenCount,
+  getAlertColor,
+  MODEL_TOKEN_LIMITS,
+} from './useTokenUsage';
+export type {
+  TokenEstimationMethod,
+  TokenAlertLevel,
+  TokenAlert,
+  TokenUsageRecord,
+  TokenBudget,
+  TokenUsageSummary,
+  ModelTokenLimits,
+  UseTokenUsageOptions,
+  UseTokenUsageReturn,
+} from './useTokenUsage';
