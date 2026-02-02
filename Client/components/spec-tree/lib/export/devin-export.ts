@@ -57,13 +57,32 @@ const DEFAULT_OPTIONS: DevinExportOptions = {
 };
 
 /**
+ * Validate that an ID is provided and non-empty
+ * @param id - The ID to validate
+ * @param type - The type of ID (for error message)
+ * @throws Error if ID is empty or whitespace
+ */
+function validateId(id: string, type: string): void {
+  if (!id || id.trim() === '') {
+    throw new Error(`${type} ID is required and cannot be empty`);
+  }
+}
+
+/**
  * Export a single task as Devin format
+ * @param taskId - The ID of the task to export
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated Devin task specification
+ * @throws Error if taskId is empty or task not found
  */
 export function exportTaskAsDevin(
   taskId: string,
   state: RootState,
   options: DevinExportOptions = DEFAULT_OPTIONS
 ): string {
+  validateId(taskId, 'Task');
+
   const sowState = state.sow;
   const task = sowState.tasks?.[taskId];
 
@@ -77,12 +96,19 @@ export function exportTaskAsDevin(
 
 /**
  * Export all tasks in a user story as Devin format
+ * @param userStoryId - The ID of the user story
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated Devin task specifications
+ * @throws Error if userStoryId is empty, story not found, or no tasks found
  */
 export function exportUserStoryTasksAsDevin(
   userStoryId: string,
   state: RootState,
   options: DevinExportOptions = DEFAULT_OPTIONS
 ): string {
+  validateId(userStoryId, 'User story');
+
   const sowState = state.sow;
   const userStory = selectUserStoryById(state, userStoryId);
 
@@ -105,12 +131,19 @@ export function exportUserStoryTasksAsDevin(
 
 /**
  * Export all tasks in a feature as Devin format
+ * @param featureId - The ID of the feature
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated Devin task specifications
+ * @throws Error if featureId is empty, feature not found, or no tasks found
  */
 export function exportFeatureTasksAsDevin(
   featureId: string,
   state: RootState,
   options: DevinExportOptions = DEFAULT_OPTIONS
 ): string {
+  validateId(featureId, 'Feature');
+
   const sowState = state.sow;
   const feature = selectFeatureById(state, featureId);
 
@@ -141,12 +174,19 @@ export function exportFeatureTasksAsDevin(
 
 /**
  * Export all tasks in an epic as Devin format
+ * @param epicId - The ID of the epic
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated Devin task specifications
+ * @throws Error if epicId is empty, epic not found, or no tasks found
  */
 export function exportEpicTasksAsDevin(
   epicId: string,
   state: RootState,
   options: DevinExportOptions = DEFAULT_OPTIONS
 ): string {
+  validateId(epicId, 'Epic');
+
   const sowState = state.sow;
   const epic = selectEpicById(state, epicId);
 
@@ -270,12 +310,19 @@ export async function copyDevinTasksToClipboard(content: string): Promise<boolea
 /**
  * Generate Linear-compatible Devin task
  * Includes metadata for Linear import
+ * @param taskId - The ID of the task
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated Linear-compatible Devin task
+ * @throws Error if taskId is empty or task not found
  */
 export function generateLinearDevinTask(
   taskId: string,
   state: RootState,
   options: DevinExportOptions = DEFAULT_OPTIONS
 ): string {
+  validateId(taskId, 'Task');
+
   const sowState = state.sow;
   const task = sowState.tasks?.[taskId];
 
@@ -301,6 +348,9 @@ export function generateLinearDevinTask(
 
 /**
  * Get Devin export statistics
+ * Optimized to use Map-based lookups for O(n) time complexity
+ * @param state - The Redux state
+ * @returns Statistics about tasks for Devin export
  */
 export function getDevinExportStatistics(state: RootState): {
   totalTasks: number;
@@ -313,24 +363,36 @@ export function getDevinExportStatistics(state: RootState): {
   const tasks = Object.values(sowState.tasks || {}).filter(Boolean) as TaskType[];
   const userStories = Object.values(sowState.userStories || {}).filter(Boolean) as UserStoryType[];
 
-  // Count tasks by type
-  const tasksByType: Record<string, number> = {};
-  for (const task of tasks) {
-    const type = inferTaskType(task);
-    tasksByType[type] = (tasksByType[type] || 0) + 1;
+  // Build a Map of story ID -> has acceptance criteria (O(n) lookup)
+  const storyHasAcceptanceCriteria = new Map<string, boolean>();
+  for (const story of userStories) {
+    storyHasAcceptanceCriteria.set(
+      story.id,
+      Boolean(story.acceptanceCriteria && story.acceptanceCriteria.length > 0)
+    );
   }
 
-  // Count tasks with acceptance criteria (from parent user story)
+  // Count tasks by type and those with acceptance criteria (single pass)
+  const tasksByType: Record<string, number> = {};
   let tasksWithAcceptanceCriteria = 0;
+  const uniqueStoryIds = new Set<string>();
+
   for (const task of tasks) {
-    const story = userStories.find((s) => s.id === task.parentUserStoryId);
-    if (story?.acceptanceCriteria && story.acceptanceCriteria.length > 0) {
+    // Count by type
+    const type = inferTaskType(task);
+    tasksByType[type] = (tasksByType[type] || 0) + 1;
+
+    // Count with acceptance criteria (O(1) lookup)
+    if (storyHasAcceptanceCriteria.get(task.parentUserStoryId)) {
       tasksWithAcceptanceCriteria++;
     }
+
+    // Track unique stories for average calculation
+    uniqueStoryIds.add(task.parentUserStoryId);
   }
 
   // Calculate average tasks per story
-  const storiesWithTasks = new Set(tasks.map((t) => t.parentUserStoryId)).size;
+  const storiesWithTasks = uniqueStoryIds.size;
   const averageTasksPerStory = storiesWithTasks > 0 ? tasks.length / storiesWithTasks : 0;
 
   return {

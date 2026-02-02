@@ -9,7 +9,7 @@
  * Devin by Cognition works best with atomic, 4-8 hour task specifications.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,6 +23,12 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { RootState } from '@/lib/store';
 import {
   exportTaskAsDevin,
@@ -36,6 +42,17 @@ import {
   getDevinExportStatistics,
   DevinExportOptions,
 } from '../../lib/export/devin-export';
+import {
+  DevinIcon,
+  ChevronDownIcon,
+  TaskIcon,
+  DownloadIcon,
+  ClipboardIcon,
+  SpinnerIcon,
+  CheckIcon,
+  ErrorIcon,
+} from './export-icons';
+import { cn } from '@/lib/utils';
 
 export interface DevinExportButtonProps {
   /** Optional task ID to export single task */
@@ -55,10 +72,37 @@ export interface DevinExportButtonProps {
   /** Additional class names */
   className?: string;
   /** Callback when export completes */
-  onExportComplete?: (success: boolean) => void;
+  onExportComplete?: (success: boolean, error?: string) => void;
 }
 
 type ExportStatus = 'idle' | 'exporting' | 'success' | 'error';
+
+interface ExportState {
+  status: ExportStatus;
+  lastAction: string;
+  errorMessage: string | null;
+}
+
+// Linear icon (specific to Devin export)
+function LinearIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn('h-4 w-4 mr-2', className)}
+      aria-hidden="true"
+    >
+      <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
+      <line x1="12" y1="22" x2="12" y2="15.5" />
+      <polyline points="22 8.5 12 15.5 2 8.5" />
+    </svg>
+  );
+}
 
 export function DevinExportButton({
   taskId,
@@ -71,36 +115,70 @@ export function DevinExportButton({
   className,
   onExportComplete,
 }: DevinExportButtonProps) {
-  const [status, setStatus] = useState<ExportStatus>('idle');
-  const [lastAction, setLastAction] = useState<string>('');
-  const state = useSelector((state: RootState) => state);
+  const [exportState, setExportState] = useState<ExportState>({
+    status: 'idle',
+    lastAction: '',
+    errorMessage: null,
+  });
+
+  // Only select the sow slice, not entire state - prevents unnecessary re-renders
+  const sowState = useSelector((state: RootState) => state.sow);
+
+  // Memoize the full state object for export functions that need RootState
+  const fullState = useMemo(() => ({ sow: sowState } as RootState), [sowState]);
+
+  // Memoize statistics calculation - expensive operation
+  const stats = useMemo(
+    () => getDevinExportStatistics(fullState),
+    [fullState]
+  );
 
   const getTasksContent = useCallback((): string => {
     if (taskId) {
-      return exportTaskAsDevin(taskId, state, options);
+      return exportTaskAsDevin(taskId, fullState, options);
     }
     if (userStoryId) {
-      return exportUserStoryTasksAsDevin(userStoryId, state, options);
+      return exportUserStoryTasksAsDevin(userStoryId, fullState, options);
     }
     if (featureId) {
-      return exportFeatureTasksAsDevin(featureId, state, options);
+      return exportFeatureTasksAsDevin(featureId, fullState, options);
     }
     if (epicId) {
-      return exportEpicTasksAsDevin(epicId, state, options);
+      return exportEpicTasksAsDevin(epicId, fullState, options);
     }
-    return exportAllTasksAsDevin(state, options);
-  }, [taskId, userStoryId, featureId, epicId, state, options]);
+    return exportAllTasksAsDevin(fullState, options);
+  }, [taskId, userStoryId, featureId, epicId, fullState, options]);
 
   const getLinearContent = useCallback((): string => {
     if (taskId) {
-      return generateLinearDevinTask(taskId, state, options);
+      return generateLinearDevinTask(taskId, fullState, options);
     }
     throw new Error('Task ID required for Linear export');
-  }, [taskId, state, options]);
+  }, [taskId, fullState, options]);
+
+  const handleError = useCallback((error: unknown, action: string) => {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    setExportState({
+      status: 'error',
+      lastAction: action,
+      errorMessage,
+    });
+    onExportComplete?.(false, errorMessage);
+    setTimeout(() => setExportState({ status: 'idle', lastAction: '', errorMessage: null }), 3000);
+  }, [onExportComplete]);
+
+  const handleSuccess = useCallback((action: string) => {
+    setExportState({
+      status: 'success',
+      lastAction: action,
+      errorMessage: null,
+    });
+    onExportComplete?.(true);
+    setTimeout(() => setExportState({ status: 'idle', lastAction: '', errorMessage: null }), 2000);
+  }, [onExportComplete]);
 
   const handleDownloadTasks = useCallback(async () => {
-    setStatus('exporting');
-    setLastAction('download-tasks');
+    setExportState({ status: 'exporting', lastAction: 'download-tasks', errorMessage: null });
 
     try {
       const content = getTasksContent();
@@ -114,74 +192,55 @@ export function DevinExportButton({
         ? `devin-epic-tasks.md`
         : `devin-all-tasks.md`;
       downloadDevinTasks(content, filename);
-      setStatus('success');
-      onExportComplete?.(true);
-      setTimeout(() => setStatus('idle'), 2000);
+      handleSuccess('download-tasks');
     } catch (error) {
-      console.error('Devin export failed:', error);
-      setStatus('error');
-      onExportComplete?.(false);
-      setTimeout(() => setStatus('idle'), 3000);
+      handleError(error, 'download-tasks');
     }
-  }, [getTasksContent, taskId, userStoryId, featureId, epicId, onExportComplete]);
+  }, [getTasksContent, taskId, userStoryId, featureId, epicId, handleSuccess, handleError]);
 
   const handleCopyTasks = useCallback(async () => {
-    setStatus('exporting');
-    setLastAction('copy-tasks');
+    setExportState({ status: 'exporting', lastAction: 'copy-tasks', errorMessage: null });
 
     try {
       const content = getTasksContent();
       const success = await copyDevinTasksToClipboard(content);
 
       if (success) {
-        setStatus('success');
-        onExportComplete?.(true);
+        handleSuccess('copy-tasks');
       } else {
-        setStatus('error');
-        onExportComplete?.(false);
+        handleError(new Error('Failed to copy to clipboard'), 'copy-tasks');
       }
-      setTimeout(() => setStatus('idle'), 2000);
     } catch (error) {
-      console.error('Devin copy failed:', error);
-      setStatus('error');
-      onExportComplete?.(false);
-      setTimeout(() => setStatus('idle'), 3000);
+      handleError(error, 'copy-tasks');
     }
-  }, [getTasksContent, onExportComplete]);
+  }, [getTasksContent, handleSuccess, handleError]);
 
   const handleCopyLinear = useCallback(async () => {
-    setStatus('exporting');
-    setLastAction('copy-linear');
+    setExportState({ status: 'exporting', lastAction: 'copy-linear', errorMessage: null });
 
     try {
       const content = getLinearContent();
       const success = await copyDevinTasksToClipboard(content);
 
       if (success) {
-        setStatus('success');
-        onExportComplete?.(true);
+        handleSuccess('copy-linear');
       } else {
-        setStatus('error');
-        onExportComplete?.(false);
+        handleError(new Error('Failed to copy to clipboard'), 'copy-linear');
       }
-      setTimeout(() => setStatus('idle'), 2000);
     } catch (error) {
-      console.error('Linear copy failed:', error);
-      setStatus('error');
-      onExportComplete?.(false);
-      setTimeout(() => setStatus('idle'), 3000);
+      handleError(error, 'copy-linear');
     }
-  }, [getLinearContent, onExportComplete]);
+  }, [getLinearContent, handleSuccess, handleError]);
 
-  const stats = getDevinExportStatistics(state);
   const hasTaskTarget = Boolean(taskId);
+  const { status, lastAction, errorMessage } = exportState;
 
   const getButtonContent = () => {
     if (status === 'exporting') {
       return (
         <>
-          <ExportIcon className="animate-spin" />
-          Exporting...
+          <SpinnerIcon className="animate-spin" />
+          <span className="ml-2">Exporting...</span>
         </>
       );
     }
@@ -190,25 +249,34 @@ export function DevinExportButton({
       return (
         <>
           <CheckIcon />
-          {lastAction.includes('copy') ? 'Copied!' : 'Downloaded!'}
+          <span className="ml-2">{lastAction.includes('copy') ? 'Copied!' : 'Downloaded!'}</span>
         </>
       );
     }
 
     if (status === 'error') {
       return (
-        <>
-          <ErrorIcon />
-          Export Failed
-        </>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="flex items-center">
+                <ErrorIcon />
+                <span className="ml-2">Export Failed</span>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{errorMessage || 'An error occurred during export'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       );
     }
 
     return (
       <>
         <DevinIcon />
-        Devin Export
-        <ChevronDownIcon />
+        <span className="ml-2">Devin Export</span>
+        <ChevronDownIcon className="ml-1" />
       </>
     );
   };
@@ -221,6 +289,7 @@ export function DevinExportButton({
           size={size}
           className={className}
           disabled={status === 'exporting'}
+          aria-label="Export tasks for Devin"
         >
           {getButtonContent()}
         </Button>
@@ -233,16 +302,16 @@ export function DevinExportButton({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <TaskIcon />
-            Task Specification
+            <span>Task Specification</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuItem onClick={handleDownloadTasks}>
               <DownloadIcon />
-              Download file
+              <span>Download file</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleCopyTasks}>
               <ClipboardIcon />
-              Copy to clipboard
+              <span>Copy to clipboard</span>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
@@ -251,190 +320,19 @@ export function DevinExportButton({
         {hasTaskTarget && (
           <DropdownMenuItem onClick={handleCopyLinear}>
             <LinearIcon />
-            Copy as Linear issue
+            <span>Copy as Linear issue</span>
           </DropdownMenuItem>
         )}
 
         <DropdownMenuSeparator />
 
-        <div className="px-2 py-1.5 text-xs text-muted-foreground">
+        <div className="px-2 py-1.5 text-xs text-muted-foreground" role="status" aria-live="polite">
           <div>Total Tasks: {stats.totalTasks}</div>
           <div>With Criteria: {stats.tasksWithAcceptanceCriteria}</div>
           <div>Avg per Story: {stats.averageTasksPerStory}</div>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-}
-
-// Icon components
-function DevinIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-      <path d="M9 9h6v6H9z" />
-      <path d="M9 1v2" />
-      <path d="M15 1v2" />
-      <path d="M9 21v2" />
-      <path d="M15 21v2" />
-      <path d="M1 9h2" />
-      <path d="M1 15h2" />
-      <path d="M21 9h2" />
-      <path d="M21 15h2" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-function TaskIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <path d="M9 11l3 3L22 4" />
-      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-    </svg>
-  );
-}
-
-function LinearIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
-      <line x1="12" y1="22" x2="12" y2="15.5" />
-      <polyline points="22 8.5 12 15.5 2 8.5" />
-    </svg>
-  );
-}
-
-function DownloadIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
-  );
-}
-
-function ClipboardIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-    </svg>
-  );
-}
-
-function ExportIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-    </svg>
-  );
-}
-
-function CheckIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-function ErrorIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="15" x2="9" y1="9" y2="15" />
-      <line x1="9" x2="15" y1="9" y2="15" />
-    </svg>
   );
 }
 

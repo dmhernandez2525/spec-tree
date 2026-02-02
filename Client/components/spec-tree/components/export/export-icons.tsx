@@ -31,6 +31,33 @@ export function V0Icon({ className }: IconProps) {
   );
 }
 
+export function DevinIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn('h-4 w-4', className)}
+      aria-hidden="true"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+      <path d="M9 9h6v6H9z" />
+      <path d="M9 1v2" />
+      <path d="M15 1v2" />
+      <path d="M9 21v2" />
+      <path d="M15 21v2" />
+      <path d="M1 9h2" />
+      <path d="M1 15h2" />
+      <path d="M21 9h2" />
+      <path d="M21 15h2" />
+    </svg>
+  );
+}
+
 export function ChevronDownIcon({ className }: IconProps) {
   return (
     <svg
@@ -64,6 +91,25 @@ export function FileIcon({ className }: IconProps) {
     >
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
       <polyline points="14 2 14 8 20 8" />
+    </svg>
+  );
+}
+
+export function TaskIcon({ className }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn('h-4 w-4 mr-2', className)}
+      aria-hidden="true"
+    >
+      <path d="M9 11l3 3L22 4" />
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
     </svg>
   );
 }
@@ -182,26 +228,6 @@ export function ErrorIcon({ className }: IconProps) {
   );
 }
 
-export function DevinIcon({ className }: IconProps) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={cn('h-4 w-4', className)}
-      aria-hidden="true"
-    >
-      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-      <line x1="9" y1="9" x2="15" y2="15" />
-      <line x1="15" y1="9" x2="9" y2="15" />
-    </svg>
-  );
-}
-
 export function PlaybookIcon({ className }: IconProps) {
   return (
     <svg
@@ -217,25 +243,6 @@ export function PlaybookIcon({ className }: IconProps) {
     >
       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
       <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-    </svg>
-  );
-}
-
-export function TaskIcon({ className }: IconProps) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={cn('h-4 w-4 mr-2', className)}
-      aria-hidden="true"
-    >
-      <path d="M9 11l3 3L22 4" />
-      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
     </svg>
   );
 }
