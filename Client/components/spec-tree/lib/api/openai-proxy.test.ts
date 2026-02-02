@@ -9,7 +9,7 @@ vi.mock('@/lib/logger', () => ({
   },
 }));
 
-import { OpenAIProxy } from './openai-proxy';
+import { OpenAIProxy, RateLimitedError } from './openai-proxy';
 import { logger } from '@/lib/logger';
 
 describe('OpenAIProxy', () => {
@@ -20,10 +20,11 @@ describe('OpenAIProxy', () => {
     // Store original fetch
     originalFetch = global.fetch;
 
-    // Create fresh proxy instance
+    // Create fresh proxy instance with no retries for faster tests
     proxy = new OpenAIProxy({
       baseURL: 'http://test-api.com',
       apiKey: 'test-api-key',
+      rateLimitConfig: { maxRetries: 0 },
     });
 
     vi.clearAllMocks();
@@ -49,7 +50,7 @@ describe('OpenAIProxy', () => {
     it('sends request with correct structure', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue({ choices: [{ message: { content: 'test' } }] }),
+        json: vi.fn().mockResolvedValue({ data: 'test response' }),
       };
 
       global.fetch = vi.fn().mockResolvedValue(mockResponse);
@@ -72,7 +73,7 @@ describe('OpenAIProxy', () => {
     it('uses default model when not specified', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue({ choices: [] }),
+        json: vi.fn().mockResolvedValue({ data: 'response' }),
       };
 
       global.fetch = vi.fn().mockResolvedValue(mockResponse);
@@ -87,7 +88,7 @@ describe('OpenAIProxy', () => {
     it('uses provided model', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue({ choices: [] }),
+        json: vi.fn().mockResolvedValue({ data: 'response' }),
       };
 
       global.fetch = vi.fn().mockResolvedValue(mockResponse);
@@ -102,7 +103,7 @@ describe('OpenAIProxy', () => {
     it('includes maxTokens when provided', async () => {
       const mockResponse = {
         ok: true,
-        json: vi.fn().mockResolvedValue({ choices: [] }),
+        json: vi.fn().mockResolvedValue({ data: 'response' }),
       };
 
       global.fetch = vi.fn().mockResolvedValue(mockResponse);
@@ -120,7 +121,8 @@ describe('OpenAIProxy', () => {
 
     it('returns response data on success', async () => {
       const expectedResponse = {
-        choices: [{ message: { content: 'Response' } }],
+        data: 'Response content',
+        usage: { prompt_tokens: 10, completion_tokens: 20, total_tokens: 30 },
       };
 
       global.fetch = vi.fn().mockResolvedValue({
@@ -133,7 +135,7 @@ describe('OpenAIProxy', () => {
       expect(result).toEqual(expectedResponse);
     });
 
-    it('throws error on non-ok response', async () => {
+    it('throws RateLimitedError on non-ok response', async () => {
       global.fetch = vi.fn().mockResolvedValue({
         ok: false,
         status: 500,
@@ -142,18 +144,47 @@ describe('OpenAIProxy', () => {
 
       await expect(
         proxy.createCompletion([{ role: 'user', content: 'Hello' }])
-      ).rejects.toThrow('HTTP error! status: 500, message: Server Error');
+      ).rejects.toThrow(RateLimitedError);
     });
 
     it('logs error on failure', async () => {
-      const error = new Error('Network error');
-      global.fetch = vi.fn().mockRejectedValue(error);
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 400,
+        text: vi.fn().mockResolvedValue('Bad Request'),
+      });
 
-      await expect(
-        proxy.createCompletion([{ role: 'user', content: 'Hello' }])
-      ).rejects.toThrow('Network error');
+      try {
+        await proxy.createCompletion([{ role: 'user', content: 'Hello' }]);
+      } catch {
+        // Expected to throw
+      }
 
-      expect(logger.error).toHaveBeenCalledWith('OpenAI Proxy Error:', error);
+      expect(logger.error).toHaveBeenCalledWith(
+        'OpenAI Proxy Error',
+        expect.any(String),
+        expect.objectContaining({
+          attempts: expect.any(Number),
+        })
+      );
+    });
+
+    it('includes error details in RateLimitedError', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 429,
+        text: vi.fn().mockResolvedValue('Rate limited'),
+      });
+
+      try {
+        await proxy.createCompletion([{ role: 'user', content: 'Hello' }]);
+        expect.fail('Should have thrown');
+      } catch (error) {
+        expect(error).toBeInstanceOf(RateLimitedError);
+        const rateLimitError = error as RateLimitedError;
+        expect(rateLimitError.rateLimitError.status).toBe(429);
+        expect(rateLimitError.attempts).toBeGreaterThanOrEqual(1);
+      }
     });
   });
 });
