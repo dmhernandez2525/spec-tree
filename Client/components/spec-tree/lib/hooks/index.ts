@@ -236,3 +236,30 @@ export type {
   UseCursorRulesImportOptions,
   UseCursorRulesImportReturn,
 } from './useCursorRulesImport';
+
+export {
+  useConventionsExport,
+  formatFrontmatter as formatMDCFrontmatter,
+  formatTechStack as formatExportTechStack,
+  formatNamingConventions,
+  formatCodePatterns,
+  formatForbiddenPatterns as formatExportForbiddenPatterns,
+  formatDirectoryStructure,
+  generateCombinedMDC,
+  generateSeparateFiles,
+  sanitizeFilename,
+} from './useConventionsExport';
+export type {
+  TechStackItem,
+  NamingConvention,
+  CodePattern,
+  ForbiddenPattern,
+  DirectoryEntry,
+  ProjectContext,
+  MDCFrontmatter,
+  ExportOptions,
+  GeneratedMDCFile,
+  ExportResult,
+  UseConventionsExportOptions,
+  UseConventionsExportReturn,
+} from './useConventionsExport';
