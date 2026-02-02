@@ -212,3 +212,27 @@ export type {
   UseBatchGenerationOptions,
   UseBatchGenerationReturn,
 } from './useBatchGeneration';
+
+export {
+  useCursorRulesImport,
+  parseFrontmatter,
+  extractTechStack,
+  extractConventions,
+  extractForbiddenPatterns,
+  extractFileStructure,
+  extractPatterns,
+  formatTechStack,
+  validateMDCContent,
+} from './useCursorRulesImport';
+export type {
+  CursorRuleFrontmatter,
+  ParsedTechStack,
+  ParsedConvention,
+  ParsedForbiddenPattern,
+  ParsedFileStructure,
+  ParsedPattern,
+  ParsedCursorRule,
+  CursorRulesImportResult,
+  UseCursorRulesImportOptions,
+  UseCursorRulesImportReturn,
+} from './useCursorRulesImport';
