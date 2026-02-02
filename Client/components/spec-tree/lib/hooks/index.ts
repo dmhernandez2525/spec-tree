@@ -141,3 +141,19 @@ export type {
   UseCostTrackingOptions,
   UseCostTrackingReturn,
 } from './useCostTracking';
+
+export {
+  useGenerationHistory,
+  getWorkItemTypeDisplayName as getGenerationWorkItemTypeDisplayName,
+} from './useGenerationHistory';
+export type {
+  GenerationWorkItemType,
+  GenerationStatus,
+  GenerationProvider,
+  GenerationRecord,
+  WorkItemHistory,
+  GenerationHistoryStore,
+  UseGenerationHistoryOptions,
+  UseGenerationHistoryReturn,
+  GenerationStatistics,
+} from './useGenerationHistory';
