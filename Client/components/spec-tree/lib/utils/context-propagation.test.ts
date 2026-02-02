@@ -15,6 +15,7 @@ import {
   buildTaskContext,
   getContextChain,
   buildContextSummary,
+  getContextMetrics,
 } from './context-propagation';
 import { RootState } from '@/lib/store';
 import {
@@ -553,6 +554,178 @@ describe('Context Propagation', () => {
       expect(summary.epicContext?.title).toBe('Epic');
       expect(summary.featureContext?.title).toBe('Feature');
       expect(summary.userStoryContext?.title).toBe('Story');
+    });
+  });
+
+  describe('getContextMetrics', () => {
+    it('returns correct metrics for empty context', () => {
+      const metrics = getContextMetrics('');
+
+      expect(metrics.length).toBe(0);
+      expect(metrics.sections).toBe(0);
+      expect(metrics.hasGlobalContext).toBe(false);
+      expect(metrics.hasGlobalQuestions).toBe(false);
+      expect(metrics.hasItemQuestions).toBe(false);
+    });
+
+    it('detects global application context', () => {
+      const context = '=== Application Context ===\nSome app description';
+      const metrics = getContextMetrics(context);
+
+      expect(metrics.hasGlobalContext).toBe(true);
+      expect(metrics.hasGlobalQuestions).toBe(false);
+      expect(metrics.sections).toBe(1); // One section header has 2 === markers
+    });
+
+    it('detects global project questions', () => {
+      const context =
+        '=== Global Project Context ===\nQ: What is this?\nA: An app';
+      const metrics = getContextMetrics(context);
+
+      expect(metrics.hasGlobalContext).toBe(false);
+      expect(metrics.hasGlobalQuestions).toBe(true);
+    });
+
+    it('detects item contextual questions', () => {
+      const context =
+        '=== Epic Contextual Information ===\nQ: Question?\nA: Answer';
+      const metrics = getContextMetrics(context);
+
+      expect(metrics.hasItemQuestions).toBe(true);
+    });
+
+    it('counts sections correctly', () => {
+      const context = `=== Application Context ===
+Some info
+
+=== Global Project Context ===
+Q: Q1?
+A: A1
+
+=== Epic: Test ===
+Description: Test`;
+
+      const metrics = getContextMetrics(context);
+
+      // Each section header has 2 === markers, so 3 sections = 6 markers / 2 = 3
+      expect(metrics.sections).toBe(3);
+    });
+
+    it('calculates length correctly', () => {
+      const context = 'Test context string';
+      const metrics = getContextMetrics(context);
+
+      expect(metrics.length).toBe(19);
+    });
+  });
+
+  describe('Global Q&A Propagation', () => {
+    it('includes global contextual questions in epic context', () => {
+      const epic = createMockEpic();
+      const state = createMockState({
+        globalInformation: 'App description',
+        contextualQuestions: [
+          { id: 'gq1', question: 'Global Q1?', answer: 'Global A1' },
+          { id: 'gq2', question: 'Global Q2?', answer: 'Global A2' },
+        ],
+      });
+
+      const context = buildEpicContext(epic, state);
+
+      expect(context).toContain('=== Global Project Context ===');
+      expect(context).toContain('Q: Global Q1?');
+      expect(context).toContain('A: Global A1');
+      expect(context).toContain('Q: Global Q2?');
+      expect(context).toContain('A: Global A2');
+    });
+
+    it('includes global contextual questions in feature context', () => {
+      const feature = createMockFeature();
+      const state = createMockState({
+        contextualQuestions: [
+          { id: 'gq1', question: 'Global Feature Q?', answer: 'Global Feature A' },
+        ],
+      });
+
+      const context = buildFeatureContext(feature, state);
+
+      expect(context).toContain('=== Global Project Context ===');
+      expect(context).toContain('Q: Global Feature Q?');
+      expect(context).toContain('A: Global Feature A');
+    });
+
+    it('includes global contextual questions in user story context', () => {
+      const userStory = createMockUserStory();
+      const state = createMockState({
+        contextualQuestions: [
+          { id: 'gq1', question: 'Global Story Q?', answer: 'Global Story A' },
+        ],
+      });
+
+      const context = buildUserStoryContext(userStory, state);
+
+      expect(context).toContain('=== Global Project Context ===');
+      expect(context).toContain('Q: Global Story Q?');
+      expect(context).toContain('A: Global Story A');
+    });
+
+    it('includes global contextual questions in task context', () => {
+      const userStory = createMockUserStory({ id: 'story-1' });
+      const task = createMockTask({ parentUserStoryId: 'story-1' });
+      const state = createMockState({
+        userStories: { 'story-1': userStory },
+        contextualQuestions: [
+          { id: 'gq1', question: 'Global Task Q?', answer: 'Global Task A' },
+        ],
+      });
+
+      const context = buildTaskContext(task, state);
+
+      expect(context).toContain('=== Global Project Context ===');
+      expect(context).toContain('Q: Global Task Q?');
+      expect(context).toContain('A: Global Task A');
+    });
+
+    it('excludes global questions without answers', () => {
+      const epic = createMockEpic();
+      const state = createMockState({
+        contextualQuestions: [
+          { id: 'gq1', question: 'Answered Q?', answer: 'Has answer' },
+          { id: 'gq2', question: 'Unanswered Q?', answer: '' },
+          { id: 'gq3', question: 'Also unanswered?', answer: undefined },
+        ],
+      });
+
+      const context = buildEpicContext(epic, state);
+
+      expect(context).toContain('Q: Answered Q?');
+      expect(context).toContain('A: Has answer');
+      expect(context).not.toContain('Unanswered Q?');
+      expect(context).not.toContain('Also unanswered?');
+    });
+
+    it('combines global and local contextual questions', () => {
+      const epic = createMockEpic({
+        contextualQuestions: [
+          { id: 'eq1', question: 'Epic specific Q?', answer: 'Epic specific A' },
+        ],
+      });
+      const state = createMockState({
+        globalInformation: 'App info',
+        contextualQuestions: [
+          { id: 'gq1', question: 'Global Q?', answer: 'Global A' },
+        ],
+      });
+
+      const context = buildEpicContext(epic, state);
+
+      // Should have all three sections
+      expect(context).toContain('=== Application Context ===');
+      expect(context).toContain('=== Global Project Context ===');
+      expect(context).toContain('=== Epic Contextual Information ===');
+      // And both Q&A pairs
+      expect(context).toContain('Q: Global Q?');
+      expect(context).toContain('Q: Epic specific Q?');
     });
   });
 });
