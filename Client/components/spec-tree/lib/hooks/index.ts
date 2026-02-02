@@ -70,3 +70,18 @@ export type {
   UseKeyboardShortcutsOptions,
   UseKeyboardShortcutsReturn,
 } from './useKeyboardShortcuts';
+
+export {
+  useWorkItemSearch,
+  searchWorkItems,
+  highlightMatch,
+  DEFAULT_SEARCH_FILTERS,
+} from './useWorkItemSearch';
+export type {
+  SearchableWorkItemType,
+  SearchResultItem,
+  SearchFilters,
+  WorkItemIndex,
+  UseWorkItemSearchOptions,
+  UseWorkItemSearchReturn,
+} from './useWorkItemSearch';
