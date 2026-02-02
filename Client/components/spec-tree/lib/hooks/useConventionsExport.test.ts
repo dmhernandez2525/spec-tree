@@ -496,3 +496,59 @@ describe('integration', () => {
     expect(content).toContain('- NO `any`');
   });
 });
+
+describe('validation', () => {
+  it('should throw error for empty project name', () => {
+    const invalidContext: ProjectContext = {
+      name: '',
+      techStack: [],
+      namingConventions: [],
+      codePatterns: [],
+      forbiddenPatterns: [],
+      directoryStructure: [],
+    };
+
+    expect(() => generateCombinedMDC(invalidContext)).toThrow('Project name is required');
+  });
+
+  it('should throw error for whitespace-only project name', () => {
+    const invalidContext: ProjectContext = {
+      name: '   ',
+      techStack: [],
+      namingConventions: [],
+      codePatterns: [],
+      forbiddenPatterns: [],
+      directoryStructure: [],
+    };
+
+    expect(() => generateCombinedMDC(invalidContext)).toThrow('Project name is required');
+  });
+
+  it('should use fallback for sanitizeFilename with special chars only', () => {
+    const result = sanitizeFilename('!!!@@@###');
+    expect(result).toBe('export');
+  });
+
+  it('should accept custom fallback for sanitizeFilename', () => {
+    const result = sanitizeFilename('!!!', 'custom-fallback');
+    expect(result).toBe('custom-fallback');
+  });
+});
+
+describe('YAML escaping', () => {
+  it('should escape special characters in frontmatter title', () => {
+    const frontmatter = {
+      title: 'Project: Test & Demo',
+    };
+    const result = formatFrontmatter(frontmatter);
+    expect(result).toContain('title: "Project: Test & Demo"');
+  });
+
+  it('should escape quotes in globs', () => {
+    const frontmatter = {
+      globs: ['src/**/"test"/*.ts'],
+    };
+    const result = formatFrontmatter(frontmatter);
+    expect(result).toContain('\\"test\\"');
+  });
+});
