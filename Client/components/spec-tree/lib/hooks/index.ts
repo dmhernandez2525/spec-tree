@@ -328,3 +328,23 @@ export type {
   UseDevinPlaybookOptions,
   UseDevinPlaybookReturn,
 } from './useDevinPlaybook';
+
+export {
+  useCSVExport,
+  escapeCSVValue,
+  getWorkItemTypeDisplayName as getCSVWorkItemTypeDisplayName,
+  formatUserStoryDescription,
+  getDefaultColumns as getCSVDefaultColumns,
+  getMinimalColumns as getCSVMinimalColumns,
+  getDetailedColumns as getCSVDetailedColumns,
+  generateCSVContent,
+} from './useCSVExport';
+export type {
+  ExportableWorkItemType,
+  ExportableWorkItem,
+  CSVColumn,
+  CSVExportOptions,
+  CSVExportResult,
+  UseCSVExportOptions,
+  UseCSVExportReturn,
+} from './useCSVExport';
