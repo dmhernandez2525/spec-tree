@@ -348,3 +348,25 @@ export type {
   UseCSVExportOptions,
   UseCSVExportReturn,
 } from './useCSVExport';
+
+export {
+  useMarkdownExport,
+  getWorkItemTypeDisplayName as getMarkdownWorkItemTypeDisplayName,
+  getWorkItemTypeEmoji,
+  getHeadingPrefix,
+  formatUserStoryDescription as formatMarkdownUserStoryDescription,
+  getStyleDescription,
+  getAvailableStyles,
+  formatWorkItemAsMarkdown,
+  buildItemTree,
+  generateMarkdownContent,
+} from './useMarkdownExport';
+export type {
+  ExportableWorkItemType as MarkdownExportableWorkItemType,
+  ExportableWorkItem as MarkdownExportableWorkItem,
+  MarkdownStyle,
+  MarkdownExportOptions,
+  MarkdownExportResult,
+  UseMarkdownExportOptions,
+  UseMarkdownExportReturn,
+} from './useMarkdownExport';
