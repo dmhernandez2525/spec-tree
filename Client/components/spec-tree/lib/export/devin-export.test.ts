@@ -163,6 +163,22 @@ describe('devin-export', () => {
       }).toThrow('Task with ID non-existent not found');
     });
 
+    it('throws error for empty task ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportTaskAsDevin('', state);
+      }).toThrow('Task ID is required and cannot be empty');
+    });
+
+    it('throws error for whitespace-only task ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportTaskAsDevin('   ', state);
+      }).toThrow('Task ID is required and cannot be empty');
+    });
+
     it('uses custom options', () => {
       const state = createMockState();
       const options: DevinExportOptions = {
@@ -202,6 +218,22 @@ describe('devin-export', () => {
         exportUserStoryTasksAsDevin('story-1', state);
       }).toThrow('No tasks found for user story story-1');
     });
+
+    it('throws error for empty user story ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportUserStoryTasksAsDevin('', state);
+      }).toThrow('User story ID is required and cannot be empty');
+    });
+
+    it('throws error for whitespace-only user story ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportUserStoryTasksAsDevin('   ', state);
+      }).toThrow('User story ID is required and cannot be empty');
+    });
   });
 
   describe('exportFeatureTasksAsDevin', () => {
@@ -219,6 +251,22 @@ describe('devin-export', () => {
         exportFeatureTasksAsDevin('non-existent', state);
       }).toThrow('Feature with ID non-existent not found');
     });
+
+    it('throws error for empty feature ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportFeatureTasksAsDevin('', state);
+      }).toThrow('Feature ID is required and cannot be empty');
+    });
+
+    it('throws error for whitespace-only feature ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportFeatureTasksAsDevin('   ', state);
+      }).toThrow('Feature ID is required and cannot be empty');
+    });
   });
 
   describe('exportEpicTasksAsDevin', () => {
@@ -235,6 +283,22 @@ describe('devin-export', () => {
       expect(() => {
         exportEpicTasksAsDevin('non-existent', state);
       }).toThrow('Epic with ID non-existent not found');
+    });
+
+    it('throws error for empty epic ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportEpicTasksAsDevin('', state);
+      }).toThrow('Epic ID is required and cannot be empty');
+    });
+
+    it('throws error for whitespace-only epic ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportEpicTasksAsDevin('   ', state);
+      }).toThrow('Epic ID is required and cannot be empty');
     });
   });
 
@@ -304,6 +368,22 @@ describe('devin-export', () => {
       expect(() => {
         generateLinearDevinTask('non-existent', state);
       }).toThrow('Task with ID non-existent not found');
+    });
+
+    it('throws error for empty task ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        generateLinearDevinTask('', state);
+      }).toThrow('Task ID is required and cannot be empty');
+    });
+
+    it('throws error for whitespace-only task ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        generateLinearDevinTask('   ', state);
+      }).toThrow('Task ID is required and cannot be empty');
     });
   });
 
