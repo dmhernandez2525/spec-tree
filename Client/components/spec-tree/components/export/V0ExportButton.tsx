@@ -9,7 +9,7 @@
  * v0 by Vercel excels at generating React/Next.js/Tailwind UI components.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,6 +23,12 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { RootState } from '@/lib/store';
 import {
   exportFeatureAsV0Spec,
@@ -34,6 +40,17 @@ import {
   getV0ExportStatistics,
   V0ExportOptions,
 } from '../../lib/export/v0-export';
+import {
+  V0Icon,
+  ChevronDownIcon,
+  FileIcon,
+  PromptIcon,
+  DownloadIcon,
+  ClipboardIcon,
+  SpinnerIcon,
+  CheckIcon,
+  ErrorIcon,
+} from './export-icons';
 
 export interface V0ExportButtonProps {
   /** Optional feature ID to export single feature */
@@ -49,10 +66,16 @@ export interface V0ExportButtonProps {
   /** Additional class names */
   className?: string;
   /** Callback when export completes */
-  onExportComplete?: (success: boolean) => void;
+  onExportComplete?: (success: boolean, error?: string) => void;
 }
 
 type ExportStatus = 'idle' | 'exporting' | 'success' | 'error';
+
+interface ExportState {
+  status: ExportStatus;
+  lastAction: string;
+  errorMessage: string | null;
+}
 
 export function V0ExportButton({
   featureId,
@@ -63,30 +86,64 @@ export function V0ExportButton({
   className,
   onExportComplete,
 }: V0ExportButtonProps) {
-  const [status, setStatus] = useState<ExportStatus>('idle');
-  const [lastAction, setLastAction] = useState<string>('');
-  const state = useSelector((state: RootState) => state);
+  const [exportState, setExportState] = useState<ExportState>({
+    status: 'idle',
+    lastAction: '',
+    errorMessage: null,
+  });
+
+  // Only select the sow slice, not entire state - prevents unnecessary re-renders
+  const sowState = useSelector((state: RootState) => state.sow);
+
+  // Memoize the full state object for export functions that need RootState
+  const fullState = useMemo(() => ({ sow: sowState } as RootState), [sowState]);
+
+  // Memoize statistics calculation - expensive operation
+  const stats = useMemo(
+    () => getV0ExportStatistics(fullState),
+    [fullState]
+  );
 
   const getSpecContent = useCallback((): string => {
     if (featureId) {
-      return exportFeatureAsV0Spec(featureId, state, options);
+      return exportFeatureAsV0Spec(featureId, fullState, options);
     }
     if (epicId) {
-      return exportEpicFeaturesAsV0Specs(epicId, state, options);
+      return exportEpicFeaturesAsV0Specs(epicId, fullState, options);
     }
-    return exportAllFeaturesAsV0Specs(state, options);
-  }, [featureId, epicId, state, options]);
+    return exportAllFeaturesAsV0Specs(fullState, options);
+  }, [featureId, epicId, fullState, options]);
 
   const getPromptContent = useCallback((): string => {
     if (featureId) {
-      return generateV0Prompt(featureId, state);
+      return generateV0Prompt(featureId, fullState);
     }
     throw new Error('Feature ID required for v0 prompt generation');
-  }, [featureId, state]);
+  }, [featureId, fullState]);
+
+  const handleError = useCallback((error: unknown, action: string) => {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    setExportState({
+      status: 'error',
+      lastAction: action,
+      errorMessage,
+    });
+    onExportComplete?.(false, errorMessage);
+    setTimeout(() => setExportState({ status: 'idle', lastAction: '', errorMessage: null }), 3000);
+  }, [onExportComplete]);
+
+  const handleSuccess = useCallback((action: string) => {
+    setExportState({
+      status: 'success',
+      lastAction: action,
+      errorMessage: null,
+    });
+    onExportComplete?.(true);
+    setTimeout(() => setExportState({ status: 'idle', lastAction: '', errorMessage: null }), 2000);
+  }, [onExportComplete]);
 
   const handleDownloadSpec = useCallback(async () => {
-    setStatus('exporting');
-    setLastAction('download-spec');
+    setExportState({ status: 'exporting', lastAction: 'download-spec', errorMessage: null });
 
     try {
       const content = getSpecContent();
@@ -96,74 +153,55 @@ export function V0ExportButton({
         ? `v0-spec-epic.md`
         : `v0-spec-all.md`;
       downloadV0Spec(content, filename);
-      setStatus('success');
-      onExportComplete?.(true);
-      setTimeout(() => setStatus('idle'), 2000);
+      handleSuccess('download-spec');
     } catch (error) {
-      console.error('v0 spec export failed:', error);
-      setStatus('error');
-      onExportComplete?.(false);
-      setTimeout(() => setStatus('idle'), 3000);
+      handleError(error, 'download-spec');
     }
-  }, [getSpecContent, featureId, epicId, onExportComplete]);
+  }, [getSpecContent, featureId, epicId, handleSuccess, handleError]);
 
   const handleCopySpec = useCallback(async () => {
-    setStatus('exporting');
-    setLastAction('copy-spec');
+    setExportState({ status: 'exporting', lastAction: 'copy-spec', errorMessage: null });
 
     try {
       const content = getSpecContent();
       const success = await copyV0SpecToClipboard(content);
 
       if (success) {
-        setStatus('success');
-        onExportComplete?.(true);
+        handleSuccess('copy-spec');
       } else {
-        setStatus('error');
-        onExportComplete?.(false);
+        handleError(new Error('Failed to copy to clipboard'), 'copy-spec');
       }
-      setTimeout(() => setStatus('idle'), 2000);
     } catch (error) {
-      console.error('v0 spec copy failed:', error);
-      setStatus('error');
-      onExportComplete?.(false);
-      setTimeout(() => setStatus('idle'), 3000);
+      handleError(error, 'copy-spec');
     }
-  }, [getSpecContent, onExportComplete]);
+  }, [getSpecContent, handleSuccess, handleError]);
 
   const handleCopyPrompt = useCallback(async () => {
-    setStatus('exporting');
-    setLastAction('copy-prompt');
+    setExportState({ status: 'exporting', lastAction: 'copy-prompt', errorMessage: null });
 
     try {
       const content = getPromptContent();
       const success = await copyV0SpecToClipboard(content);
 
       if (success) {
-        setStatus('success');
-        onExportComplete?.(true);
+        handleSuccess('copy-prompt');
       } else {
-        setStatus('error');
-        onExportComplete?.(false);
+        handleError(new Error('Failed to copy to clipboard'), 'copy-prompt');
       }
-      setTimeout(() => setStatus('idle'), 2000);
     } catch (error) {
-      console.error('v0 prompt copy failed:', error);
-      setStatus('error');
-      onExportComplete?.(false);
-      setTimeout(() => setStatus('idle'), 3000);
+      handleError(error, 'copy-prompt');
     }
-  }, [getPromptContent, onExportComplete]);
+  }, [getPromptContent, handleSuccess, handleError]);
 
-  const stats = getV0ExportStatistics(state);
   const hasFeatureTarget = Boolean(featureId);
+  const { status, lastAction, errorMessage } = exportState;
 
   const getButtonContent = () => {
     if (status === 'exporting') {
       return (
         <>
-          <ExportIcon className="animate-spin" />
-          Exporting...
+          <SpinnerIcon className="animate-spin" />
+          <span className="ml-2">Exporting...</span>
         </>
       );
     }
@@ -172,25 +210,34 @@ export function V0ExportButton({
       return (
         <>
           <CheckIcon />
-          {lastAction.includes('copy') ? 'Copied!' : 'Downloaded!'}
+          <span className="ml-2">{lastAction.includes('copy') ? 'Copied!' : 'Downloaded!'}</span>
         </>
       );
     }
 
     if (status === 'error') {
       return (
-        <>
-          <ErrorIcon />
-          Export Failed
-        </>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="flex items-center">
+                <ErrorIcon />
+                <span className="ml-2">Export Failed</span>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{errorMessage || 'An error occurred during export'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       );
     }
 
     return (
       <>
         <V0Icon />
-        v0 Export
-        <ChevronDownIcon />
+        <span className="ml-2">v0 Export</span>
+        <ChevronDownIcon className="ml-1" />
       </>
     );
   };
@@ -203,6 +250,7 @@ export function V0ExportButton({
           size={size}
           className={className}
           disabled={status === 'exporting'}
+          aria-label="Export to v0 UI specification"
         >
           {getButtonContent()}
         </Button>
@@ -215,16 +263,16 @@ export function V0ExportButton({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <FileIcon />
-            UI Specification
+            <span>UI Specification</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuItem onClick={handleDownloadSpec}>
               <DownloadIcon />
-              Download file
+              <span>Download file</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleCopySpec}>
               <ClipboardIcon />
-              Copy to clipboard
+              <span>Copy to clipboard</span>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
@@ -233,182 +281,19 @@ export function V0ExportButton({
         {hasFeatureTarget && (
           <DropdownMenuItem onClick={handleCopyPrompt}>
             <PromptIcon />
-            Copy v0 Prompt
+            <span>Copy v0 Prompt</span>
           </DropdownMenuItem>
         )}
 
         <DropdownMenuSeparator />
 
-        <div className="px-2 py-1.5 text-xs text-muted-foreground">
+        <div className="px-2 py-1.5 text-xs text-muted-foreground" role="status" aria-live="polite">
           <div>Features: {stats.totalFeatures}</div>
           <div>With Stories: {stats.featuresWithStories}</div>
           <div>User Stories: {stats.totalUserStories}</div>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-}
-
-// Icon components
-function V0Icon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <polygon points="12 2 2 7 12 12 22 7 12 2" />
-      <polyline points="2 17 12 22 22 17" />
-      <polyline points="2 12 12 17 22 12" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-function FileIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <polyline points="14 2 14 8 20 8" />
-    </svg>
-  );
-}
-
-function PromptIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <polyline points="4 17 10 11 4 5" />
-      <line x1="12" x2="20" y1="19" y2="19" />
-    </svg>
-  );
-}
-
-function DownloadIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
-  );
-}
-
-function ClipboardIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 mr-2 ${className || ''}`}
-    >
-      <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-    </svg>
-  );
-}
-
-function ExportIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-    </svg>
-  );
-}
-
-function CheckIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-function ErrorIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`h-4 w-4 ${className || ''}`}
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="15" x2="9" y1="9" y2="15" />
-      <line x1="9" x2="15" y1="9" y2="15" />
-    </svg>
   );
 }
 
