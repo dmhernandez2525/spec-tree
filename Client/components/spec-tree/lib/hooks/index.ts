@@ -263,3 +263,32 @@ export type {
   UseConventionsExportOptions,
   UseConventionsExportReturn,
 } from './useConventionsExport';
+
+export {
+  useV0ComponentBreakdown,
+  formatContainerClasses,
+  formatTypographyClasses,
+  formatBreakdownAsMarkdown,
+  getCommonStates,
+  getCommonResponsive,
+  getButtonPreset,
+  getCardPreset,
+  getInputPreset,
+  getModalPreset,
+} from './useV0ComponentBreakdown';
+export type {
+  VisualSpec,
+  ContainerSpec,
+  TypographySpec,
+  StateSpec,
+  ResponsiveSpec,
+  InteractionSpec,
+  AccessibilitySpec,
+  AnimationSpec,
+  PropSpec,
+  ChildComponentSpec,
+  ComponentBreakdown,
+  BreakdownOptions,
+  UseV0ComponentBreakdownOptions,
+  UseV0ComponentBreakdownReturn,
+} from './useV0ComponentBreakdown';
