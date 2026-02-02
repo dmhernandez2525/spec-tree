@@ -166,6 +166,22 @@ describe('v0-export', () => {
       }).toThrow('Feature with ID non-existent not found');
     });
 
+    it('throws error for empty feature ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportFeatureAsV0Spec('', state);
+      }).toThrow('Feature ID is required and cannot be empty');
+    });
+
+    it('throws error for whitespace-only feature ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportFeatureAsV0Spec('   ', state);
+      }).toThrow('Feature ID is required and cannot be empty');
+    });
+
     it('includes visual specifications', () => {
       const state = createMockState();
       const result = exportFeatureAsV0Spec('feature-1', state);
@@ -272,6 +288,14 @@ describe('v0-export', () => {
       expect(() => {
         exportEpicFeaturesAsV0Specs('non-existent', state);
       }).toThrow('Epic with ID non-existent not found');
+    });
+
+    it('throws error for empty epic ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        exportEpicFeaturesAsV0Specs('', state);
+      }).toThrow('Epic ID is required and cannot be empty');
     });
 
     it('throws error when epic has no features', () => {
@@ -518,6 +542,14 @@ describe('v0-export', () => {
       expect(() => {
         generateV0Prompt('non-existent', state);
       }).toThrow('Feature with ID non-existent not found');
+    });
+
+    it('throws error for empty feature ID', () => {
+      const state = createMockState();
+
+      expect(() => {
+        generateV0Prompt('', state);
+      }).toThrow('Feature ID is required and cannot be empty');
     });
   });
 });

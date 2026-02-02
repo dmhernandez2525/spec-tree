@@ -71,39 +71,72 @@ const DEFAULT_OPTIONS: V0ExportOptions = {
 };
 
 /**
- * Export a single feature as v0 UI spec
+ * Validate that an ID is provided and non-empty
+ * @param id - The ID to validate
+ * @param type - The type of ID (for error message)
+ * @throws Error if ID is empty or whitespace
  */
-export function exportFeatureAsV0Spec(
-  featureId: string,
-  state: RootState,
-  options: V0ExportOptions = DEFAULT_OPTIONS
-): string {
-  const sowState = state.sow;
-  const feature = selectFeatureById(state, featureId);
-
-  if (!feature) {
-    throw new Error(`Feature with ID ${featureId} not found`);
+function validateId(id: string, type: string): void {
+  if (!id || id.trim() === '') {
+    throw new Error(`${type} ID is required and cannot be empty`);
   }
+}
 
+/**
+ * Build a V0FeatureContext for a given feature
+ * @param feature - The feature to build context for
+ * @param sowState - The SOW state containing user stories and tasks
+ * @param designTokens - Optional custom design tokens
+ * @returns V0FeatureContext for the feature
+ */
+function buildFeatureContext(
+  feature: FeatureType,
+  sowState: RootState['sow'],
+  designTokens?: DesignTokens
+): V0FeatureContext {
   // Get related user stories
   const userStories = Object.values(sowState.userStories || {})
     .filter((story): story is UserStoryType =>
-      Boolean(story) && story.parentFeatureId === featureId
+      Boolean(story) && story.parentFeatureId === feature.id
     );
 
-  // Get related tasks
+  // Get related tasks (tasks belonging to stories of this feature)
   const storyIds = new Set(userStories.map((s) => s.id));
   const tasks = Object.values(sowState.tasks || {})
     .filter((task): task is TaskType =>
       Boolean(task) && storyIds.has(task.parentUserStoryId)
     );
 
-  const context: V0FeatureContext = {
+  return {
     feature,
     userStories,
     tasks,
-    designTokens: options.customDesignTokens,
+    designTokens,
   };
+}
+
+/**
+ * Export a single feature as v0 UI spec
+ * @param featureId - The ID of the feature to export
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated v0 UI specification
+ * @throws Error if featureId is empty or feature not found
+ */
+export function exportFeatureAsV0Spec(
+  featureId: string,
+  state: RootState,
+  options: V0ExportOptions = DEFAULT_OPTIONS
+): string {
+  validateId(featureId, 'Feature');
+
+  const feature = selectFeatureById(state, featureId);
+
+  if (!feature) {
+    throw new Error(`Feature with ID ${featureId} not found`);
+  }
+
+  const context = buildFeatureContext(feature, state.sow, options.customDesignTokens);
 
   return generateV0SpecFromFeature(context);
 }
@@ -139,12 +172,19 @@ export function exportCustomV0Spec(
 
 /**
  * Export all features in an epic as v0 UI specs
+ * @param epicId - The ID of the epic to export
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated v0 UI specifications for all features in the epic
+ * @throws Error if epicId is empty, epic not found, or no features found
  */
 export function exportEpicFeaturesAsV0Specs(
   epicId: string,
   state: RootState,
   options: V0ExportOptions = DEFAULT_OPTIONS
 ): string {
+  validateId(epicId, 'Epic');
+
   const sowState = state.sow;
   const epic = selectEpicById(state, epicId);
 
@@ -162,32 +202,20 @@ export function exportEpicFeaturesAsV0Specs(
     throw new Error(`No features found for epic ${epicId}`);
   }
 
-  // Build contexts for all features
-  const contexts: V0FeatureContext[] = features.map((feature) => {
-    const userStories = Object.values(sowState.userStories || {})
-      .filter((story): story is UserStoryType =>
-        Boolean(story) && story.parentFeatureId === feature.id
-      );
-
-    const storyIds = new Set(userStories.map((s) => s.id));
-    const tasks = Object.values(sowState.tasks || {})
-      .filter((task): task is TaskType =>
-        Boolean(task) && storyIds.has(task.parentUserStoryId)
-      );
-
-    return {
-      feature,
-      userStories,
-      tasks,
-      designTokens: options.customDesignTokens,
-    };
-  });
+  // Build contexts for all features using helper function
+  const contexts: V0FeatureContext[] = features.map((feature) =>
+    buildFeatureContext(feature, sowState, options.customDesignTokens)
+  );
 
   return generateBulkV0Specs(contexts);
 }
 
 /**
  * Export all features in the project as v0 UI specs
+ * @param state - The Redux state
+ * @param options - Export options
+ * @returns Generated v0 UI specifications for all features
+ * @throws Error if no features found in the project
  */
 export function exportAllFeaturesAsV0Specs(
   state: RootState,
@@ -202,26 +230,10 @@ export function exportAllFeaturesAsV0Specs(
     throw new Error('No features found in the project');
   }
 
-  // Build contexts for all features
-  const contexts: V0FeatureContext[] = features.map((feature) => {
-    const userStories = Object.values(sowState.userStories || {})
-      .filter((story): story is UserStoryType =>
-        Boolean(story) && story.parentFeatureId === feature.id
-      );
-
-    const storyIds = new Set(userStories.map((s) => s.id));
-    const tasks = Object.values(sowState.tasks || {})
-      .filter((task): task is TaskType =>
-        Boolean(task) && storyIds.has(task.parentUserStoryId)
-      );
-
-    return {
-      feature,
-      userStories,
-      tasks,
-      designTokens: options.customDesignTokens,
-    };
-  });
+  // Build contexts for all features using helper function
+  const contexts: V0FeatureContext[] = features.map((feature) =>
+    buildFeatureContext(feature, sowState, options.customDesignTokens)
+  );
 
   return generateBulkV0Specs(contexts);
 }
@@ -251,6 +263,9 @@ export async function copyV0SpecToClipboard(content: string): Promise<boolean> {
 
 /**
  * Get v0 export statistics
+ * Optimized to use Map lookups for O(n) time complexity instead of O(n*m)
+ * @param state - The Redux state
+ * @returns Statistics about features, stories, and tasks
  */
 export function getV0ExportStatistics(state: RootState): {
   totalFeatures: number;
@@ -265,20 +280,36 @@ export function getV0ExportStatistics(state: RootState): {
   const userStories = Object.values(sowState.userStories || {}).filter(Boolean) as UserStoryType[];
   const tasks = Object.values(sowState.tasks || {}).filter(Boolean) as TaskType[];
 
+  // Build lookup maps for O(1) access
+  // Map: featureId -> Set of storyIds
+  const featureToStoryIds = new Map<string, Set<string>>();
+  for (const story of userStories) {
+    const featureId = story.parentFeatureId;
+    if (!featureToStoryIds.has(featureId)) {
+      featureToStoryIds.set(featureId, new Set());
+    }
+    featureToStoryIds.get(featureId)!.add(story.id);
+  }
+
+  // Set of storyIds that have tasks
+  const storiesWithTasks = new Set<string>();
+  for (const task of tasks) {
+    storiesWithTasks.add(task.parentUserStoryId);
+  }
+
+  // Calculate statistics
   let featuresWithStories = 0;
   let featuresWithTasks = 0;
 
   for (const feature of features) {
-    const hasStories = userStories.some((s) => s.parentFeatureId === feature.id);
-    if (hasStories) {
+    const storyIds = featureToStoryIds.get(feature.id);
+    if (storyIds && storyIds.size > 0) {
       featuresWithStories++;
 
-      // Check if any of those stories have tasks
-      const featureStoryIds = userStories
-        .filter((s) => s.parentFeatureId === feature.id)
-        .map((s) => s.id);
-      const hasTasks = tasks.some((t) => featureStoryIds.includes(t.parentUserStoryId));
-      if (hasTasks) {
+      // Check if any story has tasks using Array.from for compatibility
+      const storyIdArray = Array.from(storyIds);
+      const hasTasksForFeature = storyIdArray.some((storyId) => storiesWithTasks.has(storyId));
+      if (hasTasksForFeature) {
         featuresWithTasks++;
       }
     }
@@ -313,11 +344,17 @@ export function getProjectName(state: RootState): string {
 
 /**
  * Generate a simple prompt for v0 from a feature
+ * @param featureId - The ID of the feature
+ * @param state - The Redux state
+ * @returns A prompt string suitable for v0
+ * @throws Error if featureId is empty or feature not found
  */
 export function generateV0Prompt(
   featureId: string,
   state: RootState
 ): string {
+  validateId(featureId, 'Feature');
+
   const feature = selectFeatureById(state, featureId);
 
   if (!feature) {
