@@ -121,3 +121,23 @@ export type {
   UseWorkItemTemplateOptions,
   UseWorkItemTemplateReturn,
 } from './useWorkItemTemplate';
+
+export {
+  useCostTracking,
+  getProviderFromModel,
+  MODEL_PRICING,
+} from './useCostTracking';
+export type {
+  AIProvider,
+  ModelPricing,
+  UsageRecord,
+  ProviderTokenUsage,
+  ProviderUsage,
+  ModelUsage,
+  DailyUsage,
+  MonthlyTrend,
+  PeriodUsage,
+  UsageData,
+  UseCostTrackingOptions,
+  UseCostTrackingReturn,
+} from './useCostTracking';
