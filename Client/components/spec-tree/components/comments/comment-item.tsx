@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Comment, MentionCandidate } from '@/types/comments';
+import type { OrganizationRole } from '@/types/organization';
+import { getCommentPermissions } from '../../lib/utils/comment-permissions';
 import CommentComposer from './comment-composer';
 
 export interface CommentNode extends Comment {
@@ -15,6 +17,8 @@ interface CommentItemProps {
   replies: CommentNode[];
   depth?: number;
   mentionCandidates: MentionCandidate[];
+  currentUserId?: string;
+  userRole?: OrganizationRole;
   onReply: (body: string, mentions: string[], parentId: string) => Promise<void>;
   onResolve: (commentId: string) => Promise<void>;
   onReopen: (commentId: string) => Promise<void>;
@@ -55,6 +59,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
   replies,
   depth = 0,
   mentionCandidates,
+  currentUserId,
+  userRole,
   onReply,
   onResolve,
   onReopen,
@@ -63,6 +69,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
 }) => {
   const [isReplying, setIsReplying] = useState(false);
   const padding = useMemo(() => Math.min(depth * 16, 48), [depth]);
+
+  // Get permission checks for this comment
+  const permissions = useMemo(
+    () => getCommentPermissions(comment, currentUserId, userRole),
+    [comment, currentUserId, userRole]
+  );
 
   return (
     <div className={cn('space-y-3', depth > 0 && 'border-l border-border pl-4')}>
@@ -97,7 +109,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => onReopen(comment.id)}
-              disabled={isReadOnly}
+              disabled={isReadOnly || !permissions.canReopen}
+              title={!permissions.canReopen ? 'Only the comment author or admins can reopen comments' : undefined}
             >
               Reopen
             </Button>
@@ -106,7 +119,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
               variant="ghost"
               size="sm"
               onClick={() => onResolve(comment.id)}
-              disabled={isReadOnly}
+              disabled={isReadOnly || !permissions.canResolve}
+              title={!permissions.canResolve ? 'Only the comment author or admins can resolve comments' : undefined}
             >
               Resolve
             </Button>
@@ -115,7 +129,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
             variant="ghost"
             size="sm"
             onClick={() => onDelete(comment.id)}
-            disabled={isReadOnly}
+            disabled={isReadOnly || !permissions.canDelete}
+            title={!permissions.canDelete ? 'Only the comment author can delete their comment' : undefined}
           >
             Delete
           </Button>
@@ -146,6 +161,8 @@ const CommentItem: React.FC<CommentItemProps> = ({
               replies={reply.replies || []}
               depth={depth + 1}
               mentionCandidates={mentionCandidates}
+              currentUserId={currentUserId}
+              userRole={userRole}
               onReply={onReply}
               onResolve={onResolve}
               onReopen={onReopen}

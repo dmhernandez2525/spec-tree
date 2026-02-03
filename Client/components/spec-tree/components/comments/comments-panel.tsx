@@ -18,8 +18,10 @@ import {
   setNotifications,
 } from '@/lib/store/comments-slice';
 import type { Comment, CommentTargetType, MentionCandidate } from '@/types/comments';
+import type { OrganizationRole } from '@/types/organization';
 import { toMentionValue } from '../../lib/utils/mention-utils';
 import { defaultMentionCandidates } from '../../lib/data/mention-candidates';
+import { canPerformCommentAction } from '../../lib/utils/comment-permissions';
 import { strapiService } from '../../lib/api/strapi-service';
 import CommentComposer from './comment-composer';
 import CommentItem, { CommentNode } from './comment-item';
@@ -69,6 +71,13 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
   const unreadNotifications = useSelector((state: RootState) =>
     selectUnreadNotificationsForUser(state, currentUserId)
   );
+
+  // Get the current user's role in the organization for permission checks
+  const currentUserRole = useMemo<OrganizationRole | undefined>(() => {
+    if (!currentUserId || !Array.isArray(members)) return undefined;
+    const member = members.find((m) => m.userId === currentUserId);
+    return member?.role;
+  }, [currentUserId, members]);
   const [showResolved, setShowResolved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -207,6 +216,24 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
 
   const handleResolve = async (commentId: string) => {
     if (isReadOnly) return;
+
+    // Find the comment and check permissions
+    const comment = comments.find((c) => c.id === commentId);
+    if (!comment) {
+      logger.error('CommentsPanel', 'Comment not found', { commentId });
+      return;
+    }
+
+    if (!canPerformCommentAction('resolve', comment, currentUserId, currentUserRole)) {
+      logger.warn('CommentsPanel', 'User does not have permission to resolve this comment', {
+        commentId,
+        currentUserId,
+        authorId: comment.authorId,
+      });
+      setErrorMessage('You do not have permission to resolve this comment.');
+      return;
+    }
+
     const resolvedAt = new Date().toISOString();
     const resolvedBy = currentUser?.documentId || (currentUser?.id ? String(currentUser.id) : 'current-user');
     try {
@@ -223,6 +250,24 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
 
   const handleReopen = async (commentId: string) => {
     if (isReadOnly) return;
+
+    // Find the comment and check permissions
+    const comment = comments.find((c) => c.id === commentId);
+    if (!comment) {
+      logger.error('CommentsPanel', 'Comment not found', { commentId });
+      return;
+    }
+
+    if (!canPerformCommentAction('reopen', comment, currentUserId, currentUserRole)) {
+      logger.warn('CommentsPanel', 'User does not have permission to reopen this comment', {
+        commentId,
+        currentUserId,
+        authorId: comment.authorId,
+      });
+      setErrorMessage('You do not have permission to reopen this comment.');
+      return;
+    }
+
     try {
       await strapiService.updateComment(commentId, {
         status: 'open',
@@ -237,6 +282,24 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
 
   const handleDelete = async (commentId: string) => {
     if (isReadOnly) return;
+
+    // Find the comment and check permissions
+    const comment = comments.find((c) => c.id === commentId);
+    if (!comment) {
+      logger.error('CommentsPanel', 'Comment not found', { commentId });
+      return;
+    }
+
+    if (!canPerformCommentAction('delete', comment, currentUserId, currentUserRole)) {
+      logger.warn('CommentsPanel', 'User does not have permission to delete this comment', {
+        commentId,
+        currentUserId,
+        authorId: comment.authorId,
+      });
+      setErrorMessage('You do not have permission to delete this comment. Only the author can delete their own comments.');
+      return;
+    }
+
     try {
       await strapiService.deleteComment(commentId);
       dispatch(markCommentDeleted({ id: commentId }));
@@ -311,6 +374,8 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
                 comment={node}
                 replies={node.replies || []}
                 mentionCandidates={mentionCandidates}
+                currentUserId={currentUserId}
+                userRole={currentUserRole}
                 onReply={handleReply}
                 onResolve={handleResolve}
                 onReopen={handleReopen}
