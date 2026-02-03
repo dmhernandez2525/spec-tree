@@ -39,6 +39,12 @@
       "relation": "oneToMany",
       "target": "api::contextual-question.contextual-question",
       "mappedBy": "task"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "task"
     }
   }
 }

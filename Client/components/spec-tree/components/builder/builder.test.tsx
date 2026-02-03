@@ -51,6 +51,20 @@ vi.mock('react-redux', () => ({
         },
         selectedModel: 'gpt-4',
       },
+      collaboration: {
+        isEnabled: true,
+        mode: 'edit',
+        activity: [],
+      },
+      user: {
+        user: {
+          documentId: 'user-1',
+          firstName: 'Avery',
+          lastName: 'Kim',
+          username: 'avery',
+          email: 'avery@example.com',
+        },
+      },
     };
     return selector ? selector(mockState) : mockState;
   }),
@@ -239,6 +253,18 @@ vi.mock('../builder-search', () => ({
     </div>
   ),
   SearchResult: {},
+}));
+
+vi.mock('../collaboration', () => ({
+  default: () => <div data-testid="collaboration-panel">Collaboration Panel</div>,
+}));
+
+vi.mock('../../lib/hooks/useCollaborationPresence', () => ({
+  default: () => ({ presenceUsers: [], setActiveItem: vi.fn() }),
+}));
+
+vi.mock('../../lib/hooks/useActivityLogger', () => ({
+  default: () => ({ logActivity: vi.fn() }),
 }));
 
 vi.mock('@/components/ui/button', () => ({

@@ -12,6 +12,10 @@ vi.mock('react-redux', () => ({
   useDispatch: () => mockDispatch,
 }));
 
+vi.mock('../../lib/hooks/useActivityLogger', () => ({
+  default: () => ({ logActivity: vi.fn() }),
+}));
+
 vi.mock('react-beautiful-dnd', () => ({
   Droppable: ({ children }: { children: (provided: unknown) => React.ReactNode }) =>
     children({

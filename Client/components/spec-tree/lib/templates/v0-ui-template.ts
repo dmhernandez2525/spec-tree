@@ -96,6 +96,7 @@ export interface V0FeatureContext {
   userStories?: UserStoryType[];
   tasks?: TaskType[];
   designTokens?: DesignTokens;
+  comments?: string[];
 }
 
 /**
@@ -502,6 +503,13 @@ export function generateV0SpecFromFeature(context: V0FeatureContext): string {
         sections.push(`- [ ] ${criterion.text}`);
       }
     }
+    sections.push('');
+  }
+
+  if (context.comments && context.comments.length > 0) {
+    sections.push('## Comments');
+    sections.push('');
+    sections.push(...context.comments);
     sections.push('');
   }
 

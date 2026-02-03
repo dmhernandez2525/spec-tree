@@ -19,6 +19,8 @@ import { settingsReducer } from '@/lib/store/settings-slice';
 import subscriptionReducer from '@/lib/store/subscription-slice';
 import sowReducer from '@/lib/store/sow-slice';
 import demoReducer from '@/lib/store/demo-slice';
+import { collaborationReducer } from '@/lib/store/collaboration-slice';
+import commentsReducer from '@/lib/store/comments-slice';
 
 // Store reducers for testing
 const testReducer = {
@@ -29,6 +31,8 @@ const testReducer = {
   subscription: subscriptionReducer,
   sow: sowReducer,
   demo: demoReducer,
+  collaboration: collaborationReducer,
+  comments: commentsReducer,
 };
 
 // Test store state type - matches actual RootState shape
@@ -40,6 +44,8 @@ export interface TestStoreState {
   subscription: ReturnType<typeof subscriptionReducer>;
   sow: ReturnType<typeof sowReducer>;
   demo: ReturnType<typeof demoReducer>;
+  collaboration: ReturnType<typeof collaborationReducer>;
+  comments: ReturnType<typeof commentsReducer>;
 }
 
 // Create a test store with optional preloaded state

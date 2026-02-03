@@ -40,6 +40,12 @@
       "target": "api::contextual-question.contextual-question",
       "mappedBy": "feature"
     },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "feature"
+    },
     "acceptanceCriteria": {
       "displayName": "acceptanceCriteria",
       "type": "component",

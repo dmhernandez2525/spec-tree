@@ -17,21 +17,32 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AccordionContent, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import useActivityLogger from '../../lib/hooks/useActivityLogger';
+import CommentsPanel from '../comments';
 
 interface TaskProps {
   task: TaskType;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
+  isReadOnly?: boolean;
 }
 
-const Task: React.FC<TaskProps> = ({ task, dragHandleProps }) => {
+const Task: React.FC<TaskProps> = ({
+  task,
+  dragHandleProps,
+  isReadOnly = false,
+}) => {
   const dispatch = useDispatch();
   const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
+  const { logActivity } = useActivityLogger();
 
   const handleDelete = () => {
+    if (isReadOnly) return;
     dispatch(deleteTask(task.id));
+    logActivity('deleted', 'task', task.title || 'Task');
   };
 
   const handleUpdate = (field: TaskFields, newValue: string) => {
+    if (isReadOnly) return;
     dispatch(
       updateTaskField({
         taskId: task.id,
@@ -74,10 +85,18 @@ const Task: React.FC<TaskProps> = ({ task, dragHandleProps }) => {
       <AccordionContent>
         <div className="border-l-2 border-l-amber-200 ml-4 mt-2 pl-6 space-y-6 p-4">
           <div className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsDialogOpen(true)}
+              disabled={isReadOnly}
+            >
               Edit
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isReadOnly}
+            >
               Delete
             </Button>
           </div>
@@ -99,6 +118,13 @@ const Task: React.FC<TaskProps> = ({ task, dragHandleProps }) => {
             )}
           </div>
 
+          <CommentsPanel
+            targetType="task"
+            targetId={task.id}
+            targetTitle={task.title}
+            isReadOnly={isReadOnly}
+          />
+
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -116,6 +142,8 @@ const Task: React.FC<TaskProps> = ({ task, dragHandleProps }) => {
                         value={task[label] || ''}
                         onChange={(e) => handleUpdate(label, e.target.value)}
                         className="min-h-[100px]"
+                        readOnly={isReadOnly}
+                        disabled={isReadOnly}
                       />
                     ) : (
                       <Input
@@ -123,6 +151,8 @@ const Task: React.FC<TaskProps> = ({ task, dragHandleProps }) => {
                         type="text"
                         value={task[label] || ''}
                         onChange={(e) => handleUpdate(label, e.target.value)}
+                        readOnly={isReadOnly}
+                        disabled={isReadOnly}
                       />
                     )}
                   </div>

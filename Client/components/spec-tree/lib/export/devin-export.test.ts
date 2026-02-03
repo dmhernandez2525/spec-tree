@@ -47,7 +47,10 @@ describe('devin-export', () => {
     vi.restoreAllMocks();
   });
 
-  const createMockState = (overrides: Partial<RootState['sow']> = {}): RootState => ({
+  const createMockState = (
+    overrides: Partial<RootState['sow']> = {},
+    commentOverrides = {}
+  ): RootState => ({
     sow: {
       id: 'test-id',
       globalInformation: 'Test project',
@@ -126,6 +129,26 @@ describe('devin-export', () => {
       },
       ...overrides,
     },
+    comments: {
+      commentsById: {
+        'comment-1': {
+          id: 'comment-1',
+          targetType: 'task',
+          targetId: 'task-1',
+          authorId: 'user-1',
+          authorName: 'Test User',
+          body: 'Please verify edge cases.',
+          mentions: [],
+          status: 'open',
+          createdAt: '2026-02-03T10:00:00.000Z',
+        },
+      },
+      targetIndex: {
+        'task:task-1': ['comment-1'],
+      },
+      notifications: [],
+      ...commentOverrides,
+    },
   } as RootState);
 
   describe('exportTaskAsDevin', () => {
@@ -153,6 +176,15 @@ describe('devin-export', () => {
       expect(result).toContain('**Epic:** Test Epic');
       expect(result).toContain('**Feature:** Test Feature');
       expect(result).toContain('**User Story:**');
+    });
+
+    it('includes comments when available', () => {
+      const state = createMockState();
+      const result = exportTaskAsDevin('task-1', state);
+
+      expect(result).toContain('### Comments');
+      expect(result).toContain('Test User (Open).');
+      expect(result).toContain('Please verify edge cases.');
     });
 
     it('throws error for non-existent task', () => {

@@ -111,6 +111,22 @@ describe('StrapiService', () => {
       expect(typeof strapiService.deleteTask).toBe('function');
     });
 
+    it('has fetchCommentsForTarget method', () => {
+      expect(typeof strapiService.fetchCommentsForTarget).toBe('function');
+    });
+
+    it('has createComment method', () => {
+      expect(typeof strapiService.createComment).toBe('function');
+    });
+
+    it('has updateComment method', () => {
+      expect(typeof strapiService.updateComment).toBe('function');
+    });
+
+    it('has deleteComment method', () => {
+      expect(typeof strapiService.deleteComment).toBe('function');
+    });
+
     it('has fetchAllAppData method', () => {
       expect(typeof strapiService.fetchAllAppData).toBe('function');
     });
@@ -582,6 +598,195 @@ describe('StrapiService', () => {
       await service.deleteTask('task-1');
 
       expect(mockInstance.delete).toHaveBeenCalledWith('/tasks/task-1');
+    });
+  });
+
+  describe('Comments API', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('fetchCommentsForTarget calls endpoint with target filter', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.get.mockResolvedValueOnce({
+        data: {
+          data: [
+            {
+              id: 1,
+              documentId: 'comment-1',
+              body: 'Hello',
+              status: 'open',
+              mentions: [],
+              authorId: 'user-1',
+              authorName: 'Test User',
+              createdAt: '2026-01-01T00:00:00.000Z',
+              updatedAt: '2026-01-01T00:00:00.000Z',
+            },
+          ],
+        },
+      });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      await service.fetchCommentsForTarget('feature', 'feature-123');
+
+      expect(mockInstance.get).toHaveBeenCalledWith(
+        '/comments',
+        expect.objectContaining({
+          params: expect.objectContaining({
+            filters: expect.objectContaining({
+              feature: { documentId: 'feature-123' },
+            }),
+            populate: expect.any(Object),
+          }),
+        })
+      );
+    });
+
+    it('createComment posts data with target relation', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.post.mockResolvedValueOnce({
+        data: {
+          data: {
+            id: 1,
+            documentId: 'comment-1',
+            body: 'New comment',
+            status: 'open',
+            mentions: ['user-2'],
+            authorId: 'user-1',
+            authorName: 'Test User',
+            createdAt: '2026-01-01T00:00:00.000Z',
+            updatedAt: '2026-01-01T00:00:00.000Z',
+          },
+        },
+      });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      await service.createComment({
+        targetType: 'task',
+        targetId: 'task-123',
+        parentId: 'comment-parent',
+        body: 'New comment',
+        mentions: ['user-2'],
+        authorId: 'user-1',
+        authorName: 'Test User',
+        status: 'open',
+      });
+
+      expect(mockInstance.post).toHaveBeenCalledWith(
+        '/comments',
+        expect.objectContaining({
+          data: expect.objectContaining({
+            body: 'New comment',
+            task: { connect: ['task-123'] },
+            parent: { connect: ['comment-parent'] },
+          }),
+        }),
+        expect.any(Object)
+      );
+    });
+
+    it('updateComment puts data to correct endpoint', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.put.mockResolvedValueOnce({
+        data: { data: { id: 1, documentId: 'comment-1', status: 'resolved' } },
+      });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      await service.updateComment('comment-1', {
+        status: 'resolved',
+        resolvedAt: '2026-01-02T00:00:00.000Z',
+        resolvedBy: 'user-1',
+      });
+
+      expect(mockInstance.put).toHaveBeenCalledWith('/comments/comment-1', {
+        data: {
+          status: 'resolved',
+          resolvedAt: '2026-01-02T00:00:00.000Z',
+          resolvedBy: 'user-1',
+        },
+      });
+    });
+
+    it('deleteComment calls delete on correct endpoint', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.delete.mockResolvedValueOnce({ data: { success: true } });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      await service.deleteComment('comment-1');
+
+      expect(mockInstance.delete).toHaveBeenCalledWith('/comments/comment-1');
+    });
+
+    it('fetchCommentNotificationsForUser calls endpoint with user filter', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.get.mockResolvedValueOnce({
+        data: {
+          data: [
+            {
+              id: 1,
+              documentId: 'notif-1',
+              channel: 'in_app',
+              status: 'unread',
+              createdAt: '2026-01-01T00:00:00.000Z',
+              comment: { documentId: 'comment-1' },
+              user: { documentId: 'user-1' },
+            },
+          ],
+        },
+      });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      await service.fetchCommentNotificationsForUser('user-1');
+
+      expect(mockInstance.get).toHaveBeenCalledWith(
+        '/comment-notifications',
+        expect.objectContaining({
+          params: expect.objectContaining({
+            filters: expect.objectContaining({
+              user: { documentId: 'user-1' },
+            }),
+          }),
+        })
+      );
+    });
+
+    it('markCommentNotificationsRead updates unread in-app notifications', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.get.mockResolvedValueOnce({
+        data: {
+          data: [
+            {
+              id: 1,
+              documentId: 'notif-1',
+              channel: 'in_app',
+              status: 'unread',
+              createdAt: '2026-01-01T00:00:00.000Z',
+              comment: { documentId: 'comment-1' },
+              user: { documentId: 'user-1' },
+            },
+          ],
+        },
+      });
+      mockInstance.put.mockResolvedValueOnce({ data: { success: true } });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      await service.markCommentNotificationsRead('user-1');
+
+      expect(mockInstance.put).toHaveBeenCalledWith('/comment-notifications/notif-1', {
+        data: { status: 'read' },
+      });
     });
   });
 

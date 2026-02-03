@@ -42,6 +42,8 @@ import LoadingSpinner from '../loading-spinner';
 import MetricsDisplay from '../metrics-display';
 import RegenerateFeedback from '../regenerate-feedback';
 import generateId from '../../lib/utils/generate-id';
+import useActivityLogger from '../../lib/hooks/useActivityLogger';
+import CommentsPanel from '../comments';
 import {
   calculateTotalTasks,
   calculateTotalFeatures,
@@ -53,6 +55,7 @@ interface EpicProps {
   epic: EpicType;
   index: number;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
+  isReadOnly?: boolean;
 }
 
 interface FeatureFormState {
@@ -70,7 +73,12 @@ const initialFeatureFormState: FeatureFormState = {
 };
 
 // _index reserved for drag-and-drop reordering feature
-const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => {
+const Epic: React.FC<EpicProps> = ({
+  epic,
+  index: _index,
+  dragHandleProps,
+  isReadOnly = false,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -81,12 +89,14 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
     React.useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const { logActivity } = useActivityLogger();
 
   const features = epic.featureIds.map((id) =>
     selectFeatureById(localState, id)
   );
 
   const handleUpdate = (field: EpicFields, newValue: string) => {
+    if (isReadOnly) return;
     dispatch(
       updateEpicField({
         epicName: epic.id,
@@ -101,6 +111,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
     index: number,
     value: string
   ) => {
+    if (isReadOnly) return;
     const updatedRiskMitigation = [...epic.risksAndMitigation];
     if (updatedRiskMitigation[index]) {
       updatedRiskMitigation[index] = {
@@ -124,11 +135,14 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
   };
 
   const handleDelete = () => {
+    if (isReadOnly) return;
     dispatch(deleteEpic(epic.id));
     setIsDeleteDialogOpen(false);
+    logActivity('deleted', 'epic', epic.title || 'Epic');
   };
 
   const handleGenerateFeatures = async (feedback?: string) => {
+    if (isReadOnly) return;
     setIsLoading(true);
     setError(null);
     try {
@@ -139,6 +153,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
           context: feedback,
         })
       );
+      logActivity('generated', 'feature', `Features for ${epic.title}`);
     } catch (_err) {
       setError('Failed to generate features. Please try again.');
     } finally {
@@ -147,6 +162,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
   };
 
   const handleAddFeature = () => {
+    if (isReadOnly) return;
     const feature: FeatureType = {
       id: generateId(),
       title: formState.title,
@@ -165,6 +181,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
     dispatch(addFeature(feature));
     setFormState(initialFeatureFormState);
     setIsAddFeatureDialogOpen(false);
+    logActivity('created', 'feature', formState.title || 'New feature');
   };
 
   const metrics = [
@@ -222,12 +239,14 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                   <Button
                     variant="outline"
                     onClick={() => setIsAddFeatureDialogOpen(true)}
+                    disabled={isReadOnly}
                   >
                     Add Feature
                   </Button>
                   <Button
                     variant="destructive"
                     onClick={() => setIsDeleteDialogOpen(true)}
+                    disabled={isReadOnly}
                   >
                     Delete Epic
                   </Button>
@@ -253,6 +272,8 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                                 onChange={(e) =>
                                   handleUpdate(field, e.target.value)
                                 }
+                                readOnly={isReadOnly}
+                                disabled={isReadOnly}
                               />
                             ) : (
                               <Input
@@ -260,6 +281,8 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                                 onChange={(e) =>
                                   handleUpdate(field, e.target.value)
                                 }
+                                readOnly={isReadOnly}
+                                disabled={isReadOnly}
                               />
                             )}
                           </div>
@@ -292,6 +315,8 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                                     e.target.value
                                   )
                                 }
+                                readOnly={isReadOnly}
+                                disabled={isReadOnly}
                               />
                             </div>
                           )
@@ -309,6 +334,13 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
 
                 <Separator className="my-6" />
 
+                <CommentsPanel
+                  targetType="epic"
+                  targetId={epic.id}
+                  targetTitle={epic.title}
+                  isReadOnly={isReadOnly}
+                />
+
                 <div className="space-y-6">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">Features</h3>
@@ -316,6 +348,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                       onRegenerate={handleGenerateFeatures}
                       isLoading={isLoading}
                       itemType="features"
+                      isReadOnly={isReadOnly}
                     />
                   </div>
 
@@ -331,6 +364,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                               key={feature.id}
                               draggableId={feature.id}
                               index={i}
+                              isDragDisabled={isReadOnly}
                             >
                               {(provided, snapshot) => (
                                 <div
@@ -344,6 +378,7 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                                       feature={feature}
                                       index={i}
                                       dragHandleProps={provided.dragHandleProps}
+                                      isReadOnly={isReadOnly}
                                     />
                                   </AccordionItem>
                                 </div>
@@ -389,6 +424,8 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                         [key]: e.target.value,
                       }))
                     }
+                    readOnly={isReadOnly}
+                    disabled={isReadOnly}
                   />
                 ) : (
                   <Input
@@ -400,13 +437,17 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
                         [key]: e.target.value,
                       }))
                     }
+                    readOnly={isReadOnly}
+                    disabled={isReadOnly}
                   />
                 )}
               </div>
             ))}
           </div>
           <DialogFooter>
-            <Button onClick={handleAddFeature}>Add Feature</Button>
+            <Button onClick={handleAddFeature} disabled={isReadOnly}>
+              Add Feature
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -424,10 +465,15 @@ const Epic: React.FC<EpicProps> = ({ epic, index: _index, dragHandleProps }) => 
             <Button
               variant="outline"
               onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isReadOnly}
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isReadOnly}
+            >
               Delete
             </Button>
           </DialogFooter>

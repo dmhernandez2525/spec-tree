@@ -54,6 +54,7 @@ export interface FeatureContext {
   epic?: EpicType;
   userStories?: UserStoryType[];
   tasks?: TaskType[];
+  comments?: string[];
 }
 
 /**
@@ -283,6 +284,13 @@ export function generateFeatureContextSection(
     for (const task of tasks) {
       lines.push(generateTaskSection(task));
     }
+    lines.push('');
+  }
+
+  if (context.comments && context.comments.length > 0) {
+    lines.push('### Comments');
+    lines.push('');
+    lines.push(...context.comments);
     lines.push('');
   }
 

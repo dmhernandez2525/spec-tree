@@ -35,6 +35,7 @@ import {
   DEFAULT_TEST_REQUIREMENTS,
 } from '../templates/copilot-template';
 import { downloadFile } from '../utils/import-export';
+import { buildCommentLines, getCommentsForTarget } from '../utils/comment-export';
 
 export interface CopilotExportOptions {
   /** Include tech stack information */
@@ -246,6 +247,42 @@ function buildWRAPContext(
     ? selectEpicById(state, feature.parentEpicId)
     : undefined;
 
+  const comments: string[] = [];
+  const taskComments = buildCommentLines(
+    getCommentsForTarget(state, 'task', task.id)
+  );
+  if (taskComments.length > 0) {
+    comments.push('**Task Comments**');
+    comments.push(...taskComments);
+  }
+  if (userStory) {
+    const storyComments = buildCommentLines(
+      getCommentsForTarget(state, 'userStory', userStory.id)
+    );
+    if (storyComments.length > 0) {
+      comments.push('**User Story Comments**');
+      comments.push(...storyComments);
+    }
+  }
+  if (feature) {
+    const featureComments = buildCommentLines(
+      getCommentsForTarget(state, 'feature', feature.id)
+    );
+    if (featureComments.length > 0) {
+      comments.push('**Feature Comments**');
+      comments.push(...featureComments);
+    }
+  }
+  if (epic) {
+    const epicComments = buildCommentLines(
+      getCommentsForTarget(state, 'epic', epic.id)
+    );
+    if (epicComments.length > 0) {
+      comments.push('**Epic Comments**');
+      comments.push(...epicComments);
+    }
+  }
+
   return {
     task,
     userStory: userStory || undefined,
@@ -253,6 +290,7 @@ function buildWRAPContext(
     epic: epic || undefined,
     affectedFiles,
     referencePatterns,
+    comments: comments.length > 0 ? comments : undefined,
   };
 }
 

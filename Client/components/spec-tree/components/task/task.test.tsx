@@ -9,6 +9,10 @@ vi.mock('react-redux', () => ({
   useDispatch: vi.fn(() => mockDispatch),
 }));
 
+vi.mock('../../lib/hooks/useActivityLogger', () => ({
+  default: () => ({ logActivity: vi.fn() }),
+}));
+
 const mockDeleteTask = vi.fn();
 const mockUpdateTaskField = vi.fn();
 

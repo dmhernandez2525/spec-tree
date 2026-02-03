@@ -18,6 +18,9 @@ export type {
   UseCollapsibleTreeReturn,
 } from './useCollapsibleTree';
 
+export { default as useCollaborationPresence } from './useCollaborationPresence';
+export { default as useActivityLogger } from './useActivityLogger';
+
 export { useStreamingCompletion, parseSSEChunk, simulateStream } from './useStreamingCompletion';
 export type {
   StreamingStatus,

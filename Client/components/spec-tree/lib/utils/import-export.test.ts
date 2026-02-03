@@ -10,7 +10,7 @@ import {
 import type { RootState } from '@/lib/store';
 
 describe('import-export utilities', () => {
-  const createMockState = (sowOverrides = {}): RootState => ({
+  const createMockState = (sowOverrides = {}, commentOverrides = {}): RootState => ({
     sow: {
       id: 'app-123',
       globalInformation: 'Global app description',
@@ -68,6 +68,27 @@ describe('import-export utilities', () => {
       error: null,
       ...sowOverrides,
     },
+    comments: {
+      commentsById: {
+        'comment-1': {
+          id: 'comment-1',
+          targetType: 'feature',
+          targetId: 'feature-1',
+          authorId: 'user-1',
+          authorName: 'Test User',
+          body: 'Please review this feature.',
+          mentions: [],
+          status: 'open',
+          createdAt: '2026-01-01T00:00:00.000Z',
+          updatedAt: '2026-01-01T00:00:00.000Z',
+        },
+      },
+      targetIndex: {
+        'feature:feature-1': ['comment-1'],
+      },
+      notifications: [],
+      ...commentOverrides,
+    },
   } as unknown as RootState);
 
   describe('exportToJSON', () => {
@@ -83,6 +104,7 @@ describe('import-export utilities', () => {
       expect(parsed.features).toBeDefined();
       expect(parsed.userStories).toBeDefined();
       expect(parsed.tasks).toBeDefined();
+      expect(parsed.comments).toBeDefined();
       expect(parsed.metadata).toBeDefined();
     });
 
@@ -133,6 +155,15 @@ describe('import-export utilities', () => {
       expect(parsed.tasks[0].id).toBe('task-1');
     });
 
+    it('includes all comments', () => {
+      const state = createMockState();
+      const result = exportToJSON(state);
+      const parsed = JSON.parse(result);
+
+      expect(parsed.comments).toHaveLength(1);
+      expect(parsed.comments[0].id).toBe('comment-1');
+    });
+
     it('includes correct metadata counts', () => {
       const state = createMockState();
       const result = exportToJSON(state);
@@ -142,15 +173,22 @@ describe('import-export utilities', () => {
       expect(parsed.metadata.totalFeatures).toBe(1);
       expect(parsed.metadata.totalUserStories).toBe(1);
       expect(parsed.metadata.totalTasks).toBe(1);
+      expect(parsed.metadata.totalComments).toBe(1);
     });
 
     it('handles empty state', () => {
-      const state = createMockState({
+      const state = createMockState(
+        {
         epics: {},
         features: {},
         userStories: {},
         tasks: {},
-      });
+        },
+        {
+          commentsById: {},
+          targetIndex: {},
+        }
+      );
       const result = exportToJSON(state);
       const parsed = JSON.parse(result);
 
@@ -158,6 +196,7 @@ describe('import-export utilities', () => {
       expect(parsed.features).toHaveLength(0);
       expect(parsed.userStories).toHaveLength(0);
       expect(parsed.tasks).toHaveLength(0);
+      expect(parsed.comments).toHaveLength(0);
       expect(parsed.metadata.totalEpics).toBe(0);
     });
 
@@ -231,6 +270,19 @@ describe('import-export utilities', () => {
       expect(taskLine).toContain('Task');
       expect(taskLine).toContain('task-1');
       expect(taskLine).toContain('Task One');
+    });
+
+    it('exports comments with correct format', () => {
+      const state = createMockState();
+      const result = exportToCSV(state);
+      const lines = result.split('\n');
+      const commentLine = lines.find((l) => l.startsWith('Comment,'));
+
+      expect(commentLine).toContain('Comment');
+      expect(commentLine).toContain('comment-1');
+      expect(commentLine).toContain('Test User');
+      expect(commentLine).toContain('feature:feature-1');
+      expect(commentLine).toContain('open');
     });
 
     it('escapes fields with commas', () => {
@@ -667,6 +719,15 @@ Epic,epic-1,Epic One,Description,`;
 
       expect(result).toContain('### Feature: Feature One');
       expect(result).toContain('First feature description');
+    });
+
+    it('includes comments for feature', () => {
+      const state = createMockState();
+      const result = exportToMarkdown(state);
+
+      expect(result).toContain('**Comments:**');
+      expect(result).toContain('Test User (Open).');
+      expect(result).toContain('Please review this feature.');
     });
 
     it('includes user story sections', () => {

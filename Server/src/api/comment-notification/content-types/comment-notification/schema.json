@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comment_notifications",
+  "info": {
+    "singularName": "comment-notification",
+    "pluralName": "comment-notifications",
+    "displayName": "Comment Notification",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "channel": {
+      "type": "enumeration",
+      "enum": [
+        "in_app",
+        "email"
+      ]
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "unread",
+        "read",
+        "queued",
+        "sent",
+        "failed"
+      ],
+      "default": "unread"
+    },
+    "sentAt": {
+      "type": "datetime"
+    },
+    "comment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::comment.comment",
+      "inversedBy": "notifications"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "commentNotifications"
+    }
+  }
+}

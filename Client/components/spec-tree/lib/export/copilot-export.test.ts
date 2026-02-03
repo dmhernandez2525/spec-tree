@@ -39,6 +39,25 @@ function createMockState(overrides: Partial<RootState['sow']> = {}): RootState {
       error: null,
       ...overrides,
     },
+    comments: {
+      commentsById: {
+        'comment-1': {
+          id: 'comment-1',
+          targetType: 'task',
+          targetId: 'task-1',
+          authorId: 'user-1',
+          authorName: 'Reviewer',
+          body: 'Remember edge cases.',
+          mentions: [],
+          status: 'open',
+          createdAt: '2026-02-03T10:00:00.000Z',
+        },
+      },
+      targetIndex: {
+        'task:task-1': ['comment-1'],
+      },
+      notifications: [],
+    },
     auth: {} as MockSlice<RootState['auth']> as RootState['auth'],
     user: {} as MockSlice<RootState['user']> as RootState['user'],
     organization: {} as MockSlice<RootState['organization']> as RootState['organization'],
@@ -185,6 +204,8 @@ describe('Copilot Export', () => {
       expect(result).toContain('## Requirements');
       expect(result).toContain('## Actual files');
       expect(result).toContain('## Patterns');
+      expect(result).toContain('## Comments');
+      expect(result).toContain('Remember edge cases.');
     });
 
     it('throws error for non-existent task', () => {

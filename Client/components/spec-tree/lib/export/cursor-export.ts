@@ -31,6 +31,7 @@ import {
   DEFAULT_NEXTJS_ARCHITECTURE,
 } from '../templates/cursor-rules-template';
 import { downloadFile } from '../utils/import-export';
+import { buildCommentLines, getCommentsForTarget } from '../utils/comment-export';
 
 export interface CursorExportOptions {
   /** Include tech stack information */
@@ -129,6 +130,7 @@ export function exportFeatureToCursorRules(
     epic: epic || undefined,
     userStories,
     tasks,
+    comments: buildFeatureComments(state, feature, userStories, tasks, epic),
   };
 
   const config: CursorRulesConfig = {
@@ -198,6 +200,7 @@ export function exportEpicToCursorRules(
       epic,
       userStories,
       tasks,
+      comments: buildFeatureComments(state, feature, userStories, tasks, epic),
     };
   });
 
@@ -243,6 +246,60 @@ export function exportEpicToCursorRules(
 
   return generateCursorRulesContent(config);
 }
+
+const buildFeatureComments = (
+  state: RootState,
+  feature: FeatureType,
+  userStories: UserStoryType[],
+  tasks: TaskType[],
+  epic?: EpicType
+): string[] => {
+  const lines: string[] = [];
+
+  const featureComments = buildCommentLines(
+    getCommentsForTarget(state, 'feature', feature.id)
+  );
+  if (featureComments.length > 0) {
+    lines.push('**Feature Comments**');
+    lines.push(...featureComments);
+  }
+
+  if (epic) {
+    const epicComments = buildCommentLines(
+      getCommentsForTarget(state, 'epic', epic.id)
+    );
+    if (epicComments.length > 0) {
+      lines.push('**Epic Comments**');
+      lines.push(...epicComments);
+    }
+  }
+
+  if (userStories.length > 0) {
+    userStories.forEach((story) => {
+      const storyComments = buildCommentLines(
+        getCommentsForTarget(state, 'userStory', story.id)
+      );
+      if (storyComments.length > 0) {
+        lines.push(`**User Story ${story.title}**`);
+        lines.push(...storyComments);
+      }
+    });
+  }
+
+  if (tasks.length > 0) {
+    tasks.forEach((task) => {
+      const taskComments = buildCommentLines(
+        getCommentsForTarget(state, 'task', task.id)
+      );
+      if (taskComments.length > 0) {
+        lines.push(`**Task ${task.title}**`);
+        lines.push(...taskComments);
+      }
+    });
+  }
+
+  return lines;
+};
 
 /**
  * Download Cursor rules as a file

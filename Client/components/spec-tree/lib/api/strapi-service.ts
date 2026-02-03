@@ -11,7 +11,15 @@ import {
   ResTaskType,
   RiskMitigationType,
 } from '../types/work-items';
-import type { StrapiApp } from '@/types/strapi';
+import type {
+  Comment,
+  CommentStatus,
+  CommentTargetType,
+  CommentNotification,
+  NotificationChannel,
+  NotificationStatus,
+} from '@/types/comments';
+import type { StrapiApp, StrapiComment, StrapiCommentNotification } from '@/types/strapi';
 
 // Base Strapi response types
 interface StrapiResponse<T> {
@@ -79,6 +87,53 @@ interface CreateTaskRequest {
   userStory: string;
 }
 
+interface CreateCommentRequest {
+  targetType: CommentTargetType;
+  targetId: string;
+  parentId?: string;
+  authorId: string;
+  authorName: string;
+  authorEmail?: string;
+  body: string;
+  mentions: string[];
+  status: CommentStatus;
+}
+
+interface UpdateCommentRequest {
+  body?: string;
+  mentions?: string[];
+  status?: CommentStatus;
+  resolvedAt?: string | null;
+  resolvedBy?: string | null;
+}
+
+const COMMENT_TARGET_FIELD: Record<CommentTargetType, 'app' | 'epic' | 'feature' | 'userStory' | 'task'> = {
+  app: 'app',
+  epic: 'epic',
+  feature: 'feature',
+  userStory: 'userStory',
+  task: 'task',
+};
+
+const NOTIFICATION_CHANNEL_MAP: Record<'in_app' | 'email', NotificationChannel> = {
+  in_app: 'in-app',
+  email: 'email',
+};
+
+const NOTIFICATION_STATUS_MAP: Record<
+  'unread' | 'read' | 'queued' | 'sent' | 'failed',
+  NotificationStatus
+> = {
+  unread: 'unread',
+  read: 'read',
+  queued: 'queued',
+  sent: 'sent',
+  failed: 'failed',
+};
+
+const resolveDocumentId = (relation?: { documentId: string } | null): string | undefined =>
+  relation?.documentId;
+
 class StrapiService {
   private instance: AxiosInstance;
   private readonly baseURL: string;
@@ -119,6 +174,54 @@ class StrapiService {
       throw error;
     }
     throw new Error('An unknown error occurred');
+  }
+
+  private mapStrapiComment(
+    comment: StrapiComment,
+    targetType: CommentTargetType,
+    targetId: string
+  ): Comment {
+    const mentions = Array.isArray(comment.mentions) ? comment.mentions : [];
+    return {
+      id: comment.documentId,
+      targetType,
+      targetId,
+      parentId: resolveDocumentId(comment.parent) || null,
+      authorId: comment.authorId || 'unknown',
+      authorName: comment.authorName || 'Unknown',
+      authorEmail: comment.authorEmail || undefined,
+      body: comment.body || '',
+      mentions,
+      status: comment.status || 'open',
+      createdAt: comment.createdAt,
+      updatedAt: comment.updatedAt,
+      resolvedAt: comment.resolvedAt || null,
+      resolvedBy: comment.resolvedBy || null,
+    };
+  }
+
+  private mapStrapiNotification(
+    notification: StrapiCommentNotification
+  ): CommentNotification {
+    const channel = NOTIFICATION_CHANNEL_MAP[notification.channel];
+    const status = NOTIFICATION_STATUS_MAP[notification.status];
+    const commentId =
+      'comment' in notification && notification.comment
+        ? (notification.comment as { documentId?: string }).documentId || ''
+        : '';
+    const userId =
+      'user' in notification && notification.user
+        ? (notification.user as { documentId?: string }).documentId || ''
+        : '';
+
+    return {
+      id: notification.documentId,
+      commentId,
+      userId,
+      channel,
+      status,
+      createdAt: notification.createdAt,
+    };
   }
 
   // Apps
@@ -494,6 +597,123 @@ class StrapiService {
   async deleteTask(documentId: string): Promise<void> {
     try {
       await this.instance.delete(`/tasks/${documentId}`);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  // Comments
+  async fetchCommentsForTarget(
+    targetType: CommentTargetType,
+    targetId: string
+  ): Promise<Comment[]> {
+    const targetField = COMMENT_TARGET_FIELD[targetType];
+    const data = await this.fetch<StrapiComment[]>('/comments', {
+      filters: {
+        [targetField]: {
+          documentId: targetId,
+        },
+      },
+      populate: {
+        parent: {
+          fields: ['documentId'],
+        },
+      },
+      sort: ['createdAt:asc'],
+    });
+
+    return data.map((comment) => this.mapStrapiComment(comment, targetType, targetId));
+  }
+
+  async createComment(data: CreateCommentRequest): Promise<Comment> {
+    const { targetType, targetId, parentId, ...commentData } = data;
+    const targetField = COMMENT_TARGET_FIELD[targetType];
+    const payload: Record<string, unknown> = {
+      ...commentData,
+      [targetField]: {
+        connect: [targetId],
+      },
+    };
+
+    if (parentId) {
+      payload.parent = { connect: [parentId] };
+    }
+
+    try {
+      const response = await this.instance.post(
+        '/comments',
+        {
+          data: payload,
+        },
+        {
+          params: {
+            populate: {
+              parent: {
+                fields: ['documentId'],
+              },
+            },
+          },
+        }
+      );
+      return this.mapStrapiComment(response.data.data, targetType, targetId);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async updateComment(documentId: string, data: UpdateCommentRequest): Promise<void> {
+    try {
+      await this.instance.put(`/comments/${documentId}`, {
+        data,
+      });
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async deleteComment(documentId: string): Promise<void> {
+    try {
+      await this.instance.delete(`/comments/${documentId}`);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async fetchCommentNotificationsForUser(userId: string): Promise<CommentNotification[]> {
+    const numericId = Number(userId);
+    const userFilter = Number.isNaN(numericId)
+      ? { user: { documentId: userId } }
+      : {
+          $or: [{ user: { documentId: userId } }, { user: { id: numericId } }],
+        };
+
+    const data = await this.fetch<StrapiCommentNotification[]>('/comment-notifications', {
+      filters: userFilter,
+      populate: {
+        comment: { fields: ['documentId'] },
+        user: { fields: ['documentId'] },
+      },
+      sort: ['createdAt:desc'],
+    });
+
+    return data.map((notification) => this.mapStrapiNotification(notification));
+  }
+
+  async markCommentNotificationsRead(userId: string): Promise<void> {
+    const notifications = await this.fetchCommentNotificationsForUser(userId);
+    const unread = notifications.filter(
+      (notification) => notification.channel === 'in-app' && notification.status === 'unread'
+    );
+    if (unread.length === 0) return;
+
+    try {
+      await Promise.all(
+        unread.map((notification) =>
+          this.instance.put(`/comment-notifications/${notification.id}`, {
+            data: { status: 'read' },
+          })
+        )
+      );
     } catch (error) {
       this.handleError(error);
     }
