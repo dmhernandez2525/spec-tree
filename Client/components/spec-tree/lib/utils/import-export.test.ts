@@ -339,7 +339,7 @@ describe('import-export utilities', () => {
         features: {},
         userStories: {},
         tasks: {},
-      });
+      }, { commentsById: {} });
       const result = exportToCSV(state);
       const lines = result.split('\n');
 

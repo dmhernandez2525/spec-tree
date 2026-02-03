@@ -133,6 +133,12 @@ vi.mock('../regenerate-feedback', () => ({
   ),
 }));
 
+vi.mock('../comments', () => ({
+  default: ({ targetTitle }: { targetTitle: string }) => (
+    <div data-testid="mock-comments-panel">Comments for {targetTitle}</div>
+  ),
+}));
+
 vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, variant, ...props }: React.PropsWithChildren<{ onClick?: () => void; variant?: string }>) => (
     <button onClick={onClick} data-variant={variant} {...props}>

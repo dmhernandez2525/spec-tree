@@ -75,6 +75,12 @@ vi.mock('lucide-react', () => ({
   GripVertical: () => <span data-testid="grip-icon">GripIcon</span>,
 }));
 
+vi.mock('../comments', () => ({
+  default: ({ targetTitle }: { targetTitle: string }) => (
+    <div data-testid="mock-comments-panel">Comments for {targetTitle}</div>
+  ),
+}));
+
 // Import after mocks
 import Task from './task';
 import { TaskType, TaskFields } from '../../lib/types/work-items';
