@@ -64,6 +64,11 @@ function createMockState(overrides: Partial<RootState['sow']> = {}): RootState {
     settings: {} as MockSlice<RootState['settings']> as RootState['settings'],
     subscription: {} as MockSlice<RootState['subscription']> as RootState['subscription'],
     demo: {} as MockSlice<RootState['demo']> as RootState['demo'],
+    collaboration: {
+      mode: 'edit' as const,
+      isEnabled: true,
+      activity: [],
+    },
   };
 }
 

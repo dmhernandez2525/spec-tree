@@ -63,20 +63,12 @@ export default {
       const user = await resolveUserByIdentifier(strapi, mentionId);
       if (!user) continue;
 
-      const notificationBase = {
-        comment: {
-          connect: [result.documentId],
-        },
-        user: {
-          connect: [user.documentId],
-        },
-      };
-
       await strapi.documents('api::comment-notification.comment-notification').create({
         data: {
-          ...notificationBase,
-          channel: 'in_app',
-          status: 'unread',
+          channel: 'in_app' as const,
+          status: 'unread' as const,
+          comment: result.documentId,
+          user: user.documentId,
         },
       });
 
@@ -84,9 +76,10 @@ export default {
         .documents('api::comment-notification.comment-notification')
         .create({
           data: {
-            ...notificationBase,
-            channel: 'email',
-            status: 'queued',
+            channel: 'email' as const,
+            status: 'queued' as const,
+            comment: result.documentId,
+            user: user.documentId,
           },
         });
 
@@ -95,7 +88,7 @@ export default {
           .documents('api::comment-notification.comment-notification')
           .update({
             documentId: emailNotification.documentId,
-            data: { status: 'failed' },
+            data: { status: 'failed' as const },
           });
         continue;
       }
@@ -110,7 +103,7 @@ export default {
           .documents('api::comment-notification.comment-notification')
           .update({
             documentId: emailNotification.documentId,
-            data: { status: 'sent', sentAt: new Date().toISOString() },
+            data: { status: 'sent' as const, sentAt: new Date().toISOString() },
           });
       } catch (error) {
         strapi.log.error('Failed to send comment notification email', error as Error);
@@ -118,7 +111,7 @@ export default {
           .documents('api::comment-notification.comment-notification')
           .update({
             documentId: emailNotification.documentId,
-            data: { status: 'failed' },
+            data: { status: 'failed' as const },
           });
       }
     }

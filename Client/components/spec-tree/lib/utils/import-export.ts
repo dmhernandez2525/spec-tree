@@ -183,7 +183,7 @@ export function parseJSONImport(jsonString: string): ExportData | null {
       data.comments = [];
     }
 
-    return data as ExportData;
+    return data as unknown as ExportData;
   } catch (error) {
     console.error('Failed to parse import data:', error);
     return null;

@@ -55,7 +55,7 @@ export const extractMentions = (
     ])
   );
 
-  const matches = text.match(/@([a-zA-Z0-9._-]+)/g) || [];
+  const matches: string[] = text.match(/@([a-zA-Z0-9._-]+)/g) || [];
   const ids = new Set<string>();
 
   matches.forEach((match) => {

@@ -149,6 +149,17 @@ describe('devin-export', () => {
       notifications: [],
       ...commentOverrides,
     },
+    auth: {} as RootState['auth'],
+    user: {} as RootState['user'],
+    organization: {} as RootState['organization'],
+    settings: {} as RootState['settings'],
+    subscription: {} as RootState['subscription'],
+    demo: {} as RootState['demo'],
+    collaboration: {
+      mode: 'edit' as const,
+      isEnabled: true,
+      activity: [],
+    },
   } as RootState);
 
   describe('exportTaskAsDevin', () => {
