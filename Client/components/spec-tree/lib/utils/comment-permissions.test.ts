@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import type { Comment } from '@/types/comments';
-import type { OrganizationRole } from '@/types/organization';
 import {
   isCommentAdmin,
   isCommentAuthor,
