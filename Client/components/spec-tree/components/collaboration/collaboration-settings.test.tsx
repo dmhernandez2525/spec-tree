@@ -50,7 +50,7 @@ describe('CollaborationSettings', () => {
 
     render(<CollaborationSettings />);
 
-    const readOnlyButton = screen.getByRole('button', { name: 'Read-only' });
+    const readOnlyButton = screen.getByRole('radio', { name: 'Read-only mode' });
     await userEvent.click(readOnlyButton);
 
     expect(mockDispatch).toHaveBeenCalledWith(setMode('read-only'));

@@ -161,27 +161,27 @@ export const selectCommentsForTarget = (
   targetId: string
 ): Comment[] => {
   const key = getTargetKey(targetType, targetId);
-  const commentIds = state.comments.targetIndex[key] || [];
+  const commentIds = state.comments?.targetIndex?.[key] || [];
   return commentIds
-    .map((id) => state.comments.commentsById[id])
+    .map((id) => state.comments?.commentsById?.[id])
     .filter((comment): comment is Comment => Boolean(comment))
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 };
 
 export const selectAllComments = (state: RootState): Comment[] =>
-  Object.values(state.comments.commentsById || {});
+  Object.values(state.comments?.commentsById || {});
 
 export const selectNotificationsForUser = (
   state: RootState,
   userId: string
 ): CommentNotification[] =>
-  state.comments.notifications.filter((notification) => notification.userId === userId);
+  (state.comments?.notifications || []).filter((notification) => notification.userId === userId);
 
 export const selectUnreadNotificationsForUser = (
   state: RootState,
   userId: string
 ): CommentNotification[] =>
-  state.comments.notifications.filter(
+  (state.comments?.notifications || []).filter(
     (notification) =>
       notification.userId === userId && notification.status === 'unread'
   );

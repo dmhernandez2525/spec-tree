@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import PresenceIndicator from './presence-indicator';
 import type { PresenceUser } from '@/types/collaboration';
 
@@ -28,9 +29,13 @@ const users: PresenceUser[] = [
   },
 ];
 
+const renderWithProvider = (ui: React.ReactElement) => {
+  return render(<TooltipProvider>{ui}</TooltipProvider>);
+};
+
 describe('PresenceIndicator', () => {
   it('renders active count and initials', () => {
-    render(<PresenceIndicator users={users} maxVisible={2} />);
+    renderWithProvider(<PresenceIndicator users={users} maxVisible={2} />);
 
     expect(screen.getByText('2 active')).toBeInTheDocument();
     expect(screen.getByText('AK')).toBeInTheDocument();
@@ -38,7 +43,7 @@ describe('PresenceIndicator', () => {
   });
 
   it('shows overflow count when more users exist', () => {
-    render(<PresenceIndicator users={users} maxVisible={1} />);
+    renderWithProvider(<PresenceIndicator users={users} maxVisible={1} />);
 
     expect(screen.getByText('+2')).toBeInTheDocument();
   });

@@ -45,6 +45,11 @@ const baseState = {
     isLoading: false,
     error: null,
   },
+  comments: {
+    commentsById: {},
+    targetIndex: {},
+    notifications: [],
+  },
 };
 
 describe('CommentsPanel', () => {

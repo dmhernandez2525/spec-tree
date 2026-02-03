@@ -89,7 +89,7 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
       });
     }
 
-    members.forEach((member) => {
+    (Array.isArray(members) ? members : []).forEach((member) => {
       const label = `Member ${member.userId.slice(0, 6)}`;
       candidates.push({
         id: member.userId,
