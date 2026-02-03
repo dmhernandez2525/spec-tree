@@ -246,7 +246,7 @@ describe('useCursorRulesImport', () => {
     it('should parse complete MDC content', () => {
       const { result } = renderHook(() => useCursorRulesImport());
 
-      const parsed = result.current.importFromContent(sampleMDCContent, 'project.mdc');
+      const parsed = result.current.importFromContent(sampleMDCContent);
 
       expect(parsed.frontmatter.title).toBe('Project Rules');
       expect(parsed.projectName).toBe('E-Commerce Platform');
