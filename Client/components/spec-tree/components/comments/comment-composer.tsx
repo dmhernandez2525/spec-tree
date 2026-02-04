@@ -76,10 +76,15 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
     const trimmed = value.trim();
     if (!trimmed) return;
     setIsSubmitting(true);
-    const mentions = extractMentions(trimmed, mentionCandidates);
-    await onSubmit(trimmed, mentions);
-    setValue('');
-    setIsSubmitting(false);
+    try {
+      const mentions = extractMentions(trimmed, mentionCandidates);
+      await onSubmit(trimmed, mentions);
+      setValue('');
+    } catch (error) {
+      console.error('Failed to submit comment:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

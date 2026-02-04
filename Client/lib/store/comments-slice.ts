@@ -164,12 +164,12 @@ export const selectCommentsForTarget = (
   const commentIds = state.comments?.targetIndex?.[key] || [];
   return commentIds
     .map((id) => state.comments?.commentsById?.[id])
-    .filter((comment): comment is Comment => Boolean(comment))
+    .filter((comment): comment is Comment => Boolean(comment) && !comment.isDeleted)
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 };
 
 export const selectAllComments = (state: RootState): Comment[] =>
-  Object.values(state.comments?.commentsById || {});
+  Object.values(state.comments?.commentsById || {}).filter((comment) => !comment.isDeleted);
 
 export const selectNotificationsForUser = (
   state: RootState,
