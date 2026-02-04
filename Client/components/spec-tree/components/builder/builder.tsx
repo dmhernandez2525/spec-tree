@@ -8,6 +8,10 @@ import {
 } from 'react-beautiful-dnd';
 import { RootState, AppDispatch } from '../../../../lib/store';
 import {
+  selectCollaborationEnabled,
+  selectCollaborationMode,
+} from '@/lib/store/collaboration-slice';
+import {
   addEpics,
   requestAdditionalEpics,
   requestAdditionalFeatures,
@@ -26,6 +30,7 @@ import {
 } from '../../../../lib/store/sow-slice';
 import { strapiService } from '../../lib/api/strapi-service';
 import { logger } from '../../../../lib/logger';
+import type { PresenceUser } from '@/types/collaboration';
 import {
   EpicType,
   FeatureType,
@@ -59,6 +64,7 @@ import Chat from '../chat';
 import ImportExport from '../import-export';
 import Templates from '../templates';
 import BuilderSearch, { SearchResult } from '../builder-search';
+import CollaborationPanel from '../collaboration';
 import generateId from '../../lib/utils/generate-id';
 import {
   calculateTotalTasks,
@@ -67,6 +73,8 @@ import {
 } from '../../lib/utils/calculation-utils';
 import calculateTotalPoints from '../../lib/utils/calculate-total-points';
 import useAsyncState from '@/lib/hooks/useAsyncState';
+import useCollaborationPresence from '../../lib/hooks/useCollaborationPresence';
+import useActivityLogger from '../../lib/hooks/useActivityLogger';
 
 interface BuilderProps {
   setSelectedApp: (id: string | null) => void;
@@ -115,10 +123,41 @@ const Builder: React.FC<BuilderProps> = ({
 
   // Memoize selectors
   const localState = useSelector((state: RootState) => state);
+  const collaborationEnabled = useSelector(selectCollaborationEnabled);
+  const collaborationMode = useSelector(selectCollaborationMode);
+  const isReadOnly = collaborationEnabled && collaborationMode === 'read-only';
+  const currentUser = useSelector((state: RootState) => state.user.user);
+  const { logActivity } = useActivityLogger();
   const epics = useSelector(selectAllEpics);
   const features = useSelector(selectAllFeatures);
   const userStories = useSelector(selectAllUserStories);
   const allTasks = useSelector(selectAllTasks);
+
+  const currentPresenceUser = useMemo<PresenceUser>(() => {
+    const fullName = [currentUser?.firstName, currentUser?.lastName]
+      .filter(Boolean)
+      .join(' ');
+    return {
+      id:
+        currentUser?.documentId ||
+        (currentUser?.id ? String(currentUser.id) : 'current-user'),
+      name: fullName || currentUser?.username || currentUser?.email || 'You',
+      color: '#6366f1',
+      status: 'active',
+      lastActive: new Date().toISOString(),
+    };
+  }, [
+    currentUser?.documentId,
+    currentUser?.id,
+    currentUser?.firstName,
+    currentUser?.lastName,
+    currentUser?.username,
+    currentUser?.email,
+  ]);
+
+  const { presenceUsers, setActiveItem } = useCollaborationPresence({
+    currentUser: currentPresenceUser,
+  });
 
   // Convert arrays to records for search component
   const featuresRecord = useMemo(() => {
@@ -143,6 +182,7 @@ const Builder: React.FC<BuilderProps> = ({
   }, [allTasks]);
 
   const handleSearchResultSelect = useCallback((result: SearchResult) => {
+    setActiveItem(result.item.id);
     // Scroll to and highlight the selected item
     const element = document.getElementById(`work-item-${result.item.id}`);
     if (element) {
@@ -152,7 +192,7 @@ const Builder: React.FC<BuilderProps> = ({
         element.classList.remove('ring-2', 'ring-primary', 'ring-offset-2');
       }, 2000);
     }
-  }, []);
+  }, [setActiveItem]);
 
   // Memoize computed values
   const featuresById = useMemo(() => {
@@ -175,9 +215,11 @@ const Builder: React.FC<BuilderProps> = ({
 
   const handleAddEpics = useCallback(async () => {
     try {
+      if (isReadOnly) return;
       startLoading();
       await dispatch(requestAdditionalEpics({ state: localState })).unwrap();
       stopLoading();
+      logActivity('generated', 'epic', 'Additional epics');
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -185,10 +227,19 @@ const Builder: React.FC<BuilderProps> = ({
           : 'Failed to generate epics. Please try again.';
       handleError(errorMessage);
     }
-  }, [dispatch, localState, startLoading, stopLoading, handleError]);
+  }, [
+    dispatch,
+    isReadOnly,
+    localState,
+    logActivity,
+    startLoading,
+    stopLoading,
+    handleError,
+  ]);
 
   const handleAddFeatures = useCallback(async () => {
     try {
+      if (isReadOnly) return;
       startLoading();
       await Promise.all(
         epics.map((epic) =>
@@ -198,6 +249,7 @@ const Builder: React.FC<BuilderProps> = ({
         )
       );
       stopLoading();
+      logActivity('generated', 'feature', 'Additional features');
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -205,10 +257,20 @@ const Builder: React.FC<BuilderProps> = ({
           : 'Failed to generate features. Please try again.';
       handleError(errorMessage);
     }
-  }, [dispatch, epics, localState, startLoading, stopLoading, handleError]);
+  }, [
+    dispatch,
+    epics,
+    isReadOnly,
+    localState,
+    logActivity,
+    startLoading,
+    stopLoading,
+    handleError,
+  ]);
 
   const handleAddUserStories = useCallback(async () => {
     try {
+      if (isReadOnly) return;
       startLoading();
       await Promise.all(
         epics.flatMap((epic) =>
@@ -223,6 +285,7 @@ const Builder: React.FC<BuilderProps> = ({
         )
       );
       stopLoading();
+      logActivity('generated', 'userStory', 'Additional user stories');
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -234,7 +297,9 @@ const Builder: React.FC<BuilderProps> = ({
     dispatch,
     epics,
     featuresById,
+    isReadOnly,
     localState,
+    logActivity,
     startLoading,
     stopLoading,
     handleError,
@@ -242,6 +307,7 @@ const Builder: React.FC<BuilderProps> = ({
 
   const handleAddTasksToAllUserStories = useCallback(async () => {
     try {
+      if (isReadOnly) return;
       startLoading();
       await Promise.all(
         Object.values(userStoriesById)
@@ -251,6 +317,7 @@ const Builder: React.FC<BuilderProps> = ({
           )
       );
       stopLoading();
+      logActivity('generated', 'task', 'Additional tasks');
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -260,8 +327,10 @@ const Builder: React.FC<BuilderProps> = ({
     }
   }, [
     dispatch,
+    isReadOnly,
     userStoriesById,
     localState,
+    logActivity,
     startLoading,
     stopLoading,
     handleError,
@@ -269,6 +338,7 @@ const Builder: React.FC<BuilderProps> = ({
 
   const handleAddEpic = useCallback(() => {
     try {
+      if (isReadOnly) return;
       const epic: EpicType = {
         parentAppId: selectedApp,
         id: generateId(),
@@ -286,6 +356,7 @@ const Builder: React.FC<BuilderProps> = ({
       dispatch(addEpics(epic));
       setFormState(initialFormState);
       setIsAddEpicDialogOpen(false);
+      logActivity('created', 'epic', formState.Title || 'New epic');
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -293,12 +364,20 @@ const Builder: React.FC<BuilderProps> = ({
           : 'Failed to add epic. Please try again.';
       handleError(errorMessage);
     }
-  }, [dispatch, formState, selectedApp, handleError]);
+  }, [
+    dispatch,
+    formState,
+    isReadOnly,
+    selectedApp,
+    logActivity,
+    handleError,
+  ]);
 
   const handleDragEnd = useCallback(
     async (result: DropResult) => {
       const { destination, source, type, draggableId } = result;
 
+      if (isReadOnly) return;
       if (!destination) return;
       if (
         destination.droppableId === source.droppableId &&
@@ -395,7 +474,7 @@ const Builder: React.FC<BuilderProps> = ({
         }
       }
     },
-    [dispatch, localState]
+    [dispatch, isReadOnly, localState]
   );
 
   // Memoize metrics
@@ -447,25 +526,46 @@ const Builder: React.FC<BuilderProps> = ({
             </Button>
           )}
         </div>
-        <ContextualQuestions content="Global" workItemType="Global" />
+        <ContextualQuestions
+          content="Global"
+          workItemType="Global"
+          isReadOnly={isReadOnly}
+        />
         <FormatData chatApi={chatApi} selectedApp={selectedApp} />
 
         <div className="space-y-2">
-          <Button className="w-full" onClick={handleAddEpics}>
+          <Button
+            className="w-full"
+            onClick={handleAddEpics}
+            disabled={isReadOnly}
+          >
             Add Epics
           </Button>
-          <Button className="w-full" onClick={handleAddFeatures}>
+          <Button
+            className="w-full"
+            onClick={handleAddFeatures}
+            disabled={isReadOnly}
+          >
             Add Features
           </Button>
-          <Button className="w-full" onClick={handleAddUserStories}>
+          <Button
+            className="w-full"
+            onClick={handleAddUserStories}
+            disabled={isReadOnly}
+          >
             Add User Stories
           </Button>
-          <Button className="w-full" onClick={handleAddTasksToAllUserStories}>
+          <Button
+            className="w-full"
+            onClick={handleAddTasksToAllUserStories}
+            disabled={isReadOnly}
+          >
             Add Tasks
           </Button>
           <Button
             className="w-full"
             onClick={() => setIsAddEpicDialogOpen(true)}
+            disabled={isReadOnly}
           >
             Add Epic Manually
           </Button>
@@ -498,6 +598,9 @@ const Builder: React.FC<BuilderProps> = ({
       <div className="flex-1 overflow-hidden">
         <div className="p-6">
           <div className="mb-6">
+            <CollaborationPanel presenceUsers={presenceUsers} />
+          </div>
+          <div className="mb-6">
             <BuilderSearch
               epics={epics}
               features={featuresRecord}
@@ -527,6 +630,7 @@ const Builder: React.FC<BuilderProps> = ({
                         key={epic.id}
                         draggableId={epic.id}
                         index={index}
+                        isDragDisabled={isReadOnly}
                       >
                         {(provided, snapshot) => (
                           <div
@@ -538,6 +642,7 @@ const Builder: React.FC<BuilderProps> = ({
                               epic={epic}
                               index={index}
                               dragHandleProps={provided.dragHandleProps}
+                              isReadOnly={isReadOnly}
                             />
                           </div>
                         )}
@@ -572,6 +677,8 @@ const Builder: React.FC<BuilderProps> = ({
                         [key]: e.target.value,
                       }))
                     }
+                    readOnly={isReadOnly}
+                    disabled={isReadOnly}
                   />
                 ) : (
                   <Input
@@ -583,13 +690,17 @@ const Builder: React.FC<BuilderProps> = ({
                         [key]: e.target.value,
                       }))
                     }
+                    readOnly={isReadOnly}
+                    disabled={isReadOnly}
                   />
                 )}
               </div>
             ))}
           </div>
           <DialogFooter>
-            <Button onClick={handleAddEpic}>Add Epic</Button>
+            <Button onClick={handleAddEpic} disabled={isReadOnly}>
+              Add Epic
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

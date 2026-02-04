@@ -1,4 +1,5 @@
 import { EpicType, FeatureType, UserStoryType, TaskType } from '../types/work-items';
+import type { Comment, CommentTargetType } from '@/types/comments';
 import { RootState } from '@/lib/store';
 
 interface ExportData {
@@ -13,11 +14,13 @@ interface ExportData {
   features: FeatureType[];
   userStories: UserStoryType[];
   tasks: TaskType[];
+  comments: Comment[];
   metadata: {
     totalEpics: number;
     totalFeatures: number;
     totalUserStories: number;
     totalTasks: number;
+    totalComments: number;
   };
 }
 
@@ -31,6 +34,7 @@ export function exportToJSON(state: RootState): string {
   const features = Object.values(sowState.features || {}).filter(Boolean) as FeatureType[];
   const userStories = Object.values(sowState.userStories || {}).filter(Boolean) as UserStoryType[];
   const tasks = Object.values(sowState.tasks || {}).filter(Boolean) as TaskType[];
+  const comments = Object.values(state.comments?.commentsById || {}) as Comment[];
 
   const exportData: ExportData = {
     version: '1.0.0',
@@ -44,11 +48,13 @@ export function exportToJSON(state: RootState): string {
     features,
     userStories,
     tasks,
+    comments,
     metadata: {
       totalEpics: epics.length,
       totalFeatures: features.length,
       totalUserStories: userStories.length,
       totalTasks: tasks.length,
+      totalComments: comments.length,
     },
   };
 
@@ -131,6 +137,24 @@ export function exportToCSV(state: RootState): string {
     );
   }
 
+  // Comments
+  const comments = Object.values(state.comments?.commentsById || {}) as Comment[];
+  for (const comment of comments) {
+    const targetRef = `${comment.targetType}:${comment.targetId}`;
+    const parentRef = comment.parentId || targetRef;
+    rows.push(
+      [
+        'Comment',
+        comment.id,
+        escapeCSV(comment.authorName || ''),
+        escapeCSV(comment.body || ''),
+        parentRef,
+        comment.status,
+        '',
+      ].join(',')
+    );
+  }
+
   return rows.join('\n');
 }
 
@@ -149,14 +173,17 @@ function escapeCSV(value: string): string {
  */
 export function parseJSONImport(jsonString: string): ExportData | null {
   try {
-    const data = JSON.parse(jsonString);
+    const data = JSON.parse(jsonString) as Record<string, unknown>;
 
     // Validate the structure
     if (!data.version || !data.epics || !Array.isArray(data.epics)) {
       throw new Error('Invalid import file structure');
     }
+    if (!Array.isArray(data.comments)) {
+      data.comments = [];
+    }
 
-    return data as ExportData;
+    return data as unknown as ExportData;
   } catch (error) {
     console.error('Failed to parse import data:', error);
     return null;
@@ -284,6 +311,39 @@ export function exportToMarkdown(state: RootState): string {
   const sowState = state.sow;
   const lines: string[] = [];
 
+  const comments = Object.values(state.comments?.commentsById || {}) as Comment[];
+  const commentsByTarget = comments.reduce<Record<string, Comment[]>>((acc, comment) => {
+    const key = `${comment.targetType}:${comment.targetId}`;
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(comment);
+    return acc;
+  }, {});
+
+  const formatCommentBody = (body: string) => {
+    const trimmed = body.trim();
+    if (!trimmed) return 'Comment deleted';
+    return trimmed.replace(/\s+/g, ' ');
+  };
+
+  const renderComments = (targetType: CommentTargetType, targetId: string, label?: string) => {
+    const key = `${targetType}:${targetId}`;
+    const targetComments = commentsByTarget[key];
+    if (!targetComments || targetComments.length === 0) return;
+
+    const sorted = [...targetComments].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+    const heading = label ? `**Comments for ${label}:**` : '**Comments:**';
+    lines.push(heading);
+    lines.push('');
+    sorted.forEach((comment) => {
+      const statusLabel = comment.status === 'resolved' ? 'Resolved' : 'Open';
+      const replyLabel = comment.parentId ? ` Reply to ${comment.parentId}.` : '';
+      lines.push(`- ${comment.authorName || 'Unknown'} (${statusLabel}).${replyLabel} ${formatCommentBody(comment.body || '')}`);
+    });
+    lines.push('');
+  };
+
   lines.push('# Spec Tree Export');
   lines.push('');
   lines.push(`*Exported on ${new Date().toLocaleDateString()}*`);
@@ -309,6 +369,8 @@ export function exportToMarkdown(state: RootState): string {
       lines.push('');
     }
 
+    renderComments('epic', epic.id);
+
     const features = allFeatures.filter((f) => f.parentEpicId === epic.id);
 
     for (const feature of features) {
@@ -318,6 +380,8 @@ export function exportToMarkdown(state: RootState): string {
         lines.push(feature.description);
         lines.push('');
       }
+
+      renderComments('feature', feature.id);
 
       const stories = allUserStories.filter((s) => s.parentFeatureId === feature.id);
 
@@ -334,6 +398,8 @@ export function exportToMarkdown(state: RootState): string {
           lines.push('');
         }
 
+        renderComments('userStory', story.id);
+
         const tasks = allTasks.filter((t) => t.parentUserStoryId === story.id);
 
         if (tasks.length > 0) {
@@ -343,6 +409,10 @@ export function exportToMarkdown(state: RootState): string {
             lines.push(`- [ ] ${task.title}${task.priority ? ` (priority: ${task.priority})` : ''}`);
           }
           lines.push('');
+
+          tasks.forEach((task) => {
+            renderComments('task', task.id, `Task ${task.title}`);
+          });
         }
       }
     }

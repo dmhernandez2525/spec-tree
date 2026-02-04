@@ -436,6 +436,10 @@ export interface PluginUsersPermissionsUser
     firstName: Schema.Attribute.String;
     lastName: Schema.Attribute.String;
     avatar: Schema.Attribute.Media<'images' | 'files'>;
+    commentNotifications: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comment-notification.comment-notification'
+    >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -503,12 +507,14 @@ export interface ApiAppApp extends Struct.CollectionTypeSchema {
   attributes: {
     applactionInformation: Schema.Attribute.Text;
     epics: Schema.Attribute.Relation<'oneToMany', 'api::epic.epic'>;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     globalInformation: Schema.Attribute.Text;
     selectedModel: Schema.Attribute.String;
     contextualQuestions: Schema.Attribute.Relation<
       'oneToMany',
       'api::contextual-question.contextual-question'
     >;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     organization: Schema.Attribute.Relation<
       'manyToOne',
       'api::organization.organization'
@@ -578,6 +584,87 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
   };
 }
 
+
+export interface ApiCommentComment extends Struct.CollectionTypeSchema {
+  collectionName: 'comments';
+  info: {
+    singularName: 'comment';
+    pluralName: 'comments';
+    displayName: 'Comment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    status: Schema.Attribute.Enumeration<['open', 'resolved']> &
+      Schema.Attribute.DefaultTo<'open'>;
+    mentions: Schema.Attribute.JSON;
+    authorId: Schema.Attribute.String;
+    authorName: Schema.Attribute.String;
+    authorEmail: Schema.Attribute.Email;
+    resolvedAt: Schema.Attribute.DateTime;
+    resolvedBy: Schema.Attribute.String;
+    parent: Schema.Attribute.Relation<'manyToOne', 'api::comment.comment'>;
+    replies: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
+    notifications: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comment-notification.comment-notification'
+    >;
+    app: Schema.Attribute.Relation<'manyToOne', 'api::app.app'>;
+    epic: Schema.Attribute.Relation<'manyToOne', 'api::epic.epic'>;
+    feature: Schema.Attribute.Relation<'manyToOne', 'api::feature.feature'>;
+    userStory: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::user-story.user-story'
+    >;
+    task: Schema.Attribute.Relation<'manyToOne', 'api::task.task'>;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+  };
+}
+
+export interface ApiCommentNotificationCommentNotification
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'comment_notifications';
+  info: {
+    singularName: 'comment-notification';
+    pluralName: 'comment-notifications';
+    displayName: 'Comment Notification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    channel: Schema.Attribute.Enumeration<['in_app', 'email']>;
+    status: Schema.Attribute.Enumeration<
+      ['unread', 'read', 'queued', 'sent', 'failed']
+    > &
+      Schema.Attribute.DefaultTo<'unread'>;
+    sentAt: Schema.Attribute.DateTime;
+    comment: Schema.Attribute.Relation<'manyToOne', 'api::comment.comment'>;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+  };
+}
 export interface ApiContactPageContactPage extends Struct.SingleTypeSchema {
   collectionName: 'contact_pages';
   info: {
@@ -700,6 +787,8 @@ export interface ApiEpicEpic extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::contextual-question.contextual-question'
     >;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     risksAndMitigation: Schema.Attribute.Component<
       'datasets.risks-and-mitigation',
       true
@@ -736,6 +825,8 @@ export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::contextual-question.contextual-question'
     >;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     acceptanceCriteria: Schema.Attribute.Component<
       'micro-component.acceptance-criteria',
       true
@@ -980,6 +1071,7 @@ export interface ApiTaskTask extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::contextual-question.contextual-question'
     >;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -1036,11 +1128,14 @@ export interface ApiUserStoryUserStory extends Struct.CollectionTypeSchema {
     notes: Schema.Attribute.String;
     points: Schema.Attribute.Integer;
     tasks: Schema.Attribute.Relation<'oneToMany', 'api::task.task'>;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     feature: Schema.Attribute.Relation<'manyToOne', 'api::feature.feature'>;
     contextualQuestions: Schema.Attribute.Relation<
       'oneToMany',
       'api::contextual-question.contextual-question'
     >;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
+    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
     acceptanceCriteria: Schema.Attribute.Component<
       'micro-component.acceptance-criteria',
       true
@@ -1419,6 +1514,8 @@ declare module '@strapi/strapi' {
       'api::app.app': ApiAppApp;
       'api::blog-page.blog-page': ApiBlogPageBlogPage;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
+      'api::comment.comment': ApiCommentComment;
+      'api::comment-notification.comment-notification': ApiCommentNotificationCommentNotification;
       'api::contact-page.contact-page': ApiContactPageContactPage;
       'api::contextual-question.contextual-question': ApiContextualQuestionContextualQuestion;
       'api::cookies-page.cookies-page': ApiCookiesPageCookiesPage;

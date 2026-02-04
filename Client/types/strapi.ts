@@ -124,6 +124,38 @@ export interface StrapiApp extends StrapiDocument {
 }
 
 /**
+ * Raw Comment data from Strapi API
+ */
+export interface StrapiComment extends StrapiDocument {
+  body: string;
+  status: 'open' | 'resolved';
+  mentions?: string[];
+  authorId: string;
+  authorName: string;
+  authorEmail?: string;
+  resolvedAt?: string | null;
+  resolvedBy?: string | null;
+  parent?: StrapiRelationRef | StrapiComment;
+  replies?: StrapiComment[];
+  app?: StrapiRelationRef | StrapiApp;
+  epic?: StrapiRelationRef | StrapiEpic;
+  feature?: StrapiRelationRef | StrapiFeature;
+  userStory?: StrapiRelationRef | StrapiUserStory;
+  task?: StrapiRelationRef | StrapiTask;
+}
+
+/**
+ * Raw Comment Notification data from Strapi API
+ */
+export interface StrapiCommentNotification extends StrapiDocument {
+  channel: 'in_app' | 'email';
+  status: 'unread' | 'read' | 'queued' | 'sent' | 'failed';
+  sentAt?: string | null;
+  comment?: StrapiRelationRef | StrapiComment;
+  user?: StrapiRelationRef;
+}
+
+/**
  * Full app data response (deeply populated)
  */
 export interface StrapiAppDataResponse {

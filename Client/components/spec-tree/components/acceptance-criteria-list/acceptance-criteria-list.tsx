@@ -10,6 +10,7 @@ interface AcceptanceCriteriaListProps {
   add: () => void;
   remove: (index: number) => void;
   update: (index: number, value: string) => void;
+  isReadOnly?: boolean;
 }
 
 const AcceptanceCriteriaList: React.FC<AcceptanceCriteriaListProps> = ({
@@ -17,6 +18,7 @@ const AcceptanceCriteriaList: React.FC<AcceptanceCriteriaListProps> = ({
   add,
   remove,
   update,
+  isReadOnly = false,
 }) => {
   return (
     <div className="space-y-4">
@@ -27,6 +29,7 @@ const AcceptanceCriteriaList: React.FC<AcceptanceCriteriaListProps> = ({
           variant="outline"
           size="sm"
           className="flex items-center gap-2"
+          disabled={isReadOnly}
         >
           <Plus className="h-4 w-4" />
           Add Criteria
@@ -44,6 +47,8 @@ const AcceptanceCriteriaList: React.FC<AcceptanceCriteriaListProps> = ({
                     onChange={(e) => update(index, e.target.value)}
                     placeholder="Enter acceptance criteria..."
                     className="min-h-[100px]"
+                    readOnly={isReadOnly}
+                    disabled={isReadOnly}
                   />
                 </div>
                 <Button
@@ -51,6 +56,7 @@ const AcceptanceCriteriaList: React.FC<AcceptanceCriteriaListProps> = ({
                   size="icon"
                   onClick={() => remove(index)}
                   className="h-10 w-10 shrink-0"
+                  disabled={isReadOnly}
                 >
                   <X className="h-4 w-4" />
                 </Button>

@@ -33,6 +33,12 @@
       "target": "api::contextual-question.contextual-question",
       "mappedBy": "app"
     },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "app"
+    },
     "organization": {
       "type": "relation",
       "relation": "manyToOne",

@@ -35,6 +35,7 @@ import {
   DEFAULT_ACCESSIBILITY,
 } from '../templates/v0-ui-template';
 import { downloadFile } from '../utils/import-export';
+import { buildCommentLines, getCommentsForTarget } from '../utils/comment-export';
 
 export interface V0ExportOptions {
   /** Include visual specifications */
@@ -91,9 +92,10 @@ function validateId(id: string, type: string): void {
  */
 function buildFeatureContext(
   feature: FeatureType,
-  sowState: RootState['sow'],
+  state: RootState,
   designTokens?: DesignTokens
 ): V0FeatureContext {
+  const sowState = state.sow;
   // Get related user stories
   const userStories = Object.values(sowState.userStories || {})
     .filter((story): story is UserStoryType =>
@@ -107,11 +109,16 @@ function buildFeatureContext(
       Boolean(task) && storyIds.has(task.parentUserStoryId)
     );
 
+  const comments = buildCommentLines(
+    getCommentsForTarget(state, 'feature', feature.id)
+  );
+
   return {
     feature,
     userStories,
     tasks,
     designTokens,
+    comments: comments.length > 0 ? comments : undefined,
   };
 }
 
@@ -136,7 +143,7 @@ export function exportFeatureAsV0Spec(
     throw new Error(`Feature with ID ${featureId} not found`);
   }
 
-  const context = buildFeatureContext(feature, state.sow, options.customDesignTokens);
+  const context = buildFeatureContext(feature, state, options.customDesignTokens);
 
   return generateV0SpecFromFeature(context);
 }
@@ -204,7 +211,7 @@ export function exportEpicFeaturesAsV0Specs(
 
   // Build contexts for all features using helper function
   const contexts: V0FeatureContext[] = features.map((feature) =>
-    buildFeatureContext(feature, sowState, options.customDesignTokens)
+    buildFeatureContext(feature, state, options.customDesignTokens)
   );
 
   return generateBulkV0Specs(contexts);
@@ -232,7 +239,7 @@ export function exportAllFeaturesAsV0Specs(
 
   // Build contexts for all features using helper function
   const contexts: V0FeatureContext[] = features.map((feature) =>
-    buildFeatureContext(feature, sowState, options.customDesignTokens)
+    buildFeatureContext(feature, state, options.customDesignTokens)
   );
 
   return generateBulkV0Specs(contexts);

@@ -17,12 +17,14 @@ interface MainContextualComponentProps {
   workItemType: ExtendedWorkItemType;
   content: 'Global' | 'Work Item';
   workItem?: WorkItemTypeTypes;
+  isReadOnly?: boolean;
 }
 
 const MainContextualComponent: React.FC<MainContextualComponentProps> = ({
   workItemType,
   workItem,
   content,
+  isReadOnly = false,
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -53,7 +55,7 @@ const MainContextualComponent: React.FC<MainContextualComponentProps> = ({
           )}
         </DialogContent>
       </Dialog>
-      <Button onClick={() => setIsOpen(true)} className="w-full">
+      <Button onClick={() => setIsOpen(true)} className="w-full" disabled={isReadOnly}>
         Open Context Wizard
       </Button>
     </div>

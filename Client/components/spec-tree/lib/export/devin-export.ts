@@ -33,6 +33,7 @@ import {
   DEFAULT_PLAYBOOKS,
 } from '../templates/devin-template';
 import { downloadFile } from '../utils/import-export';
+import { buildCommentLines, getCommentsForTarget } from '../utils/comment-export';
 
 export interface DevinExportOptions {
   /** Estimated hours per task (default: 4-6) */
@@ -264,6 +265,45 @@ function buildDevinContext(
     ? selectEpicById(state, feature.parentEpicId)
     : undefined;
 
+  const comments: string[] = [];
+  const taskComments = buildCommentLines(
+    getCommentsForTarget(state, 'task', task.id)
+  );
+  if (taskComments.length > 0) {
+    comments.push('**Task Comments**');
+    comments.push(...taskComments);
+  }
+
+  if (userStory) {
+    const storyComments = buildCommentLines(
+      getCommentsForTarget(state, 'userStory', userStory.id)
+    );
+    if (storyComments.length > 0) {
+      comments.push('**User Story Comments**');
+      comments.push(...storyComments);
+    }
+  }
+
+  if (feature) {
+    const featureComments = buildCommentLines(
+      getCommentsForTarget(state, 'feature', feature.id)
+    );
+    if (featureComments.length > 0) {
+      comments.push('**Feature Comments**');
+      comments.push(...featureComments);
+    }
+  }
+
+  if (epic) {
+    const epicComments = buildCommentLines(
+      getCommentsForTarget(state, 'epic', epic.id)
+    );
+    if (epicComments.length > 0) {
+      comments.push('**Epic Comments**');
+      comments.push(...epicComments);
+    }
+  }
+
   // Determine verification commands:
   // - If custom commands provided, use them
   // - If includeVerification is not explicitly false, use defaults
@@ -281,6 +321,7 @@ function buildDevinContext(
     epic: epic || undefined,
     estimatedHours: options.estimatedHours,
     verificationCommands,
+    comments: comments.length > 0 ? comments : undefined,
   };
 }
 

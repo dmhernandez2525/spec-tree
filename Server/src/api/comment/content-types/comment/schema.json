@@ -1,0 +1,93 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comments",
+  "info": {
+    "singularName": "comment",
+    "pluralName": "comments",
+    "displayName": "Comment",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "body": {
+      "type": "text"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "open",
+        "resolved"
+      ],
+      "default": "open"
+    },
+    "mentions": {
+      "type": "json"
+    },
+    "authorId": {
+      "type": "string"
+    },
+    "authorName": {
+      "type": "string"
+    },
+    "authorEmail": {
+      "type": "email"
+    },
+    "resolvedAt": {
+      "type": "datetime"
+    },
+    "resolvedBy": {
+      "type": "string"
+    },
+    "parent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::comment.comment",
+      "inversedBy": "replies"
+    },
+    "replies": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "parent"
+    },
+    "notifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment-notification.comment-notification",
+      "mappedBy": "comment"
+    },
+    "app": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::app.app",
+      "inversedBy": "comments"
+    },
+    "epic": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::epic.epic",
+      "inversedBy": "comments"
+    },
+    "feature": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::feature.feature",
+      "inversedBy": "comments"
+    },
+    "userStory": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::user-story.user-story",
+      "inversedBy": "comments"
+    },
+    "task": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::task.task",
+      "inversedBy": "comments"
+    }
+  }
+}

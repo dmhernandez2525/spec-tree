@@ -78,6 +78,12 @@
       ],
       "type": "media",
       "multiple": false
+    },
+    "commentNotifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment-notification.comment-notification",
+      "mappedBy": "user"
     }
   }
 }

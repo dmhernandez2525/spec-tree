@@ -45,12 +45,15 @@ import ContextualQuestions from '../contextual-questions';
 import RegenerateFeedback from '../regenerate-feedback';
 import generateId from '../../lib/utils/generate-id';
 import { calculateTotalTasks } from '../../lib/utils/calculation-utils';
+import useActivityLogger from '../../lib/hooks/useActivityLogger';
+import CommentsPanel from '../comments';
 
 interface UserStoryProps {
   userStory: UserStoryType;
   feature: FeatureType;
   epic: EpicType;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
+  isReadOnly?: boolean;
 }
 
 interface FormState {
@@ -68,13 +71,20 @@ const initialFormState: FormState = {
 };
 
 // _feature and _epic reserved for context propagation and breadcrumb features
-const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epic: _epic, dragHandleProps }) => {
+const UserStory: React.FC<UserStoryProps> = ({
+  userStory,
+  feature: _feature,
+  epic: _epic,
+  dragHandleProps,
+  isReadOnly = false,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [showModal, setShowModal] = React.useState(false);
   const [formState, setFormState] = React.useState<FormState>(initialFormState);
+  const { logActivity } = useActivityLogger();
 
   const tasks = userStory.taskIds?.map((id) => selectTaskById(localState, id));
 
@@ -84,6 +94,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
     arrayIndex?: number;
     isArrayItem?: boolean;
   }) => {
+    if (isReadOnly) return;
     dispatch(
       updateUserStoryField({
         userStoryId: userStory.id,
@@ -118,6 +129,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
   );
 
   const handleGenerateTasks = async (feedback?: string) => {
+    if (isReadOnly) return;
     setIsLoading(true);
     setError(null);
     try {
@@ -128,6 +140,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
           context: feedback,
         })
       );
+      logActivity('generated', 'task', `Tasks for ${userStory.title}`);
     } catch (_err) {
       setError('Failed to generate tasks');
     } finally {
@@ -136,10 +149,13 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
   };
 
   const handleDelete = () => {
+    if (isReadOnly) return;
     dispatch(deleteUserStory(userStory.id));
+    logActivity('deleted', 'userStory', userStory.title || 'User story');
   };
 
   const handleAddTask = () => {
+    if (isReadOnly) return;
     const task: TaskType = {
       id: generateId(),
       title: formState.Title,
@@ -154,6 +170,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
     dispatch(addTask(task));
     setFormState(initialFormState);
     setShowModal(false);
+    logActivity('created', 'task', formState.Title || 'New task');
   };
 
   const metrics = [
@@ -196,10 +213,18 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
         <CardContent className="border-l-2 border-l-green-200 ml-4 mt-2 pl-6">
           <div className="space-y-6">
             <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setShowModal(true)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowModal(true)}
+                disabled={isReadOnly}
+              >
                 Add Task
               </Button>
-              <Button variant="destructive" onClick={handleDelete}>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isReadOnly}
+              >
                 Delete User Story
               </Button>
             </div>
@@ -220,6 +245,8 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                               newValue: e.target.value,
                             })
                           }
+                          readOnly={isReadOnly}
+                          disabled={isReadOnly}
                         />
                       </div>
                       <div>
@@ -233,6 +260,8 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                               newValue: e.target.value,
                             })
                           }
+                          readOnly={isReadOnly}
+                          disabled={isReadOnly}
                         />
                       </div>
                     </div>
@@ -247,6 +276,8 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                             newValue: e.target.value,
                           })
                         }
+                        readOnly={isReadOnly}
+                        disabled={isReadOnly}
                       />
                     </div>
 
@@ -260,6 +291,8 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                             newValue: e.target.value,
                           })
                         }
+                        readOnly={isReadOnly}
+                        disabled={isReadOnly}
                       />
                     </div>
 
@@ -268,6 +301,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                       add={add}
                       remove={remove}
                       update={update}
+                      isReadOnly={isReadOnly}
                     />
 
                     <div>
@@ -280,6 +314,8 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                             newValue: e.target.value,
                           })
                         }
+                        readOnly={isReadOnly}
+                        disabled={isReadOnly}
                       />
                     </div>
                   </div>
@@ -300,6 +336,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                   onRegenerate={handleGenerateTasks}
                   isLoading={isLoading}
                   itemType="tasks"
+                  isReadOnly={isReadOnly}
                 />
               </div>
 
@@ -307,6 +344,14 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                 content="Work Item"
                 workItemType="userStories"
                 workItem={userStory}
+                isReadOnly={isReadOnly}
+              />
+
+              <CommentsPanel
+                targetType="userStory"
+                targetId={userStory.id}
+                targetTitle={userStory.title}
+                isReadOnly={isReadOnly}
               />
 
               <Droppable droppableId={`tasks-${userStory.id}`} type="TASK">
@@ -321,6 +366,7 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                           key={task.id}
                           draggableId={task.id}
                           index={i}
+                          isDragDisabled={isReadOnly}
                         >
                           {(provided, snapshot) => (
                             <div
@@ -329,7 +375,11 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                               className={snapshot.isDragging ? 'opacity-75 bg-white rounded shadow-lg' : ''}
                             >
                               <AccordionItem value={task.id}>
-                                <Task task={task} dragHandleProps={provided.dragHandleProps} />
+                                <Task
+                                  task={task}
+                                  dragHandleProps={provided.dragHandleProps}
+                                  isReadOnly={isReadOnly}
+                                />
                               </AccordionItem>
                             </div>
                           )}
@@ -367,6 +417,8 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                         [key]: e.target.value,
                       }))
                     }
+                    readOnly={isReadOnly}
+                    disabled={isReadOnly}
                   />
                 ) : (
                   <Input
@@ -378,13 +430,17 @@ const UserStory: React.FC<UserStoryProps> = ({ userStory, feature: _feature, epi
                         [key]: e.target.value,
                       }))
                     }
+                    readOnly={isReadOnly}
+                    disabled={isReadOnly}
                   />
                 )}
               </div>
             ))}
           </div>
           <DialogFooter>
-            <Button onClick={handleAddTask}>Add Task</Button>
+            <Button onClick={handleAddTask} disabled={isReadOnly}>
+              Add Task
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

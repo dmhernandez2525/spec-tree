@@ -74,6 +74,7 @@ export interface WRAPContext {
   epic?: EpicType;
   affectedFiles?: string[];
   referencePatterns?: string[];
+  comments?: string[];
 }
 
 /**
@@ -260,7 +261,7 @@ function generateTestRequirementsSection(requirements: TestRequirements): string
  * WRAP = What, Requirements, Actual files, Patterns
  */
 export function generateWRAPFormat(context: WRAPContext): string {
-  const { task, userStory, feature, epic, affectedFiles, referencePatterns } = context;
+  const { task, userStory, feature, epic, affectedFiles, referencePatterns, comments } = context;
   const sections: string[] = [];
 
   // Title
@@ -348,6 +349,13 @@ export function generateWRAPFormat(context: WRAPContext): string {
   // Priority
   if (task.priority) {
     sections.push(`**Priority:** ${task.priority}`);
+    sections.push('');
+  }
+
+  if (comments && comments.length > 0) {
+    sections.push('## Comments');
+    sections.push('');
+    sections.push(...comments);
     sections.push('');
   }
 

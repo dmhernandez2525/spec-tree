@@ -23,6 +23,7 @@ export interface DevinTaskConfig {
   acceptanceCriteria: string[];
   technicalDetails: DevinTechnicalDetails;
   verificationCommands: string[];
+  comments?: string[];
   references?: DevinReference[];
 }
 
@@ -64,6 +65,7 @@ export interface DevinTaskContext {
   affectedFiles?: DevinFile[];
   verificationCommands?: string[];
   estimatedHours?: number;
+  comments?: string[];
 }
 
 /**
@@ -144,6 +146,11 @@ export function generateDevinTask(config: DevinTaskConfig): string {
 
   // Technical Details
   sections.push(generateTechnicalDetailsSection(config.technicalDetails));
+
+  // Comments
+  if (config.comments && config.comments.length > 0) {
+    sections.push(generateCommentsSection(config.comments));
+  }
 
   // Verification Commands
   sections.push(generateVerificationSection(config.verificationCommands));
@@ -245,6 +252,20 @@ function generateTechnicalDetailsSection(details: DevinTechnicalDetails): string
 }
 
 /**
+ * Generate comments section
+ */
+function generateCommentsSection(comments: string[]): string {
+  const lines: string[] = ['### Comments', ''];
+
+  for (const comment of comments) {
+    lines.push(comment);
+  }
+
+  lines.push('');
+  return lines.join('\n');
+}
+
+/**
  * Generate verification commands section
  */
 function generateVerificationSection(commands: string[]): string {
@@ -281,7 +302,7 @@ function generateReferencesSection(references: DevinReference[]): string {
  * Generate Devin task from task context
  */
 export function generateDevinTaskFromContext(context: DevinTaskContext): string {
-  const { task, userStory, feature, epic, affectedFiles, verificationCommands, estimatedHours } = context;
+  const { task, userStory, feature, epic, affectedFiles, verificationCommands, estimatedHours, comments } = context;
 
   // Build acceptance criteria from user story or task
   const acceptanceCriteria: string[] = [];
@@ -334,6 +355,7 @@ export function generateDevinTaskFromContext(context: DevinTaskContext): string 
     acceptanceCriteria,
     technicalDetails,
     verificationCommands: verificationCommands || DEFAULT_VERIFICATION_COMMANDS.all,
+    comments,
     references: references.length > 0 ? references : undefined,
   };
 

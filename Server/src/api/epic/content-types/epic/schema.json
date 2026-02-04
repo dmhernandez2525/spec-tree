@@ -58,6 +58,12 @@
       "target": "api::contextual-question.contextual-question",
       "mappedBy": "epic"
     },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "epic"
+    },
     "risksAndMitigation": {
       "displayName": "risksAndMitigation",
       "type": "component",

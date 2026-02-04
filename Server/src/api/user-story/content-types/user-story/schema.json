@@ -55,6 +55,12 @@
       "target": "api::contextual-question.contextual-question",
       "mappedBy": "userStories"
     },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "userStory"
+    },
     "acceptanceCriteria": {
       "type": "component",
       "repeatable": true,

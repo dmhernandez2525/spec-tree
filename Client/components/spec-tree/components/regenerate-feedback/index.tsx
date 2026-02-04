@@ -63,6 +63,7 @@ const feedbackOptions: FeedbackOption[] = [
 interface RegenerateFeedbackProps {
   onRegenerate: (feedback?: string) => void;
   isLoading?: boolean;
+  isReadOnly?: boolean;
   itemType: 'epics' | 'features' | 'user stories' | 'tasks';
   variant?: 'default' | 'outline' | 'secondary' | 'ghost';
   size?: 'default' | 'sm' | 'lg' | 'icon';
@@ -71,12 +72,14 @@ interface RegenerateFeedbackProps {
 const RegenerateFeedback: React.FC<RegenerateFeedbackProps> = ({
   onRegenerate,
   isLoading = false,
+  isReadOnly = false,
   itemType,
   variant = 'default',
   size = 'default',
 }) => {
   const [isCustomDialogOpen, setIsCustomDialogOpen] = useState(false);
   const [customFeedback, setCustomFeedback] = useState('');
+  const isDisabled = isLoading || isReadOnly;
 
   const handleFeedbackSelect = (option: FeedbackOption) => {
     const contextPrompt = `${option.prompt}\n\nApply this guidance when generating the ${itemType}.`;
@@ -103,7 +106,7 @@ const RegenerateFeedback: React.FC<RegenerateFeedbackProps> = ({
           variant={variant}
           size={size}
           onClick={handleSimpleRegenerate}
-          disabled={isLoading}
+          disabled={isDisabled}
           className="rounded-r-none"
         >
           {isLoading ? (
@@ -114,35 +117,37 @@ const RegenerateFeedback: React.FC<RegenerateFeedbackProps> = ({
           Generate {itemType}
         </Button>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant={variant}
-              size={size}
-              disabled={isLoading}
-              className="rounded-l-none border-l-0 px-2"
-            >
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            {feedbackOptions.map((option) => (
-              <DropdownMenuItem
-                key={option.type}
-                onClick={() => handleFeedbackSelect(option)}
-                className="cursor-pointer"
-              >
-                {option.label}
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant={variant}
+            size={size}
+            disabled={isDisabled}
+            className="rounded-l-none border-l-0 px-2"
+          >
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          {feedbackOptions.map((option) => (
             <DropdownMenuItem
-              onClick={() => setIsCustomDialogOpen(true)}
+              key={option.type}
+              onClick={() => handleFeedbackSelect(option)}
               className="cursor-pointer"
+              disabled={isDisabled}
             >
-              Custom feedback...
+              {option.label}
             </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          ))}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => setIsCustomDialogOpen(true)}
+            className="cursor-pointer"
+            disabled={isDisabled}
+          >
+            Custom feedback...
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       </div>
 
       <Dialog open={isCustomDialogOpen} onOpenChange={setIsCustomDialogOpen}>
@@ -173,7 +178,7 @@ const RegenerateFeedback: React.FC<RegenerateFeedbackProps> = ({
             </Button>
             <Button
               onClick={handleCustomSubmit}
-              disabled={!customFeedback.trim()}
+              disabled={!customFeedback.trim() || isReadOnly}
             >
               Regenerate with Feedback
             </Button>

@@ -9,6 +9,10 @@ vi.mock('react-redux', () => ({
   useDispatch: vi.fn(() => mockDispatch),
 }));
 
+vi.mock('../../lib/hooks/useActivityLogger', () => ({
+  default: () => ({ logActivity: vi.fn() }),
+}));
+
 const mockDeleteTask = vi.fn();
 const mockUpdateTaskField = vi.fn();
 
@@ -69,6 +73,12 @@ vi.mock('@/components/ui/badge', () => ({
 
 vi.mock('lucide-react', () => ({
   GripVertical: () => <span data-testid="grip-icon">GripIcon</span>,
+}));
+
+vi.mock('../comments', () => ({
+  default: ({ targetTitle }: { targetTitle: string }) => (
+    <div data-testid="mock-comments-panel">Comments for {targetTitle}</div>
+  ),
 }));
 
 // Import after mocks

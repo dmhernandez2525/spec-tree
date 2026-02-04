@@ -12,6 +12,10 @@ vi.mock('react-redux', () => ({
   useDispatch: () => mockDispatch,
 }));
 
+vi.mock('../../lib/hooks/useActivityLogger', () => ({
+  default: () => ({ logActivity: vi.fn() }),
+}));
+
 vi.mock('react-beautiful-dnd', () => ({
   Droppable: ({ children }: { children: (provided: unknown) => React.ReactNode }) =>
     children({
@@ -121,6 +125,12 @@ vi.mock('../regenerate-feedback', () => ({
     >
       Regenerate {itemType}
     </button>
+  ),
+}));
+
+vi.mock('../comments', () => ({
+  default: ({ targetTitle }: { targetTitle: string }) => (
+    <div data-testid="mock-comments-panel">Comments for {targetTitle}</div>
   ),
 }));
 
