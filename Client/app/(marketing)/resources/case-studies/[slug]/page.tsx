@@ -125,8 +125,8 @@ export default function CaseStudyPage() {
               <h3 className="font-semibold">{mockCaseStudy.company}</h3>
             </div>
           </div>
-          <h1 className="text-4xl font-bold">{mockCaseStudy.title}</h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">{mockCaseStudy.title}</h1>
+          <p className="text-base sm:text-xl text-muted-foreground">
             {mockCaseStudy.description}
           </p>
         </div>
@@ -142,11 +142,11 @@ export default function CaseStudyPage() {
         </div>
 
         {/* Results */}
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
           {mockCaseStudy.results.map((result, index) => (
             <Card key={index}>
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-primary mb-2">
+                <div className="text-2xl sm:text-3xl font-bold text-primary mb-2">
                   {result.value}
                 </div>
                 <div className="font-medium mb-2">{result.metric}</div>
@@ -172,9 +172,9 @@ export default function CaseStudyPage() {
 
         {/* Quote */}
         <Card className="bg-primary text-primary-foreground">
-          <CardContent className="p-8">
+          <CardContent className="p-4 sm:p-6 lg:p-8">
             <Quote className="h-8 w-8 mb-4 opacity-50" />
-            <blockquote className="text-xl italic mb-4">
+            <blockquote className="text-base sm:text-xl italic mb-4">
               {mockCaseStudy.quote.text}
             </blockquote>
             <div>

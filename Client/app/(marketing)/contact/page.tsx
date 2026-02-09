@@ -90,7 +90,7 @@ export default function ContactPage() {
       />
 
       {/* Contact Information */}
-      <div className="mt-12 grid gap-8 md:grid-cols-3">
+      <div className="mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
         {/* Email */}
         <Card>
           <CardContent className="flex flex-col items-center p-6">
@@ -135,7 +135,7 @@ export default function ContactPage() {
         <CardContent className="p-6">
           <h2 className="text-2xl font-bold">{contactSection?.header}</h2>
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
               <Input
                 placeholder="Name"
                 value={formData.name}

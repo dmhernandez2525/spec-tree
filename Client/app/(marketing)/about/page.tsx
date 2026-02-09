@@ -306,7 +306,7 @@ function TechStackSection({ techStack }: { techStack: TechnologyStack[] }) {
                 <h3 className="text-xl font-semibold mb-6">
                   {category.category}
                 </h3>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {category.technologies.map((tech) => (
                     <motion.div
                       key={tech.name}
@@ -438,7 +438,7 @@ export default function AboutPage() {
               description="The principles that guide everything we do"
               className="mb-12"
             />
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
               {aboutData.values.map((value) => {
                 const Icon = Icons[value.icon];
                 return (
@@ -479,7 +479,7 @@ export default function AboutPage() {
               description={aboutData.whySpecTree.description}
               className="mb-12"
             />
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
               {aboutData.whySpecTree.keyPoints.map((point) => {
                 const Icon = Icons[point.icon];
                 return (

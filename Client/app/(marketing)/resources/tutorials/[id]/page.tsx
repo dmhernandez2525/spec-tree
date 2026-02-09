@@ -114,7 +114,7 @@ export default function TutorialDetailPage({
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-4">
                 <Badge variant="secondary" className="capitalize">
                   {tutorial.category}
@@ -124,7 +124,7 @@ export default function TutorialDetailPage({
                   {tutorial.duration} min
                 </div>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-full sm:w-auto">
                 <Icons.alert className="mr-2 h-4 w-4" />
                 Download Resources
               </Button>
@@ -133,7 +133,7 @@ export default function TutorialDetailPage({
 
           {/* Tutorial Content */}
           <div>
-            <h1 className="text-3xl font-bold">{tutorial.title}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">{tutorial.title}</h1>
             <p className="mt-2 text-muted-foreground">{tutorial.description}</p>
           </div>
 

@@ -126,7 +126,7 @@ export default function EmailConfirmationPage() {
               <p className="text-sm text-muted-foreground mb-3">
                 Need a new verification email?
               </p>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   type="email"
                   placeholder="Enter your email"

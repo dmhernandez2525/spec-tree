@@ -184,8 +184,8 @@ export default function APIReferencePage() {
                 <div className="space-y-6">
                   {section.endpoints.map((endpoint) => (
                     <Card key={endpoint.id}>
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-4 mb-4">
+                      <CardContent className="p-4 sm:p-6">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4">
                           <Badge
                             className={`${
                               methodColors[endpoint.method]
@@ -193,7 +193,7 @@ export default function APIReferencePage() {
                           >
                             {endpoint.method}
                           </Badge>
-                          <code className="text-sm bg-muted px-2 py-1 rounded">
+                          <code className="text-sm bg-muted px-2 py-1 rounded break-all">
                             {endpoint.path}
                           </code>
                         </div>

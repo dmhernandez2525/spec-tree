@@ -60,7 +60,7 @@ export default function FeatureCategoryPage({
             <Badge variant="secondary" className="mb-4">
               Feature
             </Badge>
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
               {feature.title}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -101,11 +101,11 @@ export default function FeatureCategoryPage({
         >
           <motion.h2
             variants={itemVariants}
-            className="text-3xl font-bold text-center"
+            className="text-2xl sm:text-3xl font-bold text-center"
           >
             How It Works
           </motion.h2>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
             {feature.details.map((detail, index) => (
               <motion.div key={index} variants={itemVariants}>
                 <Card className="h-full">
@@ -134,11 +134,11 @@ export default function FeatureCategoryPage({
           >
             <motion.h2
               variants={itemVariants}
-              className="text-3xl font-bold text-center"
+              className="text-2xl sm:text-3xl font-bold text-center"
             >
               Technical Specifications
             </motion.h2>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
               {feature.technicalSpecs.map((spec, index) => (
                 <motion.div key={index} variants={itemVariants}>
                   <Card>
@@ -165,7 +165,7 @@ export default function FeatureCategoryPage({
         >
           <motion.h2
             variants={itemVariants}
-            className="text-3xl font-bold text-center"
+            className="text-2xl sm:text-3xl font-bold text-center"
           >
             Use Cases
           </motion.h2>
@@ -204,28 +204,28 @@ export default function FeatureCategoryPage({
           className="text-center"
         >
           <Card className="bg-primary text-primary-foreground">
-            <CardContent className="p-12">
+            <CardContent className="p-6 sm:p-8 lg:p-12">
               <motion.h2
                 variants={itemVariants}
-                className="text-3xl font-bold mb-4"
+                className="text-2xl sm:text-3xl font-bold mb-4"
               >
                 Ready to Get Started?
               </motion.h2>
               <motion.p
                 variants={itemVariants}
-                className="text-lg mb-8 opacity-90"
+                className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90"
               >
                 Transform your project planning with{' '}
                 {feature.title.toLowerCase()}.
               </motion.p>
               <motion.div
                 variants={itemVariants}
-                className="flex justify-center gap-4"
+                className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4"
               >
-                <Button size="lg" variant="secondary" asChild>
+                <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
                   <Link href="/register">Start Free Trial</Link>
                 </Button>
-                <Button size="lg" variant="outline" asChild>
+                <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
                   <Link href="/contact">Contact Sales</Link>
                 </Button>
               </motion.div>

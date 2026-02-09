@@ -501,7 +501,7 @@ export default function AnalyticsDashboard() {
           <CardTitle>User Activity Metrics</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">
                 Active Users
@@ -650,7 +650,7 @@ export default function AnalyticsDashboard() {
           <CardTitle>Task Completion Analysis</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 rounded-full bg-primary" />
