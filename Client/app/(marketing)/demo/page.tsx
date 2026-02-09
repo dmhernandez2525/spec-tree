@@ -119,13 +119,13 @@ export default function DemoPage() {
                 onValueChange={setActiveTab}
                 className="space-y-4"
               >
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="video">Video Demo</TabsTrigger>
-                  <TabsTrigger value="interactive">
-                    Interactive Demo
+                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+                  <TabsTrigger value="video" className="text-xs sm:text-sm">Video</TabsTrigger>
+                  <TabsTrigger value="interactive" className="text-xs sm:text-sm">
+                    Interactive
                   </TabsTrigger>
-                  <TabsTrigger value="guided">Guided Tour</TabsTrigger>
-                  <TabsTrigger value="roi">ROI Calculator</TabsTrigger>
+                  <TabsTrigger value="guided" className="text-xs sm:text-sm">Guided</TabsTrigger>
+                  <TabsTrigger value="roi" className="text-xs sm:text-sm">ROI Calc</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="video">

@@ -112,12 +112,13 @@ export default function PricingPage() {
               />
             </div>
 
-            <div className="mt-6 flex justify-center space-x-2">
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
               {tabs.map((tab) => (
                 <Button
                   key={tab.id}
                   variant={activeTab === tab.id ? 'default' : 'outline'}
                   onClick={() => setActiveTab(tab.id)}
+                  className="text-sm"
                 >
                   {tab.label}
                 </Button>

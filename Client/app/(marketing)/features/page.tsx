@@ -104,7 +104,7 @@ export default function FeaturesPage() {
       </div>
 
       {/* Feature Highlights */}
-      <div className="mt-24 space-y-24">
+      <div className="mt-12 md:mt-24 space-y-12 md:space-y-24">
         <FeatureHighlight
           title="AI-Powered Context Gathering"
           description="Our intelligent system asks targeted questions to gather comprehensive project context, ensuring nothing is overlooked in your planning process."
@@ -144,24 +144,24 @@ export default function FeaturesPage() {
       </div>
 
       {/* Feature Comparison */}
-      <div className="mt-24">
+      <div className="mt-12 md:mt-24 overflow-x-auto">
         <FeatureComparison />
       </div>
 
       {/* CTA Section */}
-      <div className="mt-24 text-center">
-        <h2 className="text-3xl font-bold">
+      <div className="mt-16 md:mt-24 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold">
           Ready to Transform Your Project Planning?
         </h2>
-        <p className="mt-4 text-xl text-muted-foreground">
+        <p className="mt-4 text-base md:text-xl text-muted-foreground">
           Start using Spec Tree today and experience the future of
           project management.
         </p>
-        <div className="mt-8 flex justify-center gap-4">
-          <Button size="lg" asChild>
+        <div className="mt-6 md:mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+          <Button size="lg" asChild className="w-full sm:w-auto">
             <Link href="/register">Get Started</Link>
           </Button>
-          <Button size="lg" variant="outline" asChild>
+          <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
             <Link href="/contact">Contact Sales</Link>
           </Button>
         </div>

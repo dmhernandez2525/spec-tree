@@ -53,14 +53,14 @@ export default function CareersPage() {
           <div className="absolute inset-0 bg-black/30" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-24 text-white relative z-10">
+        <div className="mx-auto max-w-7xl px-4 py-12 md:py-24 text-white relative z-10">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <h1 className="text-4xl font-bold">Careers at Our Company</h1>
-            <p className="text-gray-200 mt-4 max-w-3xl text-lg">
+            <h1 className="text-2xl md:text-4xl font-bold">Careers at Our Company</h1>
+            <p className="text-gray-200 mt-3 md:mt-4 max-w-3xl text-base md:text-lg">
               We’re on a mission to build products that change how people
               interact with technology every day. Our diverse team is dedicated,
               creative, and driven by results.
@@ -75,7 +75,7 @@ export default function CareersPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-10 w-full space-y-16">
+      <main className="mx-auto max-w-7xl px-4 py-6 md:py-10 w-full space-y-10 md:space-y-16">
         <motion.section
           className="space-y-12"
           initial={{ opacity: 0 }}

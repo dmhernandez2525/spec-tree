@@ -525,26 +525,26 @@ export default function AboutPage() {
         <Section>
           <AnimatedSection>
             <motion.div
-              className="rounded-lg bg-primary p-8 text-primary-foreground text-center"
+              className="rounded-lg bg-primary p-6 md:p-8 text-primary-foreground text-center"
               variants={cardVariants}
               whileHover="hover"
             >
-              <h2 className="text-3xl font-bold mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 Ready to Transform Your Project Planning?
               </h2>
-              <p className="text-lg mb-8 opacity-90">
+              <p className="text-base md:text-lg mb-6 md:mb-8 opacity-90">
                 Join thousands of teams using Spec Tree to deliver better
                 projects.
               </p>
-              <div className="flex justify-center gap-4">
-                <Button variant="secondary" size="lg" asChild>
+              <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+                <Button variant="secondary" size="lg" asChild className="w-full sm:w-auto">
                   <Link href="/register">Start Free Trial</Link>
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
                   asChild
-                  className="bg-transparent hover:bg-primary-foreground/10"
+                  className="w-full sm:w-auto bg-transparent hover:bg-primary-foreground/10"
                 >
                   <Link href="/contact">Contact Sales</Link>
                 </Button>

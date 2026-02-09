@@ -25,7 +25,7 @@ export default function OurProcessPage() {
         />
       </motion.div>
 
-      <div className="space-y-24">
+      <div className="space-y-12 md:space-y-24">
         <section>
           <motion.div
             initial={{ opacity: 0 }}
@@ -33,7 +33,7 @@ export default function OurProcessPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold mb-8">Implementation Steps</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Implementation Steps</h2>
             <ProcessImplementationSteps />
           </motion.div>
         </section>
@@ -47,7 +47,7 @@ export default function OurProcessPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold mb-8">Support & Training</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Support & Training</h2>
             <p className="text-muted-foreground mb-8 max-w-3xl">
               We provide comprehensive support and training resources to ensure
               your team gets the most out of Spec Tree. Our
@@ -67,7 +67,7 @@ export default function OurProcessPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold mb-8">Success Metrics</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Success Metrics</h2>
             <p className="text-muted-foreground mb-8 max-w-3xl">
               Our customers consistently see significant improvements in their
               project management metrics after implementing Spec Tree.
@@ -78,7 +78,7 @@ export default function OurProcessPage() {
           </motion.div>
         </section>
 
-        <section className="bg-muted rounded-lg p-8 text-center">
+        <section className="bg-muted rounded-lg p-6 md:p-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -86,16 +86,16 @@ export default function OurProcessPage() {
             transition={{ duration: 0.5 }}
             className="max-w-2xl mx-auto"
           >
-            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-muted-foreground mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to Get Started?</h2>
+            <p className="text-muted-foreground mb-6 md:mb-8">
               Begin your journey with Spec Tree today. Our team is ready
               to help you transform your project management process.
             </p>
-            <div className="flex justify-center gap-4">
-              <Button asChild size="lg">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+              <Button asChild size="lg" className="w-full sm:w-auto">
                 <Link href="/register">Start Free Trial</Link>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
                 <Link href="/contact">Contact Sales</Link>
               </Button>
             </div>

@@ -91,8 +91,8 @@ export default function DocumentationPage() {
         className="mb-12"
       />
 
-      <div className="grid gap-8 lg:grid-cols-[300px,1fr]">
-        <aside className="lg:border-r lg:pr-8">
+      <div className="grid gap-6 md:gap-8 grid-cols-1 lg:grid-cols-[300px,1fr]">
+        <aside className="lg:border-r lg:pr-8 hidden lg:block">
           <div className="mb-4 lg:sticky lg:top-8">
             <ResourceSearch value={searchQuery} onChange={setSearchQuery} />
             <ScrollArea className="mt-8 h-[calc(100vh-200px)]">

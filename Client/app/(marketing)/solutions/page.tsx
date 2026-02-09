@@ -175,7 +175,7 @@ export default function SolutionsPage() {
       </div>
 
       {/* Solution Showcases */}
-      <div className="mt-24 space-y-24">
+      <div className="mt-12 md:mt-24 space-y-12 md:space-y-24">
         <SolutionShowcase
           title="Enterprise-Grade Project Management"
           description="Scale your project management while maintaining clarity and consistency across teams."
@@ -219,11 +219,11 @@ export default function SolutionsPage() {
       </div>
 
       {/* Testimonials */}
-      <div className="mt-24">
-        <h2 className="text-center text-3xl font-bold">
+      <div className="mt-12 md:mt-24">
+        <h2 className="text-center text-2xl md:text-3xl font-bold">
           What Our Customers Say
         </h2>
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
+        <div className="mt-8 md:mt-12 grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-3">
           {testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.author} {...testimonial} />
           ))}
@@ -231,20 +231,20 @@ export default function SolutionsPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="mt-24 rounded-lg bg-primary p-12 text-primary-foreground">
+      <div className="mt-12 md:mt-24 rounded-lg bg-primary p-6 md:p-12 text-primary-foreground">
         <div className="text-center">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl md:text-3xl font-bold">
             Ready to Transform Your Projects?
           </h2>
-          <p className="mt-4 text-xl opacity-90">
+          <p className="mt-3 md:mt-4 text-base md:text-xl opacity-90">
             Join thousands of teams using Spec Tree to deliver better
             projects.
           </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button size="lg" variant="secondary" asChild>
+          <div className="mt-6 md:mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+            <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
               <Link href="/register">Start Free Trial</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
               <Link href="/contact">Talk to Sales</Link>
             </Button>
           </div>

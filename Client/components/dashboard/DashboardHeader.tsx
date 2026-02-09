@@ -12,17 +12,18 @@ export function DashboardHeader() {
   );
   return (
     <header className="sticky top-0 z-40 border-b bg-background">
-      <div className="mr-10	ml-10	flex h-16 items-center justify-between py-4">
-        <div>
-          <span className="text-2xl font-bold">
-            {user ? `Welcome Back ${user?.firstName}` : 'Dashboard'}
+      <div className="mx-4 md:mx-10 flex h-14 md:h-16 items-center justify-between py-2 md:py-4">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-lg md:text-2xl font-bold truncate">
+            {user ? `Welcome ${user?.firstName}` : 'Dashboard'}
           </span>
-
           <Notifications />
         </div>
 
-        <div className="flex items-center gap-4">
-          <Search />
+        <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
+          <div className="hidden sm:block">
+            <Search />
+          </div>
 
           <UserNav
             user={{

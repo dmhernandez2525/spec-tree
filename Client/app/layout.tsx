@@ -8,6 +8,7 @@ import StoreProvider from './StoreProvider';
 import BaseLayout from '@/components/layout/BaseLayout';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 import { Toaster } from '@/components/ui/toaster';
+import { MarketingBottomNav } from '@/components/layout/MarketingBottomNav';
 
 export const metadata: Metadata = {
   title: {
@@ -97,6 +98,7 @@ export default function RootLayout({
                     {children}
                   </main>
                   <Footer />
+                  <MarketingBottomNav />
                 </AuthLayout>
               </BaseLayout>
               <Toaster />
