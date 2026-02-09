@@ -98,7 +98,7 @@ export default function IndustryPage() {
       {/* Features */}
       <div className="mt-16">
         <h2 className="text-2xl font-bold text-center mb-8">Key Features</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {industry.features.map((feature, index) => (
             <motion.div
               key={index}
@@ -151,17 +151,17 @@ export default function IndustryPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="mt-24 rounded-lg bg-primary p-12 text-primary-foreground text-center"
+        className="mt-24 rounded-lg bg-primary p-6 sm:p-8 lg:p-12 text-primary-foreground text-center"
       >
-        <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-        <p className="text-xl opacity-90 mb-8">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Get Started?</h2>
+        <p className="text-base sm:text-xl opacity-90 mb-6 sm:mb-8">
           Join leading {industry.title.toLowerCase()} teams using Spec Tree
         </p>
-        <div className="flex justify-center gap-4">
-          <Button size="lg" variant="secondary" asChild>
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+          <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
             <Link href="/register">Start Free Trial</Link>
           </Button>
-          <Button size="lg" variant="outline" asChild>
+          <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
             <Link href="/contact">Talk to Sales</Link>
           </Button>
         </div>

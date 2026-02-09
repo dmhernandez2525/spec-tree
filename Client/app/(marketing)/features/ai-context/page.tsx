@@ -89,13 +89,13 @@ export default function AIContextPage() {
       />
 
       {/* Main Feature Demo/Screenshot */}
-      <div className="mt-16 rounded-lg border bg-card p-8">
+      <div className="mt-16 rounded-lg border bg-card p-4 sm:p-6 lg:p-8">
         <InteractiveDemo />
       </div>
 
       {/* Benefits Section */}
       <div className="mt-24">
-        <h2 className="text-center text-3xl font-bold">Key Benefits</h2>
+        <h2 className="text-center text-2xl sm:text-3xl font-bold">Key Benefits</h2>
         <div className="mt-12 grid gap-8 md:grid-cols-2">
           {benefits.map((benefit) => {
             const Icon = Icons[benefit.icon];
@@ -122,8 +122,8 @@ export default function AIContextPage() {
 
       {/* Use Cases Section */}
       <div className="mt-24">
-        <h2 className="text-center text-3xl font-bold">Use Cases</h2>
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
+        <h2 className="text-center text-2xl sm:text-3xl font-bold">Use Cases</h2>
+        <div className="mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
           {useCases.map((useCase) => (
             <Card key={useCase.title} className="relative overflow-hidden">
               <CardContent className="p-6">
@@ -147,7 +147,7 @@ export default function AIContextPage() {
 
       {/* How It Works Section */}
       <div className="mt-24">
-        <h2 className="text-center text-3xl font-bold">How It Works</h2>
+        <h2 className="text-center text-2xl sm:text-3xl font-bold">How It Works</h2>
         <div className="mt-12 grid gap-12 md:grid-cols-2">
           <div className="relative aspect-video">
             <Image
@@ -195,19 +195,19 @@ export default function AIContextPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="mt-24 rounded-lg bg-primary p-8 text-primary-foreground">
+      <div className="mt-24 rounded-lg bg-primary p-4 sm:p-6 lg:p-8 text-primary-foreground">
         <div className="text-center">
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl sm:text-3xl font-bold">
             Ready to Transform Your Project Planning?
           </h2>
-          <p className="mt-4 text-xl opacity-90">
+          <p className="mt-4 text-base sm:text-xl opacity-90">
             Start using Spec Trees AI-powered context gathering today.
           </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button size="lg" variant="secondary" asChild>
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+            <Button size="lg" variant="secondary" asChild className="w-full sm:w-auto">
               <Link href="/register">Get Started</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
               <Link href="/contact">Contact Sales</Link>
             </Button>
           </div>

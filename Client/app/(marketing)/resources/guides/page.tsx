@@ -81,7 +81,7 @@ export default function GuidesPage() {
         onValueChange={(value) => setSelectedCategory(value as GuideCategory)}
         className="mb-8"
       >
-        <TabsList className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {categories.map((category) => (
             <TabsTrigger key={category} value={category} className="capitalize">
               {category.replace('-', ' ')}

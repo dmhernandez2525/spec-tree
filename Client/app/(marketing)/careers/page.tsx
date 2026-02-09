@@ -84,7 +84,7 @@ export default function CareersPage() {
           transition={{ delay: 0.1, duration: 0.6, ease: 'easeOut' }}
         >
           <section>
-            <h2 className="text-3xl font-semibold text-gray-900">Who We Are</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">Who We Are</h2>
             <div className="mt-4 flex flex-col md:flex-row md:items-start md:space-x-8">
               <motion.div
                 className="flex-1"
@@ -119,7 +119,7 @@ export default function CareersPage() {
           </section>
 
           <section>
-            <h2 className="text-3xl font-semibold text-gray-900">What We Do</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">What We Do</h2>
             <div className="mt-4">
               <p className="text-gray-700 max-w-3xl text-lg">
                 From crafting engaging user interfaces to architecting scalable
@@ -131,7 +131,7 @@ export default function CareersPage() {
           </section>
 
           <section>
-            <h2 className="text-3xl font-semibold text-gray-900">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
               Why We Matter
             </h2>
             <div className="mt-4">
@@ -145,7 +145,7 @@ export default function CareersPage() {
           </section>
 
           <section>
-            <h2 className="text-3xl font-semibold text-gray-900">Our Values</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">Our Values</h2>
             <ul className="list-disc pl-5 mt-4 text-gray-700 space-y-1 max-w-3xl text-lg">
               <li>
                 <strong>Innovation:</strong> We encourage creative thinking to
@@ -171,7 +171,7 @@ export default function CareersPage() {
           </section>
 
           <section>
-            <h2 className="text-3xl font-semibold text-gray-900">Benefits</h2>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">Benefits</h2>
             <ul className="list-disc pl-5 mt-4 text-gray-700 space-y-1 max-w-3xl text-lg">
               <li>Comprehensive healthcare plans</li>
               <li>Flexible remote work environment</li>
@@ -183,7 +183,7 @@ export default function CareersPage() {
 
           {/* Video Section */}
           <section>
-            <h2 className="text-3xl font-semibold text-gray-900">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
               See Us In Action
             </h2>
             <p className="text-gray-700 mt-2 max-w-3xl text-lg">
@@ -218,7 +218,7 @@ export default function CareersPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <h2 className="text-3xl font-semibold text-gray-900">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
             Open Positions
           </h2>
           <p className="text-gray-600 mt-2 max-w-xl text-lg">

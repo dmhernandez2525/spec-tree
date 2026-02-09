@@ -134,7 +134,7 @@ export default function ApplyPage() {
     <div className="min-h-screen bg-background">
       <header className="bg-white border-b border-gray-200">
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Apply for a Position
           </h1>
           <p className="text-gray-600 mt-2 max-w-3xl">
@@ -244,9 +244,9 @@ export default function ApplyPage() {
             )}
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
             <Button
-              className="bg-black text-white hover:bg-gray-900 rounded-md px-4 py-2 font-medium"
+              className="w-full sm:w-auto bg-black text-white hover:bg-gray-900 rounded-md px-4 py-2 font-medium"
               type="submit"
               disabled={isSubmitting}
             >
@@ -254,7 +254,7 @@ export default function ApplyPage() {
             </Button>
             <Button
               variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md"
+              className="w-full sm:w-auto border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md"
               type="button"
               onClick={() => router.push('/careers')}
               disabled={isSubmitting}

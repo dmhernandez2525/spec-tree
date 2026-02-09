@@ -94,7 +94,7 @@ export default function ResourcesPage() {
         onValueChange={(value) => setSelectedType(value as ResourceType)}
         className="mb-8"
       >
-        <TabsList className="grid grid-cols-3 lg:grid-cols-6 gap-4">
+        <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {resourceTypes.map((type) => (
             <TabsTrigger
               key={type}
