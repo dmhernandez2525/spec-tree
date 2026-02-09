@@ -168,15 +168,15 @@ export default function AnalyticsDashboard() {
   const hasAdvancedAnalytics = hasUnlockedAchievement('analytics-master');
 
   return (
-    <div className="space-y-8 p-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 md:space-y-8 p-4 md:p-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-3xl font-bold tracking-tight">Analytics</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Analytics</h2>
           <FeatureTutorialButton featureId="analytics-deep-dive" />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
           {hasAdvancedAnalytics && (
-            <Badge variant="secondary" className="h-7">
+            <Badge variant="secondary" className="h-7 w-fit">
               Advanced Analytics Enabled
             </Badge>
           )}
@@ -192,7 +192,7 @@ export default function AnalyticsDashboard() {
               <Button
                 variant={'outline'}
                 className={cn(
-                  'w-[240px] justify-start text-left font-normal',
+                  'w-full sm:w-[240px] justify-start text-left font-normal',
                   !date && 'text-muted-foreground'
                 )}
               >
@@ -212,7 +212,7 @@ export default function AnalyticsDashboard() {
         </div>
       </div>
       {/* Metrics Section */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         <MetricCard
           title="Active Projects"
           value="12"
@@ -688,9 +688,9 @@ export default function AnalyticsDashboard() {
       <CostTrackingPanel />
 
       {/* Export Options */}
-      <div className="flex justify-end space-x-4">
-        <Button variant="outline">Export as CSV</Button>
-        <Button variant="outline">Generate Report</Button>
+      <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:space-x-4">
+        <Button variant="outline" className="w-full sm:w-auto">Export as CSV</Button>
+        <Button variant="outline" className="w-full sm:w-auto">Generate Report</Button>
       </div>
       {/* {hasAdvancedAnalytics && (
         <></>

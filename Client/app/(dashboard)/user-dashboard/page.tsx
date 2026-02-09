@@ -36,11 +36,11 @@ export default function DashboardPage() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-8 p-8"
+      className="space-y-6 md:space-y-8 p-4 md:p-8"
     >
       <motion.div
         variants={itemVariants}
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-3 grid-cols-2 lg:grid-cols-4"
       >
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -88,20 +88,20 @@ export default function DashboardPage() {
         </Card>
       </motion.div>
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-7">
-        <motion.div variants={itemVariants} className="col-span-4">
+      <div className="grid gap-4 md:gap-8 grid-cols-1 lg:grid-cols-7">
+        <motion.div variants={itemVariants} className="lg:col-span-4">
           <ProjectOverview />
         </motion.div>
-        <motion.div variants={itemVariants} className="col-span-3">
+        <motion.div variants={itemVariants} className="lg:col-span-3">
           <TaskSummary />
         </motion.div>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-7">
-        <motion.div variants={itemVariants} className="col-span-4">
+      <div className="grid gap-4 md:gap-8 grid-cols-1 lg:grid-cols-7">
+        <motion.div variants={itemVariants} className="lg:col-span-4">
           <AnalyticsSummary />
         </motion.div>
-        <motion.div variants={itemVariants} className="col-span-3">
+        <motion.div variants={itemVariants} className="lg:col-span-3">
           <RecentActivity />
         </motion.div>
       </div>

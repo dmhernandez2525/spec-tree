@@ -26,7 +26,7 @@ export default function UserProfile() {
   const initials = `${firstName[0] || ''}${lastName[0] || ''}`.toUpperCase() || 'DU';
 
   return (
-    <div className="container mx-auto py-12 px-6 lg:px-12">
+    <div className="container mx-auto py-6 md:py-12 px-4 md:px-6 lg:px-12">
       {/* Back Button */}
       <Button
         variant="outline"
@@ -37,13 +37,13 @@ export default function UserProfile() {
       </Button>
 
       {/* Profile Header */}
-      <div className="flex items-center gap-6 mb-8">
-        <Avatar className="w-24 h-24">
-          <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
+      <div className="flex flex-col items-center gap-4 mb-8 sm:flex-row sm:items-center sm:gap-6">
+        <Avatar className="w-20 h-20 sm:w-24 sm:h-24">
+          <AvatarFallback className="text-xl sm:text-2xl">{initials}</AvatarFallback>
         </Avatar>
-        <div>
-          <h1 className="text-3xl font-bold">{fullName}</h1>
-          <p className="text-muted-foreground">{email}</p>
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl md:text-3xl font-bold">{fullName}</h1>
+          <p className="text-muted-foreground text-sm md:text-base">{email}</p>
         </div>
       </div>
 

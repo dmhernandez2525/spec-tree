@@ -35,18 +35,18 @@ export default function SupportPage() {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-8 p-8"
+      className="space-y-6 md:space-y-8 p-4 md:p-8"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Support</h2>
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Support</h2>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="tickets">Support Tickets</TabsTrigger>
-          <TabsTrigger value="docs">Documentation</TabsTrigger>
-          <TabsTrigger value="faq">FAQ</TabsTrigger>
-          <TabsTrigger value="chat">Live Chat</TabsTrigger>
+        <TabsList className="w-full flex overflow-x-auto">
+          <TabsTrigger value="tickets" className="flex-1 text-xs sm:text-sm">Tickets</TabsTrigger>
+          <TabsTrigger value="docs" className="flex-1 text-xs sm:text-sm">Docs</TabsTrigger>
+          <TabsTrigger value="faq" className="flex-1 text-xs sm:text-sm">FAQ</TabsTrigger>
+          <TabsTrigger value="chat" className="flex-1 text-xs sm:text-sm">Chat</TabsTrigger>
         </TabsList>
 
         <TabsContent value="tickets">

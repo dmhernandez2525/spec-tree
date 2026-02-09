@@ -9,6 +9,7 @@ import { TutorialManagerProvider } from '@/components/dashboard/tutorial/Tutoria
 // import { useAppSelector } from '@/lib/hooks/use-store';
 import { FeatureAnnouncementProvider } from '@/components/dashboard/announcement/FeatureAnnouncementContext';
 import { FeatureAnnouncementManager } from '@/components/dashboard/announcement/FeatureAnnouncementManager';
+import { DashboardBottomNav } from '@/components/layout/DashboardBottomNav';
 
 export const metadata: Metadata = {
   title: 'Dashboard | Spec Tree',
@@ -30,11 +31,14 @@ export default function DashboardLayout({
         <TutorialManagerProvider>
           <AchievementsProvider>
             <div className="flex min-h-screen">
-              <SidebarNav />
-              <div className="flex-1 flex flex-col">
-                <DashboardHeader />
-                <main className="flex-1 p-6">{children}</main>
+              <div className="hidden md:block">
+                <SidebarNav />
               </div>
+              <div className="flex-1 flex flex-col min-w-0">
+                <DashboardHeader />
+                <main className="flex-1 p-4 md:p-6">{children}</main>
+              </div>
+              <DashboardBottomNav />
               <TutorialOverlay />
               <TutorialControls />
               <FeatureAnnouncementManager />
