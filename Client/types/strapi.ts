@@ -156,6 +156,18 @@ export interface StrapiCommentNotification extends StrapiDocument {
 }
 
 /**
+ * Raw Version Snapshot data from Strapi API
+ */
+export interface StrapiVersionSnapshot extends StrapiDocument {
+  name: string;
+  description?: string | null;
+  snapshot: unknown;
+  createdById?: string | null;
+  createdByName?: string | null;
+  app?: StrapiRelationRef | StrapiApp;
+}
+
+/**
  * Full app data response (deeply populated)
  */
 export interface StrapiAppDataResponse {

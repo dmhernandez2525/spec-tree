@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "version_snapshots",
+  "info": {
+    "singularName": "version-snapshot",
+    "pluralName": "version-snapshots",
+    "displayName": "Version Snapshot"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "snapshot": {
+      "type": "json",
+      "required": true
+    },
+    "createdById": {
+      "type": "string"
+    },
+    "createdByName": {
+      "type": "string"
+    },
+    "app": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::app.app",
+      "inversedBy": "versionSnapshots"
+    }
+  }
+}
