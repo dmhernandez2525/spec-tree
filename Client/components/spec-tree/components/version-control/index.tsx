@@ -116,6 +116,9 @@ const VersionControl: React.FC<VersionControlProps> = ({ appId }) => {
       const current = state.sow;
       const snapshotState = snapshot.snapshot;
 
+      const countFor = (items: Record<string, unknown>) =>
+        Object.keys(items || {}).length;
+
       const diffFor = (
         currentItems: Record<string, unknown>,
         snapshotItems: Record<string, unknown>
@@ -140,6 +143,20 @@ const VersionControl: React.FC<VersionControlProps> = ({ appId }) => {
       };
 
       return {
+        counts: {
+          snapshot: {
+            epics: countFor(snapshotState.epics),
+            features: countFor(snapshotState.features),
+            userStories: countFor(snapshotState.userStories),
+            tasks: countFor(snapshotState.tasks),
+          },
+          current: {
+            epics: countFor(current.epics),
+            features: countFor(current.features),
+            userStories: countFor(current.userStories),
+            tasks: countFor(current.tasks),
+          },
+        },
         epics: diffFor(current.epics, snapshotState.epics),
         features: diffFor(current.features, snapshotState.features),
         userStories: diffFor(current.userStories, snapshotState.userStories),
@@ -276,6 +293,27 @@ const VersionControl: React.FC<VersionControlProps> = ({ appId }) => {
                             <div>Features: +{diff.features.added} / -{diff.features.removed}</div>
                             <div>User Stories: +{diff.userStories.added} / -{diff.userStories.removed}</div>
                             <div>Tasks: +{diff.tasks.added} / -{diff.tasks.removed}</div>
+                          </div>
+
+                          <div className="mt-3 grid grid-cols-2 gap-4 text-foreground">
+                            <div>
+                              <p className="font-medium">Snapshot</p>
+                              <div className="mt-1 space-y-1">
+                                <div>Epics: {diff.counts.snapshot.epics}</div>
+                                <div>Features: {diff.counts.snapshot.features}</div>
+                                <div>User Stories: {diff.counts.snapshot.userStories}</div>
+                                <div>Tasks: {diff.counts.snapshot.tasks}</div>
+                              </div>
+                            </div>
+                            <div>
+                              <p className="font-medium">Current</p>
+                              <div className="mt-1 space-y-1">
+                                <div>Epics: {diff.counts.current.epics}</div>
+                                <div>Features: {diff.counts.current.features}</div>
+                                <div>User Stories: {diff.counts.current.userStories}</div>
+                                <div>Tasks: {diff.counts.current.tasks}</div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       );
