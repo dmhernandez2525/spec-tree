@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { rateLimiter } from './middleware/rate-limit';
 // import { apiKeyAuth } from './middleware/security'; // Uncomment this line to enable API key authentication
 import routes from './routes';
+import { logger } from './utils/logger';
 
 const app = express();
 
@@ -65,20 +66,23 @@ app.use((req: Request, res: Response) => {
 });
 
 // Global error handler
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('Unhandled Error:', {
-    name: err.name,
-    message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  const error = err instanceof Error ? err : new Error('Unknown error');
+  const includeStack = process.env.NODE_ENV === 'development';
+
+  logger.error('microservice.error', 'Unhandled Error', {
+    name: error.name,
+    message: error.message,
+    ...(includeStack ? { stack: error.stack } : {}),
   });
 
   res.status(500).json({
     error: 'Internal Server Error',
     message:
-      process.env.NODE_ENV === 'development'
-        ? err.message
+      includeStack
+        ? error.message
         : 'An unexpected error occurred',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(includeStack && { stack: error.stack }),
   });
 });
 

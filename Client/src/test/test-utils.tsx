@@ -21,6 +21,7 @@ import sowReducer from '@/lib/store/sow-slice';
 import demoReducer from '@/lib/store/demo-slice';
 import { collaborationReducer } from '@/lib/store/collaboration-slice';
 import commentsReducer from '@/lib/store/comments-slice';
+import { collaborationMiddleware } from '@/lib/store/collaboration-middleware';
 
 // Store reducers for testing
 const testReducer = {
@@ -55,7 +56,7 @@ export const createTestStore = (preloadedState?: Partial<TestStoreState>) => {
     reducer: testReducer,
     preloadedState: preloadedState as Parameters<typeof configureStore>[0]['preloadedState'],
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({ serializableCheck: false }),
+      getDefaultMiddleware({ serializableCheck: false }).concat(collaborationMiddleware),
   });
   return store;
 };

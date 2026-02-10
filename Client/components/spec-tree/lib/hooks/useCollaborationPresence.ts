@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import type { PresenceUser } from '@/types/collaboration';
-import { mockPresenceUsers } from '../data/collaboration-presence';
+import type { AppDispatch, RootState } from '@/lib/store';
+import {
+  selectCollaborationPresenceUsers,
+  setPresenceUsers,
+  upsertPresenceUser,
+} from '@/lib/store/collaboration-slice';
+import { getCollaborationEmitter } from '../collaboration/collaboration-emitter';
 
 interface UseCollaborationPresenceOptions {
   currentUser?: PresenceUser | null;
@@ -36,14 +43,22 @@ const ensureCurrentUser = (
 const useCollaborationPresence = (
   options: UseCollaborationPresenceOptions = {}
 ): UseCollaborationPresenceResult => {
-  const { currentUser, initialUsers = mockPresenceUsers } = options;
-  const [presenceUsers, setPresenceUsers] = useState<PresenceUser[]>(() =>
-    ensureCurrentUser(initialUsers, currentUser)
+  const { currentUser, initialUsers = [] } = options;
+  const dispatch = useDispatch<AppDispatch>();
+  const presenceUsers = useSelector((state: RootState) =>
+    selectCollaborationPresenceUsers(state)
   );
 
   useEffect(() => {
-    setPresenceUsers((prev) => ensureCurrentUser(prev, currentUser));
-  }, [currentUser]);
+    if (initialUsers.length > 0) {
+      dispatch(setPresenceUsers(ensureCurrentUser(initialUsers, currentUser)));
+      return;
+    }
+
+    if (currentUser) {
+      dispatch(upsertPresenceUser(currentUser));
+    }
+  }, [currentUser, dispatch, initialUsers]);
 
   const activeUsers = useMemo(
     () => presenceUsers.filter((user) => user.status === 'active'),
@@ -57,29 +72,25 @@ const useCollaborationPresence = (
 
   const setActiveItem = (itemId: string | undefined) => {
     if (!currentUser) return;
-    setPresenceUsers((prev) =>
-      prev.map((user) =>
-        user.id === currentUser.id
-          ? {
-              ...user,
-              currentItemId: itemId,
-              status: 'active',
-              lastActive: new Date().toISOString(),
-            }
-          : user
-      )
-    );
+    const updatedUser = {
+      ...currentUser,
+      currentItemId: itemId,
+      status: 'active' as const,
+      lastActive: new Date().toISOString(),
+    };
+    dispatch(upsertPresenceUser(updatedUser));
+    getCollaborationEmitter().emitPresenceUpdate?.(updatedUser);
   };
 
   const setUserStatus = (status: 'active' | 'idle') => {
     if (!currentUser) return;
-    setPresenceUsers((prev) =>
-      prev.map((user) =>
-        user.id === currentUser.id
-          ? { ...user, status, lastActive: new Date().toISOString() }
-          : user
-      )
-    );
+    const updatedUser = {
+      ...currentUser,
+      status,
+      lastActive: new Date().toISOString(),
+    };
+    dispatch(upsertPresenceUser(updatedUser));
+    getCollaborationEmitter().emitPresenceUpdate?.(updatedUser);
   };
 
   return {

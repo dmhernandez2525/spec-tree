@@ -44,18 +44,23 @@ import RegenerateFeedback from '../regenerate-feedback';
 import generateId from '../../lib/utils/generate-id';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
 import CommentsPanel from '../comments';
+import ActiveCursors from '../collaboration/active-cursors';
 import {
   calculateTotalTasks,
   calculateTotalFeatures,
   calculateTotalUserStories,
 } from '../../lib/utils/calculation-utils';
 import calculateTotalPoints from '../../lib/utils/calculate-total-points';
+import type { PresenceUser } from '@/types/collaboration';
 
 interface EpicProps {
   epic: EpicType;
   index: number;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
   isReadOnly?: boolean;
+  presenceUsers?: PresenceUser[];
+  currentUserId?: string;
+  onActiveItem?: (itemId: string) => void;
 }
 
 interface FeatureFormState {
@@ -78,6 +83,9 @@ const Epic: React.FC<EpicProps> = ({
   index: _index,
   dragHandleProps,
   isReadOnly = false,
+  presenceUsers = [],
+  currentUserId,
+  onActiveItem,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
@@ -208,11 +216,15 @@ const Epic: React.FC<EpicProps> = ({
   }
 
   return (
-    <Card id={`work-item-${epic.id}`} className="mb-8 border-l-4 border-l-blue-600 transition-all">
+    <Card
+      id={`work-item-${epic.id}`}
+      className="mb-8 border-l-4 border-l-blue-600 transition-all"
+      onFocusCapture={() => onActiveItem?.(epic.id)}
+    >
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value={epic.id} className="border-none">
           <CardHeader className="bg-slate-50">
-            <AccordionTrigger>
+            <AccordionTrigger onClick={() => onActiveItem?.(epic.id)}>
               <CardTitle className="flex justify-between items-center w-full text-lg">
                 <div className="flex items-center gap-3">
                   {dragHandleProps && (
@@ -226,6 +238,11 @@ const Epic: React.FC<EpicProps> = ({
                   )}
                   <span className="text-blue-600 font-semibold">Epic</span>
                   <span className="text-slate-600">{epic.title}</span>
+                  <ActiveCursors
+                    itemId={epic.id}
+                    users={presenceUsers}
+                    currentUserId={currentUserId}
+                  />
                 </div>
                 <MetricsDisplay metrics={metrics} className="ml-4" />
               </CardTitle>
@@ -379,6 +396,9 @@ const Epic: React.FC<EpicProps> = ({
                                       index={i}
                                       dragHandleProps={provided.dragHandleProps}
                                       isReadOnly={isReadOnly}
+                                      presenceUsers={presenceUsers}
+                                      currentUserId={currentUserId}
+                                      onActiveItem={onActiveItem}
                                     />
                                   </AccordionItem>
                                 </div>

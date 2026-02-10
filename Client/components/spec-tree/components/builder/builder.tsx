@@ -75,6 +75,7 @@ import calculateTotalPoints from '../../lib/utils/calculate-total-points';
 import useAsyncState from '@/lib/hooks/useAsyncState';
 import useCollaborationPresence from '../../lib/hooks/useCollaborationPresence';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
+import useCollaborationSocket from '../../lib/hooks/useCollaborationSocket';
 
 interface BuilderProps {
   setSelectedApp: (id: string | null) => void;
@@ -156,6 +157,10 @@ const Builder: React.FC<BuilderProps> = ({
   ]);
 
   const { presenceUsers, setActiveItem } = useCollaborationPresence({
+    currentUser: currentPresenceUser,
+  });
+  useCollaborationSocket({
+    appId: selectedApp,
     currentUser: currentPresenceUser,
   });
 
@@ -643,6 +648,9 @@ const Builder: React.FC<BuilderProps> = ({
                               index={index}
                               dragHandleProps={provided.dragHandleProps}
                               isReadOnly={isReadOnly}
+                              presenceUsers={presenceUsers}
+                              currentUserId={currentPresenceUser.id}
+                              onActiveItem={setActiveItem}
                             />
                           </div>
                         )}

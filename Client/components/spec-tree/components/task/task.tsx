@@ -19,17 +19,25 @@ import { AccordionContent, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
 import CommentsPanel from '../comments';
+import ActiveCursors from '../collaboration/active-cursors';
+import type { PresenceUser } from '@/types/collaboration';
 
 interface TaskProps {
   task: TaskType;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
   isReadOnly?: boolean;
+  presenceUsers?: PresenceUser[];
+  currentUserId?: string;
+  onActiveItem?: (itemId: string) => void;
 }
 
 const Task: React.FC<TaskProps> = ({
   task,
   dragHandleProps,
   isReadOnly = false,
+  presenceUsers = [],
+  currentUserId,
+  onActiveItem,
 }) => {
   const dispatch = useDispatch();
   const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
@@ -60,8 +68,15 @@ const Task: React.FC<TaskProps> = ({
   ];
 
   return (
-    <div id={`work-item-${task.id}`} className="transition-all">
-      <AccordionTrigger className="hover:bg-slate-50 rounded-lg px-4">
+    <div
+      id={`work-item-${task.id}`}
+      className="transition-all"
+      onFocusCapture={() => onActiveItem?.(task.id)}
+    >
+      <AccordionTrigger
+        className="hover:bg-slate-50 rounded-lg px-4"
+        onClick={() => onActiveItem?.(task.id)}
+      >
         <CardTitle className="flex justify-between items-center w-full text-sm">
           <div className="flex items-center gap-3">
             {dragHandleProps && (
@@ -75,6 +90,11 @@ const Task: React.FC<TaskProps> = ({
             )}
             <span className="text-amber-600 font-semibold">Task</span>
             <span className="text-slate-600">{task.title}</span>
+            <ActiveCursors
+              itemId={task.id}
+              users={presenceUsers}
+              currentUserId={currentUserId}
+            />
           </div>
           <Badge variant="outline" className="ml-4">
             Priority: {task.priority}

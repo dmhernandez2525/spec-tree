@@ -1,7 +1,10 @@
+import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import useCollaborationPresence from './useCollaborationPresence';
 import type { PresenceUser } from '@/types/collaboration';
+import { createTestStore } from '@/src/test/test-utils';
 
 const currentUser: PresenceUser = {
   id: 'current-user',
@@ -12,23 +15,38 @@ const currentUser: PresenceUser = {
 };
 
 describe('useCollaborationPresence', () => {
-  it('includes the current user in the presence list', () => {
-    const { result } = renderHook(() =>
-      useCollaborationPresence({ currentUser, initialUsers: [] })
+  it('includes the current user in the presence list', async () => {
+    const store = createTestStore();
+    const { result } = renderHook(
+      () => useCollaborationPresence({ currentUser, initialUsers: [] }),
+      {
+        wrapper: ({ children }) => (
+          <Provider store={store}>{children}</Provider>
+        ),
+      }
     );
-
-    expect(result.current.presenceUsers[0]?.id).toBe('current-user');
+    await waitFor(() => {
+      expect(result.current.presenceUsers[0]?.id).toBe('current-user');
+    });
   });
 
-  it('updates current item for the active user', () => {
-    const { result } = renderHook(() =>
-      useCollaborationPresence({ currentUser, initialUsers: [] })
+  it('updates current item for the active user', async () => {
+    const store = createTestStore();
+    const { result } = renderHook(
+      () => useCollaborationPresence({ currentUser, initialUsers: [] }),
+      {
+        wrapper: ({ children }) => (
+          <Provider store={store}>{children}</Provider>
+        ),
+      }
     );
 
     act(() => {
       result.current.setActiveItem('item-123');
     });
 
-    expect(result.current.presenceUsers[0]?.currentItemId).toBe('item-123');
+    await waitFor(() => {
+      expect(result.current.presenceUsers[0]?.currentItemId).toBe('item-123');
+    });
   });
 });

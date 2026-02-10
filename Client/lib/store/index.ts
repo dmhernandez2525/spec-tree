@@ -8,6 +8,7 @@ import sowReducer from './sow-slice';
 import demoReducer from './demo-slice';
 import { collaborationReducer } from './collaboration-slice';
 import commentsReducer from './comments-slice';
+import { collaborationMiddleware } from './collaboration-middleware';
 
 export const makeStore = () => {
   return configureStore({
@@ -22,6 +23,8 @@ export const makeStore = () => {
       collaboration: collaborationReducer,
       comments: commentsReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false }).concat(collaborationMiddleware),
   });
 };
 

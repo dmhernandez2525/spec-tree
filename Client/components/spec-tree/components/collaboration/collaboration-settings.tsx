@@ -11,6 +11,7 @@ import {
   setMode,
 } from '@/lib/store/collaboration-slice';
 import type { CollaborationMode } from '@/types/collaboration';
+import { getCollaborationEmitter } from '../../lib/collaboration/collaboration-emitter';
 
 interface CollaborationSettingsProps {
   className?: string;
@@ -25,7 +26,9 @@ const CollaborationSettings: React.FC<CollaborationSettingsProps> = ({
 
   const handleModeChange = (value: string) => {
     if (!value) return;
-    dispatch(setMode(value as CollaborationMode));
+    const nextMode = value as CollaborationMode;
+    dispatch(setMode(nextMode));
+    getCollaborationEmitter().emitModeChange?.(nextMode, isEnabled);
   };
 
   return (
@@ -41,7 +44,10 @@ const CollaborationSettings: React.FC<CollaborationSettingsProps> = ({
         </div>
         <Switch
           checked={isEnabled}
-          onCheckedChange={(checked) => dispatch(setEnabled(checked))}
+          onCheckedChange={(checked) => {
+            dispatch(setEnabled(checked));
+            getCollaborationEmitter().emitModeChange?.(mode, checked);
+          }}
           aria-label="Enable collaboration"
         />
       </div>

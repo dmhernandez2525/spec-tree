@@ -267,6 +267,10 @@ vi.mock('../../lib/hooks/useActivityLogger', () => ({
   default: () => ({ logActivity: vi.fn() }),
 }));
 
+vi.mock('../../lib/hooks/useCollaborationSocket', () => ({
+  default: () => undefined,
+}));
+
 vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, variant, ...props }: React.PropsWithChildren<{ onClick?: () => void; variant?: string }>) => (
     <button onClick={onClick} data-variant={variant} {...props}>

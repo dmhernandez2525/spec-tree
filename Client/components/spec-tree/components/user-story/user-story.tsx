@@ -47,6 +47,8 @@ import generateId from '../../lib/utils/generate-id';
 import { calculateTotalTasks } from '../../lib/utils/calculation-utils';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
 import CommentsPanel from '../comments';
+import ActiveCursors from '../collaboration/active-cursors';
+import type { PresenceUser } from '@/types/collaboration';
 
 interface UserStoryProps {
   userStory: UserStoryType;
@@ -54,6 +56,9 @@ interface UserStoryProps {
   epic: EpicType;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
   isReadOnly?: boolean;
+  presenceUsers?: PresenceUser[];
+  currentUserId?: string;
+  onActiveItem?: (itemId: string) => void;
 }
 
 interface FormState {
@@ -77,6 +82,9 @@ const UserStory: React.FC<UserStoryProps> = ({
   epic: _epic,
   dragHandleProps,
   isReadOnly = false,
+  presenceUsers = [],
+  currentUserId,
+  onActiveItem,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const localState = useSelector((state: RootState) => state);
@@ -189,8 +197,15 @@ const UserStory: React.FC<UserStoryProps> = ({
   }
 
   return (
-    <div id={`work-item-${userStory.id}`} className="transition-all">
-      <AccordionTrigger className="hover:bg-slate-50 rounded-lg px-4">
+    <div
+      id={`work-item-${userStory.id}`}
+      className="transition-all"
+      onFocusCapture={() => onActiveItem?.(userStory.id)}
+    >
+      <AccordionTrigger
+        className="hover:bg-slate-50 rounded-lg px-4"
+        onClick={() => onActiveItem?.(userStory.id)}
+      >
         <CardTitle className="flex justify-between items-center w-full text-sm">
           <div className="flex items-center gap-3">
             {dragHandleProps && (
@@ -204,6 +219,11 @@ const UserStory: React.FC<UserStoryProps> = ({
             )}
             <span className="text-green-600 font-semibold">User Story</span>
             <span className="text-slate-600">{userStory.title}</span>
+            <ActiveCursors
+              itemId={userStory.id}
+              users={presenceUsers}
+              currentUserId={currentUserId}
+            />
           </div>
           <MetricsDisplay metrics={metrics} className="ml-4" />
         </CardTitle>
@@ -379,6 +399,9 @@ const UserStory: React.FC<UserStoryProps> = ({
                                   task={task}
                                   dragHandleProps={provided.dragHandleProps}
                                   isReadOnly={isReadOnly}
+                                  presenceUsers={presenceUsers}
+                                  currentUserId={currentUserId}
+                                  onActiveItem={onActiveItem}
                                 />
                               </AccordionItem>
                             </div>

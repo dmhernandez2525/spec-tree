@@ -20,6 +20,8 @@ export type {
 
 export { default as useCollaborationPresence } from './useCollaborationPresence';
 export { default as useActivityLogger } from './useActivityLogger';
+export { default as useCollaborationSocket } from './useCollaborationSocket';
+export { default as useCollaborationEmitter } from './useCollaborationEmitter';
 
 export { useStreamingCompletion, parseSSEChunk, simulateStream } from './useStreamingCompletion';
 export type {
