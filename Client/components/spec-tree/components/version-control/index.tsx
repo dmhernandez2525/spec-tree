@@ -45,6 +45,7 @@ const VersionControl: React.FC<VersionControlProps> = ({ appId }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [compareId, setCompareId] = useState<string | null>(null);
 
   const createdBy = useMemo(() => {
     const id = currentUser?.documentId || (currentUser?.id ? String(currentUser.id) : null);
@@ -72,6 +73,12 @@ const VersionControl: React.FC<VersionControlProps> = ({ appId }) => {
     if (!open) return;
     void loadSnapshots();
   }, [open, loadSnapshots]);
+
+  useEffect(() => {
+    if (open) return;
+    setCompareId(null);
+    setErrorMessage(null);
+  }, [open]);
 
   const handleCreateSnapshot = async () => {
     if (!appId || !name.trim() || isReadOnly) return;
@@ -103,6 +110,44 @@ const VersionControl: React.FC<VersionControlProps> = ({ appId }) => {
     dispatch(setSow({ sow: snapshot.snapshot }));
     setOpen(false);
   };
+
+  const computeDiffCounts = useCallback(
+    (snapshot: VersionSnapshot) => {
+      const current = state.sow;
+      const snapshotState = snapshot.snapshot;
+
+      const diffFor = (
+        currentItems: Record<string, unknown>,
+        snapshotItems: Record<string, unknown>
+      ) => {
+        const currentIds = new Set(Object.keys(currentItems || {}));
+        const snapshotIds = new Set(Object.keys(snapshotItems || {}));
+        let added = 0;
+        let removed = 0;
+
+        currentIds.forEach((id) => {
+          if (!snapshotIds.has(id)) {
+            added += 1;
+          }
+        });
+        snapshotIds.forEach((id) => {
+          if (!currentIds.has(id)) {
+            removed += 1;
+          }
+        });
+
+        return { added, removed };
+      };
+
+      return {
+        epics: diffFor(current.epics, snapshotState.epics),
+        features: diffFor(current.features, snapshotState.features),
+        userStories: diffFor(current.userStories, snapshotState.userStories),
+        tasks: diffFor(current.tasks, snapshotState.tasks),
+      };
+    },
+    [state.sow]
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -208,6 +253,33 @@ const VersionControl: React.FC<VersionControlProps> = ({ appId }) => {
                         Restore
                       </Button>
                     </div>
+                    <div className="mt-3 flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() =>
+                          setCompareId((prev) =>
+                            prev === snapshot.id ? null : snapshot.id
+                          )
+                        }
+                      >
+                        {compareId === snapshot.id ? 'Hide diff' : 'Show diff'}
+                      </Button>
+                    </div>
+                    {compareId === snapshot.id && (() => {
+                      const diff = computeDiffCounts(snapshot);
+                      return (
+                        <div className="mt-3 rounded-md border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
+                          <p className="font-medium text-foreground">Changes since snapshot</p>
+                          <div className="mt-2 grid grid-cols-2 gap-2">
+                            <div>Epics: +{diff.epics.added} / -{diff.epics.removed}</div>
+                            <div>Features: +{diff.features.added} / -{diff.features.removed}</div>
+                            <div>User Stories: +{diff.userStories.added} / -{diff.userStories.removed}</div>
+                            <div>Tasks: +{diff.tasks.added} / -{diff.tasks.removed}</div>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 ))
               )}
