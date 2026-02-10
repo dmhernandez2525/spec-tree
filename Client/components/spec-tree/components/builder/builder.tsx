@@ -63,6 +63,7 @@ import Config from '../config';
 import Chat from '../chat';
 import ImportExport from '../import-export';
 import Templates from '../templates';
+import VersionControl from '../version-control';
 import BuilderSearch, { SearchResult } from '../builder-search';
 import CollaborationPanel from '../collaboration';
 import generateId from '../../lib/utils/generate-id';
@@ -515,6 +516,7 @@ const Builder: React.FC<BuilderProps> = ({
           <div className="flex gap-2">
             <Templates appId={selectedApp} />
             <ImportExport appId={selectedApp} />
+            <VersionControl appId={selectedApp} />
           </div>
           {selectedApp && (
             <Button

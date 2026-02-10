@@ -39,6 +39,14 @@ describe('StrapiService', () => {
       expect(typeof strapiService.fetchApps).toBe('function');
     });
 
+    it('has fetchVersionSnapshots method', () => {
+      expect(typeof strapiService.fetchVersionSnapshots).toBe('function');
+    });
+
+    it('has createVersionSnapshot method', () => {
+      expect(typeof strapiService.createVersionSnapshot).toBe('function');
+    });
+
     it('has fetchAppById method', () => {
       expect(typeof strapiService.fetchAppById).toBe('function');
     });

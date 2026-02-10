@@ -246,6 +246,12 @@ vi.mock('../templates', () => ({
   ),
 }));
 
+vi.mock('../version-control', () => ({
+  default: ({ appId }: { appId: string | null }) => (
+    <div data-testid="version-control">Versions - {appId}</div>
+  ),
+}));
+
 vi.mock('../builder-search', () => ({
   default: ({ onResultSelect }: { onResultSelect: (result: unknown) => void }) => (
     <div data-testid="builder-search" onClick={() => onResultSelect({ item: { id: 'test' } })}>
