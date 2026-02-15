@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_api_keys",
+  "info": {
+    "singularName": "organization-api-key",
+    "pluralName": "organization-api-keys",
+    "displayName": "Organization API Key"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "provider": {
+      "type": "enumeration",
+      "enum": [
+        "openai",
+        "anthropic",
+        "gemini"
+      ],
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "maskedKey": {
+      "type": "string",
+      "required": true
+    },
+    "encryptedKey": {
+      "type": "text",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "createdById": {
+      "type": "string"
+    },
+    "lastUsedAt": {
+      "type": "datetime"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "apiKeys"
+    }
+  }
+}

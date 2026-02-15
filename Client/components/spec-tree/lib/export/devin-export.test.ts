@@ -155,6 +155,7 @@ describe('devin-export', () => {
     settings: {} as RootState['settings'],
     subscription: {} as RootState['subscription'],
     demo: {} as RootState['demo'],
+    workspace: {} as RootState['workspace'],
     collaboration: {
       mode: 'edit' as const,
       isEnabled: true,

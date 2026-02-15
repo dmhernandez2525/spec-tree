@@ -100,6 +100,21 @@ vi.mock('@/components/shared/icons', () => ({
         Brain
       </span>
     ),
+    eye: ({ className }: { className?: string }) => (
+      <span data-testid="icon-eye" className={className}>
+        Eye
+      </span>
+    ),
+    sparkles: ({ className }: { className?: string }) => (
+      <span data-testid="icon-sparkles" className={className}>
+        Sparkles
+      </span>
+    ),
+    shield: ({ className }: { className?: string }) => (
+      <span data-testid="icon-shield" className={className}>
+        Shield
+      </span>
+    ),
   },
 }));
 
@@ -144,6 +159,26 @@ vi.mock('./settings/IntegrationsSettings', () => ({
 
 vi.mock('./settings/AISettings', () => ({
   AISettings: () => <div data-testid="ai-settings">AISettings Component</div>,
+}));
+
+vi.mock('./ActivityFeed', () => ({
+  ActivityFeed: () => <div data-testid="activity-feed">ActivityFeed Component</div>,
+}));
+
+vi.mock('./AuditLogViewer', () => ({
+  AuditLogViewer: () => <div data-testid="audit-log-viewer">AuditLogViewer Component</div>,
+}));
+
+vi.mock('./TemplateLibrary', () => ({
+  TemplateLibrary: () => <div data-testid="template-library">TemplateLibrary Component</div>,
+}));
+
+vi.mock('./APIKeyManager', () => ({
+  APIKeyManager: () => <div data-testid="api-key-manager">APIKeyManager Component</div>,
+}));
+
+vi.mock('./QuotaDisplay', () => ({
+  QuotaDisplay: () => <div data-testid="quota-display">QuotaDisplay Component</div>,
 }));
 
 describe('OrganizationManagement', () => {
@@ -282,9 +317,12 @@ describe('OrganizationManagement', () => {
       expect(screen.getByTestId('icon-users')).toBeInTheDocument();
       expect(screen.getByTestId('icon-settings')).toBeInTheDocument();
       expect(screen.getByTestId('icon-credit-card')).toBeInTheDocument();
-      expect(screen.getByTestId('icon-key')).toBeInTheDocument();
+      expect(screen.getAllByTestId('icon-key')).toHaveLength(2); // SSO + API Keys
       expect(screen.getByTestId('icon-plug')).toBeInTheDocument();
       expect(screen.getByTestId('icon-brain')).toBeInTheDocument();
+      expect(screen.getByTestId('icon-eye')).toBeInTheDocument();
+      expect(screen.getByTestId('icon-sparkles')).toBeInTheDocument();
+      expect(screen.getByTestId('icon-shield')).toBeInTheDocument();
     });
   });
 

@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_templates",
+  "info": {
+    "singularName": "organization-template",
+    "pluralName": "organization-templates",
+    "displayName": "Organization Template"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "category": {
+      "type": "string"
+    },
+    "template": {
+      "type": "json",
+      "required": true
+    },
+    "createdById": {
+      "type": "string"
+    },
+    "lastUsedAt": {
+      "type": "datetime"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "sharedTemplates"
+    }
+  }
+}

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Icons } from '@/components/shared/icons';
+import { WorkspaceSwitcher } from './organization/WorkspaceSwitcher';
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -46,6 +47,7 @@ export function SidebarNav({ className }: SidebarNavProps) {
             isCollapsed && 'items-center p-2'
           )}
         >
+          {!isCollapsed && <WorkspaceSwitcher />}
           <Nav
             isCollapsed={isCollapsed}
             links={[

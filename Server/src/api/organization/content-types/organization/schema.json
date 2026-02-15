@@ -43,12 +43,62 @@
     "description": {
       "type": "text"
     },
+    "avatarUrl": {
+      "type": "string"
+    },
     "websiteUrl": {
       "type": "string"
+    },
+    "notificationPreferences": {
+      "type": "json"
+    },
+    "aiGenerationQuota": {
+      "type": "integer",
+      "default": 500
+    },
+    "aiGenerationUsage": {
+      "type": "integer",
+      "default": 0
     },
     "ownerId": {
       "type": "string",
       "required": true
+    },
+    "members": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization-member.organization-member",
+      "mappedBy": "organization"
+    },
+    "invites": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization-invite.organization-invite",
+      "mappedBy": "organization"
+    },
+    "sharedTemplates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization-template.organization-template",
+      "mappedBy": "organization"
+    },
+    "activities": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization-activity.organization-activity",
+      "mappedBy": "organization"
+    },
+    "apiKeys": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization-api-key.organization-api-key",
+      "mappedBy": "organization"
+    },
+    "auditLogs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization-audit-log.organization-audit-log",
+      "mappedBy": "organization"
     },
     "apps": {
       "type": "relation",

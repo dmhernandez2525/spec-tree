@@ -21,6 +21,7 @@ import sowReducer from '@/lib/store/sow-slice';
 import demoReducer from '@/lib/store/demo-slice';
 import { collaborationReducer } from '@/lib/store/collaboration-slice';
 import commentsReducer from '@/lib/store/comments-slice';
+import { workspaceReducer } from '@/lib/store/workspace-slice';
 
 // Store reducers for testing
 const testReducer = {
@@ -33,6 +34,7 @@ const testReducer = {
   demo: demoReducer,
   collaboration: collaborationReducer,
   comments: commentsReducer,
+  workspace: workspaceReducer,
 };
 
 // Test store state type - matches actual RootState shape
@@ -46,6 +48,7 @@ export interface TestStoreState {
   demo: ReturnType<typeof demoReducer>;
   collaboration: ReturnType<typeof collaborationReducer>;
   comments: ReturnType<typeof commentsReducer>;
+  workspace: ReturnType<typeof workspaceReducer>;
 }
 
 // Create a test store with optional preloaded state

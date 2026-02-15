@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_invites",
+  "info": {
+    "singularName": "organization-invite",
+    "pluralName": "organization-invites",
+    "displayName": "Organization Invite"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "role": {
+      "type": "enumeration",
+      "enum": [
+        "admin",
+        "editor",
+        "viewer"
+      ],
+      "required": true,
+      "default": "viewer"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "accepted",
+        "declined",
+        "expired"
+      ],
+      "required": true,
+      "default": "pending"
+    },
+    "inviteToken": {
+      "type": "uid",
+      "targetField": "email"
+    },
+    "invitedById": {
+      "type": "string",
+      "required": true
+    },
+    "message": {
+      "type": "text"
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "respondedAt": {
+      "type": "datetime"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "invites"
+    }
+  }
+}
