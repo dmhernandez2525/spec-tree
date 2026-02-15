@@ -25,7 +25,12 @@ import type {
   StrapiCommentNotification,
   StrapiVersionSnapshot,
 } from '@/types/strapi';
-import type { SowSnapshot, VersionSnapshot } from '@/types/version-snapshot';
+import type {
+  SowSnapshot,
+  VersionSnapshot,
+  VersionSnapshotSourceEvent,
+} from '@/types/version-snapshot';
+import { isVersionSnapshotSourceEvent } from '@/types/version-snapshot';
 import { logger } from '@/lib/logger';
 
 // Base Strapi response types
@@ -121,6 +126,12 @@ interface CreateVersionSnapshotRequest {
   snapshot: SowSnapshot;
   createdById?: string | null;
   createdByName?: string | null;
+  tags?: string[];
+  isMilestone?: boolean;
+  milestoneTag?: string | null;
+  sourceEvent?: VersionSnapshotSourceEvent;
+  branchName?: string | null;
+  parentSnapshotId?: string | null;
 }
 
 const COMMENT_TARGET_FIELD: Record<CommentTargetType, 'app' | 'epic' | 'feature' | 'userStory' | 'task'> = {
@@ -149,6 +160,17 @@ const NOTIFICATION_STATUS_MAP: Record<
 
 const resolveDocumentId = (relation?: { documentId: string } | null): string | undefined =>
   relation?.documentId;
+
+const normalizeSnapshotTags = (value: unknown): string[] => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((tag): tag is string => typeof tag === 'string')
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0);
+};
 
 class StrapiService {
   private instance: AxiosInstance;
@@ -245,6 +267,15 @@ class StrapiService {
   private mapStrapiVersionSnapshot(
     snapshot: StrapiVersionSnapshot
   ): VersionSnapshot {
+    const sourceEvent = isVersionSnapshotSourceEvent(snapshot.sourceEvent)
+      ? snapshot.sourceEvent
+      : 'manual';
+    const parentSnapshotId = resolveDocumentId(
+      snapshot.parentSnapshot && 'documentId' in snapshot.parentSnapshot
+        ? snapshot.parentSnapshot
+        : null
+    );
+
     return {
       id: snapshot.documentId,
       appId:
@@ -257,6 +288,12 @@ class StrapiService {
       createdAt: snapshot.createdAt,
       createdById: snapshot.createdById || null,
       createdByName: snapshot.createdByName || null,
+      tags: normalizeSnapshotTags(snapshot.tags),
+      isMilestone: Boolean(snapshot.isMilestone),
+      milestoneTag: snapshot.milestoneTag || null,
+      sourceEvent,
+      branchName: snapshot.branchName || null,
+      parentSnapshotId: parentSnapshotId || null,
     };
   }
 
@@ -767,6 +804,7 @@ class StrapiService {
         },
         populate: {
           app: { fields: ['documentId'] },
+          parentSnapshot: { fields: ['documentId'] },
         },
         sort: ['createdAt:desc'],
       }
@@ -778,24 +816,44 @@ class StrapiService {
   async createVersionSnapshot(
     data: CreateVersionSnapshotRequest
   ): Promise<VersionSnapshot> {
-    const { appId, snapshot, ...payload } = data;
+    const {
+      appId,
+      snapshot,
+      parentSnapshotId,
+      tags,
+      isMilestone,
+      sourceEvent,
+      ...payload
+    } = data;
+
+    const requestData: Record<string, unknown> = {
+      ...payload,
+      snapshot,
+      tags: tags || [],
+      isMilestone: Boolean(isMilestone),
+      sourceEvent: sourceEvent || 'manual',
+      app: {
+        connect: [appId],
+      },
+    };
+
+    if (parentSnapshotId) {
+      requestData.parentSnapshot = {
+        connect: [parentSnapshotId],
+      };
+    }
 
     try {
       const response = await this.instance.post(
         '/version-snapshots',
         {
-          data: {
-            ...payload,
-            snapshot,
-            app: {
-              connect: [appId],
-            },
-          },
+          data: requestData,
         },
         {
           params: {
             populate: {
               app: { fields: ['documentId'] },
+              parentSnapshot: { fields: ['documentId'] },
             },
           },
         }

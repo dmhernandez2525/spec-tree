@@ -6,15 +6,17 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
 import { strapiService } from './strapi-service';
 
-// Mock axios
-vi.mock('axios', async () => {
-  const mockAxiosInstance = {
+const { mockAxiosInstance } = vi.hoisted(() => ({
+  mockAxiosInstance: {
     get: vi.fn(),
     post: vi.fn(),
     put: vi.fn(),
     delete: vi.fn(),
-  };
+  },
+}));
 
+// Mock axios
+vi.mock('axios', async () => {
   return {
     default: {
       create: vi.fn(() => mockAxiosInstance),
@@ -26,7 +28,7 @@ vi.mock('axios', async () => {
 
 // Get the mock instance for use in tests
 const getMockInstance = () => {
-  return (axios.create as any)();
+  return mockAxiosInstance;
 };
 
 describe('StrapiService', () => {
@@ -798,6 +800,151 @@ describe('StrapiService', () => {
     });
   });
 
+  describe('Version Snapshots API', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('fetchVersionSnapshots maps metadata and parent relation', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.get.mockResolvedValueOnce({
+        data: {
+          data: [
+            {
+              documentId: 'snapshot-1',
+              name: 'Baseline',
+              description: 'Initial state',
+              snapshot: {
+                epics: {},
+                features: {},
+                userStories: {},
+                tasks: {},
+                contextualQuestions: [],
+                globalInformation: '',
+                selectedModel: 'gpt-4',
+                chatApi: 'StartState',
+                id: 'app-1',
+                apps: {},
+              },
+              app: { documentId: 'app-1' },
+              tags: ['milestone', 'release'],
+              isMilestone: true,
+              milestoneTag: 'M1',
+              sourceEvent: 'manual',
+              branchName: 'main',
+              parentSnapshot: { documentId: 'snapshot-0' },
+              createdAt: '2026-02-15T00:00:00.000Z',
+            },
+          ],
+        },
+      });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      const snapshots = await service.fetchVersionSnapshots('app-1');
+
+      expect(mockInstance.get).toHaveBeenCalledWith(
+        '/version-snapshots',
+        expect.objectContaining({
+          params: expect.objectContaining({
+            populate: expect.objectContaining({
+              parentSnapshot: { fields: ['documentId'] },
+            }),
+          }),
+        })
+      );
+      expect(snapshots[0]).toEqual(
+        expect.objectContaining({
+          id: 'snapshot-1',
+          appId: 'app-1',
+          tags: ['milestone', 'release'],
+          isMilestone: true,
+          milestoneTag: 'M1',
+          sourceEvent: 'manual',
+          branchName: 'main',
+          parentSnapshotId: 'snapshot-0',
+        })
+      );
+    });
+
+    it('createVersionSnapshot sends metadata and parent snapshot relation', async () => {
+      const mockInstance = getMockInstance();
+      mockInstance.post.mockResolvedValueOnce({
+        data: {
+          data: {
+            documentId: 'snapshot-2',
+            name: 'Branch Snapshot',
+            description: 'Created from baseline',
+            snapshot: {
+              epics: {},
+              features: {},
+              userStories: {},
+              tasks: {},
+              contextualQuestions: [],
+              globalInformation: '',
+              selectedModel: 'gpt-4',
+              chatApi: 'StartState',
+              id: 'app-1',
+              apps: {},
+            },
+            app: { documentId: 'app-1' },
+            tags: ['auto'],
+            isMilestone: false,
+            sourceEvent: 'branch',
+            branchName: 'alt-scope',
+            parentSnapshot: { documentId: 'snapshot-1' },
+            createdAt: '2026-02-15T00:00:00.000Z',
+          },
+        },
+      });
+
+      vi.resetModules();
+      const { strapiService: service } = await import('./strapi-service');
+
+      await service.createVersionSnapshot({
+        appId: 'app-1',
+        name: 'Branch Snapshot',
+        description: 'Created from baseline',
+        snapshot: {
+          epics: {},
+          features: {},
+          userStories: {},
+          tasks: {},
+          contextualQuestions: [],
+          globalInformation: '',
+          selectedModel: 'gpt-4',
+          chatApi: 'StartState',
+          id: 'app-1',
+          apps: {},
+        },
+        sourceEvent: 'branch',
+        tags: ['auto'],
+        branchName: 'alt-scope',
+        parentSnapshotId: 'snapshot-1',
+      });
+
+      expect(mockInstance.post).toHaveBeenCalledWith(
+        '/version-snapshots',
+        expect.objectContaining({
+          data: expect.objectContaining({
+            sourceEvent: 'branch',
+            tags: ['auto'],
+            branchName: 'alt-scope',
+            parentSnapshot: { connect: ['snapshot-1'] },
+          }),
+        }),
+        expect.objectContaining({
+          params: expect.objectContaining({
+            populate: expect.objectContaining({
+              parentSnapshot: { fields: ['documentId'] },
+            }),
+          }),
+        })
+      );
+    });
+  });
+
   describe('Position Updates', () => {
     beforeEach(() => {
       vi.clearAllMocks();
@@ -975,7 +1122,7 @@ describe('StrapiService', () => {
         },
       };
       mockInstance.get.mockRejectedValueOnce(strapiError);
-      (axios.isAxiosError as any).mockReturnValueOnce(true);
+      vi.mocked(axios.isAxiosError).mockReturnValueOnce(true);
 
       vi.resetModules();
       const { strapiService: service } = await import('./strapi-service');

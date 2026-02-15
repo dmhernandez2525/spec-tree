@@ -164,6 +164,12 @@ export interface StrapiVersionSnapshot extends StrapiDocument {
   snapshot: unknown;
   createdById?: string | null;
   createdByName?: string | null;
+  tags?: string[] | null;
+  isMilestone?: boolean;
+  milestoneTag?: string | null;
+  sourceEvent?: string | null;
+  branchName?: string | null;
+  parentSnapshot?: StrapiRelationRef | StrapiVersionSnapshot;
   app?: StrapiRelationRef | StrapiApp;
 }
 

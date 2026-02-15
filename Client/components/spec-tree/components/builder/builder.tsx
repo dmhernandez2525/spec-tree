@@ -76,6 +76,7 @@ import calculateTotalPoints from '../../lib/utils/calculate-total-points';
 import useAsyncState from '@/lib/hooks/useAsyncState';
 import useCollaborationPresence from '../../lib/hooks/useCollaborationPresence';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
+import { dispatchAutoSnapshotEvent } from '../../lib/utils/version-snapshot-events';
 
 interface BuilderProps {
   setSelectedApp: (id: string | null) => void;
@@ -221,6 +222,10 @@ const Builder: React.FC<BuilderProps> = ({
       await dispatch(requestAdditionalEpics({ state: localState })).unwrap();
       stopLoading();
       logActivity('generated', 'epic', 'Additional epics');
+      dispatchAutoSnapshotEvent({
+        eventType: 'batch-generation',
+        label: 'Additional epics',
+      });
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -251,6 +256,10 @@ const Builder: React.FC<BuilderProps> = ({
       );
       stopLoading();
       logActivity('generated', 'feature', 'Additional features');
+      dispatchAutoSnapshotEvent({
+        eventType: 'batch-generation',
+        label: 'Additional features',
+      });
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -287,6 +296,10 @@ const Builder: React.FC<BuilderProps> = ({
       );
       stopLoading();
       logActivity('generated', 'userStory', 'Additional user stories');
+      dispatchAutoSnapshotEvent({
+        eventType: 'batch-generation',
+        label: 'Additional user stories',
+      });
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -319,6 +332,10 @@ const Builder: React.FC<BuilderProps> = ({
       );
       stopLoading();
       logActivity('generated', 'task', 'Additional tasks');
+      dispatchAutoSnapshotEvent({
+        eventType: 'batch-generation',
+        label: 'Additional tasks',
+      });
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -436,6 +453,10 @@ const Builder: React.FC<BuilderProps> = ({
             })
           );
           persistPosition('epic', draggableId, destination.index);
+          dispatchAutoSnapshotEvent({
+            eventType: 'bulk-move',
+            label: 'Epic reorder',
+          });
           break;
         case 'FEATURE': {
           const epicId = source.droppableId.replace('features-', '');
@@ -447,6 +468,10 @@ const Builder: React.FC<BuilderProps> = ({
             })
           );
           persistPosition('feature', draggableId, destination.index, epicId);
+          dispatchAutoSnapshotEvent({
+            eventType: 'bulk-move',
+            label: 'Feature reorder',
+          });
           break;
         }
         case 'USER_STORY': {
@@ -459,6 +484,10 @@ const Builder: React.FC<BuilderProps> = ({
             })
           );
           persistPosition('userStory', draggableId, destination.index, featureId);
+          dispatchAutoSnapshotEvent({
+            eventType: 'bulk-move',
+            label: 'User story reorder',
+          });
           break;
         }
         case 'TASK': {
@@ -471,6 +500,10 @@ const Builder: React.FC<BuilderProps> = ({
             })
           );
           persistPosition('task', draggableId, destination.index, userStoryId);
+          dispatchAutoSnapshotEvent({
+            eventType: 'bulk-move',
+            label: 'Task reorder',
+          });
           break;
         }
       }
