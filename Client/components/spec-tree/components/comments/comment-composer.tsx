@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import type { MentionCandidate } from '@/types/comments';
+import { logger } from '@/lib/logger';
 import {
   extractMentions,
   findMentionMatch,
@@ -81,7 +82,7 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
       await onSubmit(trimmed, mentions);
       setValue('');
     } catch (error) {
-      console.error('Failed to submit comment:', error);
+      logger.error('CommentComposer', 'Failed to submit comment', { error });
     } finally {
       setIsSubmitting(false);
     }

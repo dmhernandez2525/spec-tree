@@ -139,6 +139,10 @@ vi.mock('../comments', () => ({
   ),
 }));
 
+vi.mock('../comments/comment-count-badge', () => ({
+  CommentCountBadge: () => null,
+}));
+
 vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, variant, ...props }: React.PropsWithChildren<{ onClick?: () => void; variant?: string }>) => (
     <button onClick={onClick} data-variant={variant} {...props}>

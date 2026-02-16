@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { logger } from '@/lib/logger';
 import type { AppDispatch, RootState } from '@/lib/store';
@@ -79,6 +81,10 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
     return member?.role;
   }, [currentUserId, members]);
   const [showResolved, setShowResolved] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [authorFilter, setAuthorFilter] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -114,10 +120,25 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
     return candidates;
   }, [currentUser, members]);
 
-  const visibleComments = useMemo(
-    () => comments.filter((comment) => showResolved || comment.status === 'open'),
-    [comments, showResolved]
-  );
+  const visibleComments = useMemo(() => {
+    const authorLower = authorFilter.toLowerCase();
+    const fromDate = dateFrom ? new Date(dateFrom) : null;
+    const toDate = dateTo ? new Date(`${dateTo}T23:59:59`) : null;
+
+    return comments.filter((comment) => {
+      if (!showResolved && comment.status !== 'open') return false;
+      if (authorLower && !comment.authorName.toLowerCase().includes(authorLower)) return false;
+      if (fromDate) {
+        const created = new Date(comment.createdAt);
+        if (created < fromDate) return false;
+      }
+      if (toDate) {
+        const created = new Date(comment.createdAt);
+        if (created > toDate) return false;
+      }
+      return true;
+    });
+  }, [comments, showResolved, authorFilter, dateFrom, dateTo]);
 
   const commentThread = useMemo(() => buildThread(visibleComments), [visibleComments]);
 
@@ -336,6 +357,14 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
             />
             <Label className="text-xs text-muted-foreground">Show resolved</Label>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowFilters((prev) => !prev)}
+            title="Toggle filters"
+          >
+            <Filter className="h-4 w-4" />
+          </Button>
           {unreadNotifications.length > 0 && (
             <div className="flex items-center gap-2">
               <Badge variant="secondary">{unreadNotifications.length} new</Badge>
@@ -350,6 +379,50 @@ const CommentsPanel: React.FC<CommentsPanelProps> = ({
           )}
         </div>
       </div>
+
+      {showFilters && (
+        <div className="flex flex-wrap items-end gap-3 rounded-md border border-border bg-muted/30 p-3">
+          <div className="space-y-1">
+            <Label className="text-xs">Author</Label>
+            <Input
+              placeholder="Filter by author..."
+              value={authorFilter}
+              onChange={(e) => setAuthorFilter(e.target.value)}
+              className="h-8 w-40 text-xs"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">From</Label>
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="h-8 w-36 text-xs"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">To</Label>
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="h-8 w-36 text-xs"
+            />
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setAuthorFilter('');
+              setDateFrom('');
+              setDateTo('');
+            }}
+            className="h-8 text-xs"
+          >
+            Clear
+          </Button>
+        </div>
+      )}
 
       {errorMessage && (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">

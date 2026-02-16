@@ -4,6 +4,7 @@ import commentsReducer, {
   setCommentStatus,
   setCommentsForTarget,
   setNotifications,
+  selectCommentCountForTarget,
 } from './comments-slice';
 import type { Comment } from '@/types/comments';
 import type { CommentNotification } from '@/types/comments';
@@ -59,6 +60,46 @@ describe('comments-slice', () => {
       })
     );
     expect(state.targetIndex['epic:epic-1']).toEqual(['comment-2']);
+  });
+
+  it('selectCommentCountForTarget counts open and resolved', () => {
+    const resolved: Comment = {
+      ...comment,
+      id: 'comment-resolved',
+      status: 'resolved',
+    };
+    let state = commentsReducer(undefined, addComment(comment));
+    state = commentsReducer(state, addComment(resolved));
+
+    const mockRoot = { comments: state } as never;
+    const counts = selectCommentCountForTarget(mockRoot, 'epic', 'epic-1');
+
+    expect(counts.open).toBe(1);
+    expect(counts.resolved).toBe(1);
+    expect(counts.total).toBe(2);
+  });
+
+  it('selectCommentCountForTarget excludes deleted comments', () => {
+    const deleted: Comment = {
+      ...comment,
+      id: 'comment-deleted',
+      isDeleted: true,
+    };
+    let state = commentsReducer(undefined, addComment(comment));
+    state = commentsReducer(state, addComment(deleted));
+
+    const mockRoot = { comments: state } as never;
+    const counts = selectCommentCountForTarget(mockRoot, 'epic', 'epic-1');
+
+    expect(counts.total).toBe(1);
+  });
+
+  it('selectCommentCountForTarget returns zeros for unknown target', () => {
+    const state = commentsReducer(undefined, addComment(comment));
+    const mockRoot = { comments: state } as never;
+    const counts = selectCommentCountForTarget(mockRoot, 'task', 'nonexistent');
+
+    expect(counts).toEqual({ open: 0, resolved: 0, total: 0 });
   });
 
   it('sets notifications list', () => {

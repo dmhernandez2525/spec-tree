@@ -81,6 +81,10 @@ vi.mock('../comments', () => ({
   ),
 }));
 
+vi.mock('../comments/comment-count-badge', () => ({
+  CommentCountBadge: () => null,
+}));
+
 // Import after mocks
 import Task from './task';
 import { TaskType, TaskFields } from '../../lib/types/work-items';

@@ -186,4 +186,25 @@ export const selectUnreadNotificationsForUser = (
       notification.userId === userId && notification.status === 'unread'
   );
 
+export const selectCommentCountForTarget = (
+  state: RootState,
+  targetType: CommentTargetType,
+  targetId: string
+): { open: number; resolved: number; total: number } => {
+  const key = getTargetKey(targetType, targetId);
+  const commentIds = state.comments?.targetIndex?.[key] || [];
+  let open = 0;
+  let resolved = 0;
+  for (const id of commentIds) {
+    const comment = state.comments?.commentsById?.[id];
+    if (!comment || comment.isDeleted) continue;
+    if (comment.status === 'resolved') {
+      resolved++;
+    } else {
+      open++;
+    }
+  }
+  return { open, resolved, total: open + resolved };
+};
+
 export default commentsSlice.reducer;

@@ -44,6 +44,7 @@ import RegenerateFeedback from '../regenerate-feedback';
 import generateId from '../../lib/utils/generate-id';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
 import CommentsPanel from '../comments';
+import { CommentCountBadge } from '../comments/comment-count-badge';
 import {
   calculateTotalTasks,
   calculateTotalFeatures,
@@ -227,7 +228,10 @@ const Epic: React.FC<EpicProps> = ({
                   <span className="text-blue-600 font-semibold">Epic</span>
                   <span className="text-slate-600">{epic.title}</span>
                 </div>
-                <MetricsDisplay metrics={metrics} className="ml-4" />
+                <div className="flex items-center gap-2 ml-4">
+                  <CommentCountBadge targetType="epic" targetId={epic.id} />
+                  <MetricsDisplay metrics={metrics} />
+                </div>
               </CardTitle>
             </AccordionTrigger>
           </CardHeader>

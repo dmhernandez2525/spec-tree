@@ -19,6 +19,7 @@ import { AccordionContent, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
 import CommentsPanel from '../comments';
+import { CommentCountBadge } from '../comments/comment-count-badge';
 
 interface TaskProps {
   task: TaskType;
@@ -76,9 +77,12 @@ const Task: React.FC<TaskProps> = ({
             <span className="text-amber-600 font-semibold">Task</span>
             <span className="text-slate-600">{task.title}</span>
           </div>
-          <Badge variant="outline" className="ml-4">
-            Priority: {task.priority}
-          </Badge>
+          <div className="flex items-center gap-2 ml-4">
+            <CommentCountBadge targetType="task" targetId={task.id} />
+            <Badge variant="outline">
+              Priority: {task.priority}
+            </Badge>
+          </div>
         </CardTitle>
       </AccordionTrigger>
 
