@@ -23,6 +23,7 @@ import { collaborationReducer } from '@/lib/store/collaboration-slice';
 import commentsReducer from '@/lib/store/comments-slice';
 import { workspaceReducer } from '@/lib/store/workspace-slice';
 import restApiReducer from '@/lib/store/rest-api-slice';
+import webhookReducer from '@/lib/store/webhook-slice';
 
 // Store reducers for testing
 const testReducer = {
@@ -37,6 +38,7 @@ const testReducer = {
   comments: commentsReducer,
   workspace: workspaceReducer,
   restApi: restApiReducer,
+  webhooks: webhookReducer,
 };
 
 // Test store state type - matches actual RootState shape
@@ -52,6 +54,7 @@ export interface TestStoreState {
   comments: ReturnType<typeof commentsReducer>;
   workspace: ReturnType<typeof workspaceReducer>;
   restApi: ReturnType<typeof restApiReducer>;
+  webhooks: ReturnType<typeof webhookReducer>;
 }
 
 // Create a test store with optional preloaded state
