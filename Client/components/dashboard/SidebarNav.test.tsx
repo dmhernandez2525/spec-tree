@@ -25,6 +25,11 @@ vi.mock('next/link', () => ({
   ),
 }));
 
+// Mock WorkspaceSwitcher (uses Redux hooks)
+vi.mock('./organization/WorkspaceSwitcher', () => ({
+  WorkspaceSwitcher: () => null,
+}));
+
 // Mock the scroll-area component directly
 vi.mock('@/components/ui/scroll-area', () => ({
   ScrollArea: ({

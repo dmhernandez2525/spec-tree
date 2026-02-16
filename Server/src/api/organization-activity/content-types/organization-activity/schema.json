@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_activities",
+  "info": {
+    "singularName": "organization-activity",
+    "pluralName": "organization-activities",
+    "displayName": "Organization Activity"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "edit",
+        "comment",
+        "generation",
+        "invite",
+        "member_change",
+        "permission_change",
+        "template",
+        "api_key",
+        "quota",
+        "settings"
+      ],
+      "required": true
+    },
+    "actorId": {
+      "type": "string"
+    },
+    "actorName": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "json"
+    },
+    "happenedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "activities"
+    }
+  }
+}

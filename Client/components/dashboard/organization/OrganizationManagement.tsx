@@ -9,6 +9,11 @@ import { OrganizationSettings } from './settings/OrganizationSettings';
 import { SSOSettings } from './settings/SSOSettings';
 import { IntegrationsSettings } from './settings/IntegrationsSettings';
 import { AISettings } from './settings/AISettings';
+import { ActivityFeed } from './ActivityFeed';
+import { AuditLogViewer } from './AuditLogViewer';
+import { TemplateLibrary } from './TemplateLibrary';
+import { APIKeyManager } from './APIKeyManager';
+import { QuotaDisplay } from './QuotaDisplay';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -134,6 +139,30 @@ export function OrganizationManagement() {
               AI Settings
             </div>
           </TabsTrigger>
+          <TabsTrigger value="activity" className="relative px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Icons.eye className="h-4 w-4" />
+              Activity
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="templates" className="relative px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Icons.sparkles className="h-4 w-4" />
+              Templates
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="api-keys" className="relative px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Icons.key className="h-4 w-4" />
+              API Keys
+            </div>
+          </TabsTrigger>
+          <TabsTrigger value="audit" className="relative px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Icons.shield className="h-4 w-4" />
+              Audit Log
+            </div>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="members" className="space-y-6">
@@ -198,6 +227,39 @@ export function OrganizationManagement() {
             <div className="flex h-[200px] items-center justify-center">
               <p className="text-muted-foreground">
                 You dont have permission to manage AI settings
+              </p>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="activity" className="space-y-6">
+          <ActivityFeed />
+          <QuotaDisplay />
+        </TabsContent>
+
+        <TabsContent value="templates">
+          <TemplateLibrary />
+        </TabsContent>
+
+        <TabsContent value="api-keys">
+          {canManageSettings ? (
+            <APIKeyManager />
+          ) : (
+            <div className="flex h-[200px] items-center justify-center">
+              <p className="text-muted-foreground">
+                You dont have permission to manage API keys
+              </p>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="audit">
+          {canManageSettings ? (
+            <AuditLogViewer />
+          ) : (
+            <div className="flex h-[200px] items-center justify-center">
+              <p className="text-muted-foreground">
+                You dont have permission to view audit logs
               </p>
             </div>
           )}

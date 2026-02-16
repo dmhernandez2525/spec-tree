@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_members",
+  "info": {
+    "singularName": "organization-member",
+    "pluralName": "organization-members",
+    "displayName": "Organization Member"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "role": {
+      "type": "enumeration",
+      "enum": [
+        "admin",
+        "editor",
+        "viewer"
+      ],
+      "required": true,
+      "default": "viewer"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "active",
+        "invited",
+        "removed"
+      ],
+      "default": "active"
+    },
+    "joinedAt": {
+      "type": "datetime"
+    },
+    "lastActiveAt": {
+      "type": "datetime"
+    },
+    "invitedById": {
+      "type": "string"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "members"
+    }
+  }
+}

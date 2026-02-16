@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_audit_logs",
+  "info": {
+    "singularName": "organization-audit-log",
+    "pluralName": "organization-audit-logs",
+    "displayName": "Organization Audit Log"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "action": {
+      "type": "enumeration",
+      "enum": [
+        "permission_change",
+        "member_added",
+        "member_removed",
+        "invite_sent",
+        "invite_accepted",
+        "invite_declined",
+        "quota_updated",
+        "api_key_created",
+        "api_key_revoked",
+        "settings_updated",
+        "template_created"
+      ],
+      "required": true
+    },
+    "actorId": {
+      "type": "string"
+    },
+    "actorName": {
+      "type": "string"
+    },
+    "targetId": {
+      "type": "string"
+    },
+    "targetType": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "json"
+    },
+    "happenedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "auditLogs"
+    }
+  }
+}

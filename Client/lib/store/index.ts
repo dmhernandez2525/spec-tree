@@ -8,6 +8,7 @@ import sowReducer from './sow-slice';
 import demoReducer from './demo-slice';
 import { collaborationReducer } from './collaboration-slice';
 import commentsReducer from './comments-slice';
+import { workspaceReducer } from './workspace-slice';
 
 export const makeStore = () => {
   return configureStore({
@@ -15,6 +16,7 @@ export const makeStore = () => {
       auth: authReducer,
       user: userReducer,
       organization: organizationReducer,
+      workspace: workspaceReducer,
       settings: settingsReducer,
       subscription: subscriptionReducer,
       sow: sowReducer,
