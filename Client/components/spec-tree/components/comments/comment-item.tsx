@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -26,29 +27,68 @@ interface CommentItemProps {
   isReadOnly?: boolean;
 }
 
+const MAX_NESTING_DEPTH = 3;
+
 const formatTimestamp = (timestamp: string) => {
   const date = new Date(timestamp);
   if (Number.isNaN(date.getTime())) return 'Just now';
   return formatDistanceToNow(date, { addSuffix: true });
 };
 
+const renderMarkdown = (text: string): React.ReactNode[] => {
+  const parts: React.ReactNode[] = [];
+  const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null = regex.exec(text);
+
+  while (match !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    const token = match[0];
+    if (token.startsWith('`') && token.endsWith('`')) {
+      parts.push(
+        <code key={match.index} className="rounded bg-muted px-1 py-0.5 text-xs font-mono">
+          {token.slice(1, -1)}
+        </code>
+      );
+    } else if (token.startsWith('**') && token.endsWith('**')) {
+      parts.push(<strong key={match.index}>{token.slice(2, -2)}</strong>);
+    } else if (token.startsWith('*') && token.endsWith('*')) {
+      parts.push(<em key={match.index}>{token.slice(1, -1)}</em>);
+    }
+    lastIndex = match.index + token.length;
+    match = regex.exec(text);
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts;
+};
+
 const renderBody = (body: string, mentionCandidates: MentionCandidate[]) => {
   if (!body) return <span className="text-muted-foreground italic">Comment deleted</span>;
-  const tokens = body.split(/(@[a-zA-Z0-9._-]+)/g);
+
   const mentionValues = new Set(
     mentionCandidates.map((candidate) => `@${candidate.value}`)
   );
+
+  const mentionRegex = /(@[a-zA-Z0-9._-]+)/g;
+  const segments = body.split(mentionRegex);
+
   return (
     <>
-      {tokens.map((token, index) => {
-        if (mentionValues.has(token)) {
+      {segments.map((segment, index) => {
+        if (mentionValues.has(segment)) {
           return (
-            <span key={`${token}-${index}`} className="font-medium text-primary">
-              {token}
+            <span key={`mention-${index}`} className="font-medium text-primary">
+              {segment}
             </span>
           );
         }
-        return <span key={`${token}-${index}`}>{token}</span>;
+        return <React.Fragment key={`text-${index}`}>{renderMarkdown(segment)}</React.Fragment>;
       })}
     </>
   );
@@ -68,13 +108,17 @@ const CommentItem: React.FC<CommentItemProps> = ({
   isReadOnly = false,
 }) => {
   const [isReplying, setIsReplying] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const padding = useMemo(() => Math.min(depth * 16, 48), [depth]);
 
-  // Get permission checks for this comment
+  const canNestDeeper = depth < MAX_NESTING_DEPTH;
+
   const permissions = useMemo(
     () => getCommentPermissions(comment, currentUserId, userRole),
     [comment, currentUserId, userRole]
   );
+
+  const replyParentId = canNestDeeper ? comment.id : comment.parentId || comment.id;
 
   return (
     <div className={cn('space-y-3', depth > 0 && 'border-l border-border pl-4')}>
@@ -93,7 +137,9 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </div>
         </div>
 
-        <div className="mt-3 text-sm text-foreground">{renderBody(comment.body, mentionCandidates)}</div>
+        <div className="mt-3 text-sm text-foreground whitespace-pre-wrap">
+          {renderBody(comment.body, mentionCandidates)}
+        </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Button
@@ -140,7 +186,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           <div className="mt-4">
             <CommentComposer
               onSubmit={async (body, mentions) => {
-                await onReply(body, mentions, comment.id);
+                await onReply(body, mentions, replyParentId);
                 setIsReplying(false);
               }}
               onCancel={() => setIsReplying(false)}
@@ -153,23 +199,39 @@ const CommentItem: React.FC<CommentItemProps> = ({
       </div>
 
       {replies.length > 0 && (
-        <div className="space-y-3" style={{ paddingLeft: padding }}>
-          {replies.map((reply) => (
-            <CommentItem
-              key={reply.id}
-              comment={reply}
-              replies={reply.replies || []}
-              depth={depth + 1}
-              mentionCandidates={mentionCandidates}
-              currentUserId={currentUserId}
-              userRole={userRole}
-              onReply={onReply}
-              onResolve={onResolve}
-              onReopen={onReopen}
-              onDelete={onDelete}
-              isReadOnly={isReadOnly}
-            />
-          ))}
+        <div style={{ paddingLeft: padding }}>
+          <button
+            type="button"
+            className="mb-2 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            onClick={() => setIsCollapsed((prev) => !prev)}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="h-3 w-3" />
+            ) : (
+              <ChevronDown className="h-3 w-3" />
+            )}
+            {replies.length} {replies.length === 1 ? 'reply' : 'replies'}
+          </button>
+          {!isCollapsed && (
+            <div className="space-y-3">
+              {replies.map((reply) => (
+                <CommentItem
+                  key={reply.id}
+                  comment={reply}
+                  replies={reply.replies || []}
+                  depth={depth + 1}
+                  mentionCandidates={mentionCandidates}
+                  currentUserId={currentUserId}
+                  userRole={userRole}
+                  onReply={onReply}
+                  onResolve={onResolve}
+                  onReopen={onReopen}
+                  onDelete={onDelete}
+                  isReadOnly={isReadOnly}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -47,6 +47,7 @@ import generateId from '../../lib/utils/generate-id';
 import { calculateTotalTasks } from '../../lib/utils/calculation-utils';
 import useActivityLogger from '../../lib/hooks/useActivityLogger';
 import CommentsPanel from '../comments';
+import { CommentCountBadge } from '../comments/comment-count-badge';
 
 interface UserStoryProps {
   userStory: UserStoryType;
@@ -205,7 +206,10 @@ const UserStory: React.FC<UserStoryProps> = ({
             <span className="text-green-600 font-semibold">User Story</span>
             <span className="text-slate-600">{userStory.title}</span>
           </div>
-          <MetricsDisplay metrics={metrics} className="ml-4" />
+          <div className="flex items-center gap-2 ml-4">
+            <CommentCountBadge targetType="userStory" targetId={userStory.id} />
+            <MetricsDisplay metrics={metrics} />
+          </div>
         </CardTitle>
       </AccordionTrigger>
 
