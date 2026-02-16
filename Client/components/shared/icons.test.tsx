@@ -303,6 +303,6 @@ describe('Icons object immutability', () => {
 
   it('has expected number of icon mappings', () => {
     const iconKeys = Object.keys(Icons);
-    expect(iconKeys.length).toBe(38);
+    expect(iconKeys.length).toBe(39);
   });
 });

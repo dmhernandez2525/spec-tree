@@ -36,6 +36,7 @@ import {
   Key,
   XIcon,
   ChevronLeft,
+  Globe,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -79,4 +80,5 @@ export const Icons = {
   key: Key,
   xIcon: XIcon,
   chevronLeft: ChevronLeft,
+  globe: Globe,
 } as const;

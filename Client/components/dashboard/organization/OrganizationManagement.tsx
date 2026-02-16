@@ -14,6 +14,7 @@ import { AuditLogViewer } from './AuditLogViewer';
 import { TemplateLibrary } from './TemplateLibrary';
 import { APIKeyManager } from './APIKeyManager';
 import { QuotaDisplay } from './QuotaDisplay';
+import ApiManagementPanel from '../api/ApiManagementPanel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -163,6 +164,12 @@ export function OrganizationManagement() {
               Audit Log
             </div>
           </TabsTrigger>
+          <TabsTrigger value="rest-api" className="relative px-4 py-2">
+            <div className="flex items-center gap-2">
+              <Icons.globe className="h-4 w-4" />
+              REST API
+            </div>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="members" className="space-y-6">
@@ -260,6 +267,18 @@ export function OrganizationManagement() {
             <div className="flex h-[200px] items-center justify-center">
               <p className="text-muted-foreground">
                 You dont have permission to view audit logs
+              </p>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="rest-api">
+          {canManageSettings ? (
+            <ApiManagementPanel />
+          ) : (
+            <div className="flex h-[200px] items-center justify-center">
+              <p className="text-muted-foreground">
+                You do not have permission to manage the REST API
               </p>
             </div>
           )}
