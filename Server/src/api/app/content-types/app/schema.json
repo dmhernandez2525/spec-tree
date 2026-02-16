@@ -44,6 +44,12 @@
       "relation": "manyToOne",
       "target": "api::organization.organization",
       "inversedBy": "apps"
+    },
+    "versionSnapshots": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::version-snapshot.version-snapshot",
+      "mappedBy": "app"
     }
   }
 }

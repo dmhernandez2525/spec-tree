@@ -13,6 +13,8 @@ import {
 } from '../../lib/utils/import-export';
 import { addEpics, addFeatures, addUserStories, addTasks } from '@/lib/store/sow-slice';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
+import { dispatchAutoSnapshotEvent } from '../../lib/utils/version-snapshot-events';
 
 import {
   DropdownMenu,
@@ -59,7 +61,7 @@ export default function ImportExport({ appId }: ImportExportProps) {
       toast.success('Exported to JSON successfully');
     } catch (error) {
       toast.error('Failed to export to JSON');
-      console.error(error);
+      logger.error('ImportExport', 'JSON export failed', { error });
     }
   };
 
@@ -71,7 +73,7 @@ export default function ImportExport({ appId }: ImportExportProps) {
       toast.success('Exported to CSV successfully');
     } catch (error) {
       toast.error('Failed to export to CSV');
-      console.error(error);
+      logger.error('ImportExport', 'CSV export failed', { error });
     }
   };
 
@@ -83,7 +85,7 @@ export default function ImportExport({ appId }: ImportExportProps) {
       toast.success('Exported to Markdown successfully');
     } catch (error) {
       toast.error('Failed to export to Markdown');
-      console.error(error);
+      logger.error('ImportExport', 'Markdown export failed', { error });
     }
   };
 
@@ -132,7 +134,7 @@ export default function ImportExport({ appId }: ImportExportProps) {
       }
     } catch (error) {
       toast.error('Failed to read file');
-      console.error(error);
+      logger.error('ImportExport', 'File read failed', { error });
     }
 
     // Reset file input
@@ -190,11 +192,15 @@ export default function ImportExport({ appId }: ImportExportProps) {
       }
 
       toast.success('Import completed successfully');
+      dispatchAutoSnapshotEvent({
+        eventType: 'import',
+        label: `Import ${importPreview.type.toUpperCase()}`,
+      });
       setShowImportDialog(false);
       setImportPreview(null);
     } catch (error) {
       toast.error('Failed to import data');
-      console.error(error);
+      logger.error('ImportExport', 'Import failed', { error });
     }
   };
 

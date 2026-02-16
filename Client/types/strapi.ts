@@ -156,6 +156,24 @@ export interface StrapiCommentNotification extends StrapiDocument {
 }
 
 /**
+ * Raw Version Snapshot data from Strapi API
+ */
+export interface StrapiVersionSnapshot extends StrapiDocument {
+  name: string;
+  description?: string | null;
+  snapshot: unknown;
+  createdById?: string | null;
+  createdByName?: string | null;
+  tags?: string[] | null;
+  isMilestone?: boolean;
+  milestoneTag?: string | null;
+  sourceEvent?: string | null;
+  branchName?: string | null;
+  parentSnapshot?: StrapiRelationRef | StrapiVersionSnapshot;
+  app?: StrapiRelationRef | StrapiApp;
+}
+
+/**
  * Full app data response (deeply populated)
  */
 export interface StrapiAppDataResponse {

@@ -10,6 +10,7 @@ This directory contains Software Design Documents for Spec Tree features. Each f
 | Phase 2 | AI Tool Integration | [PHASE_2_OVERVIEW.md](./phase-2/PHASE_2_OVERVIEW.md) |
 | Phase 3 | Advanced Integrations | [PHASE_3_OVERVIEW.md](./phase-3/PHASE_3_OVERVIEW.md) |
 | Phase 4 | Enterprise & Scale | [PHASE_4_OVERVIEW.md](./phase-4/PHASE_4_OVERVIEW.md) |
+| Phase 6 | Collaboration | [PHASE_6_OVERVIEW.md](./phase-6/PHASE_6_OVERVIEW.md) |
 
 ## Directory Structure
 
@@ -27,8 +28,11 @@ sdd/
 │   └── F2.1.5-copilot-export.md
 ├── phase-3/                          # Advanced Integrations (Q3 2026)
 │   └── PHASE_3_OVERVIEW.md          # Phase overview
-└── phase-4/                          # Enterprise & Scale (Q4 2026)
-    └── PHASE_4_OVERVIEW.md          # Phase overview
+├── phase-4/                          # Enterprise & Scale (Q4 2026)
+│   └── PHASE_4_OVERVIEW.md          # Phase overview
+└── phase-6/                          # Collaboration
+    ├── PHASE_6_OVERVIEW.md          # Phase overview
+    └── F2.3.3-version-control.md    # Feature SDD
 ```
 
 ## SDD Workflow
@@ -69,7 +73,7 @@ Examples:
 
 Feature IDs follow: `F{Phase}.{Category}.{Number}`
 
-- **Phase**: 1-4 (Foundation, AI Tools, Advanced, Enterprise)
+- **Phase**: 1+ (project-defined phase groups)
 - **Category**: Subcategory within phase
 - **Number**: Sequential feature number
 
@@ -106,4 +110,4 @@ Every SDD must include:
 
 ---
 
-**Last Updated:** January 17, 2026
+**Last Updated:** February 15, 2026

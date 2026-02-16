@@ -1,0 +1,75 @@
+{
+  "kind": "collectionType",
+  "collectionName": "version_snapshots",
+  "info": {
+    "singularName": "version-snapshot",
+    "pluralName": "version-snapshots",
+    "displayName": "Version Snapshot"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "tags": {
+      "type": "json"
+    },
+    "isMilestone": {
+      "type": "boolean",
+      "default": false
+    },
+    "milestoneTag": {
+      "type": "string"
+    },
+    "sourceEvent": {
+      "type": "enumeration",
+      "enum": [
+        "manual",
+        "batch-generation",
+        "bulk-move",
+        "import",
+        "restore",
+        "branch"
+      ],
+      "default": "manual"
+    },
+    "branchName": {
+      "type": "string"
+    },
+    "snapshot": {
+      "type": "json",
+      "required": true
+    },
+    "createdById": {
+      "type": "string"
+    },
+    "createdByName": {
+      "type": "string"
+    },
+    "app": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::app.app",
+      "inversedBy": "versionSnapshots"
+    },
+    "parentSnapshot": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::version-snapshot.version-snapshot",
+      "inversedBy": "childSnapshots"
+    },
+    "childSnapshots": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::version-snapshot.version-snapshot",
+      "mappedBy": "parentSnapshot"
+    }
+  }
+}

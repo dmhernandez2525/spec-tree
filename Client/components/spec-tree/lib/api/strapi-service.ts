@@ -19,7 +19,19 @@ import type {
   NotificationChannel,
   NotificationStatus,
 } from '@/types/comments';
-import type { StrapiApp, StrapiComment, StrapiCommentNotification } from '@/types/strapi';
+import type {
+  StrapiApp,
+  StrapiComment,
+  StrapiCommentNotification,
+  StrapiVersionSnapshot,
+} from '@/types/strapi';
+import type {
+  SowSnapshot,
+  VersionSnapshot,
+  VersionSnapshotSourceEvent,
+} from '@/types/version-snapshot';
+import { isVersionSnapshotSourceEvent } from '@/types/version-snapshot';
+import { logger } from '@/lib/logger';
 
 // Base Strapi response types
 interface StrapiResponse<T> {
@@ -107,6 +119,21 @@ interface UpdateCommentRequest {
   resolvedBy?: string | null;
 }
 
+interface CreateVersionSnapshotRequest {
+  appId: string;
+  name: string;
+  description?: string;
+  snapshot: SowSnapshot;
+  createdById?: string | null;
+  createdByName?: string | null;
+  tags?: string[];
+  isMilestone?: boolean;
+  milestoneTag?: string | null;
+  sourceEvent?: VersionSnapshotSourceEvent;
+  branchName?: string | null;
+  parentSnapshotId?: string | null;
+}
+
 const COMMENT_TARGET_FIELD: Record<CommentTargetType, 'app' | 'epic' | 'feature' | 'userStory' | 'task'> = {
   app: 'app',
   epic: 'epic',
@@ -133,6 +160,17 @@ const NOTIFICATION_STATUS_MAP: Record<
 
 const resolveDocumentId = (relation?: { documentId: string } | null): string | undefined =>
   relation?.documentId;
+
+const normalizeSnapshotTags = (value: unknown): string[] => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((tag): tag is string => typeof tag === 'string')
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0);
+};
 
 class StrapiService {
   private instance: AxiosInstance;
@@ -167,7 +205,9 @@ class StrapiService {
   private handleError(error: unknown): never {
     if (axios.isAxiosError(error) && error.response?.data?.error) {
       const strapiError = error.response.data as StrapiError;
-      console.error('Strapi API Error:', strapiError.error.message);
+      logger.error('StrapiService', 'Strapi API Error', {
+        message: strapiError.error.message,
+      });
       throw new Error(strapiError.error.message);
     }
     if (error instanceof Error) {
@@ -221,6 +261,39 @@ class StrapiService {
       channel,
       status,
       createdAt: notification.createdAt,
+    };
+  }
+
+  private mapStrapiVersionSnapshot(
+    snapshot: StrapiVersionSnapshot
+  ): VersionSnapshot {
+    const sourceEvent = isVersionSnapshotSourceEvent(snapshot.sourceEvent)
+      ? snapshot.sourceEvent
+      : 'manual';
+    const parentSnapshotId = resolveDocumentId(
+      snapshot.parentSnapshot && 'documentId' in snapshot.parentSnapshot
+        ? snapshot.parentSnapshot
+        : null
+    );
+
+    return {
+      id: snapshot.documentId,
+      appId:
+        snapshot.app && 'documentId' in snapshot.app
+          ? snapshot.app.documentId
+          : '',
+      name: snapshot.name || 'Snapshot',
+      description: snapshot.description || null,
+      snapshot: snapshot.snapshot as SowSnapshot,
+      createdAt: snapshot.createdAt,
+      createdById: snapshot.createdById || null,
+      createdByName: snapshot.createdByName || null,
+      tags: normalizeSnapshotTags(snapshot.tags),
+      isMilestone: Boolean(snapshot.isMilestone),
+      milestoneTag: snapshot.milestoneTag || null,
+      sourceEvent,
+      branchName: snapshot.branchName || null,
+      parentSnapshotId: parentSnapshotId || null,
     };
   }
 
@@ -714,6 +787,79 @@ class StrapiService {
           })
         )
       );
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  // Version Snapshots
+  async fetchVersionSnapshots(appId: string): Promise<VersionSnapshot[]> {
+    const data = await this.fetch<StrapiVersionSnapshot[]>(
+      '/version-snapshots',
+      {
+        filters: {
+          app: {
+            documentId: appId,
+          },
+        },
+        populate: {
+          app: { fields: ['documentId'] },
+          parentSnapshot: { fields: ['documentId'] },
+        },
+        sort: ['createdAt:desc'],
+      }
+    );
+
+    return data.map((snapshot) => this.mapStrapiVersionSnapshot(snapshot));
+  }
+
+  async createVersionSnapshot(
+    data: CreateVersionSnapshotRequest
+  ): Promise<VersionSnapshot> {
+    const {
+      appId,
+      snapshot,
+      parentSnapshotId,
+      tags,
+      isMilestone,
+      sourceEvent,
+      ...payload
+    } = data;
+
+    const requestData: Record<string, unknown> = {
+      ...payload,
+      snapshot,
+      tags: tags || [],
+      isMilestone: Boolean(isMilestone),
+      sourceEvent: sourceEvent || 'manual',
+      app: {
+        connect: [appId],
+      },
+    };
+
+    if (parentSnapshotId) {
+      requestData.parentSnapshot = {
+        connect: [parentSnapshotId],
+      };
+    }
+
+    try {
+      const response = await this.instance.post(
+        '/version-snapshots',
+        {
+          data: requestData,
+        },
+        {
+          params: {
+            populate: {
+              app: { fields: ['documentId'] },
+              parentSnapshot: { fields: ['documentId'] },
+            },
+          },
+        }
+      );
+
+      return this.mapStrapiVersionSnapshot(response.data.data);
     } catch (error) {
       this.handleError(error);
     }
