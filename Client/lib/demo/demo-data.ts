@@ -1,6 +1,8 @@
 /**
  * Demo data for SpecTree demo mode
- * Contains sample spec trees showcasing the application's full functionality
+ * Contains sample spec trees showcasing the application's full functionality,
+ * as well as demo users, organization, workspace, and a TaskFlow project
+ * for the portfolio demo mode system.
  */
 
 import {
@@ -11,6 +13,568 @@ import {
   App,
   SowState,
 } from '@/components/spec-tree/lib/types/work-items';
+
+// ============================================================================
+// Demo Mode Users, Organization, and Workspace
+// ============================================================================
+
+export interface DemoUser {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'editor' | 'viewer';
+  avatarUrl: string | null;
+}
+
+export interface DemoOrganization {
+  id: string;
+  name: string;
+  slug: string;
+  plan: string;
+}
+
+export interface DemoWorkspace {
+  id: string;
+  name: string;
+  organizationId: string;
+  isDefault: boolean;
+}
+
+export const DEMO_USERS: DemoUser[] = [
+  {
+    id: 'demo-admin',
+    email: 'admin@demo.example',
+    name: 'Alex Demo',
+    role: 'admin',
+    avatarUrl: null,
+  },
+  {
+    id: 'demo-editor',
+    email: 'editor@demo.example',
+    name: 'Jordan Demo',
+    role: 'editor',
+    avatarUrl: null,
+  },
+  {
+    id: 'demo-viewer',
+    email: 'viewer@demo.example',
+    name: 'Sam Demo',
+    role: 'viewer',
+    avatarUrl: null,
+  },
+];
+
+export const DEMO_ORGANIZATION: DemoOrganization = {
+  id: 'demo-org',
+  name: 'SpecTree Demo Org',
+  slug: 'spectree-demo',
+  plan: 'pro',
+};
+
+export const DEMO_WORKSPACE: DemoWorkspace = {
+  id: 'demo-ws',
+  name: 'Demo Workspace',
+  organizationId: 'demo-org',
+  isDefault: true,
+};
+
+// ============================================================================
+// TaskFlow Project Demo Data (Epics, Features, User Stories, Tasks)
+// ============================================================================
+
+export const DEMO_EPICS: EpicType[] = [
+  {
+    id: 'demo-epic-1',
+    documentId: 'demo-epic-1',
+    parentAppId: 'demo-app-taskflow',
+    title: 'User Authentication System',
+    description:
+      'Implement a complete authentication system with secure login, registration, password recovery, and session management for the TaskFlow application.',
+    goal: 'Enable users to securely access their TaskFlow accounts with multiple authentication methods.',
+    successCriteria:
+      'All authentication flows complete in under 2 seconds with zero security vulnerabilities in penetration testing.',
+    dependencies: 'Database schema, Email service, OAuth provider accounts',
+    timeline: '3 weeks',
+    resources: '2 Full-stack developers, 1 Security reviewer',
+    risksAndMitigation: [
+      {
+        resolve: [{ text: 'Token expiry edge cases: implement refresh token rotation' }],
+        own: [{ text: 'Password storage: use bcrypt with cost factor 12' }],
+        accept: [{ text: 'OAuth provider outages: provide email fallback' }],
+        mitigate: [{ text: 'Brute force attacks: add rate limiting and account lockout' }],
+      },
+    ],
+    featureIds: ['demo-feature-1', 'demo-feature-2'],
+    notes: 'Foundational epic; all other epics depend on this being completed first.',
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-epic-2',
+    documentId: 'demo-epic-2',
+    parentAppId: 'demo-app-taskflow',
+    title: 'Project Dashboard',
+    description:
+      'Build a comprehensive project dashboard that provides real-time visibility into project progress, task status, and team workload across all active projects.',
+    goal: 'Give project managers and team members a single view of project health and progress.',
+    successCriteria:
+      'Dashboard loads in under 1 second and updates in real-time when any team member modifies a task.',
+    dependencies: 'Authentication system, Project data models, WebSocket infrastructure',
+    timeline: '4 weeks',
+    resources: '2 Frontend developers, 1 Backend developer, 1 UX designer',
+    risksAndMitigation: [
+      {
+        resolve: [{ text: 'Real-time sync conflicts: implement optimistic UI with conflict resolution' }],
+        own: [{ text: 'Dashboard performance: use virtualized lists and lazy loading' }],
+        accept: [{ text: 'Browser compatibility gaps: graceful degradation for older browsers' }],
+        mitigate: [{ text: 'Data staleness: add polling fallback when WebSocket disconnects' }],
+      },
+    ],
+    featureIds: ['demo-feature-3', 'demo-feature-4'],
+    notes: 'Key differentiator for TaskFlow; prioritize user experience and speed.',
+    contextualQuestions: [],
+  },
+];
+
+export const DEMO_FEATURES: FeatureType[] = [
+  {
+    id: 'demo-feature-1',
+    documentId: 'demo-feature-1',
+    parentEpicId: 'demo-epic-1',
+    title: 'Email and Password Authentication',
+    description:
+      'Allow users to register and sign in with email and password, including email verification and password recovery.',
+    details:
+      'Implement secure registration with email validation, password strength enforcement, email verification tokens, and a password reset flow using time-limited tokens.',
+    dependencies: 'Email service (SendGrid), User database table',
+    acceptanceCriteria: [
+      { text: 'Users can register with a valid email and a password meeting strength requirements' },
+      { text: 'Verification email is sent within 30 seconds of registration' },
+      { text: 'Password reset link expires after 1 hour' },
+      { text: 'Failed login attempts are rate-limited to 5 per minute' },
+    ],
+    userStoryIds: ['demo-story-1', 'demo-story-2'],
+    notes: 'Follow OWASP authentication best practices.',
+    priority: 'High',
+    effort: 'Medium',
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-feature-2',
+    documentId: 'demo-feature-2',
+    parentEpicId: 'demo-epic-1',
+    title: 'OAuth Social Login',
+    description:
+      'Enable users to authenticate using third-party providers such as Google and GitHub for faster onboarding.',
+    details:
+      'Integrate OAuth 2.0 flows for Google and GitHub, with automatic account linking when email addresses match existing accounts.',
+    dependencies: 'Google OAuth credentials, GitHub OAuth app, Account linking logic',
+    acceptanceCriteria: [
+      { text: 'Users can sign in with their Google account in under 3 clicks' },
+      { text: 'Users can sign in with their GitHub account in under 3 clicks' },
+      { text: 'Existing email accounts are automatically linked to OAuth providers' },
+      { text: 'Users can disconnect OAuth providers from account settings' },
+    ],
+    userStoryIds: ['demo-story-3', 'demo-story-4'],
+    notes: 'Prioritize Google login for initial release; GitHub is secondary.',
+    priority: 'Medium',
+    effort: 'Medium',
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-feature-3',
+    documentId: 'demo-feature-3',
+    parentEpicId: 'demo-epic-2',
+    title: 'Project Overview Panel',
+    description:
+      'Display a high-level summary of each project including progress bars, milestone status, and recent activity.',
+    details:
+      'Build a card-based layout showing project completion percentage, upcoming milestones, recent task changes, and team member avatars. Support both grid and list view modes.',
+    dependencies: 'Project data API, User avatar service',
+    acceptanceCriteria: [
+      { text: 'Project cards show completion percentage with visual progress bar' },
+      { text: 'Recent activity feed shows the last 10 changes per project' },
+      { text: 'Users can toggle between grid and list view' },
+      { text: 'Projects can be filtered by status: active, archived, or all' },
+    ],
+    userStoryIds: ['demo-story-5', 'demo-story-6'],
+    notes: 'Use skeleton loading states for a polished experience.',
+    priority: 'High',
+    effort: 'High',
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-feature-4',
+    documentId: 'demo-feature-4',
+    parentEpicId: 'demo-epic-2',
+    title: 'Task Analytics and Charts',
+    description:
+      'Provide visual analytics showing task distribution, burndown charts, and team velocity over time.',
+    details:
+      'Implement interactive charts using a charting library. Include burndown chart, velocity trend, task status distribution pie chart, and assignee workload bar chart.',
+    dependencies: 'Task data API, Charting library (Recharts)',
+    acceptanceCriteria: [
+      { text: 'Burndown chart updates automatically as tasks are completed' },
+      { text: 'Velocity chart shows data for the last 6 sprints' },
+      { text: 'Task distribution chart can be filtered by assignee or label' },
+      { text: 'Charts are responsive and readable on tablets and desktops' },
+    ],
+    userStoryIds: ['demo-story-7', 'demo-story-8'],
+    notes: 'Consider adding export-to-PDF functionality in a future iteration.',
+    priority: 'Medium',
+    effort: 'High',
+    contextualQuestions: [],
+  },
+];
+
+export const DEMO_USER_STORIES: UserStoryType[] = [
+  {
+    id: 'demo-story-1',
+    documentId: 'demo-story-1',
+    parentFeatureId: 'demo-feature-1',
+    title: 'User Registration',
+    role: 'new user',
+    action: 'register for an account with my email and a password',
+    goal: 'so that I can access TaskFlow and start managing my projects',
+    points: '5',
+    acceptanceCriteria: [
+      { text: 'Registration form validates email format in real-time' },
+      { text: 'Password strength indicator is displayed as the user types' },
+      { text: 'Duplicate email addresses are rejected with a clear message' },
+      { text: 'Successful registration redirects to a verification prompt page' },
+    ],
+    notes: 'Include CAPTCHA for bot prevention on the registration form.',
+    taskIds: ['demo-task-1', 'demo-task-2'],
+    developmentOrder: 1,
+    dependentUserStoryIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-story-2',
+    documentId: 'demo-story-2',
+    parentFeatureId: 'demo-feature-1',
+    title: 'Password Recovery',
+    role: 'registered user',
+    action: 'reset my password using my email address',
+    goal: 'so that I can regain access to my account if I forget my credentials',
+    points: '3',
+    acceptanceCriteria: [
+      { text: 'Reset email is sent within 30 seconds of request' },
+      { text: 'Reset link expires after 1 hour' },
+      { text: 'New password must meet the same strength requirements as registration' },
+      { text: 'User is notified by email after a successful password change' },
+    ],
+    notes: 'Never reveal whether an email exists in the system for security reasons.',
+    taskIds: ['demo-task-3', 'demo-task-4'],
+    developmentOrder: 2,
+    dependentUserStoryIds: ['demo-story-1'],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-story-3',
+    documentId: 'demo-story-3',
+    parentFeatureId: 'demo-feature-2',
+    title: 'Google Sign-In',
+    role: 'user',
+    action: 'sign in using my Google account',
+    goal: 'so that I can quickly access TaskFlow without creating a separate password',
+    points: '5',
+    acceptanceCriteria: [
+      { text: 'Google sign-in button is displayed on the login page' },
+      { text: 'First-time users have an account created automatically' },
+      { text: 'Returning users are logged in and redirected to their dashboard' },
+      { text: 'Account linking prompt appears if email already exists' },
+    ],
+    notes: 'Request minimal scopes: email and profile only.',
+    taskIds: ['demo-task-5', 'demo-task-6'],
+    developmentOrder: 1,
+    dependentUserStoryIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-story-4',
+    documentId: 'demo-story-4',
+    parentFeatureId: 'demo-feature-2',
+    title: 'GitHub Sign-In',
+    role: 'developer',
+    action: 'sign in using my GitHub account',
+    goal: 'so that I can connect my development workflow with TaskFlow seamlessly',
+    points: '5',
+    acceptanceCriteria: [
+      { text: 'GitHub sign-in button is displayed on the login page' },
+      { text: 'User profile is populated from GitHub data on first login' },
+      { text: 'GitHub username is stored for future integration features' },
+      { text: 'OAuth token is securely stored for potential API access' },
+    ],
+    notes: 'This lays groundwork for future GitHub issue sync features.',
+    taskIds: ['demo-task-7', 'demo-task-8'],
+    developmentOrder: 2,
+    dependentUserStoryIds: ['demo-story-3'],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-story-5',
+    documentId: 'demo-story-5',
+    parentFeatureId: 'demo-feature-3',
+    title: 'View Project Cards',
+    role: 'project manager',
+    action: 'see all my projects displayed as summary cards on the dashboard',
+    goal: 'so that I can quickly assess the health of each project at a glance',
+    points: '8',
+    acceptanceCriteria: [
+      { text: 'Each project card shows title, progress percentage, and status badge' },
+      { text: 'Cards display the number of open, in-progress, and completed tasks' },
+      { text: 'Clicking a card navigates to the full project detail view' },
+      { text: 'Empty state is shown when no projects exist with a create button' },
+    ],
+    notes: 'Skeleton loaders should appear while data is being fetched.',
+    taskIds: ['demo-task-9', 'demo-task-10'],
+    developmentOrder: 1,
+    dependentUserStoryIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-story-6',
+    documentId: 'demo-story-6',
+    parentFeatureId: 'demo-feature-3',
+    title: 'Filter and Sort Projects',
+    role: 'team member',
+    action: 'filter and sort the project list by status, date, or name',
+    goal: 'so that I can find specific projects quickly when working across many teams',
+    points: '5',
+    acceptanceCriteria: [
+      { text: 'Filter dropdown allows selecting active, archived, or all projects' },
+      { text: 'Sort options include name, creation date, and last updated' },
+      { text: 'Applied filters persist across page navigation within the session' },
+      { text: 'Filter and sort state is reflected in the URL for shareability' },
+    ],
+    notes: 'Use URL query parameters to persist filter state.',
+    taskIds: ['demo-task-11', 'demo-task-12'],
+    developmentOrder: 2,
+    dependentUserStoryIds: ['demo-story-5'],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-story-7',
+    documentId: 'demo-story-7',
+    parentFeatureId: 'demo-feature-4',
+    title: 'View Burndown Chart',
+    role: 'scrum master',
+    action: 'view a burndown chart for the current sprint',
+    goal: 'so that I can track whether the team is on pace to complete the sprint goals',
+    points: '8',
+    acceptanceCriteria: [
+      { text: 'Burndown chart shows ideal trend line and actual progress line' },
+      { text: 'Chart updates in real-time when tasks are completed' },
+      { text: 'Hovering over data points shows detailed task completion info' },
+      { text: 'Chart can be viewed for current sprint or any past sprint' },
+    ],
+    notes: 'Use Recharts for consistent styling with the rest of the dashboard.',
+    taskIds: ['demo-task-13', 'demo-task-14'],
+    developmentOrder: 1,
+    dependentUserStoryIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-story-8',
+    documentId: 'demo-story-8',
+    parentFeatureId: 'demo-feature-4',
+    title: 'View Team Velocity',
+    role: 'engineering manager',
+    action: 'view a velocity chart showing story points completed per sprint',
+    goal: 'so that I can forecast capacity and plan future sprints accurately',
+    points: '5',
+    acceptanceCriteria: [
+      { text: 'Bar chart shows completed story points for the last 6 sprints' },
+      { text: 'Average velocity line is overlaid on the chart' },
+      { text: 'Chart includes a tooltip with sprint name and exact point values' },
+      { text: 'Data can be exported as CSV for external reporting' },
+    ],
+    notes: 'Consider adding a commitment vs. completion comparison view later.',
+    taskIds: ['demo-task-15', 'demo-task-16'],
+    developmentOrder: 2,
+    dependentUserStoryIds: ['demo-story-7'],
+    contextualQuestions: [],
+  },
+];
+
+export const DEMO_TASKS: TaskType[] = [
+  {
+    id: 'demo-task-1',
+    documentId: 'demo-task-1',
+    parentUserStoryId: 'demo-story-1',
+    title: 'Create registration form component with validation',
+    details: 'Build a React form component with email, password, confirm password, and terms checkbox fields using react-hook-form and zod for validation.',
+    priority: 1,
+    notes: 'Use the existing Input and Button UI components from the design system.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-2',
+    documentId: 'demo-task-2',
+    parentUserStoryId: 'demo-story-1',
+    title: 'Implement registration API endpoint',
+    details: 'Create POST /api/auth/register endpoint that validates input, hashes the password with bcrypt, stores the user record, and triggers the verification email.',
+    priority: 1,
+    notes: 'Return 409 for duplicate emails without revealing existing account info.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-3',
+    documentId: 'demo-task-3',
+    parentUserStoryId: 'demo-story-2',
+    title: 'Build password reset request form',
+    details: 'Create a form that accepts an email address and sends a password reset request to the API. Always show success message regardless of whether email exists.',
+    priority: 1,
+    notes: 'Prevent timing attacks by using constant-time responses.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-4',
+    documentId: 'demo-task-4',
+    parentUserStoryId: 'demo-story-2',
+    title: 'Implement password reset token verification and update',
+    details: 'Create endpoint that verifies the reset token, checks expiry, and allows the user to set a new password. Invalidate all existing sessions after reset.',
+    priority: 1,
+    notes: 'Tokens should be single-use and stored as hashed values.',
+    dependentTaskIds: ['demo-task-3'],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-5',
+    documentId: 'demo-task-5',
+    parentUserStoryId: 'demo-story-3',
+    title: 'Configure Google OAuth credentials and callback',
+    details: 'Set up Google Cloud Console project, create OAuth credentials, and implement the authorization callback endpoint that exchanges the code for tokens.',
+    priority: 1,
+    notes: 'Store client ID and secret in environment variables, never in code.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-6',
+    documentId: 'demo-task-6',
+    parentUserStoryId: 'demo-story-3',
+    title: 'Build Google sign-in button and account linking',
+    details: 'Create the Google sign-in button component and implement the account linking logic that checks for existing accounts by email before creating new ones.',
+    priority: 2,
+    notes: 'Use the official Google branding guidelines for the button.',
+    dependentTaskIds: ['demo-task-5'],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-7',
+    documentId: 'demo-task-7',
+    parentUserStoryId: 'demo-story-4',
+    title: 'Configure GitHub OAuth app and callback',
+    details: 'Create a GitHub OAuth app in developer settings, implement the callback handler, and store the access token securely for future API usage.',
+    priority: 1,
+    notes: 'Request the user:email scope to retrieve the primary email address.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-8',
+    documentId: 'demo-task-8',
+    parentUserStoryId: 'demo-story-4',
+    title: 'Build GitHub sign-in button and profile population',
+    details: 'Create the GitHub sign-in button and populate the user profile with GitHub avatar, display name, and username on first login.',
+    priority: 2,
+    notes: 'Use the Octokit library for clean GitHub API interactions.',
+    dependentTaskIds: ['demo-task-7'],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-9',
+    documentId: 'demo-task-9',
+    parentUserStoryId: 'demo-story-5',
+    title: 'Build project card component with progress visualization',
+    details: 'Create a reusable ProjectCard component showing title, description snippet, progress bar, task counts by status, and team member avatars.',
+    priority: 1,
+    notes: 'Use CSS Grid for responsive card layout across screen sizes.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-10',
+    documentId: 'demo-task-10',
+    parentUserStoryId: 'demo-story-5',
+    title: 'Implement project list API with aggregated metrics',
+    details: 'Create GET /api/projects endpoint that returns projects with pre-calculated task counts, completion percentages, and last activity timestamps.',
+    priority: 1,
+    notes: 'Use database aggregation queries to avoid N+1 performance issues.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-11',
+    documentId: 'demo-task-11',
+    parentUserStoryId: 'demo-story-6',
+    title: 'Create filter and sort controls component',
+    details: 'Build a toolbar component with dropdown filters for project status and sort order, syncing state to URL query parameters.',
+    priority: 1,
+    notes: 'Use next/navigation useSearchParams for URL state management.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-12',
+    documentId: 'demo-task-12',
+    parentUserStoryId: 'demo-story-6',
+    title: 'Add server-side filtering and sorting to projects API',
+    details: 'Extend the projects API endpoint to accept filter and sort query parameters, applying them at the database level for optimal performance.',
+    priority: 2,
+    notes: 'Validate query parameters to prevent SQL injection.',
+    dependentTaskIds: ['demo-task-11'],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-13',
+    documentId: 'demo-task-13',
+    parentUserStoryId: 'demo-story-7',
+    title: 'Build burndown chart component with Recharts',
+    details: 'Create a responsive line chart component that displays ideal burndown and actual progress lines, with hover tooltips and sprint selector.',
+    priority: 1,
+    notes: 'Match the color scheme to the existing dashboard theme.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-14',
+    documentId: 'demo-task-14',
+    parentUserStoryId: 'demo-story-7',
+    title: 'Implement burndown data aggregation API',
+    details: 'Create an endpoint that calculates daily remaining story points for a given sprint, returning data formatted for the chart component.',
+    priority: 1,
+    notes: 'Cache results for completed sprints since their data will not change.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-15',
+    documentId: 'demo-task-15',
+    parentUserStoryId: 'demo-story-8',
+    title: 'Build velocity chart component with average line',
+    details: 'Create a bar chart showing completed story points per sprint with a dashed average velocity line overlay and tooltips.',
+    priority: 1,
+    notes: 'Allow the user to toggle between 4, 6, and 12 sprint views.',
+    dependentTaskIds: [],
+    contextualQuestions: [],
+  },
+  {
+    id: 'demo-task-16',
+    documentId: 'demo-task-16',
+    parentUserStoryId: 'demo-story-8',
+    title: 'Implement velocity data API with CSV export',
+    details: 'Create an endpoint that returns sprint velocity data and supports a CSV export option via an Accept header or query parameter.',
+    priority: 2,
+    notes: 'Include sprint name, committed points, and completed points in the export.',
+    dependentTaskIds: ['demo-task-15'],
+    contextualQuestions: [],
+  },
+];
 
 // Sample Apps for Demo
 export const demoApps: App[] = [
