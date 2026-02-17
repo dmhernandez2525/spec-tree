@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "webhooks",
+  "info": {
+    "singularName": "webhook",
+    "pluralName": "webhooks",
+    "displayName": "Webhook",
+    "description": "Webhook endpoints for real-time event notifications"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "secretHash": {
+      "type": "string",
+      "required": true,
+      "private": true
+    },
+    "events": {
+      "type": "json",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["active", "paused", "disabled"],
+      "default": "active"
+    },
+    "customHeaders": {
+      "type": "json"
+    },
+    "payloadFields": {
+      "type": "json"
+    },
+    "failureCount": {
+      "type": "integer",
+      "default": 0
+    },
+    "lastDeliveryAt": {
+      "type": "datetime"
+    },
+    "lastDeliveryStatus": {
+      "type": "integer"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization"
+    },
+    "createdById": {
+      "type": "string"
+    }
+  }
+}

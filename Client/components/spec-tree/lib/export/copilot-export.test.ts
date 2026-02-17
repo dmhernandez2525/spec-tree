@@ -77,6 +77,13 @@ function createMockState(overrides: Partial<RootState['sow']> = {}): RootState {
       isLoading: false,
       error: null,
     },
+    webhooks: {
+      webhooks: [],
+      deliveries: [],
+      templates: [],
+      isLoading: false,
+      error: null,
+    },
   };
 }
 

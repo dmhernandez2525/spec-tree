@@ -10,6 +10,7 @@ import { collaborationReducer } from './collaboration-slice';
 import commentsReducer from './comments-slice';
 import { workspaceReducer } from './workspace-slice';
 import restApiReducer from './rest-api-slice';
+import webhookReducer from './webhook-slice';
 
 export const makeStore = () => {
   return configureStore({
@@ -25,6 +26,7 @@ export const makeStore = () => {
       collaboration: collaborationReducer,
       comments: commentsReducer,
       restApi: restApiReducer,
+      webhooks: webhookReducer,
     },
   });
 };

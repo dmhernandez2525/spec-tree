@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "webhook_deliveries",
+  "info": {
+    "singularName": "webhook-delivery",
+    "pluralName": "webhook-deliveries",
+    "displayName": "Webhook Delivery",
+    "description": "Delivery log records for webhook event dispatches"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "webhookId": {
+      "type": "string",
+      "required": true
+    },
+    "event": {
+      "type": "string",
+      "required": true
+    },
+    "payload": {
+      "type": "json",
+      "required": true
+    },
+    "statusCode": {
+      "type": "integer"
+    },
+    "responseBody": {
+      "type": "text"
+    },
+    "latencyMs": {
+      "type": "integer"
+    },
+    "attemptNumber": {
+      "type": "integer",
+      "default": 1
+    },
+    "maxAttempts": {
+      "type": "integer",
+      "default": 5
+    },
+    "nextRetryAt": {
+      "type": "datetime"
+    },
+    "success": {
+      "type": "boolean",
+      "default": false
+    },
+    "webhook": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::webhook.webhook"
+    }
+  }
+}
