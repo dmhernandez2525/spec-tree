@@ -75,6 +75,17 @@ function createMockState(overrides: Partial<RootState['sow']> = {}): RootState {
       isLoading: false,
       error: null,
     },
+    github: {
+      authStatus: 'disconnected' as const,
+      accessToken: null,
+      repos: [],
+      syncConfigs: [],
+      issueLinks: [],
+      commitLinks: [],
+      conflicts: [],
+      isLoading: false,
+      error: null,
+    },
   };
 }
 

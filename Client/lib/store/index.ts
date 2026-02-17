@@ -11,6 +11,7 @@ import commentsReducer from './comments-slice';
 import { workspaceReducer } from './workspace-slice';
 import restApiReducer from './rest-api-slice';
 import webhookReducer from './webhook-slice';
+import githubReducer from './github-slice';
 
 export const makeStore = () => {
   return configureStore({
@@ -27,6 +28,7 @@ export const makeStore = () => {
       comments: commentsReducer,
       restApi: restApiReducer,
       webhooks: webhookReducer,
+      github: githubReducer,
     },
   });
 };

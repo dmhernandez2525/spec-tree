@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "github_connections",
+  "info": {
+    "singularName": "github-connection",
+    "pluralName": "github-connections",
+    "displayName": "GitHub Connection",
+    "description": "GitHub OAuth connections for repository access and integration"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "githubUsername": {
+      "type": "string",
+      "required": true
+    },
+    "encryptedToken": {
+      "type": "text",
+      "required": true,
+      "private": true
+    },
+    "scopes": {
+      "type": "json"
+    },
+    "tokenExpiresAt": {
+      "type": "datetime"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization"
+    },
+    "createdById": {
+      "type": "string"
+    }
+  }
+}

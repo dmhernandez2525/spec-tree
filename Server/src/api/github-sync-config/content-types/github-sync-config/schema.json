@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "github_sync_configs",
+  "info": {
+    "singularName": "github-sync-config",
+    "pluralName": "github-sync-configs",
+    "displayName": "GitHub Sync Config",
+    "description": "Configuration for syncing specification documents with GitHub repositories"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "repoId": {
+      "type": "integer"
+    },
+    "repoFullName": {
+      "type": "string",
+      "required": true
+    },
+    "syncPath": {
+      "type": "string",
+      "required": true,
+      "default": "/docs"
+    },
+    "branch": {
+      "type": "string",
+      "required": true,
+      "default": "main"
+    },
+    "autoSync": {
+      "type": "boolean",
+      "default": false
+    },
+    "lastSyncAt": {
+      "type": "datetime"
+    },
+    "syncStatus": {
+      "type": "enumeration",
+      "enum": ["synced", "pending", "conflict", "error"],
+      "default": "pending"
+    },
+    "pendingChanges": {
+      "type": "integer",
+      "default": 0
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization"
+    },
+    "createdById": {
+      "type": "string"
+    }
+  }
+}

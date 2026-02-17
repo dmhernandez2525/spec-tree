@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "github_issue_links",
+  "info": {
+    "singularName": "github-issue-link",
+    "pluralName": "github-issue-links",
+    "displayName": "GitHub Issue Link",
+    "description": "Links between specification nodes and GitHub issues for traceability"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "specNodeType": {
+      "type": "string",
+      "required": true
+    },
+    "specNodeId": {
+      "type": "string",
+      "required": true
+    },
+    "issueNumber": {
+      "type": "integer",
+      "required": true
+    },
+    "issueTitle": {
+      "type": "string"
+    },
+    "issueState": {
+      "type": "enumeration",
+      "enum": ["open", "closed"],
+      "default": "open"
+    },
+    "repoFullName": {
+      "type": "string",
+      "required": true
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization"
+    }
+  }
+}
