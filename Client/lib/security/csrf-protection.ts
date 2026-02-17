@@ -22,14 +22,14 @@ export function generateCsrfToken(): string {
     // Fall through to fallback
   }
 
-  // Fallback: build a token from random bytes
+  // Fallback: build a token from crypto.getRandomValues
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
   const segments: string[] = [];
   for (let i = 0; i < 4; i++) {
-    segments.push(
-      Math.floor(Math.random() * 0xffffffff)
-        .toString(16)
-        .padStart(8, '0'),
-    );
+    const val = (bytes[i * 4] << 24) | (bytes[i * 4 + 1] << 16) |
+                (bytes[i * 4 + 2] << 8) | bytes[i * 4 + 3];
+    segments.push((val >>> 0).toString(16).padStart(8, '0'));
   }
   return segments.join('-');
 }
@@ -44,7 +44,7 @@ export function timingSafeEqual(a: string, b: string): boolean {
     // Still perform a dummy comparison to keep timing consistent
     let result = 1;
     for (let i = 0; i < a.length; i++) {
-      result |= a.charCodeAt(i) ^ a.charCodeAt(i);
+      result |= a.charCodeAt(i) ^ b.charCodeAt(i % b.length);
     }
     // Always return false for different lengths, but the loop above
     // prevents the caller from determining the length difference via timing

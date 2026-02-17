@@ -568,7 +568,7 @@ function generateJavaTests(name: string, criteria: string[]): string {
     lines.push('        assertTrue(true);');
     lines.push('    }');
   } else {
-    criteria.forEach((criterion, index) => {
+    criteria.forEach((criterion) => {
       lines.push('');
       lines.push('    @Test');
       lines.push(`    void test${toPascalCase(criterion)}() {`);

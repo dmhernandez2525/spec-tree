@@ -6,7 +6,6 @@ import {
   formatErrorReport,
   type ErrorTracker,
   type TrackedError,
-  type ErrorSeverity,
 } from './error-tracker';
 
 import {
@@ -14,7 +13,6 @@ import {
   aggregateHealth,
   createHealthMonitor,
   type HealthCheckResult,
-  type ServiceStatus,
 } from './health-check';
 
 import {
