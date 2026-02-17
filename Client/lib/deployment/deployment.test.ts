@@ -15,7 +15,7 @@ import {
   estimateResources,
   getDeploymentSummary,
 } from './self-hosted';
-import type { DeploymentConfig, MigrationStep } from './self-hosted';
+import type { MigrationStep } from './self-hosted';
 
 // ---------------------------------------------------------------------------
 // DEFAULT_DB_PORTS

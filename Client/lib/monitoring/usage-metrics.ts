@@ -56,7 +56,7 @@ function generateSessionId(): string {
 }
 
 export function createUsageTracker(): UsageTracker {
-  const sessionId = generateSessionId();
+  const _sessionId = generateSessionId();
   const startTime = Date.now();
   const features: Map<string, UsageMetric> = new Map();
   let pageViews = 0;

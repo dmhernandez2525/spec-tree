@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 // wcag-checker imports
 import {
@@ -42,7 +42,6 @@ import {
   suggestAccessibleAlternative,
   generateAccessiblePalette,
 } from './color-palette';
-import type { ColorPair } from './color-palette';
 
 // ---------------------------------------------------------------------------
 // wcag-checker.ts

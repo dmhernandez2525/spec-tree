@@ -12,7 +12,6 @@ import type {
   GitHubSyncConfig,
   GitHubIssueLink,
   GitHubPRResult,
-  GitHubConflict,
 } from '@/types/github';
 
 const initialState: GitHubState = {

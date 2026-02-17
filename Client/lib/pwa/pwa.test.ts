@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   SPECTREE_MANIFEST,
   generateManifest,
@@ -7,7 +7,6 @@ import {
   cacheStrategies,
   getInstallPromptStatus,
 } from './pwa-config';
-import type { PwaManifest } from './pwa-config';
 import {
   BREAKPOINTS,
   getBreakpoint,

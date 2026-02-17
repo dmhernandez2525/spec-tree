@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
   GDPR_REQUIREMENTS,
   DEFAULT_RETENTION_POLICIES,
@@ -14,10 +14,7 @@ import {
   getExpiredData,
   formatComplianceReport,
   type ComplianceCheck,
-  type ComplianceStandard,
-  type ComplianceStatus,
   type RetentionPolicy,
-  type DataSubjectRequest,
   type ComplianceReport,
 } from './compliance';
 

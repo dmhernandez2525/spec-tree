@@ -73,9 +73,8 @@ export function withApiMiddleware(handler: ApiHandler) {
       const response = await handler(request, ctx, resolvedParams);
       logApiRequest(request, response.status, startTime, key.id);
       return response;
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Internal server error';
-      const response = errors.internal(message, rateResult.headers);
+    } catch (_error) {
+      const response = errors.internal('Internal server error', rateResult.headers);
       logApiRequest(request, 500, startTime, key.id);
       return response;
     }

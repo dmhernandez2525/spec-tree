@@ -70,11 +70,9 @@ export function generateNonce(): string {
     // Fall through to fallback
   }
 
-  // Fallback: generate random bytes via Math.random
+  // Fallback: generate random bytes via crypto.getRandomValues
   const bytes = new Uint8Array(16);
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = Math.floor(Math.random() * 256);
-  }
+  crypto.getRandomValues(bytes);
   return btoa(String.fromCharCode.apply(null, Array.from(bytes))).replace(/[=+/]/g, '');
 }
 

@@ -19,9 +19,11 @@ async function getSessionToken(): Promise<string | null> {
 
 function generateApiKey(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const randomBytes = new Uint8Array(40);
+  crypto.getRandomValues(randomBytes);
   let result = 'sk_live_';
   for (let i = 0; i < 40; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+    result += chars.charAt(randomBytes[i] % chars.length);
   }
   return result;
 }

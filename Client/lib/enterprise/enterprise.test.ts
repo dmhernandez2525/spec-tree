@@ -6,7 +6,7 @@ import {
   upgradePlan,
   validateTenantSlug,
 } from './tenant-manager';
-import type { Plan, Tenant } from './tenant-manager';
+import type { Tenant } from './tenant-manager';
 import {
   createAuditLogger,
   formatAuditEvent,
