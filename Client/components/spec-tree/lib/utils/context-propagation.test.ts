@@ -65,6 +65,13 @@ function createMockState(overrides: Partial<RootState['sow']> = {}): RootState {
       targetIndex: {},
       notifications: [],
     },
+    restApi: {
+      keys: [],
+      usage: null,
+      usageHistory: [],
+      isLoading: false,
+      error: null,
+    },
   };
 }
 

@@ -161,6 +161,13 @@ describe('devin-export', () => {
       isEnabled: true,
       activity: [],
     },
+    restApi: {
+      keys: [],
+      usage: null,
+      usageHistory: [],
+      isLoading: false,
+      error: null,
+    },
   } as RootState);
 
   describe('exportTaskAsDevin', () => {

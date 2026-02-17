@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "public_api_keys",
+  "info": {
+    "singularName": "public-api-key",
+    "pluralName": "public-api-keys",
+    "displayName": "Public API Key",
+    "description": "API keys for external REST API access"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "prefix": {
+      "type": "string",
+      "required": true
+    },
+    "keyHash": {
+      "type": "text",
+      "required": true,
+      "private": true
+    },
+    "tier": {
+      "type": "enumeration",
+      "enum": ["free", "starter", "pro", "enterprise"],
+      "default": "free"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "corsOrigins": {
+      "type": "text"
+    },
+    "rateLimit": {
+      "type": "integer",
+      "default": 10
+    },
+    "lastUsedAt": {
+      "type": "datetime"
+    },
+    "expiresAt": {
+      "type": "datetime"
+    },
+    "createdById": {
+      "type": "string"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization"
+    }
+  }
+}

@@ -115,6 +115,11 @@ vi.mock('@/components/shared/icons', () => ({
         Shield
       </span>
     ),
+    globe: ({ className }: { className?: string }) => (
+      <span data-testid="icon-globe" className={className}>
+        Globe
+      </span>
+    ),
   },
 }));
 
@@ -179,6 +184,10 @@ vi.mock('./APIKeyManager', () => ({
 
 vi.mock('./QuotaDisplay', () => ({
   QuotaDisplay: () => <div data-testid="quota-display">QuotaDisplay Component</div>,
+}));
+
+vi.mock('../api/ApiManagementPanel', () => ({
+  default: () => <div data-testid="api-management-panel">ApiManagementPanel Component</div>,
 }));
 
 describe('OrganizationManagement', () => {
@@ -318,7 +327,8 @@ describe('OrganizationManagement', () => {
       expect(screen.getByTestId('icon-settings')).toBeInTheDocument();
       expect(screen.getByTestId('icon-credit-card')).toBeInTheDocument();
       expect(screen.getAllByTestId('icon-key')).toHaveLength(2); // SSO + API Keys
-      expect(screen.getByTestId('icon-plug')).toBeInTheDocument();
+      expect(screen.getByTestId('icon-plug')).toBeInTheDocument(); // Integrations
+      expect(screen.getByTestId('icon-globe')).toBeInTheDocument(); // REST API
       expect(screen.getByTestId('icon-brain')).toBeInTheDocument();
       expect(screen.getByTestId('icon-eye')).toBeInTheDocument();
       expect(screen.getByTestId('icon-sparkles')).toBeInTheDocument();
