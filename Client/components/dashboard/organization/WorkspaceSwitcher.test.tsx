@@ -123,7 +123,7 @@ describe('WorkspaceSwitcher', () => {
       ...multipleWorkspaces,
       user: { user: null, token: null },
     };
-    const { container } = render(<WorkspaceSwitcher />, {
+    render(<WorkspaceSwitcher />, {
       initialState: noUserState as any,
     });
 
