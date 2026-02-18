@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DEMO_ROLES, createDemoSession, type DemoRole } from '@/lib/demo/demo-mode';
+import { createDemoSession, type DemoRole } from '@/lib/demo/demo-mode';
 
 interface RoleCardConfig {
   role: DemoRole;

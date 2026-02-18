@@ -48,7 +48,7 @@ export const dashboardHeaderTests = () => {
   it('displays welcome message with user first name', () => {
     renderWithStore(<DashboardHeader />);
 
-    expect(screen.getByText('Welcome Back John')).toBeInTheDocument();
+    expect(screen.getByText('Welcome John')).toBeInTheDocument();
   });
 
   it('displays Dashboard when no user is logged in', () => {
